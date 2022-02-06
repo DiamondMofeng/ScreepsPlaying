@@ -17,22 +17,27 @@ var roleHarvesterPlus = {
 
     //after spawn
     //move to workPos
-    if (!(creep.pos == creep.memory.workPos)) {
-      creep.moveTo(workPos)
+    if (!(
+      (creep.pos.x == creep.memory.workPos.x) && (creep.pos.y == creep.memory.workPos.y)
+    )) {
+      // console.log(creep.memory.workPos)
+      const moveResult = creep.moveTo(creep.memory.workPos.x, creep.memory.workPos.y
+        , { visualizePathStyle: { stroke: '#ffaa00' } })
     }
 
     //after arrive at workPos
     //start to harvest
     else {
-      creep.harvest(Game.getObjectById(creep.memory.sourceId))
+      const harvestResult = creep.harvest(Game.getObjectById(creep.memory.sourceId))
+      // console.log('harvestResult', harvestResult)
     }
 
 
 
     //if going to die
-    if (creep.ticksToLive < 10) {
+    if (creep.ticksToLive < 50) {
       //clean memory
-      creep.room.memory.sources[creep.memory.sourceId].harvester=''
+      creep.room.memory.sources[creep.memory.index].onHarvest = false
     }
 
   }

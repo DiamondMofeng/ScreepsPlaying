@@ -1,5 +1,42 @@
 const controller_spawns = () => {
 
+  const memoryResourves = (anyObjectHasMemory) => {
+    const obj = anyObjectHasMemory
+    //add memory
+    if (!obj.room.memory.sources || obj.room.memory.sources.length == 0) {
+      obj.room.memory.sources = []
+      const sources = obj.room.find(FIND_SOURCES)
+
+      // console.log(sources)
+      const workPos = (s) => {
+        // console.log('fine')
+        if (s.id == '5bbcac3c9099fc012e635233') {
+          // console.log('fine1')
+          return new RoomPosition(9, 37, 'W12N16')
+        }
+        if (s.id == '5bbcac3c9099fc012e635232') {
+          // console.log('fine2')
+          return new RoomPosition(21, 31, 'W12N16')
+        }
+      }
+
+
+      for (i in sources) {
+        const s = sources[i]
+        // console.log(workPos(s))
+        // console.log('123',typeof s.id)
+
+        obj.room.memory.sources[i] = {
+          id: s.id,
+          workPos: workPos(s),
+          onHarvest: false,
+          harvester: '',
+        }
+      }
+    }
+  }
+
+
   /*
   return TRUE if need spawn
   */
@@ -16,6 +53,28 @@ const controller_spawns = () => {
       return true
     }
     else { return false }
+  }
+
+  const spawnByMinNumber_advance = (memory, bodyArray, minNumber, spawnSite = 'Spawn1', options = {}) => {
+    /**
+     * @param
+     * @returns {number} 0 if DO NOT need spawn
+     * @returns {number} 1 if need spawn and successfully spawned
+     * @returns {number} 2 if need spawn but failed to spawn
+     */
+    options.memory = memory
+
+    var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == memory.role);
+    // console.log(roleName + ':' + currentRolerArray.length);
+
+    if (currentRolerArray.length < minNumber) {
+      var newName = memory.role + Game.time;
+      console.log(`Going to spawn new ${memory.role} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} `);
+      const spawnResult = Game.spawns[spawnSite].spawnCreep(bodyArray, newName, options)
+      if (spawnResult == 0) return 1
+      else if (spawnResult == -6) return 2
+    }
+    else { return 0 }
   }
 
 
@@ -35,9 +94,36 @@ const controller_spawns = () => {
 
   //spawn Harvester
   //if have 5 WORK PART+1MOVE:550
-  if (spawnByMinNumber('harvester', [WORK, WORK, CARRY, MOVE], 3)) {
-    return
+  // if (spawnByMinNumber('harvester', [WORK, WORK, CARRY, MOVE], 1)) {
+  //   return
+  // }
+
+  //spawn HarvesterPlus
+  memoryResourves(Game.spawns['Spawn1'])
+  ///////////////WARNING!!! HARD CODED////////////////
+  const spareSource = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
+  if (spareSource.length) {
+    let harP_result = spawnByMinNumber_advance(
+      {
+        role: 'harvesterPlus',
+        workPos: spareSource[0].workPos,
+        sourceId: spareSource[0].id,
+        index: _.indexOf(Game.spawns['Spawn1'].room.memory.sources,spareSource[0])
+      },
+      [WORK, WORK, WORK, WORK, WORK, MOVE], 2)
+    if (harP_result === 2) {
+      return
+      //then set the memory of SOURCE
+    }
+    else if (harP_result === 1) {
+      Game.spawns['Spawn1'].room.memory.sources[0].onHarvest = true
+      return
+    }
+    // else return
   }
+
+
+
 
   //spawn Repairer
   var repairTargets = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
@@ -50,15 +136,17 @@ const controller_spawns = () => {
     spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 1)
   }
 
+  spawnByMinNumber('carrier', [WORK, CARRY, CARRY, MOVE, MOVE], 4)
+  //cost=300
 
 
   //spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', [WORK, WORK, CARRY,CARRY, MOVE,MOVE], 1)
+    spawnByMinNumber('builder', [WORK, WORK, CARRY, CARRY, MOVE, MOVE], 3)
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', [WORK, WORK, CARRY,CARRY, MOVE, MOVE], 7)//COST: 350 
+  spawnByMinNumber('upgrader', [WORK, WORK, CARRY, MOVE, MOVE], 6)//COST: 350 
 
 
 

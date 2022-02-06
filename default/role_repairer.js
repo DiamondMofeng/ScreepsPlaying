@@ -26,17 +26,6 @@ var roleRepairer = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    // const PriorizedBuildTarget = (buildTargets) => {
-    // 	//默认按放置顺序建造
-    // 	for (t in buildTargets) {
-    // 		// switch (t) {
-    // 		// 	case :
-    // 		// 		break
-    // 		// 	default:
-    // 		// 		break
-    // 		// }
-    // 	}
-    // }
 
     if (creep.memory.repairing && creep.store[RESOURCE_ENERGY] == 0) {
       creep.memory.repairing = false;

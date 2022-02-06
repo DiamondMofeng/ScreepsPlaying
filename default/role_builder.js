@@ -1,3 +1,7 @@
+const Upgrader = require('./role_upgrader')
+
+
+
 const getEnergyFromContainer = (creep) => {
 
 	const findContainer = (creep) => {
@@ -39,47 +43,50 @@ var roleBuilder = {
 
 	/** @param {Creep} creep **/
 	run: function (creep) {
-
-		// const PriorizedBuildTarget = (buildTargets) => {
-		// 	//默认按放置顺序建造
-		// 	for (t in buildTargets) {
-		// 		// switch (t) {
-		// 		// 	case :
-		// 		// 		break
-		// 		// 	default:
-		// 		// 		break
-		// 		// }
-		// 	}
-		// }
-
-		if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
-			creep.memory.building = false;
-			creep.say('🔄 Collect Energy');//	
-		}
-		if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
-			creep.memory.building = true;
-			creep.say('🚧 build');
-		}
-
-		if (creep.memory.building) {
-			var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+		var targets
+		const haveJob = () => {
+			targets = creep.room.find(FIND_CONSTRUCTION_SITES)
 			if (targets.length) {
-				if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+				return true
+			}
+			else return false
+		}
+
+		if (haveJob) {
+
+
+			if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
+				creep.memory.building = false;
+				creep.say('🔄 Collect Energy');//	
+			}
+			if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
+				creep.memory.building = true;
+				creep.say('🚧 build');
+			}
+
+			if (creep.memory.building) {
+				var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+				if (targets.length) {
+					if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+					}
+				}
+			}
+			else {
+				if (getEnergyFromContainer(creep)) {
+
+				}
+				else {//dig
+					var sources = creep.room.find(FIND_SOURCES);
+
+					if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+					}
 				}
 			}
 		}
 		else {
-			if (getEnergyFromContainer(creep)) {
-
-			}
-			else {//dig
-				var sources = creep.room.find(FIND_SOURCES);
-
-				if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-				}
-			}
+			Upgrader(creep)
 		}
 	}
 };

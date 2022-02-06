@@ -15,7 +15,7 @@ const creepRoleCounter = (roleTypeArray) => {
   }
 }
 
-const energyLeftOf = (constructName) => {
+const energyCounter = (room) => {
   const energy = Game.spawns['Spawn1'].store.getUsedCapacity(RESOURCE_ENERGY)
   console.log(`Spawn1 has ${energy} Energy left`)
 }
@@ -28,7 +28,7 @@ const broadcaster = () => {
   const energy = Game.spawns['Spawn1'].store.getUsedCapacity(RESOURCE_ENERGY)
   console.log(`Spawn1 has ${energy} Energy left`)
 
-  creepRoleCounter(['harvester', 'repairer', 'builder', 'upgrader'])
+  creepRoleCounter(['harvesterPlus', 'carrier', 'repairer', 'builder', 'upgrader'])
 }
 
 module.exports =
