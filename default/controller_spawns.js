@@ -100,7 +100,11 @@ const controller_spawns = () => {
   //   return
   // }
 
+
+
+
   //spawn HarvesterPlus
+  
   memoryResources(Game.spawns['Spawn1'].room)
   ///////////////WARNING!!! HARD CODED////////////////
   const spareSources = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
