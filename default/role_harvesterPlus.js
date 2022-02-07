@@ -37,7 +37,7 @@ var roleHarvesterPlus = {
     //if going to die
     if (creep.ticksToLive < 50) {
       //clean memory
-      creep.room.memory.sources[creep.memory.index].onHarvest = false
+      creep.room.memory.sources[creep.memory.sourceId].onHarvest = false
     }
 
   }

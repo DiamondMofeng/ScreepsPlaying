@@ -1,40 +1,42 @@
+const { memoryResources } = require('./util_getMemories')
+
 const controller_spawns = () => {
 
-  const memoryResourves = (anyObjectHasMemory) => {
-    const obj = anyObjectHasMemory
-    //add memory
-    if (!obj.room.memory.sources || obj.room.memory.sources.length == 0) {
-      obj.room.memory.sources = []
-      const sources = obj.room.find(FIND_SOURCES)
+  // const memoryResourves = (anyObjectHasMemory) => {
+  //   const obj = anyObjectHasMemory
+  //   //add memory
+  //   if (!obj.room.memory.sources || obj.room.memory.sources.length == 0) {
+  //     obj.room.memory.sources = []
+  //     const sources = obj.room.find(FIND_SOURCES)
 
-      // console.log(sources)
-      const workPos = (s) => {
-        // console.log('fine')
-        if (s.id == '5bbcac3c9099fc012e635233') {
-          // console.log('fine1')
-          return new RoomPosition(9, 37, 'W12N16')
-        }
-        if (s.id == '5bbcac3c9099fc012e635232') {
-          // console.log('fine2')
-          return new RoomPosition(21, 31, 'W12N16')
-        }
-      }
+  //     // console.log(sources)
+  //     const workPos = (s) => {
+  //       // console.log('fine')
+  //       if (s.id == '5bbcac3c9099fc012e635233') {
+  //         // console.log('fine1')
+  //         return new RoomPosition(9, 37, 'W12N16')
+  //       }
+  //       if (s.id == '5bbcac3c9099fc012e635232') {
+  //         // console.log('fine2')
+  //         return new RoomPosition(21, 31, 'W12N16')
+  //       }
+  //     }
 
 
-      for (i in sources) {
-        const s = sources[i]
-        // console.log(workPos(s))
-        // console.log('123',typeof s.id)
+  //     for (i in sources) {
+  //       const s = sources[i]
+  //       // console.log(workPos(s))
+  //       // console.log('123',typeof s.id)
 
-        obj.room.memory.sources[i] = {
-          id: s.id,
-          workPos: workPos(s),
-          onHarvest: false,
-          harvester: '',
-        }
-      }
-    }
-  }
+  //       obj.room.memory.sources[i] = {
+  //         id: s.id,
+  //         workPos: workPos(s),
+  //         onHarvest: false,
+  //         harvester: '',
+  //       }
+  //     }
+  //   }
+  // }
 
 
   /*
@@ -99,17 +101,16 @@ const controller_spawns = () => {
   // }
 
   //spawn HarvesterPlus
-  memoryResourves(Game.spawns['Spawn1'])
+  memoryResources(Game.spawns['Spawn1'].room)
   ///////////////WARNING!!! HARD CODED////////////////
-  const spareSource = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
-  if (spareSource.length) {
-    let index = _.indexOf(Game.spawns['Spawn1'].room.memory.sources,spareSource[0])
+  const spareSources = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
+  if (spareSources.length) {
+    let resource = spareSources[0]
     let harP_result = spawnByMinNumber_advance(
       {
         role: 'harvesterPlus',
-        workPos: spareSource[0].workPos,
-        sourceId: spareSource[0].id,
-        index: index
+        workPos: resource.workPos,
+        sourceId: resource.id,
       },
       [WORK, WORK, WORK, WORK, WORK, MOVE], 2)
     if (harP_result === 2) {
@@ -117,7 +118,7 @@ const controller_spawns = () => {
       //then set the memory of SOURCE
     }
     else if (harP_result === 1) {
-      Game.spawns['Spawn1'].room.memory.sources[index].onHarvest = true
+      Game.spawns['Spawn1'].room.memory.sources[resource.id].onHarvest = true
       return
     }
     // else return
@@ -137,8 +138,9 @@ const controller_spawns = () => {
     spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 3)
   }
 
-  spawnByMinNumber('carrier', [WORK, CARRY,CARRY, MOVE, MOVE], 4)
-  //cost=300
+
+  //spawn Carrier
+  spawnByMinNumber('carrier', [WORK, CARRY, CARRY, CARRY, MOVE, MOVE], 6)  //cost=300
 
 
   //spawn Builder
@@ -147,7 +149,7 @@ const controller_spawns = () => {
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', [WORK, WORK,WORK,WORK,WORK, CARRY, MOVE,MOVE, MOVE, MOVE], 6)//COST: 750
+  spawnByMinNumber('upgrader', [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE], 4)//COST: 750
 
 
 

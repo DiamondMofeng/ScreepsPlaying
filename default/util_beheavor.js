@@ -1,42 +1,36 @@
-const getEnergyFromContainer = (creep) => {
+/**
+ * 从最近的有充足能量的Container中取走能量
+ * @param {*} creep 
+ * @returns {boolean} 是否找到了合适的container
+ */
+const getEnergyFromContainer = (creep, minCap = 200) => {
 
   const findContainer = (creep) => {
     return creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => {
-        return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 100;
+        return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity(RESOURCE_ENERGY) > minCap;
       }
     })
   }
 
-  const container = findContainer(creep)[0]
-  if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(container, { visualizePathStyle: { stroke: '#ffaa00' } });
-  }
-}
-
-
-
-const PriorizedTransTarget = (transTargets) => {
-  console.log(transTargets)
-  for (t in transTargets) {
-    console.log(t)
-    console.log(t.structureType)
-
-    switch (t.structureType) {
-      case STRUCTURE_SPAWN:
-        return t
-      case STRUCTURE_EXTENSION:
-        return t
-      case STRUCTURE_TOWER:
-        return t
-      case STRUCTURE_CONTAINER:
-        return t
-      default:
-        return t
+  const container = creep.pos.findClosestByPath(findContainer(creep))
+  if (container) {
+    if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(container, { visualizePathStyle: { stroke: '#ffaa00' } });
     }
+    return true
   }
+  else return false
 }
 
+
+/**
+ * 用于建筑：从targets中按照priorArray的顺序返回最优先项</br>
+ * 调用方法：PriorizedTarget(targets)(priorArray)
+ * @param {[]} targets 
+ * @param {[]} priorArray
+ * @returns 
+ */
 const PriorizedTarget = (targets) => {
 
   // console.log('ts:' + transTargets)
@@ -61,3 +55,6 @@ const PriorizedTarget = (targets) => {
 
 //5bbcac3c9099fc012e635232
 //5bbcac3c9099fc012e635233
+
+
+module.exports = { getEnergyFromContainer, PriorizedTarget }
