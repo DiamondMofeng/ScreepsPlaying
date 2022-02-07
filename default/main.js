@@ -15,7 +15,7 @@ module.exports.loop = function () {
   controller_creeps()
   controller_spawns()
 
-  broadcaster()
+  // broadcaster()
   roleTagger('W12N16')
   
   // attack()

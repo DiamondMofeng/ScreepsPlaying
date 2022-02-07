@@ -1,26 +1,6 @@
 const { getEnergyFromContainer, PriorizedTarget } = require('./util_beheavor')
 
 
-// const getEnergyFromContainer = (creep) => {
-
-//   const findContainer = (creep) => {
-//     return creep.room.find(FIND_STRUCTURES, {
-//       filter: (structure) => {
-//         return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 100;
-//       }
-//     })
-//   }
-
-//   if (findContainer(creep).length) {
-//     const container = findContainer(creep)[0]
-//     if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-//       creep.moveTo(container, { visualizePathStyle: { stroke: '#FFFF00' } });
-//     }
-//     return true
-//   }
-//   else return false
-
-// }
 
 var roleUpgrader = {
 

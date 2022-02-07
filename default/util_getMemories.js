@@ -4,6 +4,9 @@
 const memoryResources = (room) => {
   //add memory
   if (!room.memory.sources || Object.keys(room.memory.sources).length == 0) {
+
+    console.log(`Memorizing resources info at ${room}`)
+
     room.memory.sources = {}
     const sources = room.find(FIND_SOURCES)
 
@@ -35,8 +38,8 @@ const memoryUpgradePosArray = (room) => {
   //upgradePos
   if (!room.memory.upgradePos || room.memory.upgradePos.length == 0) {
     room.memory.upgradePos = []
-
-    let controller = room.find(StructureController)[0]
+    // console.log(room.find(StructureController))
+    let controller = room.controller
 
     if (controller.id === '5bbcac3c9099fc012e635234') {
       room.memory.upgradePos = [{ x: '42', y: '41', used: false },
@@ -54,7 +57,7 @@ const memoryUpgradePosArray = (room) => {
 }
 
 
-// const exports = 
+// const { memoryResources, memoryUpgradePosArray } = require('./util_getMemories')
 
 module.exports = {
   memoryResources,

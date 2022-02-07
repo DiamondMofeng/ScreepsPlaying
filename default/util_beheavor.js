@@ -3,7 +3,7 @@
  * @param {*} creep 
  * @returns {boolean} 是否找到了合适的container
  */
-const getEnergyFromContainer = (creep, minCap = 200) => {
+const getEnergyFromContainer = (creep, minCap = 200, opt = {}) => {
 
   const findContainer = (creep) => {
     return creep.room.find(FIND_STRUCTURES, {
@@ -16,7 +16,7 @@ const getEnergyFromContainer = (creep, minCap = 200) => {
   const container = creep.pos.findClosestByPath(findContainer(creep))
   if (container) {
     if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(container, { visualizePathStyle: { stroke: '#ffaa00' } });
+      creep.moveTo(container, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
     }
     return true
   }
