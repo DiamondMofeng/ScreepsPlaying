@@ -42,13 +42,14 @@ var roleCarrier = {
   run: function (creep) {
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => {
-        return (
+        return ((
           // structure.structureType == STRUCTURE_CONTAINER ||
           structure.structureType == STRUCTURE_EXTENSION ||
           structure.structureType == STRUCTURE_SPAWN ||
           structure.structureType == STRUCTURE_TOWER
-        ) &&
-          structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+        ) && (
+            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
+          || structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 500)
       }
     });
     // console.log("targets.length", targets.length)
@@ -57,25 +58,29 @@ var roleCarrier = {
     const haveJob = () => {
       // console.log("targets1", targets)
       // console.log("targets.length", targets.length)
-      if (targets.length) {
-        console.log('return true')
+      if (targets.length > 0) {
+        // console.log('return true')
         return true
       }
       else return false
     }
+    // console.log(haveJob())
     // console.log("targets2", targets)
+
+
     ////////////main//////////
-    if (!haveJob) {
+    if (!haveJob()) {
+      // console.log('carrier dont have job,turn into Upgrader')
       Upgrader(creep)
-      return
+      
     }
     else {
       // console.log("here")
       if (creep.store.getUsedCapacity() == 0) {
-        getEnergyFromContainer(creep, 500)
+        getEnergyFromContainer(creep, 1500)
       }
       else {
-        const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER])
+        const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER])
         if (priorTarget) {
 
           console.log('CarrierTarget' + priorTarget)

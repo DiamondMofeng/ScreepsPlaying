@@ -14,7 +14,7 @@ module.exports.loop = function () {
   controller_spawns()
 
   broadcaster()
-  roleTagger()
+  roleTagger('W12N16')
   
   if (Game.cpu.bucket == 10000) {
     Game.cpu.generatePixel();

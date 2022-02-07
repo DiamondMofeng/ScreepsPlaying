@@ -136,7 +136,7 @@ const controller_spawns = () => {
     spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 1)
   }
 
-  spawnByMinNumber('carrier', [WORK, CARRY, CARRY, MOVE, MOVE], 4)
+  spawnByMinNumber('carrier', [WORK, CARRY,CARRY, MOVE, MOVE], 2)
   //cost=300
 
 
@@ -146,7 +146,7 @@ const controller_spawns = () => {
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', [WORK, WORK, CARRY, MOVE, MOVE], 6)//COST: 350 
+  spawnByMinNumber('upgrader', [WORK, WORK,WORK,WORK,WORK, CARRY, MOVE,MOVE, MOVE, MOVE], 8)//COST: 750
 
 
 
