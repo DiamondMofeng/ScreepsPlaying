@@ -42,14 +42,14 @@ const memoryUpgradePosArray = (room) => {
     let controller = room.controller
 
     if (controller.id === '5bbcac3c9099fc012e635234') {
-      room.memory.upgradePos = [{ x: '42', y: '41', used: false },
-      { x: '41', y: '41', used: false },
-      { x: '40', y: '41', used: false },
-      { x: '42', y: '40', used: false },
-      { x: '41', y: '40', used: false },
-      // { x: '40', y: '40', used:false },//为carrier保留
-      { x: '41', y: '40', used: false },
-      { x: '40', y: '40', used: false }
+      room.memory.upgradePos = [{ x: 42, y: 41, used: false },
+      { x: 41, y: 41, used: false },
+      { x: 40, y: 41, used: false },
+      { x: 42, y: 40, used: false },
+      { x: 41, y: 40, used: false },
+      // { x: 40, y: 40', used:false },//为carrier保留
+      { x: 41, y: 40, used: false },
+      { x: 40, y: 40, used: false }
         // { x: '40', y: '38', used=false }  //最左上，但是碰不到container
       ]
     }

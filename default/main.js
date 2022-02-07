@@ -11,13 +11,17 @@ module.exports.loop = function () {
   //   Game.spawns['Spawn1'].spawnCreep([MOVE, CARRY, WORK], 'harvester' + Game.time, { memory: { role: 'harvester' } })
   console.log(`----------${Game.time}----------`)
 
+  // test(Game.spawns["Spawn1"].room)
 
   controller_creeps()
   controller_spawns()
 
   // broadcaster()
   roleTagger('W12N16')
-  
+
+
+
+
   // attack()
 
 
@@ -25,6 +29,5 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-  //////test part
-  // test(Game.creeps['harvester35653212'])
+  
 }
