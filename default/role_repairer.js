@@ -41,8 +41,9 @@ var roleRepairer = {
       var targets = creep.room.find(FIND_STRUCTURES, {
         filter: (s) => {
           return (
-            (s.structureType == STRUCTURE_CONTAINER ||
-              s.structureType == STRUCTURE_ROAD)
+            (s.structureType == STRUCTURE_CONTAINER
+              || s.structureType == STRUCTURE_ROAD
+              || s.structureType == STRUCTURE_RAMPART)
             && ((s.hits / s.hitsMax) < 0.9))
         }
       });

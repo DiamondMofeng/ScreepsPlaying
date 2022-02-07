@@ -103,12 +103,13 @@ const controller_spawns = () => {
   ///////////////WARNING!!! HARD CODED////////////////
   const spareSource = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
   if (spareSource.length) {
+    let index = _.indexOf(Game.spawns['Spawn1'].room.memory.sources,spareSource[0])
     let harP_result = spawnByMinNumber_advance(
       {
         role: 'harvesterPlus',
         workPos: spareSource[0].workPos,
         sourceId: spareSource[0].id,
-        index: _.indexOf(Game.spawns['Spawn1'].room.memory.sources,spareSource[0])
+        index: index
       },
       [WORK, WORK, WORK, WORK, WORK, MOVE], 2)
     if (harP_result === 2) {
@@ -116,7 +117,7 @@ const controller_spawns = () => {
       //then set the memory of SOURCE
     }
     else if (harP_result === 1) {
-      Game.spawns['Spawn1'].room.memory.sources[0].onHarvest = true
+      Game.spawns['Spawn1'].room.memory.sources[index].onHarvest = true
       return
     }
     // else return
@@ -133,10 +134,10 @@ const controller_spawns = () => {
   });
 
   if (repairTargets.length) {
-    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 1)
+    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 3)
   }
 
-  spawnByMinNumber('carrier', [WORK, CARRY,CARRY, MOVE, MOVE], 2)
+  spawnByMinNumber('carrier', [WORK, CARRY,CARRY, MOVE, MOVE], 4)
   //cost=300
 
 
@@ -146,7 +147,7 @@ const controller_spawns = () => {
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', [WORK, WORK,WORK,WORK,WORK, CARRY, MOVE,MOVE, MOVE, MOVE], 8)//COST: 750
+  spawnByMinNumber('upgrader', [WORK, WORK,WORK,WORK,WORK, CARRY, MOVE,MOVE, MOVE, MOVE], 6)//COST: 750
 
 
 

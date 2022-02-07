@@ -52,7 +52,7 @@ var roleBuilder = {
 			else return false
 		}
 
-		if (haveJob) {
+		if (haveJob()) {
 
 
 			if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {

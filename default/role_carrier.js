@@ -42,14 +42,20 @@ var roleCarrier = {
   run: function (creep) {
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => {
-        return ((
-          // structure.structureType == STRUCTURE_CONTAINER ||
-          structure.structureType == STRUCTURE_EXTENSION ||
-          structure.structureType == STRUCTURE_SPAWN ||
-          structure.structureType == STRUCTURE_TOWER
-        ) && (
-            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
-          || structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 500)
+        return (
+          ((
+            // structure.structureType == STRUCTURE_CONTAINER ||
+            structure.structureType == STRUCTURE_EXTENSION
+            || structure.structureType == STRUCTURE_SPAWN
+          ) && (structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
+          )
+          || (structure.structureType == STRUCTURE_CONTAINER
+            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 1000
+          )
+          || (structure.structureType == STRUCTURE_TOWER
+            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 800
+          )
+        )
       }
     });
     // console.log("targets.length", targets.length)
@@ -72,7 +78,7 @@ var roleCarrier = {
     if (!haveJob()) {
       // console.log('carrier dont have job,turn into Upgrader')
       Upgrader(creep)
-      
+
     }
     else {
       // console.log("here")

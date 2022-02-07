@@ -5,6 +5,8 @@ const broadcaster = require('./util_broadcast')
 const test = require('./test')
 const roleTagger = require("./util_roleTagger")
 
+const attack = require('./attack_test')
+
 module.exports.loop = function () {
   //   Game.spawns['Spawn1'].spawnCreep([MOVE, CARRY, WORK], 'harvester' + Game.time, { memory: { role: 'harvester' } })
   console.log(`----------${Game.time}----------`)
@@ -16,6 +18,9 @@ module.exports.loop = function () {
   broadcaster()
   roleTagger('W12N16')
   
+  // attack()
+
+
   if (Game.cpu.bucket == 10000) {
     Game.cpu.generatePixel();
   }
