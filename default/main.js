@@ -1,4 +1,5 @@
 const controller_creeps = require("./controller_creeps")
+const controller_towers = require("./controller_towers")
 const controller_spawns = require('./controller_spawns')
 
 const broadcaster = require('./util_broadcast')
@@ -14,9 +15,10 @@ module.exports.loop = function () {
   // test(Game.spawns["Spawn1"].room)
 
   controller_creeps()
+  controller_towers()
   controller_spawns()
 
-  // broadcaster()
+  broadcaster()
   roleTagger('W12N16')
 
 
@@ -29,5 +31,5 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-  
+
 }

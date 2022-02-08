@@ -18,7 +18,8 @@ var roleHarvesterPlus = {
     //after spawn
     //move to workPos
     if (!(
-      (creep.pos.x == creep.memory.workPos.x) && (creep.pos.y == creep.memory.workPos.y)
+      (creep.pos.x == creep.memory.workPos.x) 
+      && (creep.pos.y == creep.memory.workPos.y)
     )) {
       // console.log(creep.memory.workPos)
       const moveResult = creep.moveTo(creep.memory.workPos.x, creep.memory.workPos.y

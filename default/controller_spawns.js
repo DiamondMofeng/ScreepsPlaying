@@ -139,12 +139,12 @@ const controller_spawns = () => {
   });
 
   if (repairTargets.length) {
-    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 3)
+    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 2)
   }
 
 
   //spawn Carrier
-  spawnByMinNumber('carrier', [WORK, CARRY, CARRY, CARRY, MOVE, MOVE], 6)  //cost=300
+  spawnByMinNumber('carrier', [WORK, CARRY, CARRY, CARRY, MOVE, MOVE], 5)  //cost=300
 
 
   //spawn Builder

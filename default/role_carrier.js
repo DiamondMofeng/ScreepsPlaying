@@ -64,7 +64,7 @@ var roleCarrier = {
     else {
       // console.log("here")
       if (creep.store.getUsedCapacity() == 0) {
-        getEnergyFromContainer(creep, 1200)
+        getEnergyFromContainer(creep, 1500)
       }
       else {
         const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER])

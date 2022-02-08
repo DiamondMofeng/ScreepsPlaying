@@ -23,8 +23,9 @@ var roleRepairer = {
         filter: (s) => {
           return (
             (s.structureType == STRUCTURE_CONTAINER
-              || s.structureType == STRUCTURE_ROAD
-              || s.structureType == STRUCTURE_RAMPART)
+              // || s.structureType == STRUCTURE_ROAD
+              || s.structureType == STRUCTURE_RAMPART
+              || s.structureType == STRUCTURE_TOWER)
             && ((s.hits / s.hitsMax) < 0.9))
         }
       });
