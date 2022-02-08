@@ -1,5 +1,5 @@
 const Upgrader = require('./role_upgrader')
-const { getEnergyFromContainer } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage } = require('./util_beheavor')
 
 
 
@@ -32,6 +32,11 @@ var roleCarrier = {
           )
           || (structure.structureType == STRUCTURE_CONTAINER
             && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 1000
+
+          )
+          || (structure.structureType == STRUCTURE_STORAGE
+            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 50000
+
           )
           || (structure.structureType == STRUCTURE_TOWER
             && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 800
@@ -65,15 +70,16 @@ var roleCarrier = {
       // console.log("here")
       if (creep.store.getUsedCapacity() == 0) {
         getEnergyFromContainer(creep, 1500)
+        getEnergyFromStorage(creep)
       }
       else {
-        const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER])
+        const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_STORAGE])
         if (priorTarget) {
 
-          console.log('CarrierTarget' + priorTarget)
+          // console.log('CarrierTarget' + priorTarget)
 
           if (creep.transfer(priorTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(priorTarget, { visualizePathStyle: { stroke: '#ffffff' } });
+            creep.moveTo(priorTarget, { visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
           }
 
           // if (haveJob)

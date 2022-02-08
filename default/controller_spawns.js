@@ -2,42 +2,39 @@ const { memoryResources } = require('./util_getMemories')
 
 const controller_spawns = () => {
 
-  // const memoryResourves = (anyObjectHasMemory) => {
-  //   const obj = anyObjectHasMemory
-  //   //add memory
-  //   if (!obj.room.memory.sources || obj.room.memory.sources.length == 0) {
-  //     obj.room.memory.sources = []
-  //     const sources = obj.room.find(FIND_SOURCES)
-
-  //     // console.log(sources)
-  //     const workPos = (s) => {
-  //       // console.log('fine')
-  //       if (s.id == '5bbcac3c9099fc012e635233') {
-  //         // console.log('fine1')
-  //         return new RoomPosition(9, 37, 'W12N16')
-  //       }
-  //       if (s.id == '5bbcac3c9099fc012e635232') {
-  //         // console.log('fine2')
-  //         return new RoomPosition(21, 31, 'W12N16')
-  //       }
-  //     }
+  let spawn =Game.spawns['Spawn1']
 
 
-  //     for (i in sources) {
-  //       const s = sources[i]
-  //       // console.log(workPos(s))
-  //       // console.log('123',typeof s.id)
 
-  //       obj.room.memory.sources[i] = {
-  //         id: s.id,
-  //         workPos: workPos(s),
-  //         onHarvest: false,
-  //         harvester: '',
-  //       }
-  //     }
-  //   }
-  // }
+  /**
+   * 输入简化版bodyArray来获取完全版
+   * @param {Array} simpleBodyArray - ['part', i, ...] 应有偶数长度
+   * @returns {Array} fullBodyArray
+   */
+  const body = (simpleBodyArray) => {
+    let result = []
 
+    for (let i = 0; i < simpleBodyArray.length; i++) {
+      let PART = simpleBodyArray[i].toString()
+      let next = simpleBodyArray[i + 1]
+
+      if (typeof next == 'undefined' || typeof next == 'string') {
+        result.push(PART)
+        continue
+      }
+      else {
+        if (typeof next == 'number') {
+          i++
+          for (; next > 0; next--) {
+            result.push(PART)
+          }
+        }
+
+        else throw new Error('error input of body function')
+      }
+    }
+    return result
+  }
 
   /*
   return TRUE if need spawn
@@ -104,7 +101,7 @@ const controller_spawns = () => {
 
 
   //spawn HarvesterPlus
-  
+
   memoryResources(Game.spawns['Spawn1'].room)
   ///////////////WARNING!!! HARD CODED////////////////
   const spareSources = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
@@ -134,7 +131,12 @@ const controller_spawns = () => {
   //spawn Repairer
   var repairTargets = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
     filter: (s) => {
-      return s.hits / s.hitsMax <= 0.6
+      return (
+        (s.structureType == STRUCTURE_CONTAINER
+          // || s.structureType == STRUCTURE_ROAD
+          || s.structureType == STRUCTURE_RAMPART
+          || s.structureType == STRUCTURE_TOWER)
+        && ((s.hits / s.hitsMax) < 1))
     }
   });
 
@@ -144,16 +146,25 @@ const controller_spawns = () => {
 
 
   //spawn Carrier
-  spawnByMinNumber('carrier', [WORK, CARRY, CARRY, CARRY, MOVE, MOVE], 5)  //cost=300
+  spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 6)  //cost=650
 
 
   //spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', [WORK, WORK, CARRY, CARRY, MOVE, MOVE], 3)
+    spawnByMinNumber('builder', [WORK, WORK, CARRY, CARRY, MOVE, MOVE], 1)
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE], 4)//COST: 750
+  spawnByMinNumber('upgrader', body([WORK, 5, CARRY, MOVE, 4]), 4)//COST: 750
+
+
+  //spawn Sweepper
+  // let droppedResources = spawn.room.find(FIND_DROPPED_RESOURCES)
+
+  // if (droppedResources.length) {
+  //   spawnByMinNumber('sweepper', body([WORK, CARRY, 10, MOVE, 11]), 1)
+  // }
+
 
 
 

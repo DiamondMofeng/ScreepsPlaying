@@ -17,22 +17,35 @@ const { memoryUpgradePosArray } = require('./util_getMemories')
 
 //define PART
 const getEnergyFromUpgradeContainer = function (creep) {
-  creep.pos.findInRange()
+  let UPcontainer = creep.pos.findInRange(FIND_STRUCTURES, 2, { filter: s => s.structureType == STRUCTURE_CONTAINER })[0]
+  // console.log('upcontainer',UPcontainer)
+  if (UPcontainer) {
+    let upgraderWithdrawResult = creep.withdraw(UPcontainer, RESOURCE_ENERGY)
+    // console.log("upgraderWithdrawResult", upgraderWithdrawResult)
+    if (upgraderWithdrawResult === 0) {
+      return true
+    }
+    else {
+      // console.log("upgrader failed to withdraw energy from container", upgraderWithdrawResult)
+      return false
+    }
+  }
 }
 
 
 
 /**
- * 给creep赋予upgradePosIndex Memory
+ * 赋予creep.memory.upgradePosIndex </br>
+ * 并使creep.room.memory.upgradePos[i].used = true
  * @param {*} creep 
  * @returns {boolean} true - if getPos
  * @returns {boolean} false - if faild to get
  */
 function getUpgradePos(creep) {
-  // console.log('getUpPosIndex:', creep)
   if (creep.memory.upgradePosIndex) {
     return
   }
+  console.log('getUpPosIndex:', creep)
 
 
   let upgradePosArray = creep.room.memory.upgradePos
@@ -42,13 +55,11 @@ function getUpgradePos(creep) {
   for (i in upgradePosArray) {
     // console.log('i:', i)
     let pos = upgradePosArray[i]
-
     if (pos.used == false) {
+      console.log(`${creep} .memory.upgradeIndex is set to ${i}`)
+
       creep.memory.upgradePosIndex = i
-      // pos.used = true
-      // if (!creep.ticksToLive < 20) {
       pos.used = true
-      // }
 
       return true
     }
@@ -57,8 +68,18 @@ function getUpgradePos(creep) {
 }
 
 /**
- * 将升级工作位置向前优化，优化成功则atPos=false
+ * 将升级工作位置向前优化，成功则对memory进行更新：
+ 
+ * 
  * @param {*} creep 
+ * 
+ * @result creep.room.memory.upgradePos[creep.memory.upgradePosIndex].used = false
+ * @result creep.room.memory.upgradePos[i].used = true
+ * 
+ * @result creep.memory.upgradePosIndex = newIndex
+ * @result creep.memory.atPos = false
+ * 
+ * 
  * @returns {boolean} true - if succ
  * @returns {boolean} false - if do NOT need
  */
@@ -68,8 +89,16 @@ function optimizeUpgradePos(creep) {
 
   for (let i = 0; i < creep.memory.upgradePosIndex; i++) {
     if (upgradePosArray[i].used == false) {
+
+      console.log(creep, ' changes his upgradePosIndex to ', i)
+
       creep.memory.upgradePosIndex = i
       creep.memory.atPos = false
+
+      creep.room.memory.upgradePos[creep.memory.upgradePosIndex].used = false
+      // creep.room.memory.upgradePos[i].used = true
+
+
       return true
     }
     else return false
@@ -85,15 +114,18 @@ function optimizeUpgradePos(creep) {
  */
 function moveToUpgradePos(creep) {
 
-  console.log("creep.memory.upgradePosIndex", creep.memory.upgradePosIndex)
+
+
 
   let upgradePos = creep.room.memory.upgradePos[creep.memory.upgradePosIndex]
   //if 已到达
-  if (creep.pos.x == upgradePos.x && creep.pos.y == upgradePos.y) {
+  if (creep.pos.x === upgradePos.x && creep.pos.y === upgradePos.y) {
     creep.memory.atPos = true
     return true
-  }
-  else {
+
+  } else {
+    console.log(creep, "is moving to pos", creep.memory.upgradePosIndex)
+
     creep.memory.atPos = false
     console.log('upgradePos', JSON.stringify(upgradePos))
     let moveResult = creep.moveTo(upgradePos.x, upgradePos.y, { ignoreCreeps: false, visualizePathStyle: { stroke: '#FFFF00' } })
@@ -102,25 +134,38 @@ function moveToUpgradePos(creep) {
   }
 }
 
+
+
+
+
+
+
+
+
+//////main/////
 var roleUpgrader = {
 
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
+    //IF 将要老死
+    if (creep.ticksToLive < 3) {
+      //放回所有energy
+      creep.transfer(
+        creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_CONTAINER })
+        , RESOURCE_ENERGY)
 
-      // optimizeUpgradePos(creep)
+      //更改memory:
+      creep.room.memory.upgradePos[creep.memory.upgradePosIndex].used = false
 
-      creep.memory.upgrading = false;
-      creep.say('🔄 harvest');
+      creep.memory.atPos = false
+      creep.memory.upgradePosIndex = -1
+
+      return
     }
-    if (!creep.memory.upgrading && creep.store.getFreeCapacity() == 0) {
-      creep.memory.upgrading = true;
-      creep.say('⚡ upgrade');
-    }
 
-    //if have energy
-    if (creep.memory.upgrading) {
+
+    else {
 
       // memoryUpgradePosArray(creep.room)
 
@@ -139,29 +184,26 @@ var roleUpgrader = {
       moveToUpgradePos(creep)
       // }
 
-      // else {//位于工作地点,开始工作
-      let upgradeResult = creep.upgradeController(creep.room.controller)
-      console.log("upgradeResult:", upgradeResult)
-      // }
+      //位于工作地点,开始工作
+      //若无能量就去获取能量
+      if (creep.store[RESOURCE_ENERGY] == 0) {
+        // creep.say('🧲 energy')
 
+        getEnergyFromUpgradeContainer(creep)
+      }
 
+      else {
+        // creep.say('⚡ upgrade');
 
+        let upgradeResult = creep.upgradeController(creep.room.controller)
+        // console.log("upgradeResult:", upgradeResult)
+      }
     }
     //dont have energy
-    else {
-      if (getEnergyFromContainer(creep, 100, { ignoreCreeps: true })) {
 
-      }
-      else {//dig
-        var sources = creep.room.find(FIND_SOURCES);
-
-        if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-        }
-      }
-    }
 
 
   }
 }
+
 module.exports = roleUpgrader.run;

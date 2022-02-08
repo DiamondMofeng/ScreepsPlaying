@@ -2,8 +2,11 @@ const Harvester = require('./role_harvester')
 const HarvesterPlus = require('./role_harvesterPlus')
 const Carrier = require('./role_carrier')
 const Upgrader = require('./role_upgrader')
+// const Upgrader = require('./role_upgraderPlus')
 const Builder = require('./role_builder')
 const Repairer = require('./role_repairer')
+const Sweepper = require('./role_sweepper')
+
 
 function controller_creeps() {
   //beheavor crontroller
@@ -31,6 +34,9 @@ function controller_creeps() {
       Repairer(creep)
       // Builder(creep)
       // Harvester(creep)
+    }
+    if (creep.memory.role == 'sweepper') {
+      Sweepper(creep)
     }
   }
   // console.log('1')

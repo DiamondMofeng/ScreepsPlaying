@@ -39,7 +39,7 @@ const memoryUpgradePosArray = (room) => {
   if (!room.memory.upgradePos || room.memory.upgradePos.length == 0) {
     room.memory.upgradePos = []
     // console.log(room.find(StructureController))
-    let controller = room.controller
+    let controller = room.controller;
 
     if (controller.id === '5bbcac3c9099fc012e635234') {
       room.memory.upgradePos = [{ x: 42, y: 41, used: false },

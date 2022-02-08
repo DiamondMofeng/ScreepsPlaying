@@ -23,7 +23,13 @@ const broadcaster = () => {
   const energy = Game.spawns['Spawn1'].room.energyAvailable
   console.log(`Spawn1 has ${energy} Energy left`)
 
-  creepRoleCounter(['harvesterPlus', 'carrier', 'repairer', 'builder', 'upgrader'])
+  creepRoleCounter(['harvesterPlus',
+    'carrier',
+    'repairer',
+    'builder',
+    'upgrader',
+    'sweepper'
+  ])
 }
 
 module.exports =
