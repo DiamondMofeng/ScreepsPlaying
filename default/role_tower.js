@@ -13,7 +13,7 @@ const roleTower = (tower) => {
   if (enemyTargets.length) {
 
     //先筛选具有攻击性的
-    let enemiesHasAttack = _.filter(enemyTargets, t => (t.body.indexOf(ATTACK) != -1) || (t.body.indexOf(RANGED_ATTACK) != -1))
+    let enemiesHasAttack = _.filter(enemyTargets, t => (t.getActiveBodyparts(ATTACK) > 0) || (t.getActiveBodyparts(RANGED_ATTACK) > 0))
 
     if (enemiesHasAttack.length) {
       tower.attack(tower.pos.findClosestByRange(enemiesHasAttack))
@@ -32,25 +32,40 @@ const roleTower = (tower) => {
   //若能量大于750则修建筑
 
   if (tower.store[RESOURCE_ENERGY] > 750) {
-    {
-
-      //修堡垒:
-      let rampartToRepair = tower.room.find(FIND_STRUCTURES,
-        {
-          filter: s => (s.structureType == STRUCTURE_RAMPART)
-            && ((s.hits / s.hitsMax) < 0.5)
-        })
-      // console.log('rampartToRepair:', rampartToRepair)
 
 
+    //修堡垒:
+    let rampartToRepair = tower.room.find(FIND_STRUCTURES,
+      {
+        filter: s => (s.structureType == STRUCTURE_RAMPART)
+          && ((s.hits / s.hitsMax) < 0.5)
+      })
+    // console.log('rampartToRepair:', rampartToRepair)
 
-      if (rampartToRepair.length) {
-        let towerRepairResult = tower.repair(rampartToRepair[0])
-        // console.log('Tower repair result:', towerRepairResult)
-      }
+
+
+    if (rampartToRepair.length) {
+      let towerRepairResult = tower.repair(rampartToRepair[0])
+      // console.log('Tower repair result:', towerRepairResult)
+      return
     }
 
 
+    //修墙:
+    let wallToRepair = tower.room.find(FIND_STRUCTURES,
+      {
+        filter: s => (s.structureType == STRUCTURE_WALL)
+          && ((s.hits / s.hitsMax) < 0.001)
+      })
+    // console.log('rampartToRepair:', rampartToRepair)
+
+
+
+    if (wallToRepair.length) {
+      let towerRepairResult = tower.repair(rampartToRepair[0])
+      // console.log('Tower repair result:', towerRepairResult)
+      return
+    }
 
     //修路：
     let roadToRepair = tower.room.find(FIND_STRUCTURES,

@@ -69,7 +69,7 @@ var roleCarrier = {
     else {
       // console.log("here")
       if (creep.store.getUsedCapacity() == 0) {
-        getEnergyFromContainer(creep, 1500)
+        getEnergyFromContainer(creep, 1300)
         getEnergyFromStorage(creep)
       }
       else {

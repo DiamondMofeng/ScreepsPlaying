@@ -1,4 +1,5 @@
 const Upgrader = require('./role_upgrader')
+const Repairer = require('./role_repairer')
 const { getEnergyFromContainer, PriorizedTarget } = require('./util_beheavor')
 
 
@@ -50,7 +51,7 @@ var roleBuilder = {
 			}
 		}
 		else {
-			Upgrader(creep)
+			Repairer(creep)
 		}
 	}
 };
