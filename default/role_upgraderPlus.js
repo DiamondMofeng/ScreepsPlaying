@@ -1,4 +1,4 @@
-const { getEnergyFromContainer } = require('./util_beheavor')
+// const { getEnergyFromContainer } = require('./util_beheavor')
 const { memoryUpgradePosArray } = require('./util_getMemories')
 
 //upgraderByPos
@@ -11,19 +11,30 @@ const { memoryUpgradePosArray } = require('./util_getMemories')
 
 // room.memory:
 // {
-// upgradePos: [{ x: , y: , used: }]
+// upgradePos: [{ x: , y: , used: }, ... ]
 // }
+
+
+//define PART
+const getEnergyFromUpgradeContainer = function (creep) {
+  creep.pos.findInRange()
+}
 
 
 
 /**
- * 
+ * 给creep赋予upgradePosIndex Memory
  * @param {*} creep 
  * @returns {boolean} true - if getPos
  * @returns {boolean} false - if faild to get
  */
 function getUpgradePos(creep) {
   // console.log('getUpPosIndex:', creep)
+  if (creep.memory.upgradePosIndex) {
+    return
+  }
+
+
   let upgradePosArray = creep.room.memory.upgradePos
 
   // console.log('creep.room.memory', creep.room.memory)
@@ -35,9 +46,9 @@ function getUpgradePos(creep) {
     if (pos.used == false) {
       creep.memory.upgradePosIndex = i
       // pos.used = true
-      if (!creep.ticksToLive < 20) {
-        pos.used = true
-      }
+      // if (!creep.ticksToLive < 20) {
+      pos.used = true
+      // }
 
       return true
     }
@@ -54,6 +65,7 @@ function getUpgradePos(creep) {
 
 function optimizeUpgradePos(creep) {
   let upgradePosArray = creep.room.memory.upgradePos
+
   for (let i = 0; i < creep.memory.upgradePosIndex; i++) {
     if (upgradePosArray[i].used == false) {
       creep.memory.upgradePosIndex = i
@@ -76,6 +88,7 @@ function moveToUpgradePos(creep) {
   console.log("creep.memory.upgradePosIndex", creep.memory.upgradePosIndex)
 
   let upgradePos = creep.room.memory.upgradePos[creep.memory.upgradePosIndex]
+  //if 已到达
   if (creep.pos.x == upgradePos.x && creep.pos.y == upgradePos.y) {
     creep.memory.atPos = true
     return true
@@ -111,27 +124,25 @@ var roleUpgrader = {
 
       // memoryUpgradePosArray(creep.room)
 
-      //检查是否有工作位置
-      if (!creep.memory.upgradePos) {
-        getUpgradePos(creep)
-      }
+      //若无工作位置则进行赋予
+      getUpgradePos(creep)
 
-      //检查优化工作区域
+      //优化工作位置 
       optimizeUpgradePos(creep)
 
       //检查是否位于工作地点，并决定是否移动
       // console.log(`atPos:${creep.memory.atPos}`)
 
 
-      if (creep.memory.atPos != true) {
-        // console.log(`atPos != true`)
-        moveToUpgradePos(creep)
-      }
+      // if (creep.memory.atPos != true) {
+      // console.log(`atPos != true`)
+      moveToUpgradePos(creep)
+      // }
 
-      else {//位于工作地点,开始工作
-        let upgradeResult = creep.upgradeController(creep.room.controller)
-        console.log("upgradeResult:", upgradeResult)
-      }
+      // else {//位于工作地点,开始工作
+      let upgradeResult = creep.upgradeController(creep.room.controller)
+      console.log("upgradeResult:", upgradeResult)
+      // }
 
 
 
