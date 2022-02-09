@@ -27,7 +27,7 @@ function attack_STRUCTURES(creep) {
   })
 
   let atkResult = creep.attack(targets[targets.length - 1])
-  
+
   // console.log(atkResult)
 
   if (atkResult == ERR_NOT_IN_RANGE) {
@@ -41,8 +41,8 @@ function attack_objectByID(creep, id) {
 
 function main() {
 
-  let attackerCreepsId = ['attackerTest', 'attackerTest2']
-  let flagID = 'Flag1'
+  let attackerCreepsId = []
+  let flagID = 'ATK'
 
 
   let flag = Game.flags[flagID]
@@ -52,15 +52,18 @@ function main() {
 
 
 
-    attack_moveToFlag(c,flag)
-    attack_objectByID(c,'62000f0f1386917f30c19f13')
-    // attack_anyCreep(c)
+    attack_moveToFlag(c, flag)
+    // attack_objectByID(c,'62000f0f1386917f30c19f13')
+    attack_anyCreep(c)
     // attack_STRUCTURES(c)
 
   }
 
   // attack_moveToFlag(Game.creeps['attackerTest2'], Game.flags['Flag1'])
 }
+
+
+// Game.spawns.Spawn1.spawnCreep([TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE], 'ATTACKERtEST')
 
 module.exports = main
 

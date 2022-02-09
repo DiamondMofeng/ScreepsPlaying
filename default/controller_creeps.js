@@ -12,9 +12,12 @@ const long_Reserver = require('./role_long_reserver')
 const long_Carrier = require('./role_long_carrier')
 const long_Harvester = require('./role_long_harvester')
 
+const Useless = require('./role_useless')
+
 
 function controller_creeps() {
-  //beheavor crontroller
+
+  //* beheavor crontroller
   for (creepName in Game.creeps) {
     var creep = Game.creeps[creepName]
     if (creep.memory.role == 'harvester') {
@@ -59,16 +62,29 @@ function controller_creeps() {
     }
 
     if (creep.memory.role == 'long_carrier') {
-      long_Carrier(creep, Game.getObjectById('620364b19c206fed8021ab42'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
+      // long_Carrier(creep, Game.getObjectById('6200bf0e9b3fe1ad6927628f'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
+      long_Carrier(creep, Game.getObjectById('620364b19c206fed8021ab42'), Game.getObjectById('6200bf0e9b3fe1ad6927628f')) // normal
+
     }
 
     if (creep.memory.role == 'long_harvester') {
+      // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
       long_Harvester(creep
         , Game.getObjectById('620364b19c206fed8021ab42')//container
         , Game.getObjectById('5bbcac4a9099fc012e6353bc')//source
-        )
+        
+      )
+    }
+
+
+
+    /////////////other////////////
+    if (creep.memory.role == 'useless') {
+      Useless(creep)
     }
   }
+
+
   // console.log('1')
 }
 

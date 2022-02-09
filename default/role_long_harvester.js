@@ -3,6 +3,7 @@
 //工作时站在container上不动，采集的资源自动掉到container里面
 //[WORK*5,MOVE] COST:550
 
+
 //memory:
 //{
 //workPos:
@@ -36,7 +37,7 @@ var roleLongHarvester = {
       } else {
         //修container
         // console.log('container\'s hits:',container.hits / container.hitsMax)
-        if ((container.hits / container.hitsMax) < 0.9) {
+        if (container.store.getUsedCapacity > 1000 && (container.hits / container.hitsMax) < 0.9) {
           creep.repair(container)
         }
         //不用修则向container输入能量

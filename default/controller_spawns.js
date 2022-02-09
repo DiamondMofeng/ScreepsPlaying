@@ -191,16 +191,16 @@ const controller_spawns = () => {
 
 
   //spawn Carrier
-  spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 6)  //cost=650
+  spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 3)  //cost=650
 
 
   //spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', body([WORK, 4, CARRY, 4, MOVE, 4]), 3)
+    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 2)
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 2)//COST: 750
+  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 1)//COST: 1300
 
 
   //spawn Sweepper
@@ -212,6 +212,9 @@ const controller_spawns = () => {
 
 
 
+
+  //* LONG 
+
   //spawn long_pionner
   spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
@@ -222,7 +225,7 @@ const controller_spawns = () => {
   spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 5, MOVE, 3]), 4)
 
   //spawn long_harvester
-  spawnByMinNumber('long_harvester', body([WORK, 6, CARRY, 1, MOVE, 6]), 1)
+  spawnByMinNumber('long_harvester', body([WORK, 7, CARRY, 1, MOVE, 4]), 1)
 
 
 

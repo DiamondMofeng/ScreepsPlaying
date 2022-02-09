@@ -15,8 +15,7 @@ module.exports.loop = function () {
   // test.trans1(Game.getObjectById('62029a95302000f912843c34'))
   // test.trans2(Game.getObjectById('62029a95302000f912843c34'))
 
-  roleTagger('W12N16')
-  roleTagger('W11N16')
+
 
   controller_creeps()
   controller_buildings()
@@ -24,11 +23,13 @@ module.exports.loop = function () {
 
   broadcaster()
 
-
-
-
+  roleTagger('W12N16')
+  roleTagger('W11N16')
 
   // attack()
+
+
+
 
 
   if (Game.cpu.bucket == 10000) {
