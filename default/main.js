@@ -1,5 +1,5 @@
 const controller_creeps = require("./controller_creeps")
-const controller_towers = require("./controller_towers")
+const controller_buildings = require("./controller_buildings")
 const controller_spawns = require('./controller_spawns')
 
 const broadcaster = require('./util_broadcast')
@@ -19,7 +19,7 @@ module.exports.loop = function () {
   roleTagger('W11N16')
 
   controller_creeps()
-  controller_towers()
+  controller_buildings()
   controller_spawns()
 
   broadcaster()

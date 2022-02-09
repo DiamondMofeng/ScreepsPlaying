@@ -196,7 +196,7 @@ const controller_spawns = () => {
 
   //spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', [WORK, WORK, CARRY, CARRY, MOVE, MOVE], 1)
+    spawnByMinNumber('builder', body([WORK, 4, CARRY, 4, MOVE, 4]), 3)
   }
 
   //spawn Upgrader
@@ -216,7 +216,7 @@ const controller_spawns = () => {
   spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
   //spawn long_claimer
-  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 2]), 1)
+  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
 
   //spawn long_carrier
   spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 5, MOVE, 3]), 4)

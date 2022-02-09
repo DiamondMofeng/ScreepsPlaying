@@ -4,5 +4,6 @@ todo list:
 
 [ ] armySpawner
 
-[ ] long harvester
-[ ] long carrier
+[x] long harvester
+
+[x] long carrier

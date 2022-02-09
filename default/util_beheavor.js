@@ -163,20 +163,29 @@ function transferAllToStorage(creep, certainStorage = null) {
  * @param {number} range 
  * @returns {boolean} true if have energy to pick
  */
-function pickUpNearbyDroppedEnergy(creep, range = 2) {
+function pickUpNearbyDroppedEnergy(creep, range = 1) {
   if (creep.store.getFreeCapacity() != 0) {
-    let nearbyDroppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
-
+    let droppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
+    let tombsHaveEnergy = creep.pos.findInRange(FIND_TOMBSTONES, range, { filter: t => t.store.energy > 0 })
+    let founded = false
     // console.log('picking')
-    if (nearbyDroppedEnergys.length > 0) {
 
-      if (creep.pickup(nearbyDroppedEnergys[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(nearbyDroppedEnergys[0])
+    if (droppedEnergys.length > 0) {
+      if (creep.pickup(droppedEnergys[0]) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(droppedEnergys[0])
       }
+      founded = true
+    }
 
-      return true
+    if (tombsHaveEnergy.length > 0) {
+      if (creep.withdraw(tombsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(tombsHaveEnergy[0])
+      }
+      founded = true
+    }
 
-    } else return false
+    return founded
+
   }
 }
 
@@ -234,6 +243,36 @@ function moveAndTransfer(creep, container, resourceTypes = []) {
   }
 }
 
+
+/**
+ * 赋予creep工作状态属性: 以确保 收集能量至满背包，工作至能量清空
+ * @notice 不需要给这两个函数传参数
+ * @param {Creep} creep 
+ * @param {Function} onCharge - 收集能量时的脚本函数
+ * @param {Function} onWork  - 工作时的脚本函数
+ */
+function workingStatesKeeper(creep, onCharge, onWork) {
+
+  //若能量为空，置为获取能量状态
+  if (creep.store.getUsedCapacity() == 0) {
+    creep.memory.working = false
+  }
+
+  //若能量为满，置为工作状态
+  if (creep.store.getFreeCapacity() == 0) {
+    creep.memory.working = true
+  }
+
+
+  //开始收集能量
+  if (creep.memory.working == false) {
+    onCharge()
+  }
+
+  else {
+    onWork()
+  }
+}
 
 //5bbcac3c9099fc012e635232
 //5bbcac3c9099fc012e635233

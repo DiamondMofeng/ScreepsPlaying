@@ -1,7 +1,7 @@
-const Tower = require('./role_tower')
+const Tower = require('./building_tower')
 
 
-function controller_towers() {
+function controller_buildings() {
   //tower beheavor crontroller
   let towers = _.filter(Object.values(Game.structures), s => s.structureType == STRUCTURE_TOWER)
 
@@ -11,5 +11,5 @@ function controller_towers() {
   }
 }
 
-module.exports = controller_towers;
+module.exports = controller_buildings;
 
