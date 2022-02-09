@@ -45,24 +45,32 @@ const controller_spawns = () => {
    */
   const bodyCost = (bodyArray) => {
     let cost = 0
-    for (part in body) {
+    for (part of bodyArray) {
       switch (part) {
         case MOVE:
           cost += 50
+          break
         case WORK:
           cost += 100
+          break
         case CARRY:
           cost += 50
+          break
         case ATTACK:
           cost += 80
+          break
         case RANGED_ATTACK:
           cost += 150
+          break
         case HEAL:
           cost += 250
+          break
         case CLAIM:
           cost += 600
+          break
         case TOUGH:
           cost += 10
+          break
       }
     }
     return cost
@@ -192,7 +200,7 @@ const controller_spawns = () => {
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 7, CARRY, MOVE, 4]), 3)//COST: 750
+  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 2)//COST: 750
 
 
   //spawn Sweepper
@@ -205,12 +213,16 @@ const controller_spawns = () => {
 
 
   //spawn long_pionner
-  spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 3)
+  spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
   //spawn long_claimer
   spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 2]), 1)
 
+  //spawn long_carrier
+  spawnByMinNumber('long_carrier', body([WORK, 2, CARRY, 4, MOVE, 3]), 3)
 
+  //spawn long_harvester
+  spawnByMinNumber('long_harvester', body([WORK, 6, CARRY, 1, MOVE, 6]), 1)
 
 
 

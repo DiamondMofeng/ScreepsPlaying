@@ -9,7 +9,8 @@ const Sweepper = require('./role_sweepper')
 
 const long_Pionner = require('./role_long_pioneer')
 const long_Reserver = require('./role_long_reserver')
-
+const long_Carrier = require('./role_long_carrier')
+const long_Harvester = require('./role_long_harvester')
 
 
 function controller_creeps() {
@@ -50,10 +51,22 @@ function controller_creeps() {
     ////////LONG/////////
     if (creep.memory.role == 'long_pionner') {
       long_Pionner(creep, 'out')
+      // long_Carrier(creep, Game.getObjectById('620364b19c206fed8021ab42'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
     }
 
     if (creep.memory.role == 'long_reserver') {
       long_Reserver(creep, 'out')
+    }
+
+    if (creep.memory.role == 'long_carrier') {
+      long_Carrier(creep, Game.getObjectById('620364b19c206fed8021ab42'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
+    }
+
+    if (creep.memory.role == 'long_harvester') {
+      long_Harvester(creep
+        , Game.getObjectById('620364b19c206fed8021ab42')//container
+        , Game.getObjectById('5bbcac4a9099fc012e6353bc')//source
+        )
     }
   }
   // console.log('1')

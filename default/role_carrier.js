@@ -23,9 +23,8 @@ var roleCarrier = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    if (pickUpNearbyDroppedEnergy(creep)) {
-      return
-    }
+
+
 
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => {
@@ -73,9 +72,15 @@ var roleCarrier = {
     }
     else {
       // console.log("here")
-      if (creep.store.getUsedCapacity() == 0) {
-        getEnergyFromContainer(creep, 1300)
-        getEnergyFromStorage(creep)
+      if (creep.store.getFreeCapacity() != 0) {
+
+        if (!pickUpNearbyDroppedEnergy(creep)) {
+          getEnergyFromContainer(creep, 1300)
+          getEnergyFromStorage(creep)
+        }
+
+
+
       }
       else {
         const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_STORAGE])
@@ -89,6 +94,7 @@ var roleCarrier = {
 
           // if (haveJob)
         }
+
       }
     }
 

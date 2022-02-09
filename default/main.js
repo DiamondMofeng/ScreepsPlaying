@@ -16,6 +16,7 @@ module.exports.loop = function () {
   // test.trans2(Game.getObjectById('62029a95302000f912843c34'))
 
   roleTagger('W12N16')
+  roleTagger('W11N16')
 
   controller_creeps()
   controller_towers()

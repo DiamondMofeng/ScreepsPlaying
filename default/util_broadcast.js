@@ -33,7 +33,9 @@ const broadcaster = () => {
 
 
     'long_pionner',
-    'long_reserver'
+    'long_reserver',
+    'long_harvester',
+    'long_carrier'
   ])
 }
 

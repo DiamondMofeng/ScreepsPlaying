@@ -18,7 +18,7 @@ var roleHarvesterPlus = {
     //after spawn
     //move to workPos
     if (!(
-      (creep.pos.x == creep.memory.workPos.x) 
+      (creep.pos.x == creep.memory.workPos.x)
       && (creep.pos.y == creep.memory.workPos.y)
     )) {
       // console.log(creep.memory.workPos)
@@ -31,6 +31,13 @@ var roleHarvesterPlus = {
     else {
       const harvestResult = creep.harvest(Game.getObjectById(creep.memory.sourceId))
       // console.log('harvestResult', harvestResult)
+
+
+      //修container
+      if (true) {
+
+      }
+
     }
 
 

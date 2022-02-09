@@ -150,25 +150,81 @@ function transferAllToStorage(creep, certainStorage = null) {
 
 
 /**
- * 
+ * 包括墓碑中的能量
  * @param {Creep} creep 
  * @param {number} range 
  * @returns {boolean} true if have energy to pick
  */
 function pickUpNearbyDroppedEnergy(creep, range = 2) {
-  let nearbyDroppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
-  if (nearbyDroppedEnergys.length > 0) {
+  if (creep.store.getFreeCapacity() != 0) {
+    let nearbyDroppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
 
-    if (creep.pickup(nearbyDroppedEnergys[0]) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(nearbyDroppedEnergys[0])
+    // console.log('picking')
+    if (nearbyDroppedEnergys.length > 0) {
+
+      if (creep.pickup(nearbyDroppedEnergys[0]) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(nearbyDroppedEnergys[0])
+      }
+
+      return true
+
+    } else return false
+  }
+}
+
+/**
+ * 默认只取能量
+ * @param {Creep} creep 
+ * @param {StructureContainer|STRUCTURE_STORAGE} container - withdraw from
+ * @param {Array} resourceTypes an array
+ */
+function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY]) {
+  for (rt of resourceTypes) {
+
+    let withdrawResult = creep.withdraw(container, rt)
+    // console.log('withdrawResult', rt, withdrawResult)
+
+    if (withdrawResult == ERR_NOT_IN_RANGE) {
+      creep.moveTo(container)
+      return
     }
-
-    return true
-
-  } else return false
+  }
 }
 
 
+/**
+ * 将creep身上的资源转移至指定container
+ * @param {Creep} creep 
+ * @param {StructureContainer|STRUCTURE_STORAGE} container - transfer to
+ * @param {Array} resourceTypes - 未指定时转移所有资源
+ * 
+ */
+function moveAndTransfer(creep, container, resourceTypes = []) {
+
+  if (resourceTypes.length > 0) {
+
+    for (rt of resourceTypes) {
+      if (creep.transfer(container, rt) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(container)
+        return
+      }
+    }
+
+  } else {
+
+    for (rt in creep.store) {
+
+      let transferResult = creep.transfer(container, rt)
+
+      // console.log(transferResult)
+
+      if (transferResult == ERR_NOT_IN_RANGE) {
+        creep.moveTo(container)
+        return
+      }
+    }
+  }
+}
 
 
 //5bbcac3c9099fc012e635232
@@ -180,5 +236,6 @@ module.exports = {
   PriorizedTarget, targetsPriorizer_byRef,
   recycleSelf,
   transferAllToStorage,
-  pickUpNearbyDroppedEnergy
+  pickUpNearbyDroppedEnergy,
+  moveAndWithdraw, moveAndTransfer
 }

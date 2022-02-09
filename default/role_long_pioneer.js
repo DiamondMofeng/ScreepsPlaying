@@ -1,4 +1,4 @@
-
+const Harvester = require('./role_harvester')
 const Builder = require('./role_builder')
 
 /**
@@ -13,8 +13,13 @@ const role_long_pioneer = (creep, flagName) => {
     return
   }
 
-  Builder(creep, true)
 
+  if (creep.room.find(FIND_CONSTRUCTION_SITES).length) {
+    Builder(creep, true)
+  }
+  else {
+    Harvester(creep)
+  }
 }
 
 module.exports = role_long_pioneer

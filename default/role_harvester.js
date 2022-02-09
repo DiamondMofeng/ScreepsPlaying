@@ -1,6 +1,4 @@
-/*
-**
-*/
+const { targetsPriorizer_byRef } = require('./util_beheavor')
 
 const PriorizedTarget = (targets) => {
 
@@ -52,7 +50,8 @@ var roleHarvester = {
       // console.log(targets[1])
 
 
-      const priorTarget = PriorizedTarget(targets)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER])
+      const priorTarget = targetsPriorizer_byRef('structureType', 
+        [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER])(targets)
       if (priorTarget) {
 
         console.log('HarvesterTarget' + priorTarget)
@@ -62,11 +61,6 @@ var roleHarvester = {
         }
       }
 
-      // if (targets.length > 0) {
-      //   if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      //     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
-      //   }
-      // }
     }
   }
 }
