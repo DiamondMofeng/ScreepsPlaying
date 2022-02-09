@@ -35,14 +35,14 @@ var roleRepairer = {
               (s.structureType == STRUCTURE_WALL)
               && ((s.hits / s.hitsMax) < 0.003)
             )
-            // || (
-            //   (s.structureType == STRUCTURE_RAMPART)
-            //   && ((s.hits / s.hitsMax) < 0.5))
+          // || (
+          //   (s.structureType == STRUCTURE_RAMPART)
+          //   && ((s.hits / s.hitsMax) < 0.5))
         }
       });
       console.log('repireList:' + targets)
       if (targets.length) {
-        let priorizedTarget = targetsPriorizer_byRef('structureType', [STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART, STRUCTURE_CONTAINER])(targets)
+        let priorizedTarget = targetsPriorizer_byRef('structureType', [STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_WALL, STRUCTURE_RAMPART])(targets)
 
         if (creep.repair(priorizedTarget) == ERR_NOT_IN_RANGE) {
           creep.moveTo(priorizedTarget, { visualizePathStyle: { stroke: '#0000CD', opacity: 0.2 } });

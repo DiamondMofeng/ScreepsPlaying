@@ -21,14 +21,19 @@ const broadcaster = () => {
 
   //Spawn's energy left
   const energy = Game.spawns['Spawn1'].room.energyAvailable
-  console.log(`Spawn1 has ${energy} Energy left`)
+  const energyCapacity = Game.spawns['Spawn1'].room.memory.energyCapacity
+  console.log(`Spawn1 has ${energy}/${energyCapacity} Energy left`)
 
   creepRoleCounter(['harvesterPlus',
     'carrier',
     'repairer',
     'builder',
     'upgrader',
-    'sweepper'
+    'sweepper',
+
+
+    'long_pionner',
+    'long_reserver'
   ])
 }
 

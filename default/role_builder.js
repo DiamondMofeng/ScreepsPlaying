@@ -7,7 +7,7 @@ const { getEnergyFromContainer, PriorizedTarget } = require('./util_beheavor')
 var roleBuilder = {
 
 	/** @param {Creep} creep **/
-	run: function (creep) {
+	run: function (creep, buildNewer = false) {
 		var targets
 		const haveJob = () => {
 			targets = creep.room.find(FIND_CONSTRUCTION_SITES)
@@ -32,8 +32,11 @@ var roleBuilder = {
 			if (creep.memory.building) {
 				var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 				if (targets.length) {
-					if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+
+					let target = buildNewer ? targets[targets.length - 1] : targets[0]
+
+					if (creep.build(target) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
 					}
 				}
 			}

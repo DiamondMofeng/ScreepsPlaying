@@ -2,7 +2,7 @@ const { memoryResources } = require('./util_getMemories')
 
 const controller_spawns = () => {
 
-  let spawn =Game.spawns['Spawn1']
+  let spawn = Game.spawns['Spawn1']
 
 
 
@@ -36,9 +36,44 @@ const controller_spawns = () => {
     return result
   }
 
-  /*
-  return TRUE if need spawn
-  */
+
+
+  /**
+   * 
+   * @param {Array} bodyArray  - consist of PART string
+   * @returns {Number} cost - cost of body
+   */
+  const bodyCost = (bodyArray) => {
+    let cost = 0
+    for (part in body) {
+      switch (part) {
+        case MOVE:
+          cost += 50
+        case WORK:
+          cost += 100
+        case CARRY:
+          cost += 50
+        case ATTACK:
+          cost += 80
+        case RANGED_ATTACK:
+          cost += 150
+        case HEAL:
+          cost += 250
+        case CLAIM:
+          cost += 600
+        case TOUGH:
+          cost += 10
+      }
+    }
+    return cost
+  }
+
+
+
+  /**
+   * return TRUE if need spawn 
+   * 
+   */
   const spawnByMinNumber = (roleName, bodyArray, minNumber, spawnSite = 'Spawn1', options = {}) => {
 
     var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == roleName);
@@ -46,7 +81,7 @@ const controller_spawns = () => {
 
     if (currentRolerArray.length < minNumber) {
       var newName = roleName + Game.time;
-      console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} `);
+      console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} , costing energy ${bodyCost(bodyArray)} `);
       Game.spawns[spawnSite].spawnCreep(bodyArray, newName,
         { memory: { role: roleName } });
       return true
@@ -54,21 +89,23 @@ const controller_spawns = () => {
     else { return false }
   }
 
+
+  /**
+  * @param
+  * @returns {number} 0 if DO NOT need spawn
+  * @returns {number} 1 if need spawn and successfully spawned
+  * @returns {number} 2 if need spawn but failed to spawn
+  */
   const spawnByMinNumber_advance = (memory, bodyArray, minNumber, spawnSite = 'Spawn1', options = {}) => {
-    /**
-     * @param
-     * @returns {number} 0 if DO NOT need spawn
-     * @returns {number} 1 if need spawn and successfully spawned
-     * @returns {number} 2 if need spawn but failed to spawn
-     */
+
     options.memory = memory
 
-    var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == memory.role);
+    var currentRolers = _.filter(Game.creeps, (creep) => creep.memory.role == memory.role);
     // console.log(roleName + ':' + currentRolerArray.length);
 
-    if (currentRolerArray.length < minNumber) {
+    if (currentRolers.length < minNumber) {
       var newName = memory.role + Game.time;
-      console.log(`Going to spawn new ${memory.role} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} `);
+      console.log(`Going to spawn new ${memory.role} ${currentRolers.length + 1}/${minNumber}: ${newName} at ${spawnSite} `);
       const spawnResult = Game.spawns[spawnSite].spawnCreep(bodyArray, newName, options)
       if (spawnResult == 0) return 1
       else if (spawnResult == -6) return 2
@@ -155,7 +192,7 @@ const controller_spawns = () => {
   }
 
   //spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 5, CARRY, MOVE, 4]), 4)//COST: 750
+  spawnByMinNumber('upgrader', body([WORK, 7, CARRY, MOVE, 4]), 3)//COST: 750
 
 
   //spawn Sweepper
@@ -164,6 +201,15 @@ const controller_spawns = () => {
   // if (droppedResources.length) {
   //   spawnByMinNumber('sweepper', body([WORK, CARRY, 10, MOVE, 11]), 1)
   // }
+
+
+
+  //spawn long_pionner
+  spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 3)
+
+  //spawn long_claimer
+  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 2]), 1)
+
 
 
 

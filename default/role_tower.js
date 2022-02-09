@@ -62,7 +62,7 @@ const roleTower = (tower) => {
 
 
     if (wallToRepair.length) {
-      let towerRepairResult = tower.repair(rampartToRepair[0])
+      let towerRepairResult = tower.repair(wallToRepair[0])
       // console.log('Tower repair result:', towerRepairResult)
       return
     }

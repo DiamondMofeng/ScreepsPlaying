@@ -1,3 +1,4 @@
+
 /**
  * 从最近的有充足能量的Container中取走能量
  * @param {*} creep 
@@ -117,7 +118,7 @@ function recycleSelf(creep) {
   console.log(`${creep} is going to recycle`)
   let spawns = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_SPAWN })
   let nearest = creep.pos.findClosestByPath(spawns)
-  console.log('nearest',nearest)
+  console.log('nearest', nearest)
 
   let result = nearest.recycleCreep(creep)
   if (result == ERR_NOT_IN_RANGE) {
@@ -135,9 +136,10 @@ function transferAllToStorage(creep, certainStorage = null) {
   let storage = certainStorage ? certainStorage : creep.room.storage
 
 
-  for (let rt of creep.store) {
-
+  for (let rt in creep.store) {
+    console.log(creep.store)
     let result = creep.transfer(storage, rt)
+
     if (result = ERR_NOT_IN_RANGE) {
       creep.moveTo(storage)
       return
@@ -146,15 +148,27 @@ function transferAllToStorage(creep, certainStorage = null) {
 
 }
 
-// function transferEnergyToContainer(creep) {
-//   let containers = creep.room.find(FIND_STRUCTURES, { filter: s.structureType == StructureContainer })
-//   creep.pos.findClosestByPath(containers)
-// }
 
-// function transferEnergyToContainer2(creep) {
-//   creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: s.structureType == StructureContainer })
+/**
+ * 
+ * @param {Creep} creep 
+ * @param {number} range 
+ * @returns {boolean} true if have energy to pick
+ */
+function pickUpNearbyDroppedEnergy(creep, range = 2) {
+  let nearbyDroppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
+  if (nearbyDroppedEnergys.length > 0) {
 
-// }
+    if (creep.pickup(nearbyDroppedEnergys[0]) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(nearbyDroppedEnergys[0])
+    }
+
+    return true
+
+  } else return false
+}
+
+
 
 
 //5bbcac3c9099fc012e635232
@@ -165,5 +179,6 @@ module.exports = {
   getEnergyFromContainer, getEnergyFromStorage,
   PriorizedTarget, targetsPriorizer_byRef,
   recycleSelf,
-  transferAllToStorage
+  transferAllToStorage,
+  pickUpNearbyDroppedEnergy
 }

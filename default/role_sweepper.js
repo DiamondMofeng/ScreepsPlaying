@@ -18,7 +18,10 @@ var roleSweeper = {
     //start to work
     if (droppedResources.length) {
 
-      if (creep.store.getFreeCapacity != 0) {
+      if (creep.store.getFreeCapacity() !== 0) {
+
+
+        // console.log(creep.store.getFreeCapacity())
 
         let resourcePriorizer = targetsPriorizer_byRef('resourceType', RESOURCES_ALL.reverse())
         let priorizedResource = resourcePriorizer(droppedResources)
@@ -29,15 +32,21 @@ var roleSweeper = {
 
         //if 
       } else {
+        console.log('123')
         transferAllToStorage(creep)
       }
       //after pickup
 
     }
 
-    //if dont have work,start to countdown
+    //if dont have work,
     else {
-      if (creep.memory.recycleCountdown > 0) {
+      if (creep.store.getUsedCapacity() > 0) {
+        transferAllToStorage(creep)
+      }
+
+      //start to countdown
+      else if (creep.memory.recycleCountdown > 0) {
         creep.memory.recycleCountdown -= 1
       }
     }

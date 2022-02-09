@@ -1,5 +1,5 @@
 const Upgrader = require('./role_upgrader')
-const { getEnergyFromContainer, getEnergyFromStorage } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy } = require('./util_beheavor')
 
 
 
@@ -22,6 +22,11 @@ const PriorizedTarget = (targets) => {
 var roleCarrier = {
   /** @param {Creep} creep **/
   run: function (creep) {
+
+    if (pickUpNearbyDroppedEnergy(creep)) {
+      return
+    }
+
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => {
         return (

@@ -7,6 +7,10 @@ const Builder = require('./role_builder')
 const Repairer = require('./role_repairer')
 const Sweepper = require('./role_sweepper')
 
+const long_Pionner = require('./role_long_pioneer')
+const long_Reserver = require('./role_long_reserver')
+
+
 
 function controller_creeps() {
   //beheavor crontroller
@@ -37,6 +41,19 @@ function controller_creeps() {
     }
     if (creep.memory.role == 'sweepper') {
       Sweepper(creep)
+    }
+
+
+
+
+
+    ////////LONG/////////
+    if (creep.memory.role == 'long_pionner') {
+      long_Pionner(creep, 'out')
+    }
+
+    if (creep.memory.role == 'long_reserver') {
+      long_Reserver(creep, 'out')
     }
   }
   // console.log('1')

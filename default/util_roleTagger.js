@@ -7,6 +7,11 @@ const roleTagger = (roomName = undefined) => {
       continue
     }
 
+    //if roomName is given ,then only show creep tag at that room
+    if (!_.isUndefined(roomName) && c.room != Game.rooms[roomName]) {
+      continue
+    }
+
     let tagText = `${c.memory.role} `
     // let tagPos = c.pos
     // tagPos['y'] = tagPos['y']+0.5
