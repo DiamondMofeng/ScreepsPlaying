@@ -1,23 +1,7 @@
 const Upgrader = require('./role_upgrader')
-const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } = require('./util_beheavor')
+const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } = require('./util_beheavor')
 
 
-
-const PriorizedTarget = (targets) => {
-  // console.log("t1:", targets)  
-  if (!targets.length) return (any) => null
-  const getPriority = (priorArray) => {
-
-    const curType = priorArray.shift()
-    const result = _.filter(targets, t => t.structureType == curType)
-    return result.length
-      ? result[0]
-      : getPriority(priorArray)
-
-  }
-
-  return getPriority
-}
 
 var roleCarrier = {
 

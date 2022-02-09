@@ -1,27 +1,5 @@
 const { targetsPriorizer_byRef } = require('./util_beheavor')
 
-const PriorizedTarget = (targets) => {
-
-  // console.log('ts:' + transTargets)
-  // const priorArray = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER]
-
-  //1. input targets to get a func needs priorArray
-
-  // console.log(targets)
-  const getPriority = (priorArray) => {
-
-    const curType = priorArray.shift()
-    // console.log(curType)
-    // console.log("array:" + priorArray)
-    const result = _.filter(targets, t => t.structureType == curType)
-    return result.length
-      ? result[0]
-      : getPriority(priorArray)
-
-  }
-
-  return getPriority
-}
 
 var roleHarvester = {
   /** @param {Creep} creep **/
@@ -50,8 +28,8 @@ var roleHarvester = {
       // console.log(targets[1])
 
 
-      const priorTarget = targetsPriorizer_byRef('structureType', 
-        [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER])(targets)
+      const priorTarget = targetsPriorizer_byRef('structureType',
+        [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER], false)(targets)
       if (priorTarget) {
 
         console.log('HarvesterTarget' + priorTarget)
