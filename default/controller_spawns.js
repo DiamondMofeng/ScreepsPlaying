@@ -219,7 +219,7 @@ const controller_spawns = () => {
   spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 2]), 1)
 
   //spawn long_carrier
-  spawnByMinNumber('long_carrier', body([WORK, 2, CARRY, 4, MOVE, 3]), 3)
+  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 5, MOVE, 3]), 4)
 
   //spawn long_harvester
   spawnByMinNumber('long_harvester', body([WORK, 6, CARRY, 1, MOVE, 6]), 1)

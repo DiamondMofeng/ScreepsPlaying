@@ -1,4 +1,4 @@
-const { getEnergyFromContainer, PriorizedTarget, targetsPriorizer_byRef, recycleSelf, transferAllToStorage } = require('./util_beheavor')
+const { targetsPriorizer_byRef, recycleSelf, transferAllToStorage } = require('./util_beheavor')
 
 
 var roleSweeper = {
@@ -23,7 +23,7 @@ var roleSweeper = {
 
         // console.log(creep.store.getFreeCapacity())
 
-        let resourcePriorizer = targetsPriorizer_byRef('resourceType', RESOURCES_ALL.reverse())
+        let resourcePriorizer = targetsPriorizer_byRef('resourceType', RESOURCES_ALL.reverse(), false)
         let priorizedResource = resourcePriorizer(droppedResources)
 
         if (creep.pickup(priorizedResource) == ERR_NOT_IN_RANGE) {

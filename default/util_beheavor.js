@@ -88,11 +88,13 @@ const PriorizedTarget = (targets) => {
  * 
  * @param {string} priorRef - 用于 filter: t[priorRef] in targets == priorArray[i] 的t属性
  * @param {Array} priorArray - 按优先顺序排列的t.priorRef属性数组
+ * @param {boolean} returnArray - 是否返回数组，默认true
  * 
  * @param {Array} targets - Array of targets
  * @returns {Function} targets处理函数，以targets为参数，递归处理targets
  */
-const targetsPriorizer_byRef = (priorRef, priorArray) => {
+const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
+
 
   const processTargets = (targets, _priorArray = priorArray) => {
 
@@ -102,12 +104,18 @@ const targetsPriorizer_byRef = (priorRef, priorArray) => {
 
     const result = _.filter(targets, t => t[priorRef] == curType)
     return result.length
-      ? result[0]
+      ? returnArray
+        ? result : result[0]
       : processTargets(targets, _priorArray)
   }
 
   return processTargets
 }
+
+
+
+
+
 
 
 /**
