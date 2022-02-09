@@ -5,14 +5,14 @@ const { targetsPriorizer_byRef } = require('./util_beheavor')
 const roleTower = (tower) => {
 
 
-  //有敌人时优先攻击敌人
+  //*有敌人时优先攻击敌人
 
   // [{ creep }, ...]
   let enemyTargets = tower.room.find(FIND_HOSTILE_CREEPS)
 
   if (enemyTargets.length) {
 
-    //先筛选具有攻击性的
+    //*先筛选具有攻击性的
     let enemiesHasAttack = _.filter(enemyTargets, t => (t.getActiveBodyparts(ATTACK) > 0) || (t.getActiveBodyparts(RANGED_ATTACK) > 0))
 
     if (enemiesHasAttack.length) {
