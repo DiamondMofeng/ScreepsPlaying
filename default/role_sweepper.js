@@ -103,7 +103,8 @@ var roleSweeper = {
       // //if dont have work,
 
     } else {
-      if (creep.store.getUsedCapacity() > 0) {
+      //* 若身上有除了能量以外别的资源
+      if (creep.store.length >= 2 || (creep.store.length == 1 && creep.store[RESOURCE_ENERGY] == 0)) {
         transferAllToStorage(creep)
       }
 
@@ -113,7 +114,7 @@ var roleSweeper = {
       // }
 
       //* 转变为carrier
-      else if (creep.store.getUsedCapacity() == 0) {
+      else {
         // creep.memory.role = 'carrier'
         Carrier(creep)
       }
