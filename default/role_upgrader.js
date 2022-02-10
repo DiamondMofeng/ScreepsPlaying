@@ -22,7 +22,8 @@ var roleUpgrader = {
       }
     }
     else {//dont have energy
-      if (getEnergyFromStorage(creep)) {
+      //* 先从container里面拿，失败则去Storage里
+      if (!getEnergyFromContainer(creep) || getEnergyFromStorage(creep)) {
 
       }
       else {//dig
