@@ -92,6 +92,7 @@ const controller_spawns = () => {
 
     let memoryObj = { ...otherMemory, role: roleName }
     let opt = { ...options, memory: memoryObj }
+    // console.log('opt: ', JSON.stringify(opt));
 
     var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == roleName);
     // console.log(roleName + ':' + currentRolerArray.length);
@@ -100,6 +101,7 @@ const controller_spawns = () => {
       var newName = roleName + Game.time;
       console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} , costing energy ${bodyCost(bodyArray)} `);
       Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt);
+      // console.log('Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt): ', Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt));
       return true
     }
     else { return false }
@@ -240,7 +242,11 @@ const controller_spawns = () => {
   //! BASE //////////////////
 
   //spawn Base_transeror
-  spawnByMinNumber('base_transferor', body([CARRY, 2, MOVE, 1]), 1, {}, { directions: RIGHT })
+  spawnByMinNumber('base_transferor', body([CARRY, 2, MOVE, 1]), 1, {}
+    , { directions: [RIGHT, BOTTOM_RIGHT] }
+  )
+
+
 
 
 

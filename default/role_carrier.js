@@ -73,7 +73,7 @@ var roleCarrier = {
 
         getEnergyFromContainer(creep, 1400)
 
-        getEnergyFromStorage(creep, 10000)
+        getEnergyFromStorage(creep, 50000)
 
         pickUpNearbyDroppedEnergy(creep, 2)
 
