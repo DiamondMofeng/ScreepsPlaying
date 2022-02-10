@@ -2,7 +2,6 @@ const Upgrader = require('./role_upgrader')
 const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } = require('./util_beheavor')
 
 
-
 var role_base_transferor = {
 
   /**

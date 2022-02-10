@@ -39,9 +39,19 @@ function attack_objectByID(creep, id) {
   creep.attack(Game.getObjectById(id))
 }
 
+function attack_moveToFlagRoom(creep, flagID) {
+  let flag = Game.flags[flagID]
+
+  if (creep.room !== flag.room) {
+    creep.moveTo(flag)
+
+  }
+}
+
+
 function main() {
 
-  let attackerCreepsId = []
+  let attackerCreepsId = ['attacker']
   let flagID = 'ATK'
 
 
@@ -52,9 +62,12 @@ function main() {
 
 
 
-    attack_moveToFlag(c, flag)
+
+    // attack_moveToFlagRoom(c, flag)
+
+    // attack_moveToFlagRoom(c, 'ATK')
     // attack_objectByID(c,'62000f0f1386917f30c19f13')
-    attack_anyCreep(c)
+    // attack_anyCreep(c)
     // attack_STRUCTURES(c)
 
   }

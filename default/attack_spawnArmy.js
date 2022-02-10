@@ -35,5 +35,3 @@ const body = (simpleBodyArray) => {
 
 
 
-
-cons

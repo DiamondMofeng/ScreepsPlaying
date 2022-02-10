@@ -20,6 +20,7 @@ const roleTagger = (roomName = undefined) => {
 
     // console.log(JSON.stringify(tagPos.y))
     tagger.text(tagText, tagPosX, tagPosY,
+
       {
         font: 0.3,
         align: 'center',
@@ -29,10 +30,10 @@ const roleTagger = (roomName = undefined) => {
 }
 
 
-const main = () => {
-  roleTagger()
+// const main = () => {
+//   roleTagger()
 
 
-}
+// }
 
 module.exports = roleTagger;

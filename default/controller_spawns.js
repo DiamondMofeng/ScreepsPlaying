@@ -196,12 +196,12 @@ const controller_spawns = () => {
   });
 
   if (repairTargets.length) {
-    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 2)
+    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 1)
   }
 
 
   //* spawn Carrier
-  spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 3)  //cost=650
+  spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 2)  //cost=650
 
 
   //* spawn Builder
@@ -226,7 +226,7 @@ const controller_spawns = () => {
   //! LONG //////////////
 
   //spawn long_pionner
-  // spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
+  spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
   //spawn long_claimer
   spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
