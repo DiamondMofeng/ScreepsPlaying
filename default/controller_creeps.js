@@ -12,6 +12,8 @@ const long_Reserver = require('./role_long_reserver')
 const long_Carrier = require('./role_long_carrier')
 const long_Harvester = require('./role_long_harvester')
 
+const base_Transferor = require('./role_base_transferor')
+
 const Useless = require('./role_useless')
 
 
@@ -51,10 +53,9 @@ function controller_creeps() {
 
 
 
-    ////////LONG/////////
+    //! //////LONG/////////
     if (creep.memory.role == 'long_pionner') {
       long_Pionner(creep, 'out')
-      // long_Carrier(creep, Game.getObjectById('620364b19c206fed8021ab42'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
     }
 
     if (creep.memory.role == 'long_reserver') {
@@ -63,22 +64,31 @@ function controller_creeps() {
 
     if (creep.memory.role == 'long_carrier') {
       // long_Carrier(creep, Game.getObjectById('6200bf0e9b3fe1ad6927628f'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
-      long_Carrier(creep, Game.getObjectById('620364b19c206fed8021ab42'), Game.getObjectById('6200bf0e9b3fe1ad6927628f')) // normal
+      long_Carrier(creep, Game.getObjectById('6204d67b3a03e2154eb99bde'), Game.getObjectById('6200bf0e9b3fe1ad6927628f')) // normal
 
     }
 
     if (creep.memory.role == 'long_harvester') {
       // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
       long_Harvester(creep
-        , Game.getObjectById('620364b19c206fed8021ab42')//container
+        , Game.getObjectById('6204d67b3a03e2154eb99bde')//container
         , Game.getObjectById('5bbcac4a9099fc012e6353bc')//source
-        
+
       )
     }
 
+    //! BASE//////////////
 
+    if (creep.memory.role == 'base_transferor') {
+      // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
+      base_Transferor(creep
+        , Game.getObjectById('62041ae6638cf54110e7422d')//link - storage
+        , Game.getObjectById('62043cc4d55ca519e1a7db68')//storage
 
-    /////////////other////////////
+      )
+    }
+
+    //! ///////////other////////////
     if (creep.memory.role == 'useless') {
       Useless(creep)
     }

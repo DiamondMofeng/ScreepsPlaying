@@ -142,7 +142,7 @@ function moveToUpgradePos(creep) {
 
 
 
-//////main/////
+//! ////main/////
 var roleUpgrader = {
 
   /** @param {Creep} creep **/

@@ -37,7 +37,7 @@ var roleLongHarvester = {
       } else {
         //修container
         // console.log('container\'s hits:',container.hits / container.hitsMax)
-        if ((container.store.getUsedCapacity() > 1000 && (container.hits / container.hitsMax) < 0.9)
+        if ((container.store.getUsedCapacity() > 1500 && (container.hits / container.hitsMax) < 0.9)
           || (container.hits / container.hitsMax) < 0.8) {
           creep.repair(container)
         }

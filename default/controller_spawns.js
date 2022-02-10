@@ -79,10 +79,19 @@ const controller_spawns = () => {
 
 
   /**
-   * return TRUE if need spawn 
-   * 
+   * spawn by 对应role的最小数字
+   * @param {String} roleName 
+   * @param {[]} bodyArray 
+   * @param {number} minNumber 
+   * @param {{}} otherMemory 
+   * @param {{}} options 
+   * @param {*} spawnSite 
+   * @returns return TRUE if need spawn 
    */
-  const spawnByMinNumber = (roleName, bodyArray, minNumber, spawnSite = 'Spawn1', options = {}) => {
+  const spawnByMinNumber = (roleName, bodyArray, minNumber, otherMemory = {}, options = {}, spawnSite = 'Spawn1') => {
+
+    let memoryObj = { ...otherMemory, role: roleName }
+    let opt = { ...options, memory: memoryObj }
 
     var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == roleName);
     // console.log(roleName + ':' + currentRolerArray.length);
@@ -90,8 +99,7 @@ const controller_spawns = () => {
     if (currentRolerArray.length < minNumber) {
       var newName = roleName + Game.time;
       console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} , costing energy ${bodyCost(bodyArray)} `);
-      Game.spawns[spawnSite].spawnCreep(bodyArray, newName,
-        { memory: { role: roleName } });
+      Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt);
       return true
     }
     else { return false }
@@ -133,7 +141,7 @@ const controller_spawns = () => {
 
 
 
-  ///////////////SPAWN PART//////////////
+  //! /////////////SPAWN PART//////////////
 
 
   //spawn Harvester
@@ -148,7 +156,7 @@ const controller_spawns = () => {
   //spawn HarvesterPlus
 
   memoryResources(Game.spawns['Spawn1'].room)
-  ///////////////WARNING!!! HARD CODED////////////////
+  //! /////////////WARNING!!! HARD CODED////////////////
   const spareSources = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
   if (spareSources.length) {
     let resource = spareSources[0]
@@ -158,7 +166,7 @@ const controller_spawns = () => {
         workPos: resource.workPos,
         sourceId: resource.id,
       },
-      [WORK, WORK, WORK, WORK, WORK, MOVE], 2)
+      body([WORK, 7, CARRY, 1, MOVE]), 2)
     if (harP_result === 2) {
       return
       //then set the memory of SOURCE
@@ -190,42 +198,49 @@ const controller_spawns = () => {
   }
 
 
-  //spawn Carrier
+  //* spawn Carrier
   spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 3)  //cost=650
 
 
-  //spawn Builder
+  //* spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 2)
+    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
   }
 
-  //spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 1)//COST: 1300
+  //* spawn Upgrader
+  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 2)//COST: 1300
 
 
-  //spawn Sweepper
-  // let droppedResources = spawn.room.find(FIND_DROPPED_RESOURCES)
+  //* spawn Sweepper
+  // //let droppedResources = spawn.room.find(FIND_DROPPED_RESOURCES)
 
-  // if (droppedResources.length) {
-  //   spawnByMinNumber('sweepper', body([WORK, CARRY, 10, MOVE, 11]), 1)
-  // }
-
-
+  // //if (droppedResources.length) {
+  spawnByMinNumber('sweepper', body([WORK, CARRY, 6, MOVE, 5]), 2)
+  // //}
 
 
-  //* LONG 
+
+
+  //! LONG //////////////
 
   //spawn long_pionner
-  //spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
+  // spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
   //spawn long_claimer
-  //spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
+  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
 
   //spawn long_carrier
-  //spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 5, MOVE, 3]), 4)
+  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 5, MOVE, 3]), 4)
 
   //spawn long_harvester
-  //spawnByMinNumber('long_harvester', body([WORK, 7, CARRY, 1, MOVE, 4]), 1)
+  spawnByMinNumber('long_harvester', body([WORK, 8, CARRY, 1, MOVE, 4]), 1)
+
+
+
+  //! BASE //////////////////
+
+  //spawn Base_transeror
+  spawnByMinNumber('base_transferor', body([CARRY, 2, MOVE, 1]), 1, {}, { directions: RIGHT })
 
 
 

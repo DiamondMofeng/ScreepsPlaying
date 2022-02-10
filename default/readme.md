@@ -2,8 +2,11 @@ a newbie player in Screeps:World Game
 
 todo list:
 
+[ ] script: outerEnergyBase
+
+[ ] roleDispatcher : roleRequireEvaluater
+
 [ ] armySpawner
 
-[x] long harvester
+optimize the pathFinder of long rolers (crossRoomer)
 
-[x] long carrier

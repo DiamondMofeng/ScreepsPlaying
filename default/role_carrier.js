@@ -57,7 +57,7 @@ var roleCarrier = {
     }
 
 
-    ////////////main//////////
+    //! //////////main//////////
     if (!haveJob()) {
       // console.log('carrier dont have job,turn into Upgrader')
       Upgrader(creep)
@@ -69,12 +69,14 @@ var roleCarrier = {
 
         //the later has higher priority
 
-        getEnergyFromStorage(creep, 0)
+        getEnergyFromStorage(creep, 10000)
 
         getEnergyFromContainer(creep, 1400)
 
         pickUpNearbyDroppedEnergy(creep, 2)
 
+
+        // // ! 转变为sweepper
       }
 
 
@@ -85,7 +87,7 @@ var roleCarrier = {
 
       else {
         const priorTargets = targetsPriorizer_byRef('structureType'
-          , [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_STORAGE])(targets)
+          , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_STORAGE])(targets)
         if (priorTargets.length) {
 
           let closest = creep.pos.findClosestByPath(priorTargets)
