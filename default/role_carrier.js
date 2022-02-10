@@ -69,9 +69,11 @@ var roleCarrier = {
 
         //the later has higher priority
 
-        getEnergyFromStorage(creep, 10000)
+
 
         getEnergyFromContainer(creep, 1400)
+
+        getEnergyFromStorage(creep, 10000)
 
         pickUpNearbyDroppedEnergy(creep, 2)
 

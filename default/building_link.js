@@ -19,7 +19,7 @@ const buildingRoleLink = (link) => {
   // }
 
 
-  console.log(link.id)
+  // console.log(link.id)
 
 
   let RM = link.room.memory

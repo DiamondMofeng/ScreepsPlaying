@@ -8,5 +8,12 @@ todo list:
 
 [ ] armySpawner
 
-optimize the pathFinder of long rolers (crossRoomer)
+[ ] room states cheaker (check if is attacked)
 
+[ ] optimize the pathFinder of long rolers (crossRoomer)
+
+BUG list:
+
+[ ]role_upgradePlus has not fixed
+
+[ ] 

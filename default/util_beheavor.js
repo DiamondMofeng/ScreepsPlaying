@@ -123,11 +123,12 @@ const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
  * @param {*} creep 
  */
 function recycleSelf(creep) {
-  console.log(`${creep} is going to recycle`)
+
   let spawns = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_SPAWN })
   let nearest = creep.pos.findClosestByPath(spawns)
-  console.log('nearest', nearest)
-
+  
+  console.log(`${creep} is going to recycle at ${nearest}`)
+  
   let result = nearest.recycleCreep(creep)
   if (result == ERR_NOT_IN_RANGE) {
     creep.moveTo(nearest)
@@ -145,7 +146,7 @@ function transferAllToStorage(creep, certainStorage = null) {
 
 
   for (let rt in creep.store) {
-    console.log(creep.store)
+
     let result = creep.transfer(storage, rt)
 
     if (result = ERR_NOT_IN_RANGE) {

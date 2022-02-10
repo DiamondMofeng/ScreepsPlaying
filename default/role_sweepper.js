@@ -44,14 +44,14 @@ var roleSweeper = {
 
 
           if (creep.pickup(priorizedResource) == ERR_NOT_IN_RANGE) {
-            console.log('creep.pickup(priorizedResource): ', creep.pickup(priorizedResource));
+            // console.log('creep.pickup(priorizedResource): ', creep.pickup(priorizedResource));
             creep.moveTo(priorizedResource, { visualizePathStyle: { stroke: '#ffaa00' } })
             return
           }
 
           //if 
         } else {
-          console.log('123')
+          // console.log('123')
           transferAllToStorage(creep)
         }
       }
@@ -91,7 +91,7 @@ var roleSweeper = {
 
           //if 
         } else {
-          console.log('123')
+          // console.log('123')
           transferAllToStorage(creep)
         }
 
