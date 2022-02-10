@@ -1,4 +1,4 @@
-const { getEnergyFromContainer, PriorizedTarget } = require('./util_beheavor')
+const { getEnergyFromContainer, PriorizedTarget, getEnergyFromStorage } = require('./util_beheavor')
 
 
 
@@ -22,7 +22,7 @@ var roleUpgrader = {
       }
     }
     else {//dont have energy
-      if (getEnergyFromContainer(creep)) {
+      if (getEnergyFromStorage(creep)) {
 
       }
       else {//dig

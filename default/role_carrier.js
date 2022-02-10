@@ -39,11 +39,11 @@ var roleCarrier = {
 
           )
           || (structure.structureType == STRUCTURE_STORAGE
-            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 50000
+            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 100000
 
           )
           || (structure.structureType == STRUCTURE_TOWER
-            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 750
+            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 900
           )
         )
       }
@@ -73,8 +73,10 @@ var roleCarrier = {
 
         getEnergyFromContainer(creep, 1400)
 
-        getEnergyFromStorage(creep, 50000)
-
+        if (creep.room.energyAvailable < 1500) {
+          getEnergyFromStorage(creep, 5000)
+        }
+        
         pickUpNearbyDroppedEnergy(creep, 2)
 
 
