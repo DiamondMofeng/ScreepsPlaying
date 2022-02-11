@@ -122,13 +122,20 @@ const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
  * 找到最近的spawn进行回收
  * @param {*} creep 
  */
-function recycleSelf(creep) {
+function recycleSelf(creep, spawnName = '') {
 
-  let spawns = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_SPAWN })
-  let nearest = creep.pos.findClosestByPath(spawns)
-  
+  let nearest
+
+  if (spawnName == '') {
+    let spawns = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_SPAWN })
+    nearest = creep.pos.findClosestByPath(spawns)
+  } else {
+    nearest = Game.spawns[spawnName]
+  }
+
+
   console.log(`${creep} is going to recycle at ${nearest}`)
-  
+
   let result = nearest.recycleCreep(creep)
   if (result == ERR_NOT_IN_RANGE) {
     creep.moveTo(nearest)
@@ -275,6 +282,17 @@ function workingStatesKeeper(creep, onCharge, onWork) {
   }
 }
 
+/**
+ * 
+ * @param {Creep} creep 
+ * @param {String} doing 
+ */
+function setDoing(creep, doing) {
+  creep.memory.doing = doing
+}
+
+
+
 //5bbcac3c9099fc012e635232
 //5bbcac3c9099fc012e635233
 
@@ -285,5 +303,6 @@ module.exports = {
   recycleSelf,
   transferAllToStorage,
   pickUpNearbyDroppedEnergy,
-  moveAndWithdraw, moveAndTransfer
+  moveAndWithdraw, moveAndTransfer,
+  setDoing
 }

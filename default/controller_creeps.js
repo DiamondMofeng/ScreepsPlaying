@@ -16,13 +16,16 @@ const base_Transferor = require('./role_base_transferor')
 
 const Useless = require('./role_useless')
 
+const Guardian = require('./role_guardian')
+
+
 
 function controller_creeps() {
+
 
   //* beheavor crontroller
   for (creepName in Game.creeps) {
     try {
-
 
       var creep = Game.creeps[creepName]
       if (creep.memory.role == 'harvester') {
@@ -96,10 +99,14 @@ function controller_creeps() {
         Useless(creep)
       }
 
+      if (creep.memory.role == 'guardian') {
+        Guardian(creep)
+      }
 
+      
 
     } catch (e) {
-      console.log('!!!!!!!!!!!!!!ERROR FOUND!!!!!!!!!!!!!!!!', e)
+      console.log('!!!!!!!!!!!!!!ERROR FOUND!!!!!!!!!!!!!!!!' + e)
     }
   }
 

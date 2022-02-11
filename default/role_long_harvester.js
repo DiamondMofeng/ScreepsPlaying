@@ -15,9 +15,9 @@ var roleLongHarvester = {
    * 
    * @param {Creep} creep 
    * @param {StructureContainer} container 
-   * @param {*} resource 
+   * @param {Source} source 
    */
-  run: function (creep, container, resource) {
+  run: function (creep, container, source) {
 
     //move to container's pos
     if (JSON.stringify(creep.pos) != JSON.stringify(container.pos)) {
@@ -31,13 +31,13 @@ var roleLongHarvester = {
     else {
       // console.log('debug')
       if (creep.store.getUsedCapacity() < 40) {
-        const harvestResult = creep.harvest(resource)
+        const harvestResult = creep.harvest(source)
         // console.log('harvestResult', harvestResult)
 
       } else {
         //修container
         // console.log('container\'s hits:',container.hits / container.hitsMax)
-        if ((container.store.getUsedCapacity() > 1500 && (container.hits / container.hitsMax) < 0.9)
+        if ((container.store.getUsedCapacity() > 1800 && (container.hits / container.hitsMax) < 1)
           || (container.hits / container.hitsMax) < 0.8) {
           creep.repair(container)
         }

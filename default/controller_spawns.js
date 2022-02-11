@@ -225,19 +225,20 @@ const controller_spawns = () => {
 
   //! LONG //////////////
 
-  //spawn long_pionner
-  spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
-  //spawn long_claimer
-  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
+
 
   //spawn long_carrier
-  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 5, MOVE, 3]), 4)
+  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 7, MOVE, 4]), 3)
 
   //spawn long_harvester
   spawnByMinNumber('long_harvester', body([WORK, 8, CARRY, 1, MOVE, 4]), 1)
 
+  //spawn long_pionner
+  // spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
+  //spawn long_claimer
+  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
 
   //! BASE //////////////////
 

@@ -2,20 +2,22 @@ a newbie player in Screeps:World Game
 
 todo list:
 
-[ ] script: outerEnergyBase
+- [ ] script: outerEnergyBase
 
-[ ] roleDispatcher : roleRequireEvaluater
+- [ ] script: roleDispatcher : roleRequireEvaluater
 
-[ ] armySpawner
+- [ ] armySpawner
 
-[ ] room states cheaker (check if is attacked)
+- [ ] room states cheaker (check if is attacked)
 
-[ ] optimize the pathFinder of long rolers (crossRoomer)
+- [ ] optimize the pathFinder of long rolers (crossRoomer)
 
-[ ] add memory suppoet of LINK
+- [ ] add memory suppoet of LINK prototype 
+
+- [ ] ?
 
 BUG list:
 
-[ ]role_upgradePlus has not fixed
+- [ ] role_upgradePlus has not fixed
 
-[ ] 
+- [ ] ?

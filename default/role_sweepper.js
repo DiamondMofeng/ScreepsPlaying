@@ -1,5 +1,5 @@
 const Carrier = require('./role_carrier')
-const { targetsPriorizer_byRef, recycleSelf, transferAllToStorage } = require('./util_beheavor')
+const { targetsPriorizer_byRef, recycleSelf, transferAllToStorage, setDoing } = require('./util_beheavor')
 
 
 var roleSweeper = {
@@ -7,11 +7,15 @@ var roleSweeper = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    // if (creep.memory.manual == true) {
-    //   if (Game.flags.sweepper) {
-    //     creep.moveTo(Game.flags.sweepper)
-    //   }
-    // }
+
+
+
+
+    if (creep.memory.manual == true) {
+      if (Game.flags.sweepper) {
+        creep.moveTo(Game.flags.sweepper)
+      }
+    }
 
 
 
@@ -25,10 +29,15 @@ var roleSweeper = {
     let droppedResources = creep.room.find(FIND_DROPPED_RESOURCES)
     let tombsHaveResource = creep.room.find(FIND_TOMBSTONES, { filter: t => t.store.getUsedCapacity() > 0 })
 
+
+
+
+
     if (creep.store.getFreeCapacity() != 0
       && (droppedResources.length > 0 || tombsHaveResource.length > 0)
     ) {
 
+      setDoing(creep, 'sweepper_sweepping')
 
       //! start to work
       if (droppedResources.length) {
@@ -72,6 +81,8 @@ var roleSweeper = {
           // console.log('resourcesTypesInTomb: ', resourcesTypesInTomb);
 
           let priorizedResource = resourcePriorizer(resourcesTypesInTomb)
+          console.log('resourcesTypesInTomb: ', resourcesTypesInTomb);
+          console.log('priorizedResource: ', priorizedResource);
 
           // console.log('priorizedResource: ', priorizedResource);
 
@@ -81,9 +92,9 @@ var roleSweeper = {
             // console.log('tomb0: ', tomb0);
             if (creep.withdraw(tomb0, priorizedResource) == ERR_NOT_IN_RANGE) {
 
-              // console.log('creep.withdraw(tomb0, priorizedResource): ', creep.withdraw(tomb0, priorizedResource));
+              console.log('creep.withdraw(tomb0, priorizedResource): ', creep.withdraw(tomb0, priorizedResource));
 
-              creep.moveTo(priorizedResource, { visualizePathStyle: { stroke: '#ffaa00' } })
+              creep.moveTo(tomb0, { visualizePathStyle: { stroke: '#ffaa00' } })
               return
             }
 
@@ -102,10 +113,25 @@ var roleSweeper = {
 
       // //if dont have work,
 
-    } else {
+    }
+    else {
+
+
       //* 若身上有除了能量以外别的资源
-      if (creep.store.length >= 2 || (creep.store.length == 1 && creep.store[RESOURCE_ENERGY] == 0)) {
+
+      //! 用Object.keys(store).length而不是store.length
+      let storeTypes = Object.keys(creep.store)
+      // console.log('Object.keys(creep.store): ', Object.keys(creep.store).length);
+      // console.log('storeLength >= 2 || (storeLength == 1 && creep.store[RESOURCE_ENERGY] == 0): ', storeLength >= 2 || (storeLength == 1 && creep.store[RESOURCE_ENERGY] == 0));
+      // console.log('creep.store[RESOURCE_ENERGY]: ', creep.store[RESOURCE_ENERGY]);
+      // console.log('storeLength: ', storeTypes);
+      if (storeTypes.length >= 2 || (storeTypes.length == 1 && creep.store[RESOURCE_ENERGY] == 0)) {
+
+
+
+        setDoing(creep, 'sweepper_transferAllToStorage')
         transferAllToStorage(creep)
+        // console.log('transferingAllToStorage')
       }
 
       // //start to countdown
@@ -115,6 +141,8 @@ var roleSweeper = {
 
       //* 转变为carrier
       else {
+        setDoing(creep, 'sweepper_carrier')
+
         // creep.memory.role = 'carrier'
         Carrier(creep)
       }

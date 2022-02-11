@@ -3,10 +3,13 @@ const controller_buildings = require("./controller_buildings")
 const controller_spawns = require('./controller_spawns')
 
 const broadcaster = require('./util_broadcast')
-const test = require('./test')
 const roleTagger = require("./util_roleTagger")
 
 const attack = require('./attack_commend')
+const test = require('./test')
+const buildEnergyBase = require('./script_outerEnergyBase')
+
+const guardRoom = require('./util_guardRoom')
 
 module.exports.loop = function () {
   //   Game.spawns['Spawn1'].spawnCreep([MOVE, CARRY, WORK], 'harvester' + Game.time, { memory: { role: 'harvester' } })
@@ -28,8 +31,9 @@ module.exports.loop = function () {
 
   // attack()
 
+  // buildEnergyBase('')
 
-
+  guardRoom('W11N16')
 
   if (Game.cpu.bucket == 10000) {
     Game.cpu.generatePixel();
