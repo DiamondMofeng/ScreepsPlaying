@@ -47,7 +47,7 @@ var roleSweeper = {
 
           // console.log(creep.store.getFreeCapacity())
 
-          let resourcePriorizer = targetsPriorizer_byRef('resourceType', RESOURCES_ALL.reverse(), false)
+          let resourcePriorizer = targetsPriorizer_byRef('resourceType', [...RESOURCES_ALL].reverse(), false)
           let priorizedResource = resourcePriorizer(droppedResources)
           console.log('priorizedResource: ', priorizedResource);
 
@@ -75,7 +75,7 @@ var roleSweeper = {
           let tomb0 = tombsHaveResource[0]
           // console.log(creep.store.getFreeCapacity())
 
-          let resourcePriorizer = targetsPriorizer_byRef('resourceType', RESOURCES_ALL.reverse(), false)
+          let resourcePriorizer = targetsPriorizer_byRef('resourceType', [...RESOURCES_ALL].reverse(), false)
 
           let resourcesTypesInTomb = Object.keys(tomb0.store)
           // console.log('resourcesTypesInTomb: ', resourcesTypesInTomb);
