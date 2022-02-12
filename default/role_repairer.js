@@ -47,11 +47,12 @@ var roleRepairer = {
       console.log('repireList:' + targets)
       if (targets.length) {
         let priorizedTarget = targetsPriorizer_byRef('structureType'
-          , [STRUCTURE_ROAD,
+          , [STRUCTURE_RAMPART,
+            STRUCTURE_ROAD,
             STRUCTURE_TOWER,
             STRUCTURE_CONTAINER,
-            STRUCTURE_WALL,
-            STRUCTURE_RAMPART]
+            STRUCTURE_WALL
+            ]
           , false)(targets)
 
         if (creep.repair(priorizedTarget) == ERR_NOT_IN_RANGE) {

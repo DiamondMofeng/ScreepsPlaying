@@ -15,6 +15,8 @@ function transferEnergyToContainer2(creep) {
 }
 
 
+
+
 let test = {
   memoryUpgradePosArray: memoryUpgradePosArray,
 

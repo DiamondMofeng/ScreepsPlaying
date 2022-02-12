@@ -8,16 +8,20 @@ todo list:
 
 - [ ] armySpawner
 
-- [ ] room states cheaker (check if is attacked)
+- [x] room states cheaker (check if is attacked)
 
 - [ ] optimize the pathFinder of long rolers (crossRoomer)
 
 - [ ] add memory suppoet of LINK prototype 
+
+
 
 - [ ] ?
 
 BUG list:
 
 - [ ] role_upgradePlus has not fixed
+
+- [ ] sweeper only pick 1 type of resource once
 
 - [ ] ?
