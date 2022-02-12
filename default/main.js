@@ -24,7 +24,7 @@ module.exports.loop = function () {
   controller_buildings('W12N16')
   controller_spawns()
 
-  broadcaster()
+  // broadcaster()
 
   roleTagger('W12N16')
   roleTagger('W11N16')
@@ -34,6 +34,10 @@ module.exports.loop = function () {
   // buildEnergyBase('')
 
   guardRoom('W11N16')
+
+  test.showFIndReslt()
+
+
 
   if (Game.cpu.bucket == 10000) {
     Game.cpu.generatePixel();

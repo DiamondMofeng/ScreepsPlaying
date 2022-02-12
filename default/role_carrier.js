@@ -39,7 +39,7 @@ var roleCarrier = {
 
           )
           || (structure.structureType == STRUCTURE_STORAGE
-            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 100000
+            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 10000
 
           )
           || (structure.structureType == STRUCTURE_TOWER
@@ -71,13 +71,13 @@ var roleCarrier = {
 
 
 
-        getEnergyFromContainer(creep, 1400)
+        getEnergyFromContainer(creep, { min: 1000, blackList: ['6200bf0e9b3fe1ad6927628f'] })
 
-        if (creep.room.energyAvailable < 1500) {
-          getEnergyFromStorage(creep, 5000)
-        }
-        
-        pickUpNearbyDroppedEnergy(creep, 2)
+        // if (creep.room.energyAvailable < 1500) {
+        getEnergyFromStorage(creep, 5000)
+        // }
+
+        pickUpNearbyDroppedEnergy(creep)
 
 
         // // ! 转变为sweepper

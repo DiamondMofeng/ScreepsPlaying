@@ -1,15 +1,28 @@
 
 /**
  * 从最近的有充足能量的Container中取走能量
- * @param {*} creep 
+ * @param {Creep} creep 
+ * @param {Object} opt 
+ * @opt {Number} minCap
+ * @opt {Array} blackList - 包括不想拿走能量的container ID string
  * @returns {boolean} 是否找到了合适的container
  */
-const getEnergyFromContainer = (creep, minCap = 200, opt = {}) => {
+const getEnergyFromContainer = (creep, opt = {}) => {
+  let min = 200
+  let BL = []
+  if (!_.isUndefined(opt.min)) {
+    min = opt.min
+  }
+  if (!_.isUndefined(opt.blackList)) {
+    BL = opt.blackList
+  }
 
   const findContainer = (creep) => {
     return creep.room.find(FIND_STRUCTURES, {
       filter: (structure) => {
-        return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity(RESOURCE_ENERGY) > minCap;
+        return structure.structureType == STRUCTURE_CONTAINER
+          && structure.store.getUsedCapacity(RESOURCE_ENERGY) > min
+          && BL.indexOf(structure.id) == -1;
       }
     })
   }

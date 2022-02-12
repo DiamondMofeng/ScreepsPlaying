@@ -49,15 +49,15 @@ var roleSweeper = {
 
           let resourcePriorizer = targetsPriorizer_byRef('resourceType', [...RESOURCES_ALL].reverse(), false)
           let priorizedResource = resourcePriorizer(droppedResources)
-          console.log('priorizedResource: ', priorizedResource);
+          // console.log('priorizedResource: ', priorizedResource);
 
 
           if (creep.pickup(priorizedResource) == ERR_NOT_IN_RANGE) {
             // console.log('creep.pickup(priorizedResource): ', creep.pickup(priorizedResource));
             creep.moveTo(priorizedResource, { visualizePathStyle: { stroke: '#ffaa00' } })
-            return
-          }
 
+          }
+          return
           //if 
         } else {
           // console.log('123')
@@ -81,8 +81,8 @@ var roleSweeper = {
           // console.log('resourcesTypesInTomb: ', resourcesTypesInTomb);
 
           let priorizedResource = resourcePriorizer(resourcesTypesInTomb)
-          console.log('resourcesTypesInTomb: ', resourcesTypesInTomb);
-          console.log('priorizedResource: ', priorizedResource);
+          // console.log('resourcesTypesInTomb: ', resourcesTypesInTomb);
+          // console.log('priorizedResource: ', priorizedResource);
 
           // console.log('priorizedResource: ', priorizedResource);
 
@@ -92,12 +92,12 @@ var roleSweeper = {
             // console.log('tomb0: ', tomb0);
             if (creep.withdraw(tomb0, priorizedResource) == ERR_NOT_IN_RANGE) {
 
-              console.log('creep.withdraw(tomb0, priorizedResource): ', creep.withdraw(tomb0, priorizedResource));
+              // console.log('creep.withdraw(tomb0, priorizedResource): ', creep.withdraw(tomb0, priorizedResource));
 
               creep.moveTo(tomb0, { visualizePathStyle: { stroke: '#ffaa00' } })
-              return
-            }
 
+            }
+            return
           }
 
           //if 
