@@ -196,7 +196,7 @@ const controller_spawns = () => {
   });
 
   if (repairTargets.length) {
-    spawnByMinNumber('repairer', [WORK, CARRY, MOVE], 1)
+    spawnByMinNumber('repairer', body([WORK, 3, CARRY, 3, MOVE, 6]), 2)
   }
 
 
@@ -206,7 +206,7 @@ const controller_spawns = () => {
 
   //* spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    // spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
+    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 2)
   }
 
   //* spawn Upgrader

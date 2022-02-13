@@ -43,5 +43,5 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-  buildEnergyBase('findStarter', 'findEnder', 'Spawn1')
+  // buildEnergyBase('findStarter', 'findEnder', 'Spawn1')
 }
