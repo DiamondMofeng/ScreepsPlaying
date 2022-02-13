@@ -326,82 +326,83 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
 
             //! tick1: controller
             if (flagTo.memory[tick] == 1) {
+              //获取信息
+              let controller = pionner.room.controller;
+              let path_toController = pionner.pos.findPathTo(controller, opt);
+              //铺路
+              for (let pos of path_toController) {
+                pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+              }
 
+              //* tick++
+              flagTo.memory[tick] += 1
+              return
             }
 
+            //! tick2: sourceS
+            if (flagTo.memory[tick] == 2) {
+              let sources = pionner.room.find(FIND_SOURCES)
+              let paths_toSoure = []
+              for (s in sources) {
+                paths_toSoure.push(pionner.pos.findPathTo(s, opt))
+              }
+              //铺路
+              //顺便把container位置存到数组里
+              let posArrayForContainer = []
 
-            //*定位source,controller,mine
-            let sources = pionner.room.find(FIND_SOURCES)
-            let controller = pionner.room.controller
-            // let mine = pionner.room.find(FIND_MINERALS)
-
-            //*各自寻路
-            //controller
-            let path_toController = pionner.pos.findPathTo(controller, opt)
-            //sources
-            let paths_toSoure = []
-            for (s in sources) {
-              paths_toSoure.push(pionner.pos.findPathTo(s, opt))
-            }
-            //mine
-            // let path_toMine = pionner.pos.findPathTo(mine)
-
-
-
-            //* 铺路
-            // if (_.isUndefined(PM[pPath])
-            //   || PM[pathRoomName] != pionner.room.name) {
-            //   PM[pPath] = pionner.pos.findPathTo(flagTo)
-            // }
-            for (let pos of path_toController) {
-              pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
-            }
-
-            let posArrayForContainer = [] //存到数组里
-
-            for (let path of paths_toSoure) {
-              for (let posIndex in path) {
-                let pos = path[posIndex]
-                if (posIndex == path.length - 1) {
-                  posArrayForContainer.push(pos)
-                } else {
-                  pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+              for (let path of paths_toSoure) {
+                for (let posIndex in path) {
+                  let pos = path[posIndex]
+                  if (posIndex == path.length - 1) {
+                    posArrayForContainer.push(pos)
+                  } else {
+                    pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+                  }
                 }
               }
+
+              //放container
+              for (pos of posArrayForContainer) {
+                pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER)
+              }
+
+              //* tick++
+              flagTo.memory[tick] += 1
+              return
             }
 
-            // for (pos of path_toMine) {
-            //   pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
-            // }
-
-            //* 放置container, extractor
-
-            //container
-            for (pos of posArrayForContainer) {
-              pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER)
+            //! tick3: mine
+            if (flagTo.memory[tick] == 3) {
+              let mine = pionner.room.find(FIND_MINERALS)[0]//? is there only 1 mine each room?
+              let path_toMine = pionner.pos.findPathTo(mine)
+              //铺路
+              for (let pos of path_toMine) {
+                pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+              }
+              //放extractor
+              pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_EXTRACTOR)
+              // flagTo.memory[tick] += 1 //?
             }
-
-            //extractor
-            // pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_EXTRACTOR)
-
             //* 工地设置完成后设置为 状态2：待建状态
-            // flagTo.memory[energyBase_state] = state_waitForBuilding
-          }
-        }
+            flagTo.memory[energyBase_state] = state_waitForBuilding
 
+          }
+
+
+
+
+        }
       }
+
     }
   }
   //! 状态阶段2： 等待建设
   if (flagTo.memory[energyBase_state] == state_waitForBuilding) {
 
   }
-  // else if (true) {
-
-  //   }
-
-  // if (flag.room.memory.)
 }
+
+
 
 
 
