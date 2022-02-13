@@ -8,21 +8,35 @@
  * @returns {boolean} 是否找到了合适的container
  */
 const getEnergyFromContainer = (creep, opt = {}) => {
+  // console.log('opt: ', JSON.stringify(opt));
+
   let min = 200
   let BL = []
   if (!_.isUndefined(opt.min)) {
     min = opt.min
   }
   if (!_.isUndefined(opt.blackList)) {
+    
+    
     BL = opt.blackList
+    // console.log('BL: ', BL);
   }
+  // console.log('opt.blackList: ', opt.blackList);
 
   const findContainer = (creep) => {
     return creep.room.find(FIND_STRUCTURES, {
-      filter: (structure) => {
-        return structure.structureType == STRUCTURE_CONTAINER
-          && structure.store.getUsedCapacity(RESOURCE_ENERGY) > min
-          && BL.indexOf(structure.id) == -1;
+      filter: (s) => {
+        // console.log('structure.id: ', structure.id);
+        // console.log('BL.indexOf(structure.id) == -1: ', BL.indexOf(structure.id) == -1);
+        if (s.structureType == STRUCTURE_CONTAINER
+          && s.store.getUsedCapacity(RESOURCE_ENERGY) > min
+          && BL.indexOf(s.id) == -1) {
+            // console.log('BL: ', BL);
+            // console.log('s.id: ', s.id);
+            
+          return true
+        }
+
       }
     })
   }

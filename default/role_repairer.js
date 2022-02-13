@@ -33,7 +33,7 @@ var roleRepairer = {
             )
             || (
               (s.structureType == STRUCTURE_WALL)
-              && ((s.hits / s.hitsMax) < 0.003)
+              && ((s.hits / s.hitsMax) < 0.05)
             )
             || (
               (s.structureType == STRUCTURE_ROAD)
@@ -52,7 +52,7 @@ var roleRepairer = {
             STRUCTURE_TOWER,
             STRUCTURE_CONTAINER,
             STRUCTURE_WALL
-            ]
+          ]
           , false)(targets)
 
         if (creep.repair(priorizedTarget) == ERR_NOT_IN_RANGE) {

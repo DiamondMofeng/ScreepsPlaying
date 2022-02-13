@@ -13,6 +13,12 @@ var role_base_transferor = {
    */
   run: function (creep, fromContainer, toContainer) {
 
+
+    // creep.say('✔️ ONLINE')
+    creep.say('❌ OFFLINE')
+
+
+
     // console.log('transferring');
     //若能量为空，置为获取能量状态
     if (creep.store.getUsedCapacity() == 0) {

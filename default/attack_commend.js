@@ -1,6 +1,6 @@
 
-const attack_moveToFlag = (creep, flag) => {
-
+const attack_moveToFlag = (creep, flagID) => {
+  let flag = Game.flags[flagID]
   creep.moveTo(flag)
 }
 
@@ -51,7 +51,7 @@ function attack_moveToFlagRoom(creep, flagID) {
 
 function main() {
 
-  let attackerCreepsId = ['attacker']
+  let attackerCreepsId = ['attacker1']
   let flagID = 'ATK'
 
 
@@ -60,13 +60,15 @@ function main() {
   for (i in attackerCreepsId) {
     let c = Game.creeps[attackerCreepsId[i]]
 
+    if (_.isUndefined(c)) continue
+
 
 
 
     // attack_moveToFlagRoom(c, flag)
 
-    // attack_moveToFlagRoom(c, 'ATK')
-    // attack_objectByID(c,'62000f0f1386917f30c19f13')
+    attack_moveToFlag(c, 'ATK')
+    attack_objectByID(c, '6207cb993532724bae271722')
     // attack_anyCreep(c)
     // attack_STRUCTURES(c)
 
@@ -76,7 +78,8 @@ function main() {
 }
 
 
-// Game.spawns.Spawn1.spawnCreep([TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE], 'ATTACKERtEST')
+// Game.spawns.Spawn1.spawnCreep([TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE], 'attacker1')
+//Game.spawns.Spawn1.spawnCreep([TOUGH, TOUGH, MOVE,TOUGH, TOUGH, MOVE,TOUGH, TOUGH, MOVE, TOUGH, ATTACK,  MOVE,ATTACK, ATTACK,  MOVE,ATTACK, ATTACK,  MOVE], 'attacker1')
 
 module.exports = main
 

@@ -23,27 +23,30 @@ var roleCarrier = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
+    //! HARD CODED!!!!!!
 
-
-
+    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a']
     let targets = creep.room.find(FIND_STRUCTURES, {
-      filter: (structure) => {
+      filter: (s) => {
         return (
-          ((
-            structure.structureType == STRUCTURE_EXTENSION
-            || structure.structureType == STRUCTURE_SPAWN
-          ) && (structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
-          )
-          || (structure.structureType == STRUCTURE_CONTAINER
-            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 1000
+          (blackList.indexOf(s.id) == -1)
+          && (
+            ((
+              s.structureType == STRUCTURE_EXTENSION
+              || s.structureType == STRUCTURE_SPAWN
+            ) && (s.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
+            )
+            || (s.structureType == STRUCTURE_CONTAINER
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 1600
 
-          )
-          || (structure.structureType == STRUCTURE_STORAGE
-            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 10000
+            )
+            || (s.structureType == STRUCTURE_STORAGE
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 1000000
 
-          )
-          || (structure.structureType == STRUCTURE_TOWER
-            && structure.store.getUsedCapacity(RESOURCE_ENERGY) < 900
+            )
+            || (s.structureType == STRUCTURE_TOWER
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 900
+            )
           )
         )
       }
@@ -60,7 +63,7 @@ var roleCarrier = {
     //! //////////main//////////
     if (!haveJob()) {
       // console.log('carrier dont have job,turn into Upgrader')
-      Upgrader(creep)
+      // Upgrader(creep)
 
     }
     else {
@@ -68,16 +71,17 @@ var roleCarrier = {
       if (creep.store.getUsedCapacity() == 0) {
 
         //the later has higher priority
-
-
-
-        getEnergyFromContainer(creep, { min: 1000, blackList: ['6200bf0e9b3fe1ad6927628f'] })
-
-        // if (creep.room.energyAvailable < 1500) {
-        getEnergyFromStorage(creep, 5000)
-        // }
-
         pickUpNearbyDroppedEnergy(creep)
+
+        if (getEnergyFromContainer(creep, { min: 1000, blackList: ['6200bf0e9b3fe1ad6927628f'] })) {
+          return
+        } else if (getEnergyFromStorage(creep, 5000)) {
+          return
+        }
+
+
+
+
 
 
         // // ! 转变为sweepper

@@ -11,13 +11,13 @@ const buildEnergyBase = require('./script_outerEnergyBase')
 
 const guardRoom = require('./util_guardRoom')
 
+const customPrototypes = require('./util_customPrototypes')
+
 module.exports.loop = function () {
-  //   Game.spawns['Spawn1'].spawnCreep([MOVE, CARRY, WORK], 'harvester' + Game.time, { memory: { role: 'harvester' } })
+
   console.log(`----------${Game.time}----------`)
 
-  // test.trans1(Game.getObjectById('62029a95302000f912843c34'))
-  // test.trans2(Game.getObjectById('62029a95302000f912843c34'))
-
+  // customPrototypes()
 
 
   controller_creeps()
@@ -29,13 +29,13 @@ module.exports.loop = function () {
   roleTagger('W12N16')
   roleTagger('W11N16')
 
-  // attack()
+  attack()
 
   // buildEnergyBase('')
 
   guardRoom('W11N16')
 
-  test.showFIndReslt()
+  // test.showFIndReslt()
 
 
 
