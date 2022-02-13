@@ -133,7 +133,7 @@ const controller_spawns = () => {
 
 
 
-  //clean the dead(experiod)
+  //*clean the dead(experiod)
   for (var name in Memory.creeps) {
     if (!Game.creeps[name]) {
       delete Memory.creeps[name];
