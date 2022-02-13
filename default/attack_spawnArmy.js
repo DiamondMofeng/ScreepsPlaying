@@ -1,6 +1,6 @@
 
 
-let spawn =Game.spawns['Spawn1']
+let spawn = Game.spawns['Spawn1']
 
 
 /**

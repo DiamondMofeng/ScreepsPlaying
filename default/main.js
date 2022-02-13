@@ -29,9 +29,9 @@ module.exports.loop = function () {
   roleTagger('W12N16')
   roleTagger('W11N16')
 
-  attack()
+  // attack()
 
-  // buildEnergyBase('')
+
 
   guardRoom('W11N16')
 
@@ -43,5 +43,5 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-
+  // buildEnergyBase('findStarter', 'findEnder', 'Spawn1')
 }

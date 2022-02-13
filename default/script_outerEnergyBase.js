@@ -1,31 +1,23 @@
 /*
 param:baseRoom,targetRoom
 思路:
-TODO 暂时手动定义起终点
-首先用`Game.map.findRoute`寻找路径房间，把结果存到memory.outerBase中
-再用PathFinder.search初步寻找路径，把每个房间的第一个/最后一个点记录，用于后续优化路径
-对于结果房间，从起点房间开始依次处理。
-  首先，检查正在处理的房间是否有视野(在rooms中)
-  若无视野，则：
-    observer开视野；派creep去开视野
-  有视野后，
-    用`PathFinder.search`找路，方便利用现有道路、规避建筑等，
-    ? 同时一定程度上降低沼泽的权重方便修近路 ?
-    * 1.controller
-    找路前，挑选一个点 距离controller为1内的 距离入口最近的点作为后续cliamer的工作位置
-    第一遍找路通向controller，调整cliamer的工作位置cost为256，放置一条通向controller的 道路 的 建筑工地，
-    
-    * 2.现在开始处理sources
-    对于source,获取后存入数组，依次处理。
-    寻路前，放置一个container,位置为 (?实现) 距离source为1内的离入口最近的点
-    进行 第 2 - ? 遍寻路 找路通向source。此时调整 Road建筑工地 的cost等同道路，container建筑工地 的cost为最大。找到后放置道路 的 建筑工地
+TODO 暂时手动定义起终点旗子
+首先制造一个pionner creep
+if not 位于目标房间:仅修路
+  if(creep.memory.path==undefined),直接 creep.pos.findPathTo，并把结果存到memory里
+  对于每个path，创建road的建筑工地，但是继续往前走
+if 位于目标房间，定位claimer、harvester、miner的工作位置:
+  claimer:寻路通向contoleer，最后坐标为工作位置，同时放下Road
+  harvester：寻路通向source，同上
+  miner:暂时不
 
-    * 3.记录路径
-    最后记录路径供后续工作bot行动。
-    claimer: path_toController
-    harvester: path_toSource 1、2
-    carrier: path_toSource 、 (? path_fromSource(toStorage))
-    ? 大概没必要单独存一个反向的
+  then :在harvester工作位置放下containr
+
+  pionner利用本房间内的source修建筑
+
+  设定房间memory的underConstruction值为true,若建筑工地完成则改为false
+
+
 
 ! 派遣pionner去修建筑
 
@@ -135,20 +127,154 @@ function pathFinder(fromPos, toPos) {
 
 
 
+//! /////////////    MAIN    ///////////////////////////////////
+
+
+/**
+ * 
+ * @param {String} flagNameFrom 起点旗子。必须给定
+ * @param {String} flagNameTo 目标房间？的旗子
+ * @param {String} spawnName 
+ */
+function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
+  //处理flag
+  let flagTo = Game.flags[flagNameTo]
+  if (_.isUndefined(flagTo)) {
+    console.log('!!!buildEnergyBase--flag', flagNameTo, 'is not defined!!!!')
+  }
+  if (_.isUndefined(flagTo.memory.type)) {
+    flagTo.memory.type = 'energyBase'
+  }
+  if (_.isUndefined(flagTo.memory.energyBase_state)) {
+    flagTo.memory.energyBase_state = 'underConstruction'
+  }
+  if (_.isUndefined(flagTo.memory.energyBase_pionners)) {
+    flagTo.memory.energyBase_pionners = []
+  }
+
+  //根据flag的状态进行建造
+  if (flagTo.memory.energyBase_state == 'underConstruction') {
+
+
+
+    //从spawnName指定的spawn生产pionner
+    //先建一个过去铺路
+    //没有就造一个
+    if (flagTo.memory.energyBase_pionners.length == 0) {
+      let role1 = 'pionner_leader'
+      let spawn = Game.spawns[spawnName]
+      let pionnerName = `${role1}-${Game.time}-${flagNameTo}`
+      let spawnResult = spawn.spawnCreep([WORK,CARRY,MOVE], pionnerName, { memory: { role: role1 } })
+      if (spawnResult == OK) {
+        //成功则记下pionnerName
+        flagTo.memory.energyBase_pionners.push(pionnerName)
+      }
+      //return //? 
+
+    }
+
+    //若有pionner
+
+    //! 正式开始开拓任务
+
+    else {
+      for (pionnerName of flagTo.memory.energyBase_pionners) {
+        let pionner = Game.creeps[pionnerName]
+        let PM = pionner.memory //快捷访问
+        //* 初始化pionner不存在的的memory
+
+        let toStart = 'pionner_toStart' //检测一开始是否到达了起点
+        if (_.isUndefined(PM[toStart])) {
+          PM[toStart] = false
+        }
+
+        let pathRoomName = 'pionner_currentRoom' //用于检测所存路径的房间
+        if (_.isUndefined(PM[pathRoomName])) {
+          PM[pathRoomName] = pionner.room
+        }
+
+        let lol = 'pionner_lol' //预留
+        if (_.isUndefined(PM[pathRoomName])) {
+          PM[pathRoomName] = false
+        }
+
+        //! 起始房间中发生的事情
+        let flagFrom = Game.flags[flagNameFrom]
+
+
+        //? 这段检查挪到前面？
+
+        if (_.isUndefined(flagFrom)) {
+          console.log('!!!!!!!!!!!!!!FlagFrom is not defined!!!!!!!!!!!!!')
+          return
+        }
+
+        //* 先去靠近起点旗子
+
+        //若已靠近，则设为true
+        if (pionner.pos.isNearTo(flagFrom)) {
+          PM[toStart] = true
+        }
+        //若未靠近过，则尝试靠近
+        if (PM[toStart] == false) {
+          pionner.moveTo(flagFrom)
+        }
+
+        //* 开始铺路
+
+        if (PM[toStart] == true) {
+
+
+          //! 若未到达目标房间：
+          //先仅铺路
+          if (pionner.room != flagTo.room) {
+
+
+
+            //若无路径记忆，或路径房间过期 
+            //  则赋予路径记忆
+
+            //* 注意！ 这个路径只通向出口
+            if (_.isUndefined(PM[pPath])
+              || PM[pathRoomName] != pionner.room.name) {
+              PM[pPath] = pionner.pos.findPathTo(flagTo)
+            }
+
+            //* 进行铺路
+            for (pos of PM[pPath]) {
+              pionner.room.createConstructionSite(pos, STRUCTURE_ROAD)
+            }
+
+            //* 沿着路走
+            pionner.moveByPath(PM[pPath])
+
+          }
+
+          //! 若已到达目标房间
+
+          else {
+            //定位
+          }
+        }
 
 
 
 
-function buildEnergyBase(roomToBuild = '') {
 
-  let resule = pathFinder(Game.flags['findStarter'].pos, Game.flags['findEnder'].pos)
 
-  console.log('resule: ', JSON.stringify(resule));
 
-  // let ret = testMartix('W11N16')
-  // console.log('ret: ', ret.serialize());
+      }
+    }
 
+
+  }
+  // else if (true) {
+
+  //   }
+
+  // if (flag.room.memory.)
 }
+
 
 
 module.exports = buildEnergyBase

@@ -14,7 +14,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
 
   let roomTW = Game.rooms[roomName] //Means room to watch
 
-  let RM = roomTW.memory
+  let RM = Memory.rooms[roomName]
 
 
 
@@ -24,18 +24,22 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
 
   //* 判断是否InDanger
 
-  let hostileAttackers = roomTW.find(FIND_HOSTILE_CREEPS
-    , {
-      filter: HC => HC.body.indexOf(ATTACK) != -1
-        || HC.body.indexOf(RANGED_ATTACK != -1)
-    })
+  if (!_.isUndefined(roomTW)) {
 
-  if (hostileAttackers.length > 0) {
-    RM.inDanger = true
-  } else {
-    RM.inDanger = false
+
+    let hostileAttackers = roomTW.find(FIND_HOSTILE_CREEPS
+      , {
+        filter: HC => HC.body.indexOf(ATTACK) != -1
+          || HC.body.indexOf(RANGED_ATTACK != -1)
+      })
+
+    if (hostileAttackers.length > 0) {
+      RM.inDanger = true
+    } else {
+      RM.inDanger = false
+    }
+
   }
-
   //* IF InDanger:
 
   if (RM.inDanger === true) {
@@ -45,20 +49,25 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
       console.log(`!!!!!!!!!!!!!!!!!   ${roomTW} is in DANGER  !!!!!!!!!!!!!!!!!!!!!`)
     }
     //* 基地造兵支援
-
     let hasGuardian = false
+
 
     for (creepName in Game.creeps) {
       let creep = Game.creeps[creepName]
       let CM = creep.memory
       if (CM.role == 'guardian' && CM.guardian_Room == roomName) {
         hasGuardian = true
+
       }
     }
     // console.log('hasGuardian: ', hasGuardian);
+
+
     if (hasGuardian == false) {
-      let guardianName = 'guardian' + roomName
-      Game.spawns[opts.spawnName].spawnCreep([TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE],
+
+      let guardianName = 'guardian' + roomName + Game.time
+      let spawnResult = Game.spawns[opts.spawnName].spawnCreep([TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE],
+
         guardianName,
         {
           memory: {
@@ -67,31 +76,51 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
             spawnName: opts.spawnName
           }
         })
-
+      // console.log('spawnResult: ', spawnResult);
     }
 
     //* worker逃命
     for (creepName in Game.creeps) {
       let creep = Game.creeps[creepName]
       //* 若此creep在inDanger房间内，且无还手之力
+
+      function isBattleable(creep) {
+        for (part of creep.body) {
+          if (part.type == ATTACK || part.type == RANGED_ATTACK) {
+            return true
+          }
+        }
+        return false
+      }
+
       if (creep.room == roomTW
-        && (creep.body.indexOf(ATTACK) == -1 || creep.body.indexOf(RANGED_ATTACK) == -1)) {
+        && !isBattleable(creep)) {
+
+
         //* 建立一个fleed数组存放逃走的creep，方便后续恢复role
         if (_.isUndefined(RM.guardSys_fleedCreeps)) {
           RM.guardSys_fleedCreeps = []
         }
-        RM.guardSys_fleedCreeps.push(creepName)
+        if (RM.guardSys_fleedCreeps.indexOf(creepName) == -1) {
+          RM.guardSys_fleedCreeps.push(creepName)
+        }
 
+        if (_.isUndefined(creep.memory.roleBeforeFlee)) {
+          creep.memory.roleBeforeFlee = creep.memory.role
+        }
 
+        creep.memory.role = 'fleer'
         creep.memory.flee = true  //为flee 接口做准备，现在还没写
-        creep.memory.roleBeforeFlee = creep.memory.role
         creep.memory.fleeFrom = roomName
 
+
+
+      }
+      if (creep.memory.role == 'fleer') {
         function fleeTo(creep, destination) {
           creep.moveTo(destination)
         }
         fleeTo(creep, Game.flags['FleeTo'])
-
       }
     }
 

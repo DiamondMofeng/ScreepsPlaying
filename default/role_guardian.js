@@ -24,13 +24,26 @@ function attack_attackerCreep(creep) {
  */
 var roleGuardian = (creep) => {
 
+
+	// function isBattleable(creep) {
+	// 	for (part of creep.body) {
+	// 		if (part.type == ATTACK || part.type == RANGED_ATTACK) {
+	// 			return true
+	// 		}
+	// 	}
+	// 	return false
+	// }
+	// console.log('isBattleable(creep): ', isBattleable(creep));
+
 	let CM = creep.memory
 	let roomTG = Game.rooms[CM.guardian_Room]	//means roomToGuard
 	// console.log('roomTG: ', roomTG);
 
 	let flagName = 'Guard' + CM.guardian_Room
 
-	if (roomTG.memory.inDanger == true) {
+
+	// console.log('debug')
+	if (Memory.rooms[CM.guardian_Room].inDanger == true) {
 
 		let flag = Game.flags[flagName]
 
@@ -40,11 +53,12 @@ var roleGuardian = (creep) => {
 			roomTG.createFlag(25, 25, flagName, COLOR_YELLOW)
 		}
 
-		console.log(`Don't worry,Guardian of ${roomTG} is on the way! `)
+		console.log(`Don't worry,Guardian of ${CM.guardian_Room} is on the way! `)
 
 		//! 待优化
-		if (creep.room != flag.room) {
+		if (creep.room != flag.room || _.isUndefined(flag.room)) {
 			creep.moveTo(flag)
+			console.log('creep.moveTo(flag): ', creep.moveTo(flag));
 		} else {
 			attack_attackerCreep(creep)
 		}
