@@ -32,6 +32,8 @@ room.storage.pos.findPathTo
 
 */
 
+
+
 // let costMatrix = new PathFinder.CostMatrix()
 
 
@@ -139,37 +141,93 @@ function pathFinder(fromPos, toPos) {
 function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
   //处理flag
   let flagTo = Game.flags[flagNameTo]
+
+  let energyBase_state = 'energyBase_state'
+  let energyBase_pionners = 'energyBase_pionners'
+
+  let state_waitForDeposit = 'waitForDeposit'
+  let state_waitForBuilding = 'waitForBuilding'
+  let state_done = 'done'
+
   if (_.isUndefined(flagTo)) {
     console.log('!!!buildEnergyBase--flag', flagNameTo, 'is not defined!!!!')
   }
   if (_.isUndefined(flagTo.memory.type)) {
     flagTo.memory.type = 'energyBase'
   }
-  if (_.isUndefined(flagTo.memory.energyBase_state)) {
-    flagTo.memory.energyBase_state = 'underConstruction'
+  if (_.isUndefined(flagTo.memory[energyBase_state])) {
+    flagTo.memory[energyBase_state] = state_waitForDeposit
   }
-  if (_.isUndefined(flagTo.memory.energyBase_pionners)) {
-    flagTo.memory.energyBase_pionners = []
+  if (_.isUndefined(flagTo.memory[energyBase_pionners])) {
+    flagTo.memory[energyBase_pionners] = []
   }
 
+  //* 传入寻路的opt
+  let opt = {
+    ignoreCreeps: true,
+    range: 1,
+    serialize: false,
+    plainCost: 2,
+    swampCost: 5,
+    costCallback: function (roomName) {
+
+      let room = Game.rooms[roomName];
+      if (_.isUndefined(room)) return;
+
+      let costs = new PathFinder.CostMatrix;
+
+      //设置道路工地的cost为1
+      room.find(FIND_CONSTRUCTION_SITES).forEach(s => {
+        if (s.structureType == STRUCTURE_ROAD) {
+          costs.set(s.pos.x, s.pos.y, 1)
+        }
+      })
+      //设置道路cost为1，不可通行的建筑cost为最大
+      room.find(FIND_STRUCTURES).forEach(function (s) {
+        if (s.structureType === STRUCTURE_ROAD) {
+          costs.set(s.pos.x, s.pos.y, 1);
+        }
+        else if (s.structureType !== STRUCTURE_CONTAINER
+          && (s.structureType !== STRUCTURE_RAMPART ||
+            !s.my)
+        ) {
+          costs.set(s.pos.x, s.pos.y, 0xff);
+        }
+      });
+
+      return costs;
+    },
+  }
   //根据flag的状态进行建造
-  if (flagTo.memory.energyBase_state == 'underConstruction') {
+  //! 状态1：等待部署
+  if (flagTo.memory[energyBase_state] == state_waitForDeposit) {
 
 
 
     //从spawnName指定的spawn生产pionner
     //先建一个过去铺路
+
+
+    //清除死去的pionner creep
+    //? 不知道有没有bug,这个for splice
+    for (creepName of flagTo.memory[energyBase_pionners]) {
+      if (Object.keys(Game.creeps).indexOf(creepName) == -1) {
+        let indexToDelete = flagTo.memory[energyBase_pionners].indexOf(creepName)
+        flagTo.memory[energyBase_pionners].splice(indexToDelete, 1)
+      }
+    }
+
     //没有就造一个
-    if (flagTo.memory.energyBase_pionners.length == 0) {
+    if (flagTo.memory[energyBase_pionners].length == 0) {
       let role1 = 'pionner_leader'
       let spawn = Game.spawns[spawnName]
       let pionnerName = `${role1}-${Game.time}-${flagNameTo}`
-      let spawnResult = spawn.spawnCreep([WORK,CARRY,MOVE], pionnerName, { memory: { role: role1 } })
+      let spawnResult = spawn.spawnCreep([WORK, CARRY, MOVE], pionnerName, { memory: { role: role1 } })
       if (spawnResult == OK) {
         //成功则记下pionnerName
-        flagTo.memory.energyBase_pionners.push(pionnerName)
+        flagTo.memory[energyBase_pionners].push(pionnerName)
       }
-      //return //? 
+      return //? 
 
     }
 
@@ -178,9 +236,11 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
     //! 正式开始开拓任务
 
     else {
-      for (pionnerName of flagTo.memory.energyBase_pionners) {
+      for (pionnerName of flagTo.memory[energyBase_pionners]) {
         let pionner = Game.creeps[pionnerName]
-        let PM = pionner.memory //快捷访问
+        let PM = Memory.creeps[pionnerName] //快捷访问
+        // console.log('PM: ', JSON.stringify(PM));
+        // console.log('PM: ', JSON.stringify(pionner.memory));
         //* 初始化pionner不存在的的memory
 
         let toStart = 'pionner_toStart' //检测一开始是否到达了起点
@@ -190,7 +250,7 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
 
         let pathRoomName = 'pionner_currentRoom' //用于检测所存路径的房间
         if (_.isUndefined(PM[pathRoomName])) {
-          PM[pathRoomName] = pionner.room
+          PM[pathRoomName] = pionner.room.name
         }
 
         let lol = 'pionner_lol' //预留
@@ -209,6 +269,7 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
           return
         }
 
+        //! 状态1：等待部署
         //* 先去靠近起点旗子
 
         //若已靠近，则设为true
@@ -235,14 +296,16 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
             //  则赋予路径记忆
 
             //* 注意！ 这个路径只通向出口
+            let pPath = 'pionner_path'
             if (_.isUndefined(PM[pPath])
               || PM[pathRoomName] != pionner.room.name) {
-              PM[pPath] = pionner.pos.findPathTo(flagTo)
+              PM[pPath] = pionner.pos.findPathTo(flagTo, opt)
             }
 
             //* 进行铺路
             for (pos of PM[pPath]) {
-              pionner.room.createConstructionSite(pos, STRUCTURE_ROAD)
+              pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+              // console.log('pionner.room.createConstructionSite(pos, STRUCTURE_ROAD): ', pionner.room.createConstructionSite(pos, STRUCTURE_ROAD));
             }
 
             //* 沿着路走
@@ -253,19 +316,84 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
           //! 若已到达目标房间
 
           else {
-            //定位
+
+            //! 分tick进行，方便重复利用道路
+            //初始化tick为1
+            let tick = 'tick'
+            if (_.isUndefined(flagTo.memory[tick])) {
+              flagTo.memory[tick] = 1
+            }
+
+            //! tick1: controller
+            if (flagTo.memory[tick] == 1) {
+
+            }
+
+
+            //*定位source,controller,mine
+            let sources = pionner.room.find(FIND_SOURCES)
+            let controller = pionner.room.controller
+            // let mine = pionner.room.find(FIND_MINERALS)
+
+            //*各自寻路
+            //controller
+            let path_toController = pionner.pos.findPathTo(controller, opt)
+            //sources
+            let paths_toSoure = []
+            for (s in sources) {
+              paths_toSoure.push(pionner.pos.findPathTo(s, opt))
+            }
+            //mine
+            // let path_toMine = pionner.pos.findPathTo(mine)
+
+
+
+            //* 铺路
+            // if (_.isUndefined(PM[pPath])
+            //   || PM[pathRoomName] != pionner.room.name) {
+            //   PM[pPath] = pionner.pos.findPathTo(flagTo)
+            // }
+            for (let pos of path_toController) {
+              pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+            }
+
+            let posArrayForContainer = [] //存到数组里
+
+            for (let path of paths_toSoure) {
+              for (let posIndex in path) {
+                let pos = path[posIndex]
+                if (posIndex == path.length - 1) {
+                  posArrayForContainer.push(pos)
+                } else {
+                  pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+                }
+              }
+            }
+
+            // for (pos of path_toMine) {
+            //   pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+            // }
+
+            //* 放置container, extractor
+
+            //container
+            for (pos of posArrayForContainer) {
+              pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER)
+            }
+
+            //extractor
+            // pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_EXTRACTOR)
+
+            //* 工地设置完成后设置为 状态2：待建状态
+            // flagTo.memory[energyBase_state] = state_waitForBuilding
           }
         }
 
-
-
-
-
-
-
       }
     }
-
+  }
+  //! 状态阶段2： 等待建设
+  if (flagTo.memory[energyBase_state] == state_waitForBuilding) {
 
   }
   // else if (true) {
