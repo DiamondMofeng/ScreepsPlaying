@@ -103,10 +103,10 @@ function controller_creeps() {
         Guardian(creep)
       }
 
-      
+
 
     } catch (e) {
-      console.log('!!!!!!!!!!!!!!ERROR FOUND!!!!!!!!!!!!!!!!' + e)
+      console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)
     }
   }
 

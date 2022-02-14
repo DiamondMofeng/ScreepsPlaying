@@ -17,7 +17,7 @@ module.exports.loop = function () {
 
   console.log(`----------${Game.time}----------`)
 
-  // customPrototypes()
+  customPrototypes()
 
 
   controller_creeps()

@@ -6,7 +6,7 @@ var roleUseless = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    recycleSelf(creep)
+    recycleSelf(creep,'Spawn1')
     
   }
 }

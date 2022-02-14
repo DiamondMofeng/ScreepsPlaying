@@ -16,8 +16,8 @@ const getEnergyFromContainer = (creep, opt = {}) => {
     min = opt.min
   }
   if (!_.isUndefined(opt.blackList)) {
-    
-    
+
+
     BL = opt.blackList
     // console.log('BL: ', BL);
   }
@@ -31,9 +31,9 @@ const getEnergyFromContainer = (creep, opt = {}) => {
         if (s.structureType == STRUCTURE_CONTAINER
           && s.store.getUsedCapacity(RESOURCE_ENERGY) > min
           && BL.indexOf(s.id) == -1) {
-            // console.log('BL: ', BL);
-            // console.log('s.id: ', s.id);
-            
+          // console.log('BL: ', BL);
+          // console.log('s.id: ', s.id);
+
           return true
         }
 

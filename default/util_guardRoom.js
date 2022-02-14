@@ -49,6 +49,15 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
       console.log(`!!!!!!!!!!!!!!!!!   ${roomTW} is in DANGER  !!!!!!!!!!!!!!!!!!!!!`)
     }
     //* 基地造兵支援
+
+    //造个旗子方便guardian寻路
+    let flagName = 'Guard' + roomName
+    let flagTG = Game.flags[flagName]
+    if (_.isUndefined(flagTG)) {
+      roomTW.createFlag(25, 25, flagName)
+    }
+
+
     let hasGuardian = false
 
 
@@ -73,6 +82,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
           memory: {
             role: 'guardian',
             guardian_Room: roomName,
+            guardian_FlagName: flagName,
             spawnName: opts.spawnName
           }
         })
@@ -109,14 +119,14 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
           creep.memory.roleBeforeFlee = creep.memory.role
         }
 
-        creep.memory.role = 'fleer'
+        // creep.memory.role = 'fleer'
         creep.memory.flee = true  //为flee 接口做准备，现在还没写
         creep.memory.fleeFrom = roomName
 
 
 
       }
-      if (creep.memory.role == 'fleer') {
+      if (creep.memory.flee == true) {
         function fleeTo(creep, destination) {
           creep.moveTo(destination)
         }

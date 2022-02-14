@@ -39,19 +39,20 @@ var roleGuardian = (creep) => {
 	let roomTG = Game.rooms[CM.guardian_Room]	//means roomToGuard
 	// console.log('roomTG: ', roomTG);
 
-	let flagName = 'Guard' + CM.guardian_Room
 
 
 	// console.log('debug')
 	if (Memory.rooms[CM.guardian_Room].inDanger == true) {
 
-		let flag = Game.flags[flagName]
+		let flag = Game.flags[CM.guardian_FlagName]
 
 		// console.log('flag: ', flag);
 
-		if (_.isUndefined(flag)) {
-			roomTG.createFlag(25, 25, flagName, COLOR_YELLOW)
-		}
+		// if (_.isUndefined(flag)) {
+		// 	let flagPos = new RoomPosition(25, 25, CM.guardian_Room)
+		// 	flagPos.createFlag(flagName, COLOR_YELLOW)
+		// 	// roomTG.createFlag(25, 25, )
+		// }
 
 		console.log(`Don't worry,Guardian of ${CM.guardian_Room} is on the way! `)
 

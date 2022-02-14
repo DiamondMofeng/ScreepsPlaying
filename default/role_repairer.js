@@ -29,7 +29,7 @@ var roleRepairer = {
           )
             || (
               (s.structureType == STRUCTURE_RAMPART)
-              && ((s.hits / s.hitsMax) < 0.5)
+              && ((s.hits / s.hitsMax) < 0.28)
             )
             || (
               (s.structureType == STRUCTURE_WALL)
@@ -44,7 +44,7 @@ var roleRepairer = {
           //   && ((s.hits / s.hitsMax) < 0.5))
         }
       });
-      console.log('repireList:' + targets)
+      // console.log('repireList:' + targets)
       if (targets.length) {
         let priorizedTarget = targetsPriorizer_byRef('structureType'
           , [STRUCTURE_RAMPART,

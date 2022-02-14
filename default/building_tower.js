@@ -31,41 +31,41 @@ const roleTower = (tower) => {
   //无敌人时：
   //若能量大于750则修建筑
 
-  if (tower.store[RESOURCE_ENERGY] > 750) {
+  if (tower.store[RESOURCE_ENERGY] > 0) {
 
 
     // //修堡垒:
-    let rampartToRepair = tower.room.find(FIND_STRUCTURES,
-      {
-        filter: s => (s.structureType == STRUCTURE_RAMPART)
-          && ((s.hits / s.hitsMax) < 0.5)
-      })
-    // console.log('rampartToRepair:', rampartToRepair)
+    // let rampartToRepair = tower.room.find(FIND_STRUCTURES,
+    //   {
+    //     filter: s => (s.structureType == STRUCTURE_RAMPART)
+    //       && ((s.hits / s.hitsMax) < 0.5)
+    //   })
+    // // console.log('rampartToRepair:', rampartToRepair)
 
 
 
-    if (rampartToRepair.length) {
-      let towerRepairResult = tower.repair(rampartToRepair[0])
-      // console.log('Tower repair result:', towerRepairResult)
-      return
-    }
+    // if (rampartToRepair.length) {
+    //   let towerRepairResult = tower.repair(rampartToRepair[0])
+    //   // console.log('Tower repair result:', towerRepairResult)
+    //   return
+    // }
 
 
-    //修墙:
-    let wallToRepair = tower.room.find(FIND_STRUCTURES,
-      {
-        filter: s => (s.structureType == STRUCTURE_WALL)
-          && ((s.hits / s.hitsMax) < 0.001)
-      })
-    // console.log('rampartToRepair:', rampartToRepair)
+    // //修墙:
+    // let wallToRepair = tower.room.find(FIND_STRUCTURES,
+    //   {
+    //     filter: s => (s.structureType == STRUCTURE_WALL)
+    //       && ((s.hits / s.hitsMax) < 0.001)
+    //   })
+    // // console.log('rampartToRepair:', rampartToRepair)
 
 
 
-    if (wallToRepair.length) {
-      let towerRepairResult = tower.repair(wallToRepair[0])
-      // console.log('Tower repair result:', towerRepairResult)
-      return
-    }
+    // if (wallToRepair.length) {
+    //   let towerRepairResult = tower.repair(wallToRepair[0])
+    //   // console.log('Tower repair result:', towerRepairResult)
+    //   return
+    // }
 
     //修路：
     let roadToRepair = tower.room.find(FIND_STRUCTURES,

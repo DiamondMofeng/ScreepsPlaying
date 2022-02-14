@@ -206,11 +206,11 @@ const controller_spawns = () => {
 
   //* spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 2)
+    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
   }
 
   //* spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 2)//COST: 1300
+  spawnByMinNumber('upgrader', body([WORK, 8, CARRY, MOVE, 4]), 1)//COST: 1300
 
 
   //* spawn Sweepper
