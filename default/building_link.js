@@ -5,21 +5,13 @@
  */
 const buildingRoleLink = (link) => {
   /*
+  ! 已于'./util_customPrototypes.js'为S
+
   link types:
     source,
     storage,
     upgrade
   */
-
-  // 在原型方法中，"this" 通常代指该原型对象本身
-  // 无论你在哪个 creep 上调用 '.sayHello()' 都可以执行这段代码
-
-  // if (!StructureLink.prototype.memory) {
-  //   StructureLink.prototype.memory = this.room.memory.BUILDING_LINKS[this.id]
-  // }
-
-
-  // console.log(link.id)
 
 
   let RM = link.room.memory

@@ -7,15 +7,23 @@ function controller_buildings(roomID) {
 
   for (s of Game.rooms[roomID].find(FIND_STRUCTURES)) {
 
-    if (s.structureType == STRUCTURE_TOWER) {
-      Tower(s)
+    try {
+      if (s.structureType == STRUCTURE_TOWER) {
+        Tower(s)
+      }
+      if (s.structureType == STRUCTURE_LINK) {
+        Link(s)
+      }
+      // if (s.structureType == STRUCTURE_TOWER) {
+      //   Tower(s)
+      // }
     }
-    if (s.structureType == STRUCTURE_LINK) {
-      Link(s)
+
+    catch (e) {
+      console.log('!!!!!!!!!!!!ERROR FOUND IN ' + s + ' CONTROLL!!!!!!!!!' + e)
+
     }
-    // if (s.structureType == STRUCTURE_TOWER) {
-    //   Tower(s)
-    // }
+
   }
 }
 
