@@ -1,13 +1,13 @@
 const Upgrader = require('./role_upgrader')
 const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, PriorizedTarget } = require('./util_beheavor')
+const { getEnergyFromContainer, PriorizedTarget, getEnergyFromStorage } = require('./util_beheavor')
 
 
 
 var roleBuilder = {
 
 	/** @param {Creep} creep **/
-	run: function (creep, buildNewer = false) {
+	run: function (creep, buildNewer = true) {
 		var targets
 		const haveJob = () => {
 			targets = creep.room.find(FIND_CONSTRUCTION_SITES)
@@ -41,16 +41,8 @@ var roleBuilder = {
 				}
 			}
 			else {
-				if (getEnergyFromContainer(creep)) {
-
-				}
-				else {//dig
-					var sources = creep.room.find(FIND_SOURCES);
-
-					if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-					}
-				}
+				getEnergyFromContainer(creep)
+				getEnergyFromStorage(creep)
 			}
 		}
 		else {

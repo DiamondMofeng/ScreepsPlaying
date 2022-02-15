@@ -15,16 +15,27 @@
 const customPrototypes = () => {
 
 
+  // if (_.isUndefined(StructureLink.prototype.Rmemory)) {
 
-
-  let BUILDING_LINKS = 'BUILDING_LINKS'
-  Object.defineProperty(StructureLink, 'Rmemory', {
-    get() { return Memory.rooms[this.room.name][BUILDING_LINKS][this.id]; },
-    set(value) { this.Rmemory = value },
-    configurable: true,
-    enumerable: true
-  })
-
+    let BUILDING_LINKS   = 'BUILDING_LINKS'
+    Object.defineProperty(StructureLink.prototype, 'Rmemory', {
+      get() {
+        if (_.isUndefined(Memory.rooms[this.room.name])) {
+          Memory.rooms[this.room.name] = {}
+        }
+        if (_.isUndefined(Memory.rooms[this.room.name][BUILDING_LINKS])) {
+          Memory.rooms[this.room.name][BUILDING_LINKS] = {}
+        }
+        if (_.isUndefined(Memory.rooms[this.room.name][BUILDING_LINKS][this.id])) {
+          Memory.rooms[this.room.name][BUILDING_LINKS][this.id] = {}
+        }
+        return Memory.rooms[this.room.name][BUILDING_LINKS][this.id]
+      },
+      set(value) { Memory.rooms[this.room.name][BUILDING_LINKS][this.id] = value },
+      configurable: true,
+      enumerable: true
+    })
+  // }
   // {
   //   globals.Memory.rooms=> this.
   // }

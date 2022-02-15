@@ -66,7 +66,7 @@ var roleGuardian = (creep) => {
 
 	} else {
 
-		let flag = Game.flags[flagName]
+		let flag = Game.flags[CM.guardian_FlagName]
 
 		if (!_.isUndefined(flag)) {
 			flag.remove()

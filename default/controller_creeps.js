@@ -70,7 +70,9 @@ function controller_creeps() {
 
       if (creep.memory.role == 'long_carrier') {
         // long_Carrier(creep, Game.getObjectById('6200bf0e9b3fe1ad6927628f'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
-        long_Carrier(creep, Game.getObjectById('6204d67b3a03e2154eb99bde'), Game.getObjectById('6200bf0e9b3fe1ad6927628f')) // normal
+        long_Carrier(creep
+          , Game.getObjectById('6204d67b3a03e2154eb99bde')
+        , Game.getObjectById('620b405774b79b735e8dcaa4')) // normal
 
       }
 
