@@ -63,8 +63,9 @@ const buildingRoleLink = (link) => {
     if (type == 'source') {
 
       for (ID in RM.BUILDING_LINKS) {
+        // console.log('RM.BUILDING_LINKS: ', RM.BUILDING_LINKS);
         let otherLink = Game.getObjectById(ID)
-        if (otherLink !== link && link.Rmemory.type == 'storage') {
+        if (otherLink !== link && otherLink.Rmemory.type == 'storage') {
           link.transferEnergy(otherLink)
         }
       }

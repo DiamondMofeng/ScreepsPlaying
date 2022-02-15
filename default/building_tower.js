@@ -31,7 +31,7 @@ const roleTower = (tower) => {
   //无敌人时：
   //若能量大于750则修建筑
 
-  if (tower.store[RESOURCE_ENERGY] > 0) {
+  if (tower.store[RESOURCE_ENERGY] > 600) {
 
 
     //修堡垒:

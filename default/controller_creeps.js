@@ -20,6 +20,8 @@ const Guardian = require('./role_guardian')
 
 
 
+//! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
+
 function controller_creeps() {
 
 

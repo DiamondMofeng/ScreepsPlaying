@@ -12,7 +12,7 @@ todo list:
 
 - [ ] optimize the pathFinder of long rolers (crossRoomer)
 
-- [ ] add memory suppoet of LINK prototype 
+- [x] add memory suppoet of LINK prototype 
 
 
 

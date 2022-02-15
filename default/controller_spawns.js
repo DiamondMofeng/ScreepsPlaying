@@ -210,7 +210,7 @@ const controller_spawns = () => {
   }
 
   //* spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 8, CARRY, MOVE, 4]), 1)//COST: 1300
+  spawnByMinNumber('upgrader', body([WORK, 8, CARRY, MOVE, 4]), 2)//COST: 1300
 
 
   //* spawn Sweepper
