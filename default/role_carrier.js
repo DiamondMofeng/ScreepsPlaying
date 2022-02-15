@@ -73,7 +73,7 @@ var roleCarrier = {
         //the later has higher priority
         pickUpNearbyDroppedEnergy(creep)
 
-        if (getEnergyFromContainer(creep, { min: 0, blackList: ['620b405774b79b735e8dcaa4'] })) {
+        if (getEnergyFromContainer(creep, { min: 300, blackList: ['620b405774b79b735e8dcaa4'] })) {
           return
         } else if (getEnergyFromStorage(creep, 0)) {
           return

@@ -1,6 +1,6 @@
 // const Builder = require('./role_builder')
 const { setDoing } = require('./util_beheavor')
-const body = require('./util_helper')
+const { body } = require('./util_helper')
 /*
 param:baseRoom,targetRoom
 思路:
@@ -26,8 +26,12 @@ if 位于目标房间，定位claimer、harvester、miner的工作位置:
 
 
 *已知问题
+划掉的是已完成
 TODO 未考虑建筑工地被踩坏的影响
-TODO 给claimer留空位
+TODO 未考虑建筑工地达到上线后如何处理
+TODO 没有占领的房间放不了extractor，把那行代码删掉，整个对于Mineral的处理也删掉。。这以后将属于主基地的逻辑。
+TODO 给builder添加采多矿的逻辑。现在只采一个。可以改为：根据source分配builder，并且先修最近的建筑工地
+// TODO 给claimer留空位
 
 
 */
@@ -352,16 +356,16 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
                 pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER)
 
                 //顺便把container位置存到room.memory.energyBase里
-                if (_.isUndefined(room.memory.energyBase.workPosArray_harvester)) {
-                  room.memory.energyBase.workPosArray_harvester = []
+                if (_.isUndefined(pionner.room.memory.energyBase.workPosArray_harvester)) {
+                  pionner.memory.energyBase.workPosArray_harvester = []
                 }
                 toSaveInMemory.push({ x: pos.x, y: pos.y, roomName: pionner.room.name })
               }
 
-              if (_.isUndefined(room.memory.energyBase.workPosArray_harvester)) {
-                room.memory.energyBase.workPosArray_harvester = []
+              if (_.isUndefined(pionner.room.memory.energyBase.workPosArray_harvester)) {
+                pionner.room.memory.energyBase.workPosArray_harvester = []
               }
-              room.memory.energyBase.workPosArray_harvester = toSaveInMemory
+              pionner.room.memory.energyBase.workPosArray_harvester = toSaveInMemory
 
               //* tick++
               flagTo.memory[tick] += 1
@@ -438,13 +442,17 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
             //* forDEBUG
             if (flagTo.memory[tick] == 4) {
 
-              let CTs = pionner.room.find(FIND_CONSTRUCTION_SITES)
-              for (let ct of CTs) {
-                ct.remove()
-              }
+              // let CTs = pionner.room.find(FIND_CONSTRUCTION_SITES)
+              // for (let ct of CTs) {
+              //   ct.remove()
+              // }
 
               flagTo.memory[tick] = 1
               flagTo.memory[energyBase_state] = state_waitForBuilding
+
+              //TODO 但是这样写和后面逻辑对不上
+              //?最后把pionner转成remote builder 
+              pionner.memory.role = 'remote_builder'//? 把硬编码提到前面去
             }
 
             //! 工地设置完成后设置为 状态2：待建状态
@@ -454,25 +462,30 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
 
 
         }
+
+
       }
     }
   }
   //! 状态阶段2： 等待建设
   if (flagTo.memory[energyBase_state] == state_waitForBuilding) {
 
+    //pionner转成builder
+
     //造几个pionner过去干活
-    if (!_.isUndefined(flagTo.memory.energyBase_builders)) {
+    if (_.isUndefined(flagTo.memory.energyBase_builders)) {
       flagTo.memory.energyBase_builders = []
     }
 
-    if (flagTo.memory.energyBase_builders.length < 3) {
-      let builderName = `remote_builder_${flagTo.room.name}_${Game.time}`
+    if (flagTo.memory.energyBase_builders.length < 2) {
+      let builderRole = 'remote_builder'
+      let builderName = `remote_builder_${flagTo.name}_${Game.time}`//?待改flagTo.name为room name
       let spawnReslt = Game.spawns[spawnName].spawnCreep(
         body([WORK, 3, CARRY, 3, MOVE, 3]),
         builderName,
         {
           memory: {
-            // spawnFrom: spawnName,
+            role: builderRole,
             spawnRoom: spawnName.room,
             workRoom: flagTo.room,
 
@@ -489,36 +502,45 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
     for (let i in flagTo.memory.energyBase_builders) {
       let builderName = flagTo.memory.energyBase_builders[i]
       let builder = Game.creeps[builderName]
-
-      //? 清完之后本轮不能用i了，会出麻烦
       if (_.isUndefined(builder)) {
         flagTo.memory.energyBase_builders.splice(i, 1)
         i--
       }
 
       //干事
-
       //先过去
       if (builder.room.name !== roomNameTo) {
+        
         builder.moveTo(new RoomPosition(25, 25, roomNameTo), {
           reusePath: 50
         })
       }
       else {
+        // console.log('1')
         //到了之后,没资源就挖挖，有资源就修路
         let doing = 'doing'
         let builderState_building = 'building'
         let builderState_harvesting = 'harvesting'
 
-        if (builder[doing] !== builderState_building) {
+        if (_.isUndefined(builder.memory.doing)) {
+          setDoing(builder, builderState_harvesting)
+
+        }
+        // console.log('2')
+        if (builder.memory[doing] == builderState_building) {
+
+          if (builder.store[RESOURCE_ENERGY] == 0) {
+            setDoing(builder, builderState_harvesting)
+          }
 
           if (_.isUndefined(flagTo.memory.energyBase_constructionSites)) {
             let CSs = flagTo.room.find(FIND_CONSTRUCTION_SITES)
             flagTo.memory.energyBase_constructionSites = CSs
           }
-          let buildTarget = flagTo.memory.energyBase_constructionSites[flagTo.memory.energyBase_constructionSites.length - 1]
+          let buildTarget = Game.getObjectById(flagTo.memory.energyBase_constructionSites[flagTo.memory.energyBase_constructionSites.length - 1].id)
           let buildResult = builder.build(buildTarget)//先修最新的
-
+          console.log('buildResult: ', buildResult);
+          //TODO 可以优化，先存找最近的
           if (buildResult == ERR_INVALID_TARGET) {
             //重寻建筑工地列表
             let CSs = flagTo.room.find(FIND_CONSTRUCTION_SITES)
@@ -529,18 +551,37 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
             builder.moveTo(buildTarget, { reusePath: 50 })
           }
 
-          if (build.store[RESOURCE_ENERGY] === 0) {
-            setDoing(builder, builderState_harvesting)
+        }
+
+
+
+        if (builder.memory[doing] == builderState_harvesting) {
+
+          if (builder.store.getFreeCapacity() === 0) {
+
+            setDoing(builder, builderState_building)
+
           }
+
+          //TODO 待修改builder的挖矿逻辑，可以实现分source挖矿
+          let harvestTarget = Game.getObjectById(flagTo.memory.energyBase_sources[0].id)
+          let harvestResult = builder.harvest(harvestTarget)
+          // console.log('harvestResult: ', harvestResult);
+          if (harvestResult === ERR_NOT_IN_RANGE) {
+            builder.moveTo(harvestTarget, { reusePath: 50 })
+          }
+
+
         }
 
-        if (builder[doing] !== builderState_harvesting) {
-
-          let harvestResult = builder.harvest(flagTo.energyBase.sources)
-
-          setDoing(builder, builderState_building)
-        }
       }
+
+      //TODO 判断路修完了没，修完则进入完工阶段，派正式员工上班（？修路阶段已经可以让claimer上班了）
+
+
+
+    }
+    if (flagTo.memory[energyBase_state] == state_done) {
 
 
 
