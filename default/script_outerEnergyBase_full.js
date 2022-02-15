@@ -1,6 +1,3 @@
-// const Builder = require('./role_builder')
-const { setDoing } = require('./util_beheavor')
-const body = require('./util_helper')
 /*
 param:baseRoom,targetRoom
 思路:
@@ -48,7 +45,7 @@ TODO 给claimer留空位
  * @param {String} flagNameTo 目标房间？的旗子
  * @param {String} spawnName 
  */
-function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N17') {
+ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName) {
   //处理flag
   let flagTo = Game.flags[flagNameTo]
 
@@ -235,18 +232,15 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
             //为防止来回exit，先往前走一步
             //* 因为这一步，等会铺路的时候要往脚下铺一格
             let oneStep = 'oneStep'
-            if (_.isUndefined(pionner.memory[oneStep])) {
-              pionner.memory[oneStep] = false
+            if (_.isUndefined(flagTo.memory[oneStep])) {
+              flagTo.memory[oneStep] = false
             }
-            if (pionner.memory[oneStep] == false) {
+            if (flagTo.memory[oneStep] == false) {
               if (pionner.move(pionner.pos.getDirectionTo(25, 25)) == 0) {
-                pionner.memory[oneStep] = true
+                flagTo.memory[oneStep] = true
 
               }
             }
-
-
-
 
 
             //开始准备铺路
@@ -286,8 +280,7 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
             //! tick2: sourceS
             if (flagTo.memory[tick] == 2) {
               let sources = pionner.room.find(FIND_SOURCES)
-              flagTo.memory.energyBase_sources = sources  //? 在这里存sources?
-              // console.log('sources: ', sources);
+              console.log('sources: ', sources);
               let paths_toSoure = []
               //* ///////////////// 定义躲避claimer工作位置的opt/////////////////
               let opt_avoidClaimer = {
@@ -370,8 +363,6 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
 
             //! tick3: mine
             if (flagTo.memory[tick] == 3) {
-              /*
-! 禁用了mine铺路开采
               let mine = pionner.room.find(FIND_MINERALS)[0]//? is there only 1 mine each room?
 
               //* ///////////////// 定义躲避claimer和Harvester工作位置的opt/////////////////
@@ -423,26 +414,16 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
               }
               //放extractor
               pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_EXTRACTOR)
-
-              */
-
               flagTo.memory[tick] += 1 //?
               return
-
-
-
             }
-
-
 
             //* forDEBUG
             if (flagTo.memory[tick] == 4) {
-
               let CTs = pionner.room.find(FIND_CONSTRUCTION_SITES)
               for (let ct of CTs) {
                 ct.remove()
               }
-
               flagTo.memory[tick] = 1
               flagTo.memory[energyBase_state] = state_waitForBuilding
             }
@@ -459,96 +440,6 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
   }
   //! 状态阶段2： 等待建设
   if (flagTo.memory[energyBase_state] == state_waitForBuilding) {
-
-    //造几个pionner过去干活
-    if (!_.isUndefined(flagTo.memory.energyBase_builders)) {
-      flagTo.memory.energyBase_builders = []
-    }
-
-    if (flagTo.memory.energyBase_builders.length < 3) {
-      let builderName = `remote_builder_${flagTo.room.name}_${Game.time}`
-      let spawnReslt = Game.spawns[spawnName].spawnCreep(
-        body([WORK, 3, CARRY, 3, MOVE, 3]),
-        builderName,
-        {
-          memory: {
-            // spawnFrom: spawnName,
-            spawnRoom: spawnName.room,
-            workRoom: flagTo.room,
-
-          }
-        }) //? 等待后续其他模块接管
-      if (spawnReslt === 0) {
-        flagTo.memory.energyBase_builders.push(builderName)
-      }
-    }
-
-
-
-    //生完了之后派他们干点事
-    for (let i in flagTo.memory.energyBase_builders) {
-      let builderName = flagTo.memory.energyBase_builders[i]
-      let builder = Game.creeps[builderName]
-
-      //? 清完之后本轮不能用i了，会出麻烦
-      if (_.isUndefined(builder)) {
-        flagTo.memory.energyBase_builders.splice(i, 1)
-        i--
-      }
-
-      //干事
-
-      //先过去
-      if (builder.room.name !== roomNameTo) {
-        builder.moveTo(new RoomPosition(25, 25, roomNameTo), {
-          reusePath: 50
-        })
-      }
-      else {
-        //到了之后,没资源就挖挖，有资源就修路
-        let doing = 'doing'
-        let builderState_building = 'building'
-        let builderState_harvesting = 'harvesting'
-
-        if (builder[doing] !== builderState_building) {
-
-          if (_.isUndefined(flagTo.memory.energyBase_constructionSites)) {
-            let CSs = flagTo.room.find(FIND_CONSTRUCTION_SITES)
-            flagTo.memory.energyBase_constructionSites = CSs
-          }
-          let buildTarget = flagTo.memory.energyBase_constructionSites[flagTo.memory.energyBase_constructionSites.length - 1]
-          let buildResult = builder.build(buildTarget)//先修最新的
-
-          if (buildResult == ERR_INVALID_TARGET) {
-            //重寻建筑工地列表
-            let CSs = flagTo.room.find(FIND_CONSTRUCTION_SITES)
-            flagTo.memory.energyBase_constructionSites = CSs
-          }
-
-          else if (buildResult == ERR_NOT_IN_RANGE) {
-            builder.moveTo(buildTarget, { reusePath: 50 })
-          }
-
-          if (build.store[RESOURCE_ENERGY] === 0) {
-            setDoing(builder, builderState_harvesting)
-          }
-        }
-
-        if (builder[doing] !== builderState_harvesting) {
-
-          let harvestResult = builder.harvest(flagTo.energyBase.sources)
-
-          setDoing(builder, builderState_building)
-        }
-      }
-
-
-
-    }
-
-
-
-
 
   }
 }
