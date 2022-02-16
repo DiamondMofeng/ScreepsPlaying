@@ -14,6 +14,11 @@ const long_Harvester = require('./role_long_harvester')
 
 const base_Transferor = require('./role_base_transferor')
 
+// const remote_builder=
+const remote_Carrier = require('./role_remote_carrier')
+const remote_Claimer = require('./role_remote_claimer')
+const remote_Harvester = require('./role_remote_harvester')
+
 const Useless = require('./role_useless')
 
 const Guardian = require('./role_guardian')
@@ -73,16 +78,16 @@ function controller_creeps() {
       if (creep.memory.role == 'long_carrier') {
         // long_Carrier(creep, Game.getObjectById('6200bf0e9b3fe1ad6927628f'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
         long_Carrier(creep
-          , Game.getObjectById('6204d67b3a03e2154eb99bde')
-        , Game.getObjectById('620b405774b79b735e8dcaa4')) // normal
+          , '6204d67b3a03e2154eb99bde'
+          , '620b405774b79b735e8dcaa4') // normal
 
       }
 
       if (creep.memory.role == 'long_harvester') {
         // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
         long_Harvester(creep
-          , Game.getObjectById('6204d67b3a03e2154eb99bde')//container
-          , Game.getObjectById('5bbcac4a9099fc012e6353bc')//source
+          , '6204d67b3a03e2154eb99bde'//container
+          , '5bbcac4a9099fc012e6353bc'//source
 
         )
       }
@@ -98,7 +103,20 @@ function controller_creeps() {
         )
       }
 
+
+
+      //! ///////////Remote///////////
+      // if (creep.memory.role == '123') {
+      //   Useless(creep)
+      // }
+      // if (creep.memory.role == 'useless') {
+      //   Useless(creep)
+      // }
+      if (creep.memory.role.indexOf('remote_claimer') == 0) {
+        remote_Claimer(creep)
+      }
       //! ///////////other////////////
+
       if (creep.memory.role == 'useless') {
         Useless(creep)
       }
@@ -111,6 +129,7 @@ function controller_creeps() {
 
     } catch (e) {
       console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)
+      console.log(e.stack)
     }
   }
 

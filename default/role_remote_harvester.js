@@ -9,18 +9,26 @@
 //workPos:
 //sourceId:
 //}
-var roleLongHarvester = {
+var role_remote_harvester = {
 
   /**
    * 
    * @param {Creep} creep 
-   * @param {StructureContainer} container 
-   * @param {Source} source 
+   * 
    */
-  run: function (creep, containerID, sourceID) {
+  run: function (creep) {
 
-    let container = Game.getObjectById(containerID)
-    let source = Game.getObjectById(sourceID)
+    let CM = creep.memory
+
+    let workRoom = CM.workRoom
+
+    let remote_harvester_containerID = 'remote_harvester_containerID'
+    let remote_harvester_sourceID = 'remote_harvester_sourceID'
+
+
+    let container = Game.getObjectById(CM[remote_harvester_containerID])
+    let source = Game.getObjectById(CM[remote_harvester_sourceID])
+
 
     //move to container's pos
     if (JSON.stringify(creep.pos) != JSON.stringify(container.pos)) {
@@ -57,6 +65,6 @@ var roleLongHarvester = {
   }
 }
 
-module.exports = roleLongHarvester.run;
+module.exports = role_remote_harvester.run;
 
 

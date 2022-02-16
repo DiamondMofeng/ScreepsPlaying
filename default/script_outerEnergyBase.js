@@ -1,6 +1,6 @@
 // const Builder = require('./role_builder')
 const { setDoing } = require('./util_beheavor')
-const { body } = require('./util_helper')
+const { body, spawnByMinNumber, bodyCost } = require('./util_helper')
 /*
 param:baseRoom,targetRoom
 思路:
@@ -53,6 +53,8 @@ TODO 给builder添加采多矿的逻辑。现在只采一个。可以改为：�
  * @param {String} spawnName 
  */
 function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N17') {
+
+  let RM = Memory.rooms[roomNameTo]
   //处理flag
   let flagTo = Game.flags[flagNameTo]
 
@@ -477,7 +479,7 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
       flagTo.memory.energyBase_builders = []
     }
 
-    if (flagTo.memory.energyBase_builders.length < 2) {
+    if (flagTo.memory.energyBase_builders.length < 1) {
       let builderRole = 'remote_builder'
       let builderName = `remote_builder_${flagTo.name}_${Game.time}`//?待改flagTo.name为room name
       let spawnReslt = Game.spawns[spawnName].spawnCreep(
@@ -505,12 +507,15 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
       if (_.isUndefined(builder)) {
         flagTo.memory.energyBase_builders.splice(i, 1)
         i--
+        continue
       }
+
+
 
       //干事
       //先过去
       if (builder.room.name !== roomNameTo) {
-        
+
         builder.moveTo(new RoomPosition(25, 25, roomNameTo), {
           reusePath: 50
         })
@@ -536,6 +541,17 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
           if (_.isUndefined(flagTo.memory.energyBase_constructionSites)) {
             let CSs = flagTo.room.find(FIND_CONSTRUCTION_SITES)
             flagTo.memory.energyBase_constructionSites = CSs
+          }
+
+          let newestCS = flagTo.memory.energyBase_constructionSites[flagTo.memory.energyBase_constructionSites.length - 1]
+          // console.log('newestCS: ', newestCS);
+          if (_.isUndefined(newestCS)) {
+            let CSs = flagTo.room.find(FIND_CONSTRUCTION_SITES)
+            flagTo.memory.energyBase_constructionSites = CSs
+
+            if (CSs.length == 0) {
+              flagTo.memory[energyBase_state] = state_done//! 怎么写这了，待更改位置
+            }
           }
           let buildTarget = Game.getObjectById(flagTo.memory.energyBase_constructionSites[flagTo.memory.energyBase_constructionSites.length - 1].id)
           let buildResult = builder.build(buildTarget)//先修最新的
@@ -575,18 +591,75 @@ function buildEnergyBase(flagNameFrom, flagNameTo, spawnName, roomNameTo = 'W12N
         }
 
       }
+      //TODO 判断路修完了没，修完则进入完工阶段，派正式员工上班（？修路阶段已经可以让大家上班了）
 
-      //TODO 判断路修完了没，修完则进入完工阶段，派正式员工上班（？修路阶段已经可以让claimer上班了）
+
+
+
+      // spawnByMinNumber(spawnName, remote_harvester, body([WORK, 8, CARRY, 1, MOVE, 4]), 1,
+      //   {
+      //     remote_harvester_containerID:abc,
+      //     remote_harvester_sourceID: flagTo.memory.energyBase_sources[0].id,
+      //     spawnName: spawnName,
+      //   })
+
+
+
 
 
 
     }
-    if (flagTo.memory[energyBase_state] == state_done) {
 
 
 
+  }
+  if (flagTo.memory[energyBase_state] == state_done) {
+
+
+    //* 这时候就让其他员工上班，harvester,claimer,carrier
+    //TODO 这些等会挪到前面
+    let energyBase_harvesters = 'energyBase_harvesters'
+    let energyBase_claimers = 'energyBase_claimers'
+    let energyBase_carriers = 'energyBase_carriers'
+    let energyBase_containers = 'energyBase_containers'
+
+    if (_.isUndefined(flagTo.memory[energyBase_harvesters])) {
+      flagTo.memory[energyBase_harvesters] = []
+    }
+    if (_.isUndefined(flagTo.memory[energyBase_claimers])) {
+      flagTo.memory[energyBase_claimers] = []
     }
 
+    if (_.isUndefined(flagTo.memory[energyBase_carriers])) {
+      flagTo.memory[energyBase_carriers] = []
+    }
+
+    if (_.isUndefined(flagTo.memory[energyBase_containers])) {
+      //TODO 待添加container损坏时自动重建的逻辑
+      //TODO 可以优化：仅保存id
+      let containers = flagTo.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_CONTAINER })
+      flagTo.memory[energyBase_containers] = containers
+    }
+
+    //? HARD CODED !!!!!!!!!!!!!!!!!!!!!
+    let remote_harvester = 'remote_harvester' + roomNameTo
+    let remote_claimer = 'remote_claimer' + roomNameTo
+    let remote_carrier = 'remote_carrier' + roomNameTo
+
+    // spawnByMinNumber(spawnName, remote_harvester, body([WORK, 8, CARRY, 1, MOVE, 4]), 0,
+    //   {
+    //     workRoom: roomNameTo
+    //   })
+
+    spawnByMinNumber(spawnName, remote_claimer, body([CLAIM, 2, MOVE, 1]), 1,
+      {
+        workRoom: roomNameTo
+      })
+    // spawnByMinNumber(spawnName, remote_carrier, body([WORK, 1, CARRY, 7, MOVE, 4]), 0,
+    //   {
+    //     remote_carrier_fromContainerID:,
+    //     remote_carrier_toContainerID:
+    //   })
 
 
 

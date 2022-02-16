@@ -1,32 +1,21 @@
-const Upgrader = require('./role_upgrader')
 const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } = require('./util_beheavor')
 
 
 
-var roleCarrier = {
+var role_remote_carrier = {
 
   /**
-   * creep从指定容器搬运至另一指定容器
+   * creep从记忆中的指定容器搬运至另一指定容器
    * @param {Creep} creep
-   * @param {String} fromContainerID - id of from
-   * @param {String} toContainerID  - id of to
-   * @returns 
    */
-  run: function (creep, fromContainerID = '', toContainerID = '') {
+  run: function (creep) {
 
-    let long_carrier_fromContainerID = 'long_carrier_fromContainerID'
-    let long_carrier_toContainerID = 'long_carrier_toContainerID'
+    let remote_carrier_fromContainerID = 'remote_carrier_fromContainerID'
+    let remote_carrier_toContainerID = 'remote_carrier_toContainerID'
 
-    if (typeof creep.memory[long_carrier_fromContainerID] !== 'string') {
-      creep.memory[long_carrier_fromContainerID] = fromContainerID
-    }
-    if (typeof creep.memory[long_carrier_toContainerID] !== 'string') {
-      creep.memory[long_carrier_toContainerID] = toContainerID
-    }
-
-    let fromContainer = Game.getObjectById(creep.memory.long_carrier_fromContainerID)
-    // console.log('creep.memory.long_carrier_fromContainerID: ', creep.memory.long_carrier_fromContainerID);
-    let toContainer = Game.getObjectById(creep.memory.long_carrier_toContainerID)
+  
+    let fromContainer = Game.getObjectById(creep.memory[remote_carrier_fromContainerID])
+    let toContainer = Game.getObjectById(creep.memory[remote_carrier_toContainerID])
 
     //若能量为空，置为获取能量状态
     if (creep.store.getUsedCapacity() == 0) {
@@ -76,6 +65,6 @@ var roleCarrier = {
   }
 }
 
-module.exports = roleCarrier.run;
+module.exports = role_remote_carrier.run;
 
 

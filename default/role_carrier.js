@@ -37,7 +37,7 @@ var roleCarrier = {
             ) && (s.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
             )
             || (s.structureType == STRUCTURE_CONTAINER
-              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 1600
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 1000
 
             )
             || (s.structureType == STRUCTURE_STORAGE

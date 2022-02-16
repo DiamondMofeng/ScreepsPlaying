@@ -318,8 +318,43 @@ function setDoing(creep, doing) {
   creep.memory.doing = doing
 }
 
+/**
+ * 修理creep旁边的任意建筑
+ * @param {Creep} creep 
+ * @param {Number} range - 修的范围
+ * @param {Number} ratio - 开始修的比例
+ */
+function repireNearby(creep, range, ratio) {
 
+  let roadsToRepair = creep.pos.findInRange(FIND_STRUCTURES, range, { filter: s => s.structureType == STRUCTURE_ROAD && s.hits / s.hitsMax < ratio })
+  if (roadsToRepair.length > 0) {
+    creep.repair(roadsToRepair[0])
+  }
+}
 
+/**
+ * 在无视野的情况下前往指定房间
+ * @param {Creep} creep
+ * @param {String} roomName - 要去的房间名称 
+ * @param {Boolean} oneStep - 进入房间后是否往前走一步避免卡在房间出口，默认false
+ */
+function moveToRoom(creep, roomName, oneStep = false) {
+  if (creep.room.name !== roomName) {
+    creep.moveTo(new RoomPosition(25, 25, roomName))
+  }
+  else if (oneStep === true) {
+    if (_.isUndefined(creep.memory.oneStep)) {
+      creep.memory.oneStep = false
+    }
+
+    if (creep.memory.oneStep == false) {
+      let moveResult = creep.moveTo(new RoomPosition(25, 25, roomName))
+      if (moveResult == 0) {
+        creep.memory.oneStep = true
+      }
+    }
+  }
+}
 //5bbcac3c9099fc012e635232
 //5bbcac3c9099fc012e635233
 
@@ -331,5 +366,8 @@ module.exports = {
   transferAllToStorage,
   pickUpNearbyDroppedEnergy,
   moveAndWithdraw, moveAndTransfer,
-  setDoing
+  setDoing,
+  repireNearby,
+  moveToRoom
+
 }
