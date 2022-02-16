@@ -113,5 +113,13 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
   else { return false }
 }
 
+function getCPUCost(func) {
+  let startTime = Game.cpu.getUsed()
+  func
+  let endTime = Game.cpu.getUsed()
+
+  let costTime = endTime - costTime
+  return costTime
+}
 
 module.exports = { body, bodyCost, spawnByMinNumber }
