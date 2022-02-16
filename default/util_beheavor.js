@@ -237,7 +237,7 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY]) {
     // console.log('withdrawResult', rt, withdrawResult)
 
     if (withdrawResult == ERR_NOT_IN_RANGE) {
-      creep.moveTo(container)
+      creep.moveTo(container, { reusePath: 50 })
       return
     }
   }
@@ -257,7 +257,7 @@ function moveAndTransfer(creep, container, resourceTypes = []) {
 
     for (rt of resourceTypes) {
       if (creep.transfer(container, rt) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(container)
+        creep.moveTo(container, { reusePath: 50 })
         return
       }
     }
@@ -321,10 +321,10 @@ function setDoing(creep, doing) {
 /**
  * 修理creep旁边的任意建筑
  * @param {Creep} creep 
- * @param {Number} range - 修的范围
- * @param {Number} ratio - 开始修的比例
+ * @param {Number} range - 修的范围 默认2
+ * @param {Number} ratio - 开始修的比例 默认0.8
  */
-function repireNearby(creep, range, ratio) {
+function repireNearbyRoad(creep, range = 2, ratio = 0.8) {
 
   let roadsToRepair = creep.pos.findInRange(FIND_STRUCTURES, range, { filter: s => s.structureType == STRUCTURE_ROAD && s.hits / s.hitsMax < ratio })
   if (roadsToRepair.length > 0) {
@@ -367,7 +367,7 @@ module.exports = {
   pickUpNearbyDroppedEnergy,
   moveAndWithdraw, moveAndTransfer,
   setDoing,
-  repireNearby,
+  repireNearbyRoad,
   moveToRoom
 
 }

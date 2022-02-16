@@ -21,20 +21,46 @@ var role_remote_harvester = {
     let CM = creep.memory
 
     let workRoom = CM.workRoom
+    let RM = Memory.rooms[workRoom]
+    //找到未使用的自己用，并标记为已使用
+    let remote_harvester_container = 'remote_harvester_container'
+    if (_.isUndefined(CM[remote_harvester_container])) {
+      let containers = _.filter(RM.energyBase_containers, c => c.used !== true)
+      CM[remote_harvester_container] = containers[0]
+      containers[0].used = true
+    }
 
-    let remote_harvester_containerID = 'remote_harvester_containerID'
-    let remote_harvester_sourceID = 'remote_harvester_sourceID'
+    let remote_harvester_source = 'remote_harvester_source'
+    if (_.isUndefined(CM[remote_harvester_source])) {
+      let sources = _.filter(RM.energyBase_sources, s => s.used !== true)
+      CM[remote_harvester_source] = sources[0]
+
+      sources[0].used = true
+      // console.log('CM[remote_harvester_source] === sources[0]: ', CM[remote_harvester_source] === sources[0]);
+    }
+
+    // 要老死的时候还回去
+    if (creep.ticksToLive < 50) {
+      CM[remote_harvester_container].used = false
+      CM[remote_harvester_source].used = false
+    }
 
 
-    let container = Game.getObjectById(CM[remote_harvester_containerID])
-    let source = Game.getObjectById(CM[remote_harvester_sourceID])
+    let containerID = CM[remote_harvester_container].id
+    let sourceID = CM[remote_harvester_source].id
 
+
+    let container = Game.getObjectById(containerID)
+    let source = Game.getObjectById(sourceID)
+
+
+    //* MAIN////
 
     //move to container's pos
     if (JSON.stringify(creep.pos) != JSON.stringify(container.pos)) {
       // console.log(creep.pos, container.pos, creep.pos == container.pos)
 
-      const moveResult = creep.moveTo(container.pos, { visualizePathStyle: { stroke: '#ffaa00' } })
+      const moveResult = creep.moveTo(container.pos, { reusePath: 50, visualizePathStyle: { stroke: '#ffaa00' } })
     }
 
     //after arrive at workPos

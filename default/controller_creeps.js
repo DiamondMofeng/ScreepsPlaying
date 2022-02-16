@@ -34,6 +34,10 @@ function controller_creeps() {
   for (creepName in Game.creeps) {
     try {
 
+
+      let startCPU = Game.cpu.getUsed()
+
+
       var creep = Game.creeps[creepName]
       if (creep.memory.role == 'harvester') {
         //  Builder(creep)
@@ -115,6 +119,12 @@ function controller_creeps() {
       if (creep.memory.role.indexOf('remote_claimer') == 0) {
         remote_Claimer(creep)
       }
+      if (creep.memory.role.indexOf('remote_harvester') == 0) {
+        remote_Harvester(creep)
+      }
+      if (creep.memory.role.indexOf('remote_carrier') == 0) {
+        remote_Carrier(creep)
+      }
       //! ///////////other////////////
 
       if (creep.memory.role == 'useless') {
@@ -126,6 +136,15 @@ function controller_creeps() {
       }
 
 
+
+
+
+
+
+      let endCPU = Game.cpu.getUsed()
+
+      let costCPU = endCPU - startCPU
+      console.log(`CPU cost of ${creep} : ${costCPU}`);
 
     } catch (e) {
       console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)

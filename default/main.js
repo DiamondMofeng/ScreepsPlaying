@@ -7,17 +7,19 @@ const roleTagger = require("./util_roleTagger")
 
 const attack = require('./attack_commend')
 const test = require('./test')
-const buildEnergyBase = require('./script_outerEnergyBase')
+const buildEnergyBase = require('./script_outerEnergyBase_byRoom')
 
 const guardRoom = require('./util_guardRoom')
 
 const customPrototypes = require('./util_customPrototypes')
 
 module.exports.loop = function () {
-
   console.log(`----------${Game.time}----------`)
 
+  
+
   customPrototypes()
+
 
 
   controller_creeps()
@@ -43,5 +45,13 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-  buildEnergyBase('findStarter', 'findEnder', 'Spawn1')
+  guardRoom('W12N17')
+  buildEnergyBase('Spawn1','W12N17')
+
+  console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
+
+
+
+
+
 }
