@@ -40,11 +40,14 @@ var role_remote_harvester = {
     }
 
     // 要老死的时候还回去
+    //TODO 待优化
     if (creep.ticksToLive < 50) {
-      CM[remote_harvester_container].used = false
-      CM[remote_harvester_source].used = false
-    }
+      let sourceToReturn = RM.energyBase_sources.filter(s => s.id === CM[remote_harvester_source].id)[0]
+      let containerToReturn = RM.energyBase_containers.filter(s => s.id === CM[remote_harvester_container].id)[0]
 
+      sourceToReturn.used=false
+      containerToReturn.used=false
+    }
 
     let containerID = CM[remote_harvester_container].id
     let sourceID = CM[remote_harvester_source].id

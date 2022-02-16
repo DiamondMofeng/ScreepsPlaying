@@ -144,7 +144,7 @@ function controller_creeps() {
       let endCPU = Game.cpu.getUsed()
 
       let costCPU = endCPU - startCPU
-      console.log(`CPU cost of ${creep} : ${costCPU}`);
+      // console.log(`CPU cost of ${creep} : ${costCPU}`);
 
     } catch (e) {
       console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)
