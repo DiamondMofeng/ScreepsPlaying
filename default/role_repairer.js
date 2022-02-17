@@ -41,7 +41,7 @@ var roleRepairer = {
             )
             || (
               (s.structureType == STRUCTURE_CONTAINER)
-              && ((s.hits / s.hitsMax) < 0.4)
+              && ((s.hits / s.hitsMax) < 0.5)
             )
           // || (
           //   (s.structureType == STRUCTURE_RAMPART)

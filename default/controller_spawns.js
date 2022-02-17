@@ -201,7 +201,7 @@ const controller_spawns = () => {
 
 
   //* spawn Carrier
-  spawnByMinNumber('carrier', body([WORK, CARRY, 6, MOVE, 5]), 2)  //cost=650
+  spawnByMinNumber('carrier', body([CARRY, 10, MOVE, 10]), 2)  //cost=650
 
 
   //* spawn Builder
@@ -210,14 +210,14 @@ const controller_spawns = () => {
   }
 
   //* spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 8, CARRY, MOVE, 4]), 2)//COST: 1300
+  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 2)//COST: 1300
 
 
   //* spawn Sweepper
   // //let droppedResources = spawn.room.find(FIND_DROPPED_RESOURCES)
 
   // //if (droppedResources.length) {
-  spawnByMinNumber('sweepper', body([WORK, CARRY, 6, MOVE, 5]), 2)
+  spawnByMinNumber('sweepper', body([WORK, CARRY, 7, MOVE, 8]), 1)
   // //}
 
 

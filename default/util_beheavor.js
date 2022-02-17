@@ -235,11 +235,15 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY]) {
 
     let withdrawResult = creep.withdraw(container, rt)
     // console.log('withdrawResult', rt, withdrawResult)
+    // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
     if (withdrawResult == ERR_NOT_IN_RANGE) {
       creep.moveTo(container, { reusePath: 50 })
       return
     }
+
+    // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
+
   }
 }
 

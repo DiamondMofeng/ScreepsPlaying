@@ -32,7 +32,6 @@ var roleSweeper = {
 
 
 
-
     if (creep.store.getFreeCapacity() != 0
       && (droppedResources.length > 0 || tombsHaveResource.length > 0)
     ) {
@@ -117,6 +116,7 @@ var roleSweeper = {
     else {
 
 
+
       //* 若身上有除了能量以外别的资源
 
       //! 用Object.keys(store).length而不是store.length
@@ -128,10 +128,15 @@ var roleSweeper = {
       if (storeTypes.length >= 2 || (storeTypes.length == 1 && creep.store[RESOURCE_ENERGY] == 0)) {
 
 
-
+        // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
+        
         setDoing(creep, 'sweepper_transferAllToStorage')
         transferAllToStorage(creep)
         // console.log('transferingAllToStorage')
+
+        // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
+
+
       }
 
       // //start to countdown
@@ -146,6 +151,8 @@ var roleSweeper = {
         // creep.memory.role = 'carrier'
         Carrier(creep)
       }
+
+
     }
   }
 };

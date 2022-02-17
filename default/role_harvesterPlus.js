@@ -19,7 +19,7 @@ var roleHarvesterPlus = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    let M = creep.memory//简写
+    let CM = creep.memory//简写
 
 
     //after spawn
@@ -44,59 +44,59 @@ var roleHarvesterPlus = {
     //* start to harvest
 
     else {
-      if (_.isUndefined(M.harvester_linkID)) {
+      if (_.isUndefined(CM.harvester_linkID)) {
         let links = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_LINK })
         if (links.length > 0) {
-          M.harvester_linkID = links[0].id
+          CM.harvester_linkID = links[0].id
         }
         else {
-          M.harvester_linkID = 'none'
+          CM.harvester_linkID = 'none'
         }
       }
 
       // save container
-      if (_.isUndefined(M.harvester_containerID)) {
+      if (_.isUndefined(CM.harvester_containerID)) {
         let containers = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER })
         if (containers.length > 0) {
-          M.harvester_containerID = containers[0].id
+          CM.harvester_containerID = containers[0].id
         }
         else {
-          M.harvester_containerID = 'none'
+          CM.harvester_containerID = 'none'
         }
       }
 
       // save source
-      if (_.isUndefined(M.harvester_sourceID)) {
+      if (_.isUndefined(CM.harvester_sourceID)) {
         let sources = creep.pos.findInRange(FIND_SOURCES, 1)
         if (sources.length > 0) {
-          M.harvester_sourceID = sources[0].id
+          CM.harvester_sourceID = sources[0].id
         }
         else {
-          M.harvester_sourceID = 'none'
+          CM.harvester_sourceID = 'none'
         }
       }
 
 
       //! WORK
-      const harvestResult = creep.harvest(Game.getObjectById(M.harvester_sourceID))
+      const harvestResult = creep.harvest(Game.getObjectById(CM.harvester_sourceID))
       // console.log('harvestResult', harvestResult)
 
 
       //* 修container
-      let container = Game.getObjectById(M.harvester_containerID)
+      let container = Game.getObjectById(CM.harvester_containerID)
       if ((container.store.getUsedCapacity() > 1000 && (container.hits / container.hitsMax) < 0.9)
         || (container.hits / container.hitsMax) < 0.7) {
         creep.repair(container)
       }
 
       //* 不用修则尝试向Link输入能量
-      else if (M.harvester_linkID != 'none' && Game.getObjectById(M.harvester_linkID).store.getFreeCapacity() != 0) {
-        creep.transfer(Game.getObjectById(M.harvester_linkID), RESOURCE_ENERGY)
+      else if (CM.harvester_linkID != 'none' && Game.getObjectById(CM.harvester_linkID).store.getFreeCapacity() != 0) {
+        creep.transfer(Game.getObjectById(CM.harvester_linkID), RESOURCE_ENERGY)
       }
 
       //* 否则向container中输入能量
-      else if (M.harvester_containerID != 'none' && Game.getObjectById(M.harvester_containerID).store.getFreeCapacity() != 0) {
-        creep.transfer(Game.getObjectById(M.harvester_containerID), RESOURCE_ENERGY)
+      else if (CM.harvester_containerID != 'none' && Game.getObjectById(CM.harvester_containerID).store.getFreeCapacity() != 0) {
+        creep.transfer(Game.getObjectById(CM.harvester_containerID), RESOURCE_ENERGY)
       }
 
       //* 否则把能量扔地上
@@ -121,7 +121,7 @@ var roleHarvesterPlus = {
 
 
     //if going to die
-    if (creep.ticksToLive < 50) {
+    if (creep.ticksToLive < 5) {
       //clean memory
       creep.room.memory.sources[creep.memory.sourceId].onHarvest = false
     }

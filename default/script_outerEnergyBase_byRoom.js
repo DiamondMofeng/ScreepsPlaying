@@ -668,7 +668,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
       {
         workRoom: roomNameTo
       })
-    spawnByMinNumber(spawnName, remote_carrier, body([WORK, 1, CARRY, 11, MOVE, 6]), harvesterNumber * 3,//TODO 需要添加评估系统
+    spawnByMinNumber(spawnName, remote_carrier, body([WORK, 1, CARRY, 12, MOVE, 7]), harvesterNumber * 3,//TODO 需要添加评估系统
       {
         workRoom: roomNameTo
       })

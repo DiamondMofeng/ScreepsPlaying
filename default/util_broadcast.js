@@ -1,11 +1,8 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('util_ broadcast');
- * mod.thing == 'a thing'; // true
- */
+const roomSpawnEnergy = (roomName) => {
+  const energy = Game.rooms[roomName].energyAvailable
+  const energyCapacity = Game.rooms[roomName].energyCapacityAvailable
+  console.log(`${roomName} has ${energy}/${energyCapacity} Energy left`)
+}
 
 const creepRoleCounter = (roleTypeArray) => {
   // console.log(roleTypeArray)
@@ -20,23 +17,23 @@ const broadcaster = () => {
 
 
   //Spawn's energy left
-  const energy = Game.spawns['Spawn1'].room.energyAvailable
-  const energyCapacity = Game.spawns['Spawn1'].room.energyCapacityAvailable
-  console.log(`Spawn1 has ${energy}/${energyCapacity} Energy left`)
-
-  creepRoleCounter(['harvesterPlus',
-    'carrier',
-    'repairer',
-    'builder',
-    'upgrader',
-    'sweepper',
+  roomSpawnEnergy('W12N16')
 
 
-    'long_pionner',
-    'long_reserver',
-    'long_harvester',
-    'long_carrier'
-  ])
+  // creepRoleCounter(['harvesterPlus',
+  //   'carrier',
+  //   'repairer',
+  //   'builder',
+  //   'upgrader',
+  //   'sweepper',
+
+  //   'long_pionner',
+  //   'long_reserver',
+  //   'long_harvester',
+  //   'long_carrier'
+  // ])
+
+
 }
 
 module.exports =

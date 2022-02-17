@@ -57,10 +57,15 @@ var role_remote_carrier = {
 
     //若处于 获取能量状态：(此时应有：背包未满)
     if (!creep.memory.working) {
+
+
+
       //尝试捡周围掉落的能量
       pickUpNearbyDroppedEnergy(creep)
 
       moveToRoom(creep, workRoom, true)
+
+
 
       if (!CM[remote_carrier_fromContainerID]) {
 
@@ -72,11 +77,13 @@ var role_remote_carrier = {
           }
         }
 
-      }
+      } 
+
+
 
       fromContainer = Game.getObjectById(CM[remote_carrier_fromContainerID])
 
-      moveAndWithdraw(creep, fromContainer)
+      moveAndWithdraw(creep, fromContainer)     //! 这个占的CPU多
       // console.log('debug')
 
 
@@ -85,6 +92,9 @@ var role_remote_carrier = {
       if (creep.store.getFreeCapacity() == 0) {
         creep.memory.working = true
       }
+
+
+
 
     }
 
