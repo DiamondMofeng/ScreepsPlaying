@@ -1,4 +1,4 @@
-const { getEnergyFromContainer, PriorizedTarget, getEnergyFromStorage } = require('./util_beheavor')
+const { getEnergyFromContainer,  getEnergyFromStorage } = require('./util_beheavor')
 
 
 

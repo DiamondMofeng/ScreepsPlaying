@@ -23,6 +23,7 @@ const Useless = require('./role_useless')
 
 const Guardian = require('./role_guardian')
 
+const Miner = require('./role_miner')
 
 
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
@@ -136,9 +137,11 @@ function controller_creeps() {
       }
 
 
+      //! ///////// after LV6 ///////
 
-
-
+      if (creep.memory.role == 'miner') {
+        Miner(creep)
+      }
 
 
       let endCPU = Game.cpu.getUsed()

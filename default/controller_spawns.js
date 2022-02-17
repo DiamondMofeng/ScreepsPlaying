@@ -249,6 +249,11 @@ const controller_spawns = () => {
 
 
 
+  //! after LV6 /////
+
+  spawnByMinNumber('miner', body([WORK, 8, CARRY, 8, MOVE, 8]), 1)
+
+
 
 
 

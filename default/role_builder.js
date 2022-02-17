@@ -1,6 +1,6 @@
 const Upgrader = require('./role_upgrader')
 const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, PriorizedTarget, getEnergyFromStorage } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage } = require('./util_beheavor')
 
 
 

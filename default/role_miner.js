@@ -1,48 +1,60 @@
-const { targetsPriorizer_byRef } = require('./util_beheavor')
+const { setDoing, moveAndHarvest, moveAndTransfer } = require("./util_beheavor")
 
 
-var roleHarvester = {
+var roleMiner = {
+
+  memoryConsts: {
+
+  },
+
   /** @param {Creep} creep **/
   run: function (creep) {
-    if (creep.store.getFreeCapacity() > 0) {
-      var sources = creep.room.find(FIND_SOURCES);
-      // console.log('source',sources)
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-      }
+
+    let CM = creep.memory
+
+    if (_.isUndefined(CM.miner_mineID)) {
+      let mine = creep.room.find(FIND_MINERALS)[0]
+      CM.miner_mineID = mine.id
     }
-    else {
-      var targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-          return (
-            structure.structureType == STRUCTURE_CONTAINER ||
-            structure.structureType == STRUCTURE_EXTENSION ||
-            structure.structureType == STRUCTURE_SPAWN ||
-            structure.structureType == STRUCTURE_TOWER
-          ) &&
-            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-        }
-      });
-
-      // console.log(targets)
-      // console.log(targets[1])
 
 
-      const priorTarget = targetsPriorizer_byRef('structureType',
-        [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER], false)(targets)
-      if (priorTarget) {
 
-        console.log('HarvesterTarget' + priorTarget)
+    let state_mining = 'mining'
+    let state_transfering = 'transfering'
 
-        if (creep.transfer(priorTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(priorTarget, { visualizePathStyle: { stroke: '#ffffff' } });
-        }
+    if (_.isUndefined(CM.doing)) {
+      CM.doing = state_mining //初始化为mining
+    }
+
+
+
+    if (CM.doing == state_mining) {
+
+      let mineral = Game.getObjectById(CM.miner_mineID)
+      moveAndHarvest(creep, mineral)
+
+      if (creep.store.getFreeCapacity() == 0) {
+        setDoing(creep, state_transfering)
       }
 
     }
+    else if (CM.doing == state_transfering) {
+
+      let storage = creep.room.storage
+      moveAndTransfer(creep, storage)
+
+      if (creep.store.getUsedCapacity() == 0) {
+        setDoing(creep, state_mining)
+      }
+
+    }
+
+
+
+
   }
 }
 
-module.exports = roleHarvester.run;
+module.exports = roleMiner.run;
 
 

@@ -249,7 +249,26 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY]) {
 
 
 /**
- * 将creep身上的资源转移至指定container
+ * 输入creep和mineral对象
+ * @param {Creep} creep 
+ * @param {Source|Mineral|Deposit} target - 采集的对象
+ */
+function moveAndHarvest(creep, target) {
+
+  let harvestResult = creep.harvest(target)
+  // console.log('withdrawResult', rt, withdrawResult)
+  // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
+
+  if (harvestResult == ERR_NOT_IN_RANGE) {
+    creep.moveTo(target, { reusePath: 50 })
+    return
+  }
+
+}
+
+
+/**
+ * 将creep身上的资源转移至指定container，未指定时转移所有资源
  * @param {Creep} creep 
  * @param {StructureContainer|STRUCTURE_STORAGE} container - transfer to
  * @param {Array} resourceTypes - 未指定时转移所有资源
@@ -257,6 +276,7 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY]) {
  */
 function moveAndTransfer(creep, container, resourceTypes = []) {
 
+  //若给定类型了则按类型transfer
   if (resourceTypes.length > 0) {
 
     for (rt of resourceTypes) {
@@ -365,13 +385,14 @@ function moveToRoom(creep, roomName, oneStep = false) {
 
 module.exports = {
   getEnergyFromContainer, getEnergyFromStorage,
-  PriorizedTarget, targetsPriorizer_byRef,
+  targetsPriorizer_byRef,
   recycleSelf,
   transferAllToStorage,
   pickUpNearbyDroppedEnergy,
-  moveAndWithdraw, moveAndTransfer,
+  moveAndWithdraw, moveAndTransfer, moveAndHarvest,
   setDoing,
   repireNearbyRoad,
-  moveToRoom
+  moveToRoom,
+  workingStatesKeeper
 
 }
