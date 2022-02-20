@@ -101,11 +101,7 @@ function controller_creeps() {
 
       if (creep.memory.role == 'base_transferor') {
         // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
-        base_Transferor(creep
-          , Game.getObjectById('62041ae6638cf54110e7422d')//link - storage
-          , Game.getObjectById('62043cc4d55ca519e1a7db68')//storage
-
-        )
+        base_Transferor(creep)
       }
 
 

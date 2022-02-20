@@ -3,24 +3,15 @@
  * 从最近的有充足能量的Container中取走能量
  * @param {Creep} creep 
  * @param {Object} opt 
- * @opt {Number} minCap
+ * @opt {Number} min
  * @opt {Array} blackList - 包括不想拿走能量的container ID string
  * @returns {boolean} 是否找到了合适的container
  */
 const getEnergyFromContainer = (creep, opt = {}) => {
   // console.log('opt: ', JSON.stringify(opt));
 
-  let min = 200
-  let BL = []
-  if (!_.isUndefined(opt.min)) {
-    min = opt.min
-  }
-  if (!_.isUndefined(opt.blackList)) {
-
-
-    BL = opt.blackList
-    // console.log('BL: ', BL);
-  }
+  let min = opt.min || 200
+  let BL = opt.BL || []
   // console.log('opt.blackList: ', opt.blackList);
 
   const findContainer = (creep) => {
@@ -58,16 +49,8 @@ const getEnergyFromContainer = (creep, opt = {}) => {
  */
 const getEnergyFromStorage = (creep, minCap = 5000, opt = {}) => {
 
-  const findStorage = (creep) => {
-    return creep.room.find(FIND_STRUCTURES, {
-      filter: (structure) => {
-        return structure.structureType == STRUCTURE_STORAGE && structure.store.getUsedCapacity(RESOURCE_ENERGY) > minCap;
-      }
-    })
-  }
-
-  const storage = creep.pos.findClosestByPath(findStorage(creep))
-  if (storage) {
+  const storage = creep.room.storage
+  if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > minCap) {
     if (creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       creep.moveTo(storage, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
     }
@@ -77,6 +60,38 @@ const getEnergyFromStorage = (creep, minCap = 5000, opt = {}) => {
 }
 
 
+/**
+ * 从最近的有充足能量的Link中取走能量
+ * @param {Creep} creep 
+ * @param {Object} opt
+ * @option {Number} range - 搜索范围，默认2
+ * @option {Number} minCap - Link最低具有多少能量，默认0
+ * @returns {boolean} 是否找到了合适的link
+ */
+const getEnergyFromNearbyLink = (creep, opt = {}) => {
+  let range = opt.range || 2
+  let minCap = opt.minCap || 0
+  const findLink = (creep) => {
+    return creep.pos.findInRange(FIND_STRUCTURES, 2, {
+      filter: (structure) => {
+        return structure.structureType == STRUCTURE_LINK && structure.store.getUsedCapacity(RESOURCE_ENERGY) > minCap;
+      }
+    })
+  }
+
+  const link = findLink(creep)[0]
+
+  if (link) {
+
+    if (creep.withdraw(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+
+      creep.moveTo(link, { visualizePathStyle: { stroke: '#ffaa00' } });
+
+    }
+    return true
+  }
+  else return false
+}
 
 
 
@@ -384,7 +399,7 @@ function moveToRoom(creep, roomName, oneStep = false) {
 
 
 module.exports = {
-  getEnergyFromContainer, getEnergyFromStorage,
+  getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink,
   targetsPriorizer_byRef,
   recycleSelf,
   transferAllToStorage,

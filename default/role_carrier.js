@@ -25,7 +25,7 @@ var roleCarrier = {
 
     //! HARD CODED!!!!!!
 
-    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a']
+    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a','620b405774b79b735e8dcaa4']
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (s) => {
         return (

@@ -63,14 +63,37 @@ const buildingRoleLink = (link) => {
     if (type == 'source') {
 
       for (ID in RM.BUILDING_LINKS) {
-        // console.log('RM.BUILDING_LINKS: ', RM.BUILDING_LINKS);
         let otherLink = Game.getObjectById(ID)
-        if (otherLink !== link && otherLink.Rmemory.type == 'storage') {
+        // console.log('otherLink: ', otherLink);
+        // console.log('ID: ', ID);
+        // console.log('otherLink === link: ', otherLink === link);
+        if (otherLink === link) {
+
+          continue
+        }
+
+        //TODO ! 以下部分不合理,因为没有指定搜索顺序。待修改
+        if (otherLink.Rmemory.type == 'controller'
+          && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 700) {
+          link.transferEnergy(otherLink)
+        }
+
+        else if (otherLink.Rmemory.type == 'storage') {
           link.transferEnergy(otherLink)
         }
       }
     } else if (type == 'storage') {
-      //todo 待写
+
+      for (ID in RM.BUILDING_LINKS) {
+        let otherLink = Game.getObjectById(ID)
+        if (otherLink === link) { continue }
+
+        if (otherLink.Rmemory.type == 'controller'
+          && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 500) {
+          link.transferEnergy(otherLink)
+        }
+
+      }
 
     } else if (type == 'controller') {
       //todo 待写

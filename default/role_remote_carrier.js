@@ -26,7 +26,7 @@ var role_remote_carrier = {
     if (_.isUndefined(CM[remote_carrier_fromContainerIDs])) {
       CM[remote_carrier_fromContainerIDs] = []
       for (c of RM[energyBase_containers]) {
-        console.log('c: ', JSON.stringify(c));
+        // console.log('c: ', JSON.stringify(c));
         CM[remote_carrier_fromContainerIDs].push(c.id)
       }
     }

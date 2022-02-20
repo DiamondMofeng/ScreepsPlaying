@@ -1,5 +1,6 @@
-const Upgrader = require('./role_upgrader')
-const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } = require('./util_beheavor')
+const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage } = require('./util_beheavor')
+
+
 
 
 var role_base_transferor = {
@@ -11,47 +12,84 @@ var role_base_transferor = {
    * @param {String} toContainer  - id of to
    * @returns 
    */
-  run: function (creep, fromContainer, toContainer) {
-
+  run: function (creep, fromContainer = Game.getObjectById('62041ae6638cf54110e7422d'), toContainer = Game.getObjectById('62043cc4d55ca519e1a7db68')) {
 
     // creep.say('✔️ ONLINE')
     creep.say('❌ OFFLINE')
 
 
 
-    // console.log('transferring');
-    //若能量为空，置为获取能量状态
-    if (creep.store.getUsedCapacity() == 0) {
-      creep.memory.working = false
+    //* 基本任务：如果能源充足，则把能量从storage运到link里（link给upgrader送过去）
+    //* 否则：仅把能量从link拿到storage里
+
+    //* 此外：负责terminal的订单内容：保持terminal里能量最少50k。
+    //? terminal里除能量外的其他资源送到storage里
+
+    //把能量从link拿到storage:
+    // workingStatesKeeper(creep, getEnergyFromNearbyLink(creep, { range: 2, minCap: 0 }), moveAndTransfer(creep.room.storage))
+    let terminal = creep.room.terminal
+    let storage = creep.room.storage
+    let link_storage = Game.getObjectById('62041ae6638cf54110e7422d')
+    let link_controller = Game.getObjectById('6209b6db0bd2bf4b0ce577eb')
+
+    if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 100 * 1000) {
+
+
+      if (link_controller.store.getUsedCapacity(RESOURCE_ENERGY) < 300) {
+
+        getEnergyFromStorage(creep)
+        creep.transfer(link_storage, RESOURCE_ENERGY)
+        return
+
+      } else if (link_storage.store.getUsedCapacity(RESOURCE_ENERGY) > 500) {
+        moveAndWithdraw(creep, link_storage)
+        moveAndTransfer(creep, storage)
+
+
+      }else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 50 * 1000) {
+        getEnergyFromStorage(creep)
+        creep.transfer(terminal, RESOURCE_ENERGY)
+      }
+
+
     }
-
-    //若能量为满，置为工作状态
-    if (creep.store.getFreeCapacity() == 0) {
-      creep.memory.working = true
-    }
-
-
-
-    //若处于 获取能量状态：(此时应有：背包未满)
-    if (!creep.memory.working) {
-
-      //尝试捡周围掉落的能量
-      pickUpNearbyDroppedEnergy(creep)
-
-
-      moveAndWithdraw(creep, fromContainer)
-      // console.log('debug')
-
-    }
-
-    //获取能量结束，开始工作直至背包清空
-
-
     else {
-
-      moveAndTransfer(creep, toContainer)
-
+      moveAndWithdraw(creep, link_storage)
+      moveAndTransfer(creep, Game.getObjectById('62043cc4d55ca519e1a7db68'))
     }
+
+    // //若能量为空，置为获取能量状态
+    // if (creep.store.getUsedCapacity() == 0) {
+    //   creep.memory.working = false
+    // }
+
+    // //若能量为满，置为工作状态
+    // if (creep.store.getFreeCapacity() == 0) {
+    //   creep.memory.working = true
+    // }
+
+
+
+    // //若处于 获取能量状态：(此时应有：背包未满)
+    // if (!creep.memory.working) {
+
+    //   //尝试捡周围掉落的能量
+    //   pickUpNearbyDroppedEnergy(creep)
+
+
+    //   moveAndWithdraw(creep, fromContainer)
+    //   // console.log('debug')
+
+    // }
+
+    // //获取能量结束，开始工作直至背包清空
+
+
+    // else {
+
+    //   moveAndTransfer(creep, toContainer)
+
+    // }
 
 
 

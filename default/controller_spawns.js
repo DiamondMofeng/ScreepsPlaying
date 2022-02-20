@@ -1,6 +1,6 @@
 const { memoryResources } = require('./util_getMemories')
 
-const controller_spawns = () => {
+const controller_spawns = (spawnName) => {
 
   let spawn = Game.spawns['Spawn1']
 
@@ -196,21 +196,21 @@ const controller_spawns = () => {
   });
 
   if (repairTargets.length) {
-    spawnByMinNumber('repairer', body([WORK, 3, CARRY, 3, MOVE, 6]), 2)
+    spawnByMinNumber('repairer', body([WORK, 6, CARRY, 6, MOVE, 6]), 1)
   }
 
 
   //* spawn Carrier
-  spawnByMinNumber('carrier', body([CARRY, 10, MOVE, 10]), 2)  //cost=650
+  spawnByMinNumber('carrier', body([CARRY, 7, MOVE, 7]), 2)  //cost=650
 
 
   //* spawn Builder
   if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 3)
+    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
   }
 
   //* spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 10, CARRY, MOVE, 5]), 2)//COST: 1300
+  spawnByMinNumber('upgrader', body([WORK, 14, CARRY, MOVE, 7]), 2)//COST: 1300
 
 
   //* spawn Sweepper
@@ -229,7 +229,7 @@ const controller_spawns = () => {
 
 
   //spawn long_carrier
-  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 6, MOVE, 4]), 3)
+  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 10, MOVE, 6]), 2)
 
   //spawn long_harvester
   spawnByMinNumber('long_harvester', body([WORK, 8, CARRY, 1, MOVE, 4]), 1)
@@ -251,8 +251,11 @@ const controller_spawns = () => {
 
   //! after LV6 /////
 
-  spawnByMinNumber('miner', body([WORK, 8, CARRY, 8, MOVE, 8]), 1)
+  //! HARD CODED
+  if (Game.getObjectById('5bbcb26b40062e4259e939d2').mineralAmount > 0) {
 
+    spawnByMinNumber('miner', body([WORK, 8, CARRY, 8, MOVE, 8]), 1)
+  }
 
 
 
@@ -261,7 +264,7 @@ const controller_spawns = () => {
   if (Game.spawns['Spawn1'].spawning) {
     var spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
     Game.spawns['Spawn1'].room.visual.text(
-      '🛠️' + spawningCreep.memory.role,
+      `🛠️ ${spawningCreep.memory.role} ${Game.spawns['Spawn1'].spawning.needTime - Game.spawns['Spawn1'].spawning.remainingTime}/${Game.spawns['Spawn1'].spawning.needTime}`,
       Game.spawns['Spawn1'].pos.x + 1,
       Game.spawns['Spawn1'].pos.y,
       { align: 'left', opacity: 0.8 });

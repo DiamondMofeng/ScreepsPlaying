@@ -24,7 +24,7 @@ module.exports.loop = function () {
 
   controller_creeps()
   controller_buildings('W12N16')
-  controller_spawns()
+  controller_spawns('Spawn1')
 
   broadcaster()
 

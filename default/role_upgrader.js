@@ -1,4 +1,4 @@
-const { getEnergyFromContainer,  getEnergyFromStorage } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink } = require('./util_beheavor')
 
 
 
@@ -22,16 +22,14 @@ var roleUpgrader = {
       }
     }
     else {//dont have energy
-      //* 先从container里面拿，失败则去Storage里
-      if (getEnergyFromContainer(creep) || getEnergyFromStorage(creep)) {
+      //* 依次从Container,Link,Storage里拿
+      if (getEnergyFromContainer(creep, { BL: ['61feb366182cf40dfd2b848a','61ff6d41e69b53cf867c9aac'] })
+        || getEnergyFromNearbyLink(creep, { range: 2, minCap: 0 })
+        || getEnergyFromStorage(creep)) {
 
       }
-      else {//dig
-        // var sources = creep.room.find(FIND_SOURCES);
+      else {
 
-        // if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        //   creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-        // }
       }
     }
   }
