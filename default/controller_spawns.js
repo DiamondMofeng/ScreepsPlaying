@@ -2,7 +2,7 @@ const { memoryResources } = require('./util_getMemories')
 
 const controller_spawns = (spawnName) => {
 
-  let spawn = Game.spawns['Spawn1']
+  let spawn = Game.spawns[spawnName]
 
 
 
@@ -85,12 +85,20 @@ const controller_spawns = (spawnName) => {
    * @param {number} minNumber 
    * @param {{}} otherMemory 
    * @param {{}} options 
-   * @param {*} spawnSite 
+   * @param {StructureSpawn} spawnSite 
    * @returns return TRUE if need spawn 
    */
-  const spawnByMinNumber = (roleName, bodyArray, minNumber, otherMemory = {}, options = {}, spawnSite = 'Spawn1') => {
+  const spawnByMinNumber = (roleName, bodyArray, minNumber, otherMemory = {}, options = {}, spawnSite = spawn) => {
 
-    let memoryObj = { ...otherMemory, role: roleName }
+    let memoryObj = {
+      ...otherMemory,
+      role: roleName,
+      spawnName: spawnName,
+      spawnRoom: spawn.room.name
+    }
+    if (_.isUndefined(memoryObj.workRoom)) {
+      memoryObj.workRoom = memoryObj.spawnRoom
+    }
     let opt = { ...options, memory: memoryObj }
     // console.log('opt: ', JSON.stringify(opt));
 
@@ -99,8 +107,8 @@ const controller_spawns = (spawnName) => {
 
     if (currentRolerArray.length < minNumber) {
       var newName = roleName + Game.time;
-      console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite} , costing energy ${bodyCost(bodyArray)} `);
-      Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt);
+      console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite.name} , costing energy ${bodyCost(bodyArray)} `);
+      spawnSite.spawnCreep(bodyArray, newName, opt);
       // console.log('Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt): ', Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt));
       return true
     }
@@ -114,7 +122,7 @@ const controller_spawns = (spawnName) => {
   * @returns {number} 1 if need spawn and successfully spawned
   * @returns {number} 2 if need spawn but failed to spawn
   */
-  const spawnByMinNumber_advance = (memory, bodyArray, minNumber, spawnSite = 'Spawn1', options = {}) => {
+  const spawnByMinNumber_advance = (memory, bodyArray, minNumber, spawnSite = spawn, options = {}) => {
 
     options.memory = memory
 
@@ -124,7 +132,7 @@ const controller_spawns = (spawnName) => {
     if (currentRolers.length < minNumber) {
       var newName = memory.role + Game.time;
       console.log(`Going to spawn new ${memory.role} ${currentRolers.length + 1}/${minNumber}: ${newName} at ${spawnSite} `);
-      const spawnResult = Game.spawns[spawnSite].spawnCreep(bodyArray, newName, options)
+      const spawnResult = spawnSite.spawnCreep(bodyArray, newName, options)
       if (spawnResult == 0) return 1
       else if (spawnResult == -6) return 2
     }
@@ -157,10 +165,10 @@ const controller_spawns = (spawnName) => {
 
   //spawn HarvesterPlus
 
-  memoryResources(Game.spawns['Spawn1'].room)
+  memoryResources(spawn.room)
   //! /////////////WARNING!!! HARD CODED////////////////
-  const spareSources = _.filter(Game.spawns['Spawn1'].room.memory.sources, s => s.onHarvest == false)
-  if (spareSources.length) {
+  const spareSources = _.filter(spawn.room.memory.sources, s => s.onHarvest == false)
+  if (spareSources.length > 0) {
     let resource = spareSources[0]
     let harP_result = spawnByMinNumber_advance(
       {
@@ -174,7 +182,8 @@ const controller_spawns = (spawnName) => {
       //then set the memory of SOURCE
     }
     else if (harP_result === 1) {
-      Game.spawns['Spawn1'].room.memory.sources[resource.id].onHarvest = true
+      spawn.room.memory.sources[resource.id].onHarvest = true
+      spawn.room.memory.sources[resource.id].harvester = 'harvesterPlus' + Game.time
       return
     }
     // else return
@@ -184,14 +193,16 @@ const controller_spawns = (spawnName) => {
 
 
   //spawn Repairer
-  var repairTargets = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
+  var repairTargets = spawn.room.find(FIND_STRUCTURES, {
     filter: (s) => {
       return (
         (s.structureType == STRUCTURE_CONTAINER
-          // || s.structureType == STRUCTURE_ROAD
-          || s.structureType == STRUCTURE_RAMPART
-          || s.structureType == STRUCTURE_TOWER)
-        && ((s.hits / s.hitsMax) < 1))
+          && s.hits / s.hitsMax < 0.5)
+        || (s.structureType == STRUCTURE_TOWER
+          && s.hits / s.hitsMax < 1)
+        || (s.structureType == STRUCTURE_RAMPART
+          && s.hits < 1.2 * 100000)
+      )
     }
   });
 
@@ -205,12 +216,12 @@ const controller_spawns = (spawnName) => {
 
 
   //* spawn Builder
-  if (Game.spawns['Spawn1'].room.find(FIND_CONSTRUCTION_SITES).length) {
+  if (spawn.room.find(FIND_CONSTRUCTION_SITES).length) {
     spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
   }
 
   //* spawn Upgrader
-  spawnByMinNumber('upgrader', body([WORK, 14, CARRY, MOVE, 7]), 2)//COST: 1300
+  spawnByMinNumber('upgrader', body([WORK, 18, CARRY, MOVE, 9]), 2)//COST: 2300
 
 
   //* spawn Sweepper
@@ -259,14 +270,13 @@ const controller_spawns = (spawnName) => {
 
 
 
-
   //show what is spawning
-  if (Game.spawns['Spawn1'].spawning) {
-    var spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
-    Game.spawns['Spawn1'].room.visual.text(
-      `🛠️ ${spawningCreep.memory.role} ${Game.spawns['Spawn1'].spawning.needTime - Game.spawns['Spawn1'].spawning.remainingTime}/${Game.spawns['Spawn1'].spawning.needTime}`,
-      Game.spawns['Spawn1'].pos.x + 1,
-      Game.spawns['Spawn1'].pos.y,
+  if (spawn.spawning) {
+    var spawningCreep = Game.creeps[spawn.spawning.name];
+    spawn.room.visual.text(
+      `🛠️ ${spawningCreep.memory.role} ${spawn.spawning.needTime - spawn.spawning.remainingTime}/${spawn.spawning.needTime}`,
+      spawn.pos.x + 1,
+      spawn.pos.y,
       { align: 'left', opacity: 0.8 });
   }
 

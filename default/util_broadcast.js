@@ -4,6 +4,11 @@ const roomSpawnEnergy = (roomName) => {
   console.log(`${roomName} has ${energy}/${energyCapacity} Energy left`)
 }
 
+const RCLprogress = (roomName) => {
+  let control = Game.rooms[roomName].controller
+  console.log(`RCL of ${roomName}: ${control.progress}/${control.progressTotal},${Math.floor(control.progress / control.progressTotal * 100 * 100) / 100}% `)
+
+}
 const creepRoleCounter = (roleTypeArray) => {
   // console.log(roleTypeArray)
   for (i in roleTypeArray) {
@@ -18,7 +23,7 @@ const broadcaster = () => {
 
   //Spawn's energy left
   roomSpawnEnergy('W12N16')
-
+  RCLprogress('W12N16')
 
   // creepRoleCounter(['harvesterPlus',
   //   'carrier',

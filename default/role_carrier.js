@@ -25,7 +25,7 @@ var roleCarrier = {
 
     //! HARD CODED!!!!!!
 
-    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a','620b405774b79b735e8dcaa4']
+    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a']
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (s) => {
         return (
@@ -76,7 +76,7 @@ var roleCarrier = {
         //the later has higher priority
         pickUpNearbyDroppedEnergy(creep)
 
-        if (getEnergyFromContainer(creep, { min: 300, blackList: ['620b405774b79b735e8dcaa4'] })) {
+        if (getEnergyFromContainer(creep, { min: 300, BL: ['620b405774b79b735e8dcaa4'] })) {
           return
         } else if (getEnergyFromStorage(creep, 0)) {
           return

@@ -4,7 +4,7 @@
  * @param {Creep} creep 
  * @param {Object} opt 
  * @opt {Number} min
- * @opt {Array} blackList - 包括不想拿走能量的container ID string
+ * @opt {Array} BL - 包括不想拿走能量的container ID string
  * @returns {boolean} 是否找到了合适的container
  */
 const getEnergyFromContainer = (creep, opt = {}) => {
@@ -12,7 +12,6 @@ const getEnergyFromContainer = (creep, opt = {}) => {
 
   let min = opt.min || 200
   let BL = opt.BL || []
-  // console.log('opt.blackList: ', opt.blackList);
 
   const findContainer = (creep) => {
     return creep.room.find(FIND_STRUCTURES, {
@@ -50,7 +49,7 @@ const getEnergyFromContainer = (creep, opt = {}) => {
 const getEnergyFromStorage = (creep, minCap = 5000, opt = {}) => {
 
   const storage = creep.room.storage
-  if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > minCap) {
+  if (!_.isUndefined(storage) && storage.store.getUsedCapacity(RESOURCE_ENERGY) > minCap) {
     if (creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       creep.moveTo(storage, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
     }

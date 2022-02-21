@@ -32,7 +32,30 @@ var role_base_transferor = {
     let link_storage = Game.getObjectById('62041ae6638cf54110e7422d')
     let link_controller = Game.getObjectById('6209b6db0bd2bf4b0ce577eb')
 
-    if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 100 * 1000) {
+
+    //* 把化合物送到lab
+    let transferLab = true
+    let lab = Game.getObjectById('620b72e917753b7eff964959')
+    let resourceType = RESOURCE_GHODIUM_HYDRIDE
+    if (transferLab && terminal.store.getUsedCapacity(resourceType) > 0) {
+      if (creep.store.getFreeCapacity() > 0) { moveAndWithdraw(creep, terminal, [resourceType]) }
+      else { moveAndTransfer(creep, lab, [resourceType]) }
+      return
+    }
+
+
+
+    //* Main////////////
+    //填充spawn的能量
+    let spawn = Game.spawns['Spawn1']
+    if (spawn.store[RESOURCE_ENERGY] < 300) {
+      getEnergyFromStorage(creep)
+      moveAndTransfer(creep, spawn)
+      return
+    }
+
+    //在LINK，storage,terminal之间转运
+    if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 70 * 1000) {
 
 
       if (link_controller.store.getUsedCapacity(RESOURCE_ENERGY) < 300) {
@@ -46,7 +69,7 @@ var role_base_transferor = {
         moveAndTransfer(creep, storage)
 
 
-      }else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 50 * 1000) {
+      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 50 * 1000) {
         getEnergyFromStorage(creep)
         creep.transfer(terminal, RESOURCE_ENERGY)
       }

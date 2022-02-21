@@ -16,10 +16,20 @@
 //sourceId:
 //}
 var roleHarvesterPlus = {
+
+
   /** @param {Creep} creep **/
   run: function (creep) {
 
     let CM = creep.memory//简写
+
+
+
+    //if going to die
+    if (creep.ticksToLive < 50) {
+      //clean memory
+      creep.room.memory.sources[CM.harvester_sourceID].onHarvest = false
+    }
 
 
     //after spawn
@@ -120,11 +130,7 @@ var roleHarvesterPlus = {
 
 
 
-    //if going to die
-    if (creep.ticksToLive < 5) {
-      //clean memory
-      creep.room.memory.sources[creep.memory.sourceId].onHarvest = false
-    }
+
 
   }
 }

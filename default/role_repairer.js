@@ -29,11 +29,11 @@ var roleRepairer = {
           )
             || (
               (s.structureType == STRUCTURE_RAMPART)
-              && ((s.hits / s.hitsMax) < 0.28)
+              && ((s.hits < 1.5 * 1000000))
             )
             || (
               (s.structureType == STRUCTURE_WALL)
-              && ((s.hits / s.hitsMax) < 0.01)
+              && ((s.hits < 1.5 * 1000000))
             )
             || (
               (s.structureType == STRUCTURE_ROAD)
@@ -41,7 +41,7 @@ var roleRepairer = {
             )
             || (
               (s.structureType == STRUCTURE_CONTAINER)
-              && ((s.hits / s.hitsMax) < 0.5)
+              && ((s.hits / s.hitsMax) < 0.7)
             )
           // || (
           //   (s.structureType == STRUCTURE_RAMPART)

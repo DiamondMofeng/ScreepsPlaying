@@ -23,6 +23,9 @@ const Useless = require('./role_useless')
 
 const Guardian = require('./role_guardian')
 
+const RoomClaimer = require('./role_roomClaimer')
+
+
 const Miner = require('./role_miner')
 
 
@@ -40,6 +43,12 @@ function controller_creeps() {
 
 
       var creep = Game.creeps[creepName]
+
+      if (creep.memory == {}) {
+        continue
+      }
+
+
       if (creep.memory.role == 'harvester') {
         //  Builder(creep)
         Harvester(creep)
@@ -132,13 +141,21 @@ function controller_creeps() {
         Guardian(creep)
       }
 
-
+      if (creep.memory.role == 'roomClaimer') {
+        RoomClaimer(creep)
+      }
       //! ///////// after LV6 ///////
 
       if (creep.memory.role == 'miner') {
         Miner(creep)
       }
 
+
+
+      //! ///////temp for other room/////
+      if (creep.memory.role == 'upgrader2') {
+        Upgrader(creep)
+      }
 
       let endCPU = Game.cpu.getUsed()
 

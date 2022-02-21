@@ -99,8 +99,8 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
   }
   let opt = { ...options, memory: memoryObj }
   // console.log('opt: ', JSON.stringify(opt));
-
-  var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == roleName);
+  let creepsSpawnAtCurRoom = _.filter(Game.creeps, (creep) => creep.memory.spawnName === spawnName)
+  let currentRolerArray = _.filter(creepsSpawnAtCurRoom, (creep) => creep.memory.role == roleName);
   // console.log(roleName + ':' + currentRolerArray.length);
 
   if (currentRolerArray.length < minNumber) {

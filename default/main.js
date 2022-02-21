@@ -12,6 +12,7 @@ const buildEnergyBase = require('./script_outerEnergyBase_byRoom')
 const guardRoom = require('./util_guardRoom')
 
 const customPrototypes = require('./util_customPrototypes')
+const roomPlanner = require("./util_roomPlanner")
 
 module.exports.loop = function () {
   console.log(`----------${Game.time}----------`)
@@ -51,7 +52,7 @@ module.exports.loop = function () {
   console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
 
-
+roomPlanner('W17N15')
 
 
 }
