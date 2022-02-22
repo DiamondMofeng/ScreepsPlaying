@@ -179,7 +179,7 @@ const controller_spawns = (spawnName) => {
 
 
 
-  if (spawnByMinNumber(spawnName, 'harvesterPlus', body([WORK, 7, CARRY, 1, MOVE]), 2) !== 0) {
+  if (spawnByMinNumber(spawnName, 'harvesterPlus', body([WORK, 7, CARRY, 1, MOVE]), 2)) {
     return
   }
   // else return
