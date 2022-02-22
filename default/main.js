@@ -17,7 +17,7 @@ const roomPlanner = require("./util_roomPlanner")
 module.exports.loop = function () {
   console.log(`----------${Game.time}----------`)
 
-  
+
 
   customPrototypes()
 
@@ -31,6 +31,7 @@ module.exports.loop = function () {
 
   roleTagger('W12N16')
   roleTagger('W11N16')
+  roomPlanner('W17N15')
 
   // attack()
 
@@ -47,12 +48,11 @@ module.exports.loop = function () {
   }
 
   guardRoom('W12N17')
-  buildEnergyBase('Spawn1','W12N17')
+  buildEnergyBase('Spawn1', 'W12N17')
 
   console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
 
-roomPlanner('W17N15')
 
 
 }

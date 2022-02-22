@@ -29,10 +29,19 @@ const RoomClaimer = require('./role_roomClaimer')
 const Miner = require('./role_miner')
 
 
+const { startWith } = require('./util_helper')
+
+
+
+
+//* functions////////////////////////////////
+
+
+
+
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
 
 function controller_creeps() {
-
 
   //* beheavor crontroller
   for (creepName in Game.creeps) {
@@ -44,35 +53,36 @@ function controller_creeps() {
 
       var creep = Game.creeps[creepName]
 
-      if (creep.memory == {}) {
+      if (!creep.memory.role) {
         continue
       }
 
 
-      if (creep.memory.role == 'harvester') {
-        //  Builder(creep)
-        Harvester(creep)
+      if (startWith(creep.memory.role, 'harvester')) {
+
+        if (startWith(creep.memory.role, 'harvesterPlus')) {
+          HarvesterPlus(creep)
+
+        } else { Harvester(creep) }
       }
-      if (creep.memory.role == 'harvesterPlus') {
-        HarvesterPlus(creep)
-      }
-      if (creep.memory.role == 'carrier') {
+
+      if (startWith(creep.memory.role, 'carrier')) {
         //   Harvester(creep)
         Carrier(creep)
       }
-      if (creep.memory.role == 'builder') {
+      if (startWith(creep.memory.role, 'builder')) {
         Builder(creep)
       }
-      if (creep.memory.role == 'upgrader') {
+      if (startWith(creep.memory.role, 'upgrader')) {
         Upgrader(creep)
         // Builder(creep)
       }
-      if (creep.memory.role == 'repairer') {
+      if (startWith(creep.memory.role, 'repairer')) {
         Repairer(creep)
         // Builder(creep)
         // Harvester(creep)
       }
-      if (creep.memory.role == 'sweepper') {
+      if (startWith(creep.memory.role, 'sweepper')) {
         Sweepper(creep)
       }
 
@@ -81,15 +91,15 @@ function controller_creeps() {
 
 
       //! //////LONG/////////
-      if (creep.memory.role == 'long_pionner') {
+      if (startWith(creep.memory.role, 'long_pionner')) {
         long_Pionner(creep, 'out')
       }
 
-      if (creep.memory.role == 'long_reserver') {
+      if (startWith(creep.memory.role, 'long_reserver')) {
         long_Reserver(creep, 'out')
       }
 
-      if (creep.memory.role == 'long_carrier') {
+      if (startWith(creep.memory.role, 'long_carrier')) {
         // long_Carrier(creep, Game.getObjectById('6200bf0e9b3fe1ad6927628f'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
         long_Carrier(creep
           , '6204d67b3a03e2154eb99bde'
@@ -97,7 +107,7 @@ function controller_creeps() {
 
       }
 
-      if (creep.memory.role == 'long_harvester') {
+      if (startWith(creep.memory.role, 'long_harvester')) {
         // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
         long_Harvester(creep
           , '6204d67b3a03e2154eb99bde'//container
@@ -108,7 +118,7 @@ function controller_creeps() {
 
       //! BASE//////////////
 
-      if (creep.memory.role == 'base_transferor') {
+      if (startWith(creep.memory.role, 'base_transferor')) {
         // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
         base_Transferor(creep)
       }
@@ -116,51 +126,48 @@ function controller_creeps() {
 
 
       //! ///////////Remote///////////
-      // if (creep.memory.role == '123') {
+      // if (startWith(creep.memory.role, '123')) {
       //   Useless(creep)
       // }
-      // if (creep.memory.role == 'useless') {
+      // if (startWith(creep.memory.role, 'useless')) {
       //   Useless(creep)
       // }
-      if (creep.memory.role.indexOf('remote_claimer') == 0) {
+      if (startWith(creep.memory.role, 'remote_claimer')) {
         remote_Claimer(creep)
       }
-      if (creep.memory.role.indexOf('remote_harvester') == 0) {
+      if (startWith(creep.memory.role, 'remote_harvester')) {
         remote_Harvester(creep)
       }
-      if (creep.memory.role.indexOf('remote_carrier') == 0) {
+      if (startWith(creep.memory.role, 'remote_carrier')) {
         remote_Carrier(creep)
       }
       //! ///////////other////////////
 
-      if (creep.memory.role == 'useless') {
+      if (startWith(creep.memory.role, 'useless')) {
         Useless(creep)
       }
 
-      if (creep.memory.role == 'guardian') {
+      if (startWith(creep.memory.role, 'guardian')) {
         Guardian(creep)
       }
 
-      if (creep.memory.role == 'roomClaimer') {
+      if (startWith(creep.memory.role, 'roomClaimer')) {
         RoomClaimer(creep)
       }
       //! ///////// after LV6 ///////
 
-      if (creep.memory.role == 'miner') {
+      if (startWith(creep.memory.role, 'miner')) {
         Miner(creep)
       }
 
 
 
-      //! ///////temp for other room/////
-      if (creep.memory.role == 'upgrader2') {
-        Upgrader(creep)
-      }
+      ////  ///////temp for other room/////
 
       let endCPU = Game.cpu.getUsed()
 
       let costCPU = endCPU - startCPU
-      // console.log(`CPU cost of ${creep} : ${costCPU}`);
+      console.log(`CPU cost of ${creep} : ${costCPU}`);
 
     } catch (e) {
       console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)

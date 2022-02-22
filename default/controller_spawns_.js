@@ -4,15 +4,7 @@ const controller_spawns = (spawnName) => {
 
   let spawn = Game.spawns[spawnName]
 
-  //show what is spawning
-  if (spawn.spawning) {
-    var spawningCreep = Game.creeps[spawn.spawning.name];
-    spawn.room.visual.text(
-      `🛠️ ${spawningCreep.memory.role} ${spawn.spawning.needTime - spawn.spawning.remainingTime}/${spawn.spawning.needTime}`,
-      spawn.pos.x + 1,
-      spawn.pos.y,
-      { align: 'left', opacity: 0.8 });
-  }
+
 
   /**
    * 输入简化版bodyArray来获取完全版
@@ -87,37 +79,36 @@ const controller_spawns = (spawnName) => {
 
 
   /**
- * spawn by 对应role的最小数字
- * @param {string} spawnName 
- * @param {string} roleName 
- * @param {Array} bodyArray 
- * @param {number} minNumber 
- * @param {Object} otherMemory 
- * @memory {string} workRoom - 若不指定则默认为spawn所在房间 
- * @param {Object} options 
- * @returns TRUE if need spawn 
- */
-  const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory = {}, options = {}) => {
+   * spawn by 对应role的最小数字
+   * @param {String} roleName 
+   * @param {[]} bodyArray 
+   * @param {number} minNumber 
+   * @param {{}} otherMemory 
+   * @param {{}} options 
+   * @param {StructureSpawn} spawnSite 
+   * @returns return TRUE if need spawn 
+   */
+  const spawnByMinNumber = (roleName, bodyArray, minNumber, otherMemory = {}, options = {}, spawnSite = spawn) => {
 
     let memoryObj = {
       ...otherMemory,
       role: roleName,
       spawnName: spawnName,
-      spawnRoom: Game.spawns[spawnName].room.name
+      spawnRoom: spawn.room.name
     }
     if (_.isUndefined(memoryObj.workRoom)) {
       memoryObj.workRoom = memoryObj.spawnRoom
     }
     let opt = { ...options, memory: memoryObj }
     // console.log('opt: ', JSON.stringify(opt));
-    let creepsSpawnAtCurRoom = _.filter(Game.creeps, (creep) => creep.memory.spawnName === spawnName)
-    let currentRolerArray = _.filter(creepsSpawnAtCurRoom, (creep) => creep.memory.role == roleName);
+
+    var currentRolerArray = _.filter(Game.creeps, (creep) => creep.memory.role == roleName);
     // console.log(roleName + ':' + currentRolerArray.length);
 
     if (currentRolerArray.length < minNumber) {
       var newName = roleName + Game.time;
-      console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnName} , costing energy ${bodyCost(bodyArray)} `);
-      Game.spawns[spawnName].spawnCreep(bodyArray, newName, opt);
+      console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnSite.name} , costing energy ${bodyCost(bodyArray)} `);
+      spawnSite.spawnCreep(bodyArray, newName, opt);
       // console.log('Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt): ', Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt));
       return true
     }
@@ -165,7 +156,7 @@ const controller_spawns = (spawnName) => {
 
   //spawn Harvester
   //if have 5 WORK PART+1MOVE:550
-  // if (spawnByMinNumber(spawnName'harvester', [WORK, WORK, CARRY, MOVE], 1)) {
+  // if (spawnByMinNumber('harvester', [WORK, WORK, CARRY, MOVE], 1)) {
   //   return
   // }
 
@@ -176,14 +167,27 @@ const controller_spawns = (spawnName) => {
 
   memoryResources(spawn.room.name)
   //! /////////////WARNING!!! HARD CODED////////////////
-
-
-
-  if (spawnByMinNumber(spawnName, 'harvesterPlus', body([WORK, 7, CARRY, 1, MOVE]), 2) !== 0) {
-    return
+  const spareSources = _.filter(spawn.room.memory.sources, s => s.onHarvest == false)
+  if (spareSources.length > 0) {
+    let resource = spareSources[0]
+    let harP_result = spawnByMinNumber_advance(
+      {
+        role: 'harvesterPlus',
+        workPos: resource.workPos,
+        sourceId: resource.id,
+      },
+      body([WORK, 7, CARRY, 1, MOVE]), 2)
+    if (harP_result === 2) {
+      return
+      //then set the memory of SOURCE
+    }
+    else if (harP_result === 1) {
+      spawn.room.memory.sources[resource.id].onHarvest = true
+      spawn.room.memory.sources[resource.id].harvester = 'harvesterPlus' + Game.time
+      return
+    }
+    // else return
   }
-  // else return
-
 
 
 
@@ -203,28 +207,28 @@ const controller_spawns = (spawnName) => {
   });
 
   if (repairTargets.length) {
-    spawnByMinNumber(spawnName, 'repairer', body([WORK, 6, CARRY, 6, MOVE, 6]), 1)
+    spawnByMinNumber('repairer', body([WORK, 6, CARRY, 6, MOVE, 6]), 1)
   }
 
 
   //* spawn Carrier
-  spawnByMinNumber(spawnName, 'carrier', body([CARRY, 7, MOVE, 7]), 2)  //cost=650
+  spawnByMinNumber('carrier', body([CARRY, 7, MOVE, 7]), 2)  //cost=650
 
 
   //* spawn Builder
   if (spawn.room.find(FIND_CONSTRUCTION_SITES).length) {
-    spawnByMinNumber(spawnName, 'builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
+    spawnByMinNumber('builder', body([WORK, 2, CARRY, 2, MOVE, 2]), 1)
   }
 
   //* spawn Upgrader
-  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 16, CARRY, MOVE, 8]), 2)//COST: 2300
+  spawnByMinNumber('upgrader', body([WORK, 16, CARRY, MOVE, 8]), 2)//COST: 2300
 
 
   //* spawn Sweepper
   // //let droppedResources = spawn.room.find(FIND_DROPPED_RESOURCES)
 
   // //if (droppedResources.length) {
-  spawnByMinNumber(spawnName, 'sweepper', body([WORK, CARRY, 7, MOVE, 8]), 1)
+  spawnByMinNumber('sweepper', body([WORK, CARRY, 7, MOVE, 8]), 1)
   // //}
 
 
@@ -236,21 +240,21 @@ const controller_spawns = (spawnName) => {
 
 
   //spawn long_carrier
-  spawnByMinNumber(spawnName, 'long_carrier', body([WORK, 1, CARRY, 10, MOVE, 6]), 2)
+  spawnByMinNumber('long_carrier', body([WORK, 1, CARRY, 10, MOVE, 6]), 2)
 
   //spawn long_harvester
-  spawnByMinNumber(spawnName, 'long_harvester', body([WORK, 8, CARRY, 1, MOVE, 4]), 1)
+  spawnByMinNumber('long_harvester', body([WORK, 8, CARRY, 1, MOVE, 4]), 1)
 
   //spawn long_pionner
-  // spawnByMinNumber(spawnName,'long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
+  // spawnByMinNumber('long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
 
   //spawn long_claimer
-  spawnByMinNumber(spawnName, 'long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
+  spawnByMinNumber('long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
 
   //! BASE //////////////////
 
   //spawn Base_transeror
-  spawnByMinNumber(spawnName, 'base_transferor', body([CARRY, 2, MOVE, 1]), 1, {}
+  spawnByMinNumber('base_transferor', body([CARRY, 2, MOVE, 1]), 1, {}
     , { directions: [RIGHT, BOTTOM_RIGHT] }
   )
 
@@ -261,12 +265,20 @@ const controller_spawns = (spawnName) => {
   //! HARD CODED
   if (Game.getObjectById('5bbcb26b40062e4259e939d2').mineralAmount > 0) {
 
-    spawnByMinNumber(spawnName, 'miner', body([WORK, 8, CARRY, 8, MOVE, 8]), 1)
+    spawnByMinNumber('miner', body([WORK, 8, CARRY, 8, MOVE, 8]), 1)
   }
 
 
 
-
+  //show what is spawning
+  if (spawn.spawning) {
+    var spawningCreep = Game.creeps[spawn.spawning.name];
+    spawn.room.visual.text(
+      `🛠️ ${spawningCreep.memory.role} ${spawn.spawning.needTime - spawn.spawning.remainingTime}/${spawn.spawning.needTime}`,
+      spawn.pos.x + 1,
+      spawn.pos.y,
+      { align: 'left', opacity: 0.8 });
+  }
 
 
 }

@@ -205,12 +205,32 @@ const roomPlanner = (roomName = undefined) => {
     }
 
 
-
+    //*STORAGES
+    if (flag.name.indexOf('TOWERS') === 0) {
+      let x = flag.pos.x
+      let y = flag.pos.y
+      
+      let linkPos = [
+        { x: x + 1, y: y }  //右
+      ]
+      let towerPos = [
+        { x: x - 1, y: y - 1 },
+        { x: x, y: y - 1 },
+        { x: x + 1, y: y - 1 },
+        { x: x + 1, y: y + 1 },
+        { x: x, y: y + 1 },
+        { x: x - 1, y: y + 1 },
+      ]
+      for (pos of linkPos) {
+        V.text('◊', pos.x, pos.y, { color: '#f5b400' })
+      }
+      for (pos of towerPos) {
+        V.text('♜', pos.x, pos.y, {})
+      }
+    }
 
   }
-
 }
-
 
 
 module.exports = roomPlanner;

@@ -1,23 +1,6 @@
 //import
 
 
-class priorQueue {
-  constructor(queue, weight) {
-    this._queue = queue
-    this._weight = weight
-  }
-  
-  push(){
-
-  }
-
-  pop(){
-
-  }
-
-  
-
-}
 
 
 
@@ -27,7 +10,10 @@ class priorQueue {
  */
 const roleSpawn = (spawn) => {
 
-
+  if (_.isUndefined(spawn.room.memory.spawnQueue)) {
+    spawn.room.memory.spawnQueue = []
+  }
+  let spawnQueue = spawn.room.memory.spawnQueue
 
 
 

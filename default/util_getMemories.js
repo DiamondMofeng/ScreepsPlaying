@@ -1,8 +1,69 @@
 
 
 
-const memoryResources = (room) => {
+const memoryResources = (roomName, timer = true) => {
+
+
+
+  //间隔一段时间才执行
+  if (timer == true) {
+    if (Game.time % 30 !== 0)
+      return
+  }
+
+
   //add memory
+
+  let room = Game.rooms[roomName]
+  //给room的Memory添加各种常用建筑，除了terminal,storage,controll
+  // spawn
+
+  let RM = room.memory
+
+
+  let Structures = room.find(FIND_STRUCTURES,
+    {
+      filter: s => s.structureType !== STRUCTURE_WALL
+        && s.structureType !== STRUCTURE_RAMPART
+        && s.structureType !== STRUCTURE_EXTENSION
+    })
+
+  let Sources = {}
+  let StructureContainers = {}
+  let StructureLinks = {}
+  let StructureSpawns = {}
+  let StructureLabs = {}
+
+
+  //* StructureContainer
+  let containers = Structures.filter(s => s.structureType === STRUCTURE_CONTAINER)
+  for (c of containers) {
+    //确定type:source,?mine,?spawn,controller,other
+    //确定？
+    let type = 'unknow'
+
+    let sources = room.find(FIND_SOURCES)
+    for (s of sources) {
+      if (c.pos.inRangeTo(s, 1) == true) {
+        type = 'source'
+        break
+      }
+    }
+
+
+
+
+    StructureContainers[c.id] = { type: type }
+  }
+
+  //* SAVE
+  RM.StructureContainers = StructureContainers
+
+
+
+
+
+
   if (!room.memory.sources || Object.keys(room.memory.sources).length == 0) {
 
     console.log(`Memorizing resources info at ${room}`)
