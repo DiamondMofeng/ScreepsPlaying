@@ -109,6 +109,7 @@ var role_remote_carrier = {
       }
 
       moveAndTransfer(creep, toContainer)
+      // console.log('moveAndTransfer(creep, toContainer): ', moveAndTransfer(creep, toContainer));
       // console.log('debug2')
 
       //添加修路逻辑

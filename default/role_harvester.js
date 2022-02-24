@@ -32,7 +32,7 @@ var roleHarvester = {
         [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER], false)(targets)
       if (priorTarget) {
 
-        console.log('HarvesterTarget' + priorTarget)
+        // console.log('HarvesterTarget' + priorTarget)
 
         if (creep.transfer(priorTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
           creep.moveTo(priorTarget, { visualizePathStyle: { stroke: '#ffffff' } });

@@ -8,10 +8,10 @@ var roleUpgrader = {
   run: function (creep) {
 
     //执行强化
-    let boost = true
-    if (boost) {
-      let lab = Game.getObjectById('620b72e917753b7eff964959')
-      let resourceType = RESOURCE_GHODIUM_HYDRIDE
+    let boost = false
+    if (boost && creep.ticksToLive > 1300) {
+      let lab = Game.getObjectById('620a638d7a3c3562cf7103f6')
+      let resourceType = RESOURCE_CATALYZED_GHODIUM_ACID
       let workParts = _.filter(creep.body, p => p.type === WORK)
 
       if (workParts.length > 0

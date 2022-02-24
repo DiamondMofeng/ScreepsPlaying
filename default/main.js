@@ -25,6 +25,8 @@ module.exports.loop = function () {
 
   controller_creeps()
   controller_buildings('W12N16')
+  controller_buildings('W17N15')  //临时
+
   controller_spawns('Spawn1')
 
   broadcaster()
@@ -37,7 +39,7 @@ module.exports.loop = function () {
 
 
 
-  guardRoom('W11N16')
+
 
   // test.showFIndReslt()
 
@@ -47,9 +49,10 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-  guardRoom('W12N17')
   buildEnergyBase('Spawn1', 'W12N17')
-
+  buildEnergyBase('Spawn1', 'W11N16')
+  guardRoom('W11N16')
+  guardRoom('W12N17')
   console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
 

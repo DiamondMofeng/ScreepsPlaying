@@ -65,18 +65,26 @@ const evaluNumber = (roomName) => {
 }
 
 
-const evaluBody = (roomName, roleName) => {
+const evaluBody = (roomName, type) => {
 
 }
 
 
-const spawnQueue_push = (roleName) => {
+const spawnQueue_push = (roomName, roleToPush) => {
   let room = Game.rooms[roomName]
 
   if (_.isUndefined(room.memory.spawnQueue)) {
     room.memory.spawnQueue = []
   }
   let queue = room.memory.spawnQueue
+
+  let index = _.findIndex(queue, i => weight.get(i) > weight.get(roleToPush))
+  if (index === -1) {
+    queue.push(roleToPush)
+  } else {
+    queue.splice(index, 0, roleToPush)
+  }
+
 
 }
 
@@ -87,7 +95,7 @@ const spawnQueue_sort = (roomName, weight = undefined) => {
     room.memory.spawnQueue = []
   }
 
-  let queue = [...room.memory.spawnQueue]
+  // let queue = [...room.memory.spawnQueue]
   let sorted = []
   if (!weight) {
     let weight = new Map()
@@ -99,34 +107,19 @@ const spawnQueue_sort = (roomName, weight = undefined) => {
     weight.set('upgrader', 10)
   }
 
-  while (queue.length > 0) {
-    let r = queue.pop()
-    let weight_r = weight.get(r)
+
+  _.sortBy(room.memory.spawnQueue, i => weight.get(i))
 
 
-    //插入
-    if (sorted.length == 0) {
-      sorted.push(r)
-      continue
-    }
-    else {
-      for (let i in sorted) {
-        if (weight.get(sorted[i]) > weight_r) {
-          sorted.splice(i, 0, r)
-          continue
-        }
-
-      }
-      sorted.push(r)
-      continue
-    }
-  }
-
-
-  room.memory.spawnQueue = sorted
+  // room.memory.spawnQueue = sorted
 
 }
 
+
+/**
+ * 按照评估的数量，补全creep至spawn队列
+ * @param {String}} roomName
+ */
 const pushByDiff = (roomName) => {
   let room = Game.rooms[roomName]
   if (!room) {
@@ -137,7 +130,7 @@ const pushByDiff = (roomName) => {
 
   let neededCounts = evaluNumber(roomName)
 
-  let creeps = _.filter(Game.creeps, c => c.memory?.spawnRoom === roomName)
+  let creeps = _.filter(Game.creeps, c => c.memory.spawnRoom === roomName)
 
 
   let roleCounts = {}
@@ -182,12 +175,13 @@ const pushByDiff = (roomName) => {
   for (let role in neededCounts) {
     let diff = neededCounts[role] - roleCounts[role]
     while (diff > 0) {
-      spawnQueue_push(role)
+      spawnQueue_push(roomName, role)
+      // RM.spawnQueue.push(diff)
       diff -= 1
     }
 
   }
-  spawnQueue_sort(roomName)
+  // spawnQueue_sort(roomName)
 
 }
 

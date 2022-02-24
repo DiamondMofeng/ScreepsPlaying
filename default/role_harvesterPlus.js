@@ -196,8 +196,8 @@ var roleHarvesterPlus = {
 
       let container = Game.getObjectById(CM.harvester_containerID)
       // console.log('container: ', container);
-      if (container && ((container.store.getUsedCapacity() > 1000 && (container.hits / container.hitsMax) < 0.9)
-        || (container.hits / container.hitsMax) < 0.7)) {
+      if ((container && container.store.getUsedCapacity() > 1000 && (container.hits / container.hitsMax) < 0.9)
+        || (container.hits / container.hitsMax) < 0.7) {
 
         creep.repair(container)
       }

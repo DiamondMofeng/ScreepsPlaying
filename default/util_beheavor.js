@@ -58,6 +58,17 @@ const getEnergyFromStorage = (creep, minCap = 5000, opt = {}) => {
   else return false
 }
 
+const getEnergyFromTerminal = (creep, minCap = 5000, opt = {}) => {
+
+  const terminal = creep.room.terminal
+  if (!_.isUndefined(terminal) && terminal.store.getUsedCapacity(RESOURCE_ENERGY) > minCap) {
+    if (creep.withdraw(terminal, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(terminal, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
+    }
+    return true
+  }
+  else return false
+}
 
 /**
  * 从最近的有充足能量的Link中取走能量
@@ -284,11 +295,14 @@ function moveAndHarvest(creep, target) {
 /**
  * 将creep身上的资源转移至指定container，未指定时转移所有资源
  * @param {Creep} creep 
- * @param {StructureContainer|STRUCTURE_STORAGE} container - transfer to
+ * @param {StructureContainer|StructureStore} container - transfer to
  * @param {Array} resourceTypes - 未指定时转移所有资源
  * 
  */
 function moveAndTransfer(creep, container, resourceTypes = []) {
+
+  let moveResult
+  let transferResult
 
   //若给定类型了则按类型transfer
   if (resourceTypes.length > 0) {
@@ -315,6 +329,7 @@ function moveAndTransfer(creep, container, resourceTypes = []) {
     }
   }
 }
+
 
 
 /**
@@ -398,7 +413,7 @@ function moveToRoom(creep, roomName, oneStep = false) {
 
 
 module.exports = {
-  getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink,
+  getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal,
   targetsPriorizer_byRef,
   recycleSelf,
   transferAllToStorage,

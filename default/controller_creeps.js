@@ -43,6 +43,8 @@ const { startWith } = require('./util_helper')
 
 function controller_creeps() {
 
+
+  let CPUcounts = []
   //* beheavor crontroller
   for (creepName in Game.creeps) {
     try {
@@ -166,14 +168,16 @@ function controller_creeps() {
 
       let endCPU = Game.cpu.getUsed()
 
-      let costCPU = endCPU - startCPU
-      console.log(`CPU cost of ${creep} : ${costCPU}`);
+      CPUcounts.push({ creep: creep.name, cpu: endCPU - startCPU })
 
     } catch (e) {
       console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)
       console.log(e.stack)
     }
   }
+
+  CPUcounts.sort((a, b) => a.cpu - b.cpu)
+  _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
 
 
   // console.log('1')

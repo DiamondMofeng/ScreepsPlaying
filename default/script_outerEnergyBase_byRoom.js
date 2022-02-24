@@ -356,7 +356,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
 
                 //顺便把container位置存到room.memory.energyBase里
                 if (_.isUndefined(pionner.room.memory.energyBase.workPosArray_harvester)) {
-                  pionner.memory.energyBase.workPosArray_harvester = []
+                  pionner.room.memory.energyBase.workPosArray_harvester = []
                 }
                 toSaveInMemory.push({ x: pos.x, y: pos.y, roomName: pionner.room.name })
               }
@@ -450,6 +450,9 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
               if (CTs.length == 0) {
                 RM[energyBase_state] = state_done
               }
+
+              RM[tick] += 1 
+              return
 
             }
 
@@ -651,9 +654,9 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
     }
 
     //? HARD CODED !!!!!!!!!!!!!!!!!!!!!
-    let remote_harvester = 'remote_harvester' + roomNameTo
-    let remote_claimer = 'remote_claimer' + roomNameTo
-    let remote_carrier = 'remote_carrier' + roomNameTo
+    let remote_harvester = 'remote_harvester' + '_' + roomNameTo
+    let remote_claimer = 'remote_claimer' + '_' + roomNameTo
+    let remote_carrier = 'remote_carrier' + '_' + roomNameTo
 
     let harvesterNumber = RM[energyBase_sources].length
     // console.log('RM[energyBase_sources].length: ', RM[energyBase_sources].length);

@@ -33,7 +33,7 @@ var roleRepairer = {
             )
             || (
               (s.structureType == STRUCTURE_WALL)
-              && ((s.hits < 1.5 * 1000000))
+              && ((s.hits < 1 * 1000 * 1000))
             )
             || (
               (s.structureType == STRUCTURE_ROAD)

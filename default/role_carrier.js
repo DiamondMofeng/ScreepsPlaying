@@ -1,5 +1,5 @@
 const Upgrader = require('./role_upgrader')
-const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy, targetsPriorizer_byRef } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy, targetsPriorizer_byRef, getEnergyFromTerminal } = require('./util_beheavor')
 
 
 
@@ -79,6 +79,8 @@ var roleCarrier = {
         if (getEnergyFromContainer(creep, { min: 300, BL: ['620b405774b79b735e8dcaa4'] })) {
           return
         } else if (getEnergyFromStorage(creep, 0)) {
+          return
+        } else if (getEnergyFromTerminal(creep, 0)) {
           return
         }
 

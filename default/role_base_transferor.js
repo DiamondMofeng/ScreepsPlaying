@@ -12,10 +12,17 @@ var role_base_transferor = {
    * @param {String} toContainer  - id of to
    * @returns 
    */
-  run: function (creep, fromContainer = Game.getObjectById('62041ae6638cf54110e7422d'), toContainer = Game.getObjectById('62043cc4d55ca519e1a7db68')) {
+  run: function (creep) {
 
     // creep.say('✔️ ONLINE')
     creep.say('❌ OFFLINE')
+
+    if (creep.ticksToLive < 500) {
+      let spawn = Game.spawns[creep.memory.spawnName]
+      if (spawn) {
+        spawn.renewCreep(creep)
+      }
+    }
 
 
 
@@ -34,12 +41,21 @@ var role_base_transferor = {
 
 
     //* 把化合物送到lab
-    let transferLab = true
-    let lab = Game.getObjectById('620b72e917753b7eff964959')
-    let resourceType = RESOURCE_GHODIUM_HYDRIDE
-    if (transferLab && terminal.store.getUsedCapacity(resourceType) > 0) {
-      if (creep.store.getFreeCapacity() > 0) { moveAndWithdraw(creep, terminal, [resourceType]) }
-      else { moveAndTransfer(creep, lab, [resourceType]) }
+    let transferLab = false
+    let lab = Game.getObjectById('620a638d7a3c3562cf7103f6')
+    let resourceType = RESOURCE_CATALYZED_GHODIUM_ACID
+    if (transferLab && terminal.store.getUsedCapacity(resourceType) > 0 && lab.store.getFreeCapacity(resourceType) > 0) {
+      if (creep.store.getUsedCapacity - creep.store[resourceType] > 0) {
+        moveAndTransfer(creep, storage, RESOURCE_ENERGY);
+        // console.log('moveAndTransfer(creep, storage, RESOURCE_ENERGY): ', moveAndTransfer(creep, storage, [RESOURCE_ENERGY]));
+        return
+      }
+      if (creep.store.getFreeCapacity() > 0) {
+        moveAndWithdraw(creep, terminal, [resourceType])
+      }
+      else {
+        moveAndTransfer(creep, lab, [resourceType])
+      }
       return
     }
 
