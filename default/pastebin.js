@@ -21,3 +21,4 @@ function t2() {
   let et = Game.cpu.getUsed()
   console.log('t1', et - st)
 }
+

@@ -1,3 +1,15 @@
+/**
+ * 
+ * @param {RoomVisual} v
+ * @param {number} x 
+ * @param {number} y 
+ */
+const drawExtension = (v,x,y) => {
+  
+}
+
+
+
 const roomPlanner = (roomName = undefined) => {
   if (!roomName) { return }
   let V = new RoomVisual(roomName)
@@ -209,7 +221,7 @@ const roomPlanner = (roomName = undefined) => {
     if (flag.name.indexOf('TOWERS') === 0) {
       let x = flag.pos.x
       let y = flag.pos.y
-      
+
       let linkPos = [
         { x: x + 1, y: y }  //右
       ]
@@ -231,6 +243,25 @@ const roomPlanner = (roomName = undefined) => {
 
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = roomPlanner;
