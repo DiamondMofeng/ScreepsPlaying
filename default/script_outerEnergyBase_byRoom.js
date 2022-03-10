@@ -33,6 +33,11 @@ TODO 没有占领的房间放不了extractor，把那行代码删掉，整个对
 TODO 给builder添加采多矿的逻辑。现在只采一个。可以改为：根据source分配builder，并且先修最近的建筑工地
 // TODO 给claimer留空位
 
+* 后来发现的问题：
+TODO 未考虑invaderCore入侵时 要清除核心
+TODO 尽快解决container被摧毁时如何自动恢复
+
+
 
 */
 
@@ -54,6 +59,10 @@ TODO 给builder添加采多矿的逻辑。现在只采一个。可以改为：�
  */
 function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
 
+
+  if (_.isUndefined(Memory.rooms[roomNameTo])) {
+    Memory.rooms[roomNameTo] = {}
+  }
   let RM = Memory.rooms[roomNameTo]
 
 
@@ -269,7 +278,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
 
               pionner.room.createConstructionSite(pionner.pos, STRUCTURE_ROAD)  //! 因为之前往房间里面走了一格
               for (let pos of path_toController) {
-                pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
+                // pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)  //! 不给controller铺路了
               }
 
               //记录claimer工作位置，方便后续绕道
@@ -451,7 +460,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
                 RM[energyBase_state] = state_done
               }
 
-              RM[tick] += 1 
+              RM[tick] += 1
               return
 
             }
@@ -653,6 +662,13 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
       RM[energyBase_containers] = containers
     }
 
+    if (_.isUndefined(RM[energyBase_sources])) {
+      //TODO 待添加container损坏时自动重建的逻辑
+      //TODO 可以优化：仅保存id
+      let sources = Game.rooms[roomNameTo].find(FIND_SOURCES)//TODO 没视野怎么办？
+      RM[energyBase_sources] = sources
+    }
+
     //? HARD CODED !!!!!!!!!!!!!!!!!!!!!
     let remote_harvester = 'remote_harvester' + '_' + roomNameTo
     let remote_claimer = 'remote_claimer' + '_' + roomNameTo
@@ -662,15 +678,17 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
     // console.log('RM[energyBase_sources].length: ', RM[energyBase_sources].length);
 
 
+    spawnByMinNumber(spawnName, remote_claimer, body([CLAIM, 2, MOVE, 1]), 1,
+      {
+        workRoom: roomNameTo
+      })
+
     spawnByMinNumber(spawnName, remote_harvester, body([WORK, 8, CARRY, 1, MOVE, 4]), harvesterNumber,
       {
         workRoom: roomNameTo
       })
 
-    spawnByMinNumber(spawnName, remote_claimer, body([CLAIM, 2, MOVE, 1]), 1,
-      {
-        workRoom: roomNameTo
-      })
+
     spawnByMinNumber(spawnName, remote_carrier, body([WORK, 1, CARRY, 12, MOVE, 7]), harvesterNumber * 3,//TODO 需要添加评估系统
       {
         workRoom: roomNameTo

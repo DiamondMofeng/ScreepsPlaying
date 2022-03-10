@@ -25,7 +25,7 @@ var roleCarrier = {
 
     //! HARD CODED!!!!!!
 
-    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a']
+    let blackList = ['61ff6d41e69b53cf867c9aac', '61feb366182cf40dfd2b848a', '621511cd317fb0f68a6e076a', '6214a646de5fb11b25de0545']
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (s) => {
         return (
@@ -49,6 +49,9 @@ var roleCarrier = {
             )
             || (s.structureType == STRUCTURE_LAB
               && s.store.getUsedCapacity(RESOURCE_ENERGY) < 2000
+            )
+            || (s.structureType == STRUCTURE_TERMINAL
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 300 * 1000
             )
           )
         )
@@ -100,7 +103,7 @@ var roleCarrier = {
 
       else {
         const priorTargets = targetsPriorizer_byRef('structureType'
-          , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_CONTAINER, STRUCTURE_STORAGE])(targets)
+          , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL])(targets)
         if (priorTargets.length) {
 
           let closest = creep.pos.findClosestByPath(priorTargets)
@@ -108,6 +111,8 @@ var roleCarrier = {
 
           if (creep.transfer(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.moveTo(closest, { visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
+            // creep.goto(closest, { visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
+
           }
 
           // if (haveJob)

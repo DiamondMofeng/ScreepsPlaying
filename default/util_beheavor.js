@@ -178,10 +178,15 @@ function recycleSelf(creep, spawnName = '') {
 
   let nearest
 
-  if (spawnName == '') {
+  if (creep.memory.spawnName) {
+    nearest = Game.spawns[creep.memory.spawnName]
+  }
+
+  else if (spawnName == '') {
     let spawns = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_SPAWN })
     nearest = creep.pos.findClosestByPath(spawns)
-  } else {
+  } 
+  else {
     nearest = Game.spawns[spawnName]
   }
 
@@ -190,7 +195,7 @@ function recycleSelf(creep, spawnName = '') {
 
   let result = nearest.recycleCreep(creep)
   if (result == ERR_NOT_IN_RANGE) {
-    creep.moveTo(nearest)
+    creep.moveTo(nearest, { reusePath: 50 })
   }
 
 }

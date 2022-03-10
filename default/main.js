@@ -13,13 +13,37 @@ const guardRoom = require('./util_guardRoom')
 
 const customPrototypes = require('./util_customPrototypes')
 const roomPlanner = require("./util_roomPlanner")
+const { cleanInvaderCore } = require("./script_invaderCore")
+
+
+
+const proto_creep = require("./proto_creep")
+
+
+
+
+
 
 module.exports.loop = function () {
   console.log(`----------${Game.time}----------`)
 
+  console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
+
+  // let a1 = Game.cpu.getUsed()
 
   customPrototypes()
+
+  // let a2 = Game.cpu.getUsed()
+
+  proto_creep()
+
+  // let a3 = Game.cpu.getUsed()
+
+  // console.log(a2 - a1)
+  // console.log(a3 - a2)
+
+
 
 
 
@@ -49,11 +73,26 @@ module.exports.loop = function () {
     Game.cpu.generatePixel();
   }
 
-  buildEnergyBase('Spawn1', 'W12N17')
-  buildEnergyBase('Spawn1', 'W11N16')
+  buildEnergyBase('W12N16_1', 'W12N17')
+  buildEnergyBase('W12N16_1', 'W11N16')
   guardRoom('W11N16')
   guardRoom('W12N17')
-  console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
+
+  // buildEnergyBase('W17N15_0', 'W17N14')
+  // guardRoom('W17N14')
+
+
+  // let a1 = Game.cpu.getUsed()
+  // Game.getObjectById('622732bf2952437d9bc20081').moveTo(Game.getObjectById('621390327c6c81f155da95d0'))
+  // let a2 = Game.cpu.getUsed()
+  // console.log(a2 - a1)
+
+
+
+  // cleanInvaderCore('W17N14', 'W17N15')
+
+
+  console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());
 
 
 

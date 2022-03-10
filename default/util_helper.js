@@ -84,7 +84,7 @@ const bodyCost = (bodyArray) => {
  * @param {Object} otherMemory 
  * @memory {string} workRoom - 若不指定则默认为spawn所在房间 
  * @param {Object} options 
- * @returns TRUE if need spawn 
+ * @returns needSpawn: true, spawnResult: spawnResult
  */
 const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory = {}, options = {}) => {
 
@@ -106,9 +106,10 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
   if (currentRolerArray.length < minNumber) {
     var newName = roleName + Game.time;
     console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnName} , costing energy ${bodyCost(bodyArray)} `);
-    Game.spawns[spawnName].spawnCreep(bodyArray, newName, opt);
+    let spawnResult = Game.spawns[spawnName].spawnCreep(bodyArray, newName, opt);
     // console.log('Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt): ', Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt));
-    return true
+
+    return { needSpawn: true, spawnResult: spawnResult }
   }
   else { return false }
 }

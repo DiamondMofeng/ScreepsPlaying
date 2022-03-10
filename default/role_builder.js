@@ -1,4 +1,3 @@
-const Upgrader = require('./role_upgrader')
 const Repairer = require('./role_repairer')
 const { getEnergyFromContainer, getEnergyFromStorage } = require('./util_beheavor')
 
@@ -41,9 +40,9 @@ var roleBuilder = {
 				}
 			}
 			else {
-				if (getEnergyFromContainer(creep)) { return }
-
 				if (getEnergyFromStorage(creep)) { return }
+
+				if (getEnergyFromContainer(creep)) { return }
 				//dig
 				var sources = creep.room.find(FIND_SOURCES_ACTIVE);
 

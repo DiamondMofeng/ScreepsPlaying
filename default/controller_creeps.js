@@ -177,7 +177,7 @@ function controller_creeps() {
   }
 
   CPUcounts.sort((a, b) => a.cpu - b.cpu)
-  _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
+  // _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
 
 
   // console.log('1')

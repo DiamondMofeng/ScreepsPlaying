@@ -9,10 +9,26 @@ const role_remote_claimer = (creep) => {
   let workRoom = creep.memory.workRoom
   if (creep.room.name !== workRoom) {
     moveToRoom(creep, workRoom)
+    return;
   }
 
-  else if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(creep.room.controller, { reusePath: 50 })
+
+  let controller = creep.room.controller
+
+
+  if (controller.reservation && controller.reservation.username == 'Invader') {
+    let attackResult = creep.attackController(controller)
+    if (attackResult == ERR_NOT_IN_RANGE) {
+      creep.moveTo(controller, { reusePath: 50 })
+    }
+    return
+  }
+
+  let reserveResult = creep.reserveController(controller)
+  if (reserveResult == ERR_NOT_IN_RANGE) {
+    creep.moveTo(controller, { reusePath: 50 })
+  } else if (reserveResult == ERR_INVALID_TARGET) {
+
   }
 
 }

@@ -17,9 +17,9 @@ Decay:
 
     Loses 100 of 5k hits on plain land
 
-    Loses 500 0f 25k hits on swamp
+    Loses 500 0f 25k hits on swamp    = 5* plain
 
-    Loses 15k of 750k hits on walls
+    Loses 15,000 of 750k hits on walls   = 150* plain = 30 * swamp
 
     percent: 2%
 

@@ -14,8 +14,8 @@ var role_base_transferor = {
    */
   run: function (creep) {
 
-    // creep.say('✔️ ONLINE')
-    creep.say('❌ OFFLINE')
+    // creep.say('✔️ ONLINE',true)
+    creep.say('❌ OFFLINE', true)
 
     if (creep.ticksToLive < 500) {
       let spawn = Game.spawns[creep.memory.spawnName]
@@ -41,20 +41,52 @@ var role_base_transferor = {
 
 
     //* 把化合物送到lab
-    let transferLab = false
-    let lab = Game.getObjectById('620a638d7a3c3562cf7103f6')
-    let resourceType = RESOURCE_CATALYZED_GHODIUM_ACID
-    if (transferLab && terminal.store.getUsedCapacity(resourceType) > 0 && lab.store.getFreeCapacity(resourceType) > 0) {
+    // let transferLab = false
+    // let lab = Game.getObjectById('620a638d7a3c3562cf7103f6')
+    // let resourceType = RESOURCE_CATALYZED_GHODIUM_ACID
+    // if (transferLab && terminal.store.getUsedCapacity(resourceType) > 0 && lab.store.getFreeCapacity(resourceType) > 0) {
+    //   if (creep.store.getUsedCapacity - creep.store[resourceType] > 0) {
+    //     moveAndTransfer(creep, storage, RESOURCE_ENERGY);
+    //     // console.log('moveAndTransfer(creep, storage, RESOURCE_ENERGY): ', moveAndTransfer(creep, storage, [RESOURCE_ENERGY]));
+    //     return
+    //   }
+    //   if (creep.store.getFreeCapacity() > 0) {
+    //     moveAndWithdraw(creep, terminal, [resourceType])
+    //   }
+    //   else {
+    //     moveAndTransfer(creep, lab, [resourceType])
+    //   }
+    //   return
+    // }
+
+    //! 临时 把东西从storage搬到terminal
+    let isTransfer = false
+    if (isTransfer) {
+      creep.withdraw(storage, 'U')
+      creep.transfer(terminal, 'U')
+      return
+    }
+
+
+
+
+
+
+    //! 临时：把原材料送到工厂
+    let isFactory = false
+    let factory = Game.getObjectById('622461be2f2a4a4840b6ee24')
+    let resourceType = RESOURCE_ENERGY
+    if (isFactory && storage.store.getUsedCapacity(resourceType) > 0 && factory.store.getUsedCapacity(resourceType) < 200) {
       if (creep.store.getUsedCapacity - creep.store[resourceType] > 0) {
         moveAndTransfer(creep, storage, RESOURCE_ENERGY);
         // console.log('moveAndTransfer(creep, storage, RESOURCE_ENERGY): ', moveAndTransfer(creep, storage, [RESOURCE_ENERGY]));
         return
       }
       if (creep.store.getFreeCapacity() > 0) {
-        moveAndWithdraw(creep, terminal, [resourceType])
+        moveAndWithdraw(creep, storage, [resourceType])
       }
       else {
-        moveAndTransfer(creep, lab, [resourceType])
+        moveAndTransfer(creep, factory, [resourceType])
       }
       return
     }
@@ -76,16 +108,25 @@ var role_base_transferor = {
 
       if (link_controller.store.getUsedCapacity(RESOURCE_ENERGY) < 300) {
 
+        // storage-> link storage
         getEnergyFromStorage(creep)
         creep.transfer(link_storage, RESOURCE_ENERGY)
-        return
+        // console.log(333);
+
+        // return
 
       } else if (link_storage.store.getUsedCapacity(RESOURCE_ENERGY) > 500) {
+
+        //link storage -> storage
         moveAndWithdraw(creep, link_storage)
         moveAndTransfer(creep, storage)
+        creep.transfer(terminal, RESOURCE_ENERGY)
 
+        // console.log(222);
 
-      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 50 * 1000) {
+      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 100 * 1000) {
+
+        //storage->terminal
         getEnergyFromStorage(creep)
         creep.transfer(terminal, RESOURCE_ENERGY)
       }

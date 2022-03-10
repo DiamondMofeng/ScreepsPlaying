@@ -15,11 +15,15 @@ const evalBody_harvester = (spawnName, opt = {}) => {
   let minBody = { w: 1, c: 1, m: 1 }
   let maxBody = { w: 7, c: 1, m: 1 }
 
-  let w = (curEnergy - 100) / 100
+  let w = Math.floor((curEnergy - 100) / 100)
   if (w >= 1) {
     if (w > 7) { w = 7 }
 
     return body([WORK, w, CARRY, 1, MOVE, 1])
+  }
+  else {
+    // console.log(`${spawnName}'s energy 不足以产生 harvesterplus`)
+    return []
   }
 
 }
