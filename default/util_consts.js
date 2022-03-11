@@ -3,9 +3,9 @@ const C = {
 
 
 
+  myName: 'Mofeng'
 
 
-  
 }
 
 

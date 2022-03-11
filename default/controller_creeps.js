@@ -30,6 +30,8 @@ const Miner = require('./role_miner')
 
 
 const { startWith } = require('./util_helper')
+const role_expend_builder = require('./role_expend_builder')
+const role_expend_claimer = require('./role_expend_claimer')
 
 
 
@@ -163,6 +165,13 @@ function controller_creeps() {
       }
 
 
+      //! //////// expend //////////
+      if (startWith(creep.memory.role, 'expend_builder')) {
+        role_expend_builder(creep)
+      }
+      if (startWith(creep.memory.role, 'expend_claimer')) {
+        role_expend_claimer(creep)
+      }
 
       ////  ///////temp for other room/////
 
@@ -176,7 +185,7 @@ function controller_creeps() {
     }
   }
 
-  CPUcounts.sort((a, b) => a.cpu - b.cpu)
+  // CPUcounts.sort((a, b) => a.cpu - b.cpu)
   // _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
 
 

@@ -185,7 +185,7 @@ function recycleSelf(creep, spawnName = '') {
   else if (spawnName == '') {
     let spawns = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_SPAWN })
     nearest = creep.pos.findClosestByPath(spawns)
-  } 
+  }
   else {
     nearest = Game.spawns[spawnName]
   }
@@ -223,15 +223,18 @@ function transferAllToStorage(creep, certainStorage = null) {
 
 
 /**
- * 包括墓碑中的能量
+ * 拾取range内掉落的能量
+ * 包括墓碑、ruin中的能量
  * @param {Creep} creep 
- * @param {number} range 
+ * @param {number} range - 默认为1
  * @returns {boolean} true if have energy to pick
  */
 function pickUpNearbyDroppedEnergy(creep, range = 1) {
   if (creep.store.getFreeCapacity() != 0) {
     let droppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
     let tombsHaveEnergy = creep.pos.findInRange(FIND_TOMBSTONES, range, { filter: t => t.store.energy > 0 })
+    let ruinsHaveEnergy = creep.pos.findInRange(FIND_RUINS, range, { filter: t => t.store.energy > 0 })
+
     let founded = false
     // console.log('picking')
 
@@ -245,6 +248,13 @@ function pickUpNearbyDroppedEnergy(creep, range = 1) {
     if (tombsHaveEnergy.length > 0) {
       if (creep.withdraw(tombsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(tombsHaveEnergy[0])
+      }
+      founded = true
+    }
+
+    if (ruinsHaveEnergy.length > 0) {
+      if (creep.withdraw(ruinsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(ruinsHaveEnergy[0])
       }
       founded = true
     }
@@ -417,8 +427,91 @@ function moveToRoom(creep, roomName, oneStep = false) {
 //5bbcac3c9099fc012e635233
 
 
+/**
+ * 从房间内的resource,tomb,ruin获取能量
+ * 极度消耗CPU
+ * @param {Creep} creep 
+ */
+function getEnergyFromWasted(creep, range = 5) {
+  if (creep.store.getFreeCapacity() != 0) {
+
+    let founded = false
+
+    let droppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
+    if (droppedEnergys.length > 0) {
+      if (creep.pickup(droppedEnergys[0]) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(droppedEnergys[0])
+      }
+      founded = true
+      return founded
+    }
+
+    let tombsHaveEnergy = creep.pos.findInRange(FIND_TOMBSTONES, range, { filter: t => t.store.energy > 0 })
+    if (tombsHaveEnergy.length > 0) {
+      if (creep.withdraw(tombsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(tombsHaveEnergy[0])
+      }
+      founded = true
+      return founded
+
+    }
+
+    let ruinsHaveEnergy = creep.pos.findInRange(FIND_RUINS, range, { filter: t => t.store.energy > 0 })
+    if (ruinsHaveEnergy.length > 0) {
+      if (creep.withdraw(ruinsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(ruinsHaveEnergy[0])
+      }
+      founded = true
+      return founded
+
+    }
+
+    return founded
+
+  }
+}
+
+
+/**
+ * FIND有能源的Source并过去挖
+ * @param {Creep} creep 
+ */
+function getEnergyFromHarvest(creep) {
+  let activeSources = creep.room.find(FIND_SOURCES_ACTIVE)
+  if (activeSources.length > 0) {
+    if (creep.harvest(activeSources[0]) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(activeSources[0])
+    }
+    return true;
+  }
+  else return false
+}
+
+/**
+ * 在Creep房间中尽一切办法尝试获取能量
+ * 注意！很耗CPU
+ * @param {Creep} creep 
+ * @param {Array} ignore - 不想要获取能源的方法
+ * @ignore wasted,container,terminal,storage,harvest
+ */
+function tryCollectAnyEnergy(creep, ignore = []) {
+
+  if (getEnergyFromWasted(creep)) return
+  if (getEnergyFromContainer(creep)) return
+  if (getEnergyFromTerminal(creep)) return
+  if (getEnergyFromStorage(creep)) return
+  if (getEnergyFromHarvest(creep)) return
+
+}
+
+
+
+
 module.exports = {
-  getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal,
+  getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink,
+  getEnergyFromTerminal, getEnergyFromWasted, getEnergyFromHarvest,
+  tryCollectAnyEnergy,
+  
   targetsPriorizer_byRef,
   recycleSelf,
   transferAllToStorage,

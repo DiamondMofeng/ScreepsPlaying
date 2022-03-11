@@ -1,4 +1,4 @@
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal, getEnergyFromHarvest } = require('./util_beheavor')
 
 
 
@@ -50,11 +50,11 @@ var roleUpgrader = {
 
       //* 依次从Link,Container,Storage里拿
       if (getEnergyFromNearbyLink(creep, { range: 3, minCap: 0 })
-        || getEnergyFromContainer(creep, { BL: ['61feb366182cf40dfd2b848a', '61ff6d41e69b53cf867c9aac','621511cd317fb0f68a6e076a','6214a646de5fb11b25de0545'] })
+        || getEnergyFromContainer(creep, { BL: ['61feb366182cf40dfd2b848a', '61ff6d41e69b53cf867c9aac', '621511cd317fb0f68a6e076a', '6214a646de5fb11b25de0545'] })
         || getEnergyFromTerminal(creep)
         || getEnergyFromStorage(creep)
-        
-        ) {
+        || getEnergyFromHarvest(creep)
+      ) {
 
       }
 

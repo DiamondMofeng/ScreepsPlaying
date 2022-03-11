@@ -84,7 +84,7 @@ const bodyCost = (bodyArray) => {
  * @param {Object} otherMemory 
  * @memory {string} workRoom - 若不指定则默认为spawn所在房间 
  * @param {Object} options 
- * @returns needSpawn: true, spawnResult: spawnResult
+ * @returns {Object} {needSpawn: true, spawnResult: spawnResult}
  */
 const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory = {}, options = {}) => {
 
@@ -98,10 +98,8 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
     memoryObj.workRoom = memoryObj.spawnRoom
   }
   let opt = { ...options, memory: memoryObj }
-  // console.log('opt: ', JSON.stringify(opt));
-  let creepsSpawnAtCurRoom = _.filter(Game.creeps, (creep) => creep.memory.spawnName === spawnName)
+  let creepsSpawnAtCurRoom = _.filter(Game.creeps, (creep) => creep.memory.spawnName === spawnName) //todo 待优化
   let currentRolerArray = _.filter(creepsSpawnAtCurRoom, (creep) => creep.memory.role == roleName);
-  // console.log(roleName + ':' + currentRolerArray.length);
 
   if (currentRolerArray.length < minNumber) {
     var newName = roleName + Game.time;
@@ -111,7 +109,9 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
 
     return { needSpawn: true, spawnResult: spawnResult }
   }
-  else { return false }
+  else return { needSpawn: false, spawnResult: undefined }
+
+
 }
 
 function getCPUCost(func) {

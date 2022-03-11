@@ -173,7 +173,7 @@ const controller_spawns = (spawnName) => {
   //! 临时
   spawnByMinNumber('W17N15_0', 'harvesterPlus2', evalBody_harvester('W17N15_0'), 2)
   
-  spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 3)
+  spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 2)
   spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
 
   spawnByMinNumber('W17N15_0', 'upgrader2', body([WORK, 10, CARRY, 1, MOVE, 5]), 2)
@@ -221,7 +221,7 @@ const controller_spawns = (spawnName) => {
 
 
   //* spawn Carrier
-  spawnByMinNumber(spawnName, 'carrier', body([CARRY, 8, MOVE, 8]), 2)  //cost=650
+  spawnByMinNumber(spawnName, 'carrier', body([CARRY, 8, MOVE, 8]), 1)  //cost=650
 
 
   //* spawn Builder

@@ -18,6 +18,9 @@ const { cleanInvaderCore } = require("./script_invaderCore")
 
 
 const proto_creep = require("./proto_creep")
+const roomBuildingPlanner = require("./util_roomBuildingPlanner")
+const claimNewRoom = require("./script_claimNewRoom")
+const developNewRoom = require("./script_developRoom")
 
 
 
@@ -59,10 +62,16 @@ module.exports.loop = function () {
   roleTagger('W11N16')
   roomPlanner('W17N15')
 
-  // attack()
+  roomBuildingPlanner('expend1')
 
 
 
+
+  // claimNewRoom('expend1', 'W12N16_1', 'W11N8')
+  // claimNewRoom('expend2', 'W12N16_1', 'W9N7')
+
+  developNewRoom('expend1', 'W11N8')
+  developNewRoom('expend2', 'W9N7')
 
 
   // test.showFIndReslt()
