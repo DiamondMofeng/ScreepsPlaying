@@ -114,13 +114,21 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
 
 }
 
-function getCPUCost(func) {
-  let startTime = Game.cpu.getUsed()
-  func
-  let endTime = Game.cpu.getUsed()
 
-  let costTime = endTime - costTime
-  return costTime
+
+/**
+ * 于打印此函数的cpu消耗
+ * @param {Function} func 
+ * @returns 函数的原返回值
+ */
+function getCPUCost(func) {
+  let startCPU = Game.cpu.getUsed()
+  let res = func()
+  let endCPU = Game.cpu.getUsed()
+
+  let costTime = endCPU - startCPU
+  console.log(`costCPU: of ${func.name}`, costTime);
+  return res
 }
 
 
@@ -140,5 +148,6 @@ function startWith(str1, str2) {
 
 module.exports = {
   body, bodyCost, spawnByMinNumber,
+  getCPUCost,
   startWith
 }

@@ -7,10 +7,10 @@ const Builder = require('./role_builder')
 const Repairer = require('./role_repairer')
 const Sweepper = require('./role_sweepper')
 
-const long_Pionner = require('./role_long_pioneer')
-const long_Reserver = require('./role_long_reserver')
-const long_Carrier = require('./role_long_carrier')
-const long_Harvester = require('./role_long_harvester')
+// const long_Pionner = require('./role_long_pioneer')
+// const long_Reserver = require('./role_long_reserver')
+// const long_Carrier = require('./role_long_carrier')
+// const long_Harvester = require('./role_long_harvester')
 
 const base_Transferor = require('./role_base_transferor')
 
@@ -93,7 +93,7 @@ function controller_creeps() {
 
 
 
-
+      /*
       //! //////LONG/////////
       if (startWith(creep.memory.role, 'long_pionner')) {
         long_Pionner(creep, 'out')
@@ -119,7 +119,7 @@ function controller_creeps() {
 
         )
       }
-
+    */
       //! BASE//////////////
 
       if (startWith(creep.memory.role, 'base_transferor')) {
@@ -185,8 +185,8 @@ function controller_creeps() {
     }
   }
 
-  // CPUcounts.sort((a, b) => a.cpu - b.cpu)
-  // _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
+  CPUcounts.sort((a, b) => a.cpu - b.cpu)
+  _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
 
 
   // console.log('1')

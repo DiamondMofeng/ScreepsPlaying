@@ -1,3 +1,5 @@
+const C = require("./util_consts")
+
 /**
  * 
  * @param {RoomVisual} v
@@ -7,6 +9,16 @@
 const drawExtension = (v, x, y) => {
 
 }
+
+
+
+
+
+
+
+
+
+
 
 
 const DrawBuildings = (V, x, y) => {
@@ -26,12 +38,12 @@ const DrawBuildings = (V, x, y) => {
     { x: x - 6, y: y - 4 },
     { x: x - 6, y: y - 3 },
     { x: x - 6, y: y - 2 },
-    { x: x - 6, y: y - 1 },
+    { x: x - 6, y: y - 1 }, //5
     { x: x - 6, y: y + 5 },
     { x: x - 6, y: y + 4 },
     { x: x - 6, y: y + 3 },
     { x: x - 6, y: y + 2 },
-    { x: x - 6, y: y + 1 },
+    { x: x - 6, y: y + 1 }, //10
 
     { x: x - 5, y: y - 5 },
     { x: x - 5, y: y - 3 },
@@ -43,7 +55,7 @@ const DrawBuildings = (V, x, y) => {
     { x: x - 4, y: y - 5 },
     { x: x - 4, y: y - 4 },
     { x: x - 4, y: y - 2 },
-    { x: x - 4, y: y - 1 },
+    { x: x - 4, y: y - 1 }, //20
     { x: x - 4, y: y + 5 },
     { x: x - 4, y: y + 4 },
     { x: x - 4, y: y + 2 },
@@ -54,7 +66,7 @@ const DrawBuildings = (V, x, y) => {
     { x: x - 3, y: y - 1 },
     { x: x - 3, y: y + 5 },
     { x: x - 3, y: y + 3 },
-    { x: x - 3, y: y + 1 },
+    { x: x - 3, y: y + 1 }, //30
 
     { x: x - 2, y: y - 5 },
     { x: x - 2, y: y - 4 },
@@ -66,7 +78,7 @@ const DrawBuildings = (V, x, y) => {
     { x: x - 2, y: y + 2 },
     ////
     { x: x + 6, y: y - 5 },
-    { x: x + 6, y: y - 4 },
+    { x: x + 6, y: y - 4 }, //40
     { x: x + 6, y: y - 3 },
     { x: x + 6, y: y - 2 },
     { x: x + 6, y: y - 1 },
@@ -78,7 +90,7 @@ const DrawBuildings = (V, x, y) => {
     { x: x + 4, y: y - 5 },
     { x: x + 4, y: y - 4 },
     { x: x + 4, y: y - 2 },
-    { x: x + 4, y: y - 1 },
+    { x: x + 4, y: y - 1 }, //50
 
     { x: x + 3, y: y - 5 },
     { x: x + 3, y: y - 3 },
@@ -87,7 +99,7 @@ const DrawBuildings = (V, x, y) => {
     { x: x + 2, y: y - 5 },
     { x: x + 2, y: y - 4 },
     { x: x + 2, y: y - 3 },
-    { x: x + 2, y: y - 2 },
+    { x: x + 2, y: y - 2 }, //57
 
   ]
 
@@ -126,12 +138,12 @@ const DrawBuildings = (V, x, y) => {
   let towerX = x;
   let towerY = y + 4;
   let towerPos = [
-    { x: towerX - 1, y: towerY - 1 },
-    { x: towerX - 1, y: towerY },
-    { x: towerX - 1, y: towerY + 1 },
+    { x: towerX - 1, y: towerY - 1 }, //1
+    { x: towerX - 1, y: towerY },     //2
+    { x: towerX - 1, y: towerY + 1 }, //3
     { x: towerX + 1, y: towerY - 1 },
     { x: towerX + 1, y: towerY },
-    { x: towerX + 1, y: towerY + 1 },
+    { x: towerX + 1, y: towerY + 1 }, //6
   ]
   let containerPos = [
 

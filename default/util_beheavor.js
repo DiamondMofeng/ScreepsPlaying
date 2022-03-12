@@ -431,6 +431,7 @@ function moveToRoom(creep, roomName, oneStep = false) {
  * 从房间内的resource,tomb,ruin获取能量
  * 极度消耗CPU
  * @param {Creep} creep 
+ * @param {Number} range - 捡破烂的距离，默认为5
  */
 function getEnergyFromWasted(creep, range = 5) {
   if (creep.store.getFreeCapacity() != 0) {
@@ -511,7 +512,7 @@ module.exports = {
   getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink,
   getEnergyFromTerminal, getEnergyFromWasted, getEnergyFromHarvest,
   tryCollectAnyEnergy,
-  
+
   targetsPriorizer_byRef,
   recycleSelf,
   transferAllToStorage,

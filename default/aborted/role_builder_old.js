@@ -29,7 +29,7 @@ var roleBuilder = {
 			}
 
 			if (creep.memory.building) {
-				var targets = creep.room.cts;
+				var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 				if (targets.length) {
 
 					let target = buildNewer ? targets[targets.length - 1] : targets[0]

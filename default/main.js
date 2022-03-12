@@ -21,7 +21,9 @@ const proto_creep = require("./proto_creep")
 const roomBuildingPlanner = require("./util_roomBuildingPlanner")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
+const { getCPUCost } = require("./util_helper")
 
+const findCache = require("./util_findCache")()
 
 
 
@@ -29,7 +31,6 @@ const developNewRoom = require("./script_developRoom")
 
 module.exports.loop = function () {
   console.log(`----------${Game.time}----------`)
-
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
 
@@ -49,8 +50,8 @@ module.exports.loop = function () {
 
 
 
+  getCPUCost(controller_creeps)
 
-  controller_creeps()
   controller_buildings('W12N16')
   controller_buildings('W17N15')  //临时
 
