@@ -95,12 +95,16 @@ var role_base_transferor = {
 
     //* Main////////////
     //填充spawn的能量
-    let spawn = Game.spawns['Spawn1']
-    if (spawn.store[RESOURCE_ENERGY] < 300) {
-      getEnergyFromStorage(creep)
-      moveAndTransfer(creep, spawn)
-      return
+    let isFillSpawn = false
+    if (isFillSpawn) {
+      let spawn = Game.spawns['Spawn1']
+      if (spawn.store[RESOURCE_ENERGY] < 300) {
+        getEnergyFromStorage(creep)
+        moveAndTransfer(creep, spawn)
+        return
+      }
     }
+
 
     //在LINK，storage,terminal之间转运
     if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 70 * 1000) {

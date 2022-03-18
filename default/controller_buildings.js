@@ -3,9 +3,9 @@ const Link = require('./building_link')
 const Factory = require('./building_factory')
 
 
-function controller_buildings(roomID) {
+function controller_buildings() {
 
-  for (s of Game.rooms[roomID].find(FIND_STRUCTURES)) {
+  for (s of Object.values(Game.structures)) {
 
     try {
       if (s.structureType == STRUCTURE_TOWER) {

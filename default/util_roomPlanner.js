@@ -53,7 +53,7 @@ const roomPlanner = (roomName = undefined) => {
       let y = flag.pos.y
 
       let linkPos = [
-        { x: x, y: y }
+        { x: x, y: y-1 }
       ]
       let spawnPos = [
         { x: x, y: y - 2 },

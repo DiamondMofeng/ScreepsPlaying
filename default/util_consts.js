@@ -3,7 +3,13 @@ const C = {
 
 
 
-  myName: 'Mofeng'
+  myName: 'Mofeng',
+
+  RM: {
+    CONTAINERS: 'containers',
+    LINKS: 'links',
+  },
+
 
 
 }

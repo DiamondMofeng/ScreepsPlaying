@@ -6,10 +6,10 @@ const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickU
 var roleBuilder = {
 
 	/** @param {Creep} creep **/
-	run: function (creep, buildNewer = true) {
+	run: function (creep, buildNewer = false) {
 		var targets
 		const haveJob = () => {
-			targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+			targets = creep.room.cts
 			if (targets.length) {
 				return true
 			}
@@ -29,7 +29,33 @@ var roleBuilder = {
 			}
 
 			if (creep.memory.building) {
-				var targets = creep.room.cts;
+				let cts = _.groupBy(creep.room.cts, ct => ct.structureType);
+				let targets = []
+				const priorties_cts = [STRUCTURE_STORAGE, STRUCTURE_TOWER, STRUCTURE_EXTENSION,]
+
+
+
+				for (Ptype of priorties_cts) {
+
+					if (targets.length > 0) {
+						break;
+					}
+
+					for (type in cts) {
+						if (Ptype == type) {
+							targets = cts[type];
+							break;
+						}
+					}
+				}
+
+
+				if (targets.length == 0) {
+					targets = creep.room.cts
+				}
+
+
+
 				if (targets.length) {
 
 					let target = buildNewer ? targets[targets.length - 1] : targets[0]

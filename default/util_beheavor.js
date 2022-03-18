@@ -12,29 +12,43 @@ const getEnergyFromContainer = (creep, opt = {}) => {
 
   let min = opt.min || 200
   let BL = opt.BL || []
+  let range = opt.range || false
+  let moveOpt = opt.moveOpt || {}
+  let container;
 
-  const findContainer = (creep) => {
-    return creep.room.find(FIND_STRUCTURES, {
-      filter: (s) => {
-        // console.log('structure.id: ', structure.id);
-        // console.log('BL.indexOf(structure.id) == -1: ', BL.indexOf(structure.id) == -1);
-        if (s.structureType == STRUCTURE_CONTAINER
-          && s.store.getUsedCapacity(RESOURCE_ENERGY) > min
-          && BL.indexOf(s.id) == -1) {
-          // console.log('BL: ', BL);
-          // console.log('s.id: ', s.id);
+  if (range == false) {
 
-          return true
+    const findContainer = (creep) => {
+      return creep.room.find(FIND_STRUCTURES, {
+        filter: (s) => {
+          // console.log('structure.id: ', structure.id);
+          // console.log('BL.indexOf(structure.id) == -1: ', BL.indexOf(structure.id) == -1);
+          if (s.structureType == STRUCTURE_CONTAINER
+            && s.store.getUsedCapacity(RESOURCE_ENERGY) > min
+            && BL.indexOf(s.id) == -1) {
+            // console.log('BL: ', BL);
+            // console.log('s.id: ', s.id);
+
+            return true
+          }
+
         }
+      })
 
-      }
-    })
+    }
+    container = creep.pos.findClosestByPath(findContainer(creep))
+  }
+  else {
+    let find = creep.pos.findInRange(FIND_STRUCTURES, range, { filter: s => s.structureType == STRUCTURE_CONTAINER })
+    container = find.length > 0 ? find[0] : undefined
   }
 
-  const container = creep.pos.findClosestByPath(findContainer(creep))
   if (container) {
-    if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(container, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
+    // console.log(creep, container)
+    let witRes = creep.withdraw(container, RESOURCE_ENERGY)
+    if (witRes == ERR_NOT_IN_RANGE) {
+      let movRes = creep.moveTo(container, { ...moveOpt, visualizePathStyle: { stroke: '#ffaa00' } });
+      // console.log('movRes: ', movRes);
     }
     return true
   }
@@ -47,11 +61,12 @@ const getEnergyFromContainer = (creep, opt = {}) => {
  * @returns {boolean} 是否找到了合适的storage
  */
 const getEnergyFromStorage = (creep, minCap = 5000, opt = {}) => {
+  let moveOpt = opt.moveOpt || {}
 
   const storage = creep.room.storage
   if (!_.isUndefined(storage) && storage.store.getUsedCapacity(RESOURCE_ENERGY) > minCap) {
     if (creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(storage, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
+      creep.moveTo(storage, { ...moveOpt, visualizePathStyle: { stroke: '#ffaa00' } });
     }
     return true
   }
@@ -59,11 +74,12 @@ const getEnergyFromStorage = (creep, minCap = 5000, opt = {}) => {
 }
 
 const getEnergyFromTerminal = (creep, minCap = 5000, opt = {}) => {
+  let moveOpt = opt.moveOpt || {}
 
   const terminal = creep.room.terminal
   if (!_.isUndefined(terminal) && terminal.store.getUsedCapacity(RESOURCE_ENERGY) > minCap) {
     if (creep.withdraw(terminal, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(terminal, { ...opt, visualizePathStyle: { stroke: '#ffaa00' } });
+      creep.moveTo(terminal, { ...moveOpt, visualizePathStyle: { stroke: '#ffaa00' } });
     }
     return true
   }

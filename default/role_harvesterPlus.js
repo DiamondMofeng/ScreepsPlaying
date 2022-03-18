@@ -1,4 +1,4 @@
-const { pickUpNearbyDroppedEnergy, workingStatesKeeper } = require("./util_beheavor")
+const { pickUpNearbyDroppedEnergy, workingStatesKeeper, setDoing } = require("./util_beheavor")
 const { startWith } = require("./util_helper")
 
 //when spawn, add memory of certain source position to go , and bind with this source.
@@ -93,7 +93,7 @@ var roleHarvesterPlus = {
         //;若无container，则没有数量限制。
         let container = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType === STRUCTURE_CONTAINER })[0]
         if (container) {
-          let currentHarvesters = s.pos.findInRange(FIND_CREEPS, 1, { filter: c => startWith(c.memory.role, 'harvester') })
+          let currentHarvesters = s.pos.findInRange(FIND_CREEPS, 1, { filter: c => c.memory && startWith(c.memory.role, 'harvester') })
           if (currentHarvesters.length > 0) {
             continue
           } else {
@@ -192,6 +192,7 @@ var roleHarvesterPlus = {
                 // console.log('e: ', e);
                 creep.transfer(e, RESOURCE_ENERGY)
                 // console.log('creep.transfer(e, RESOURCE_ENERGY): ', creep.transfer(e, RESOURCE_ENERGY));
+                setDoing(creep, 'filling ext')
                 return  //! RETURN
               }
             }
@@ -210,12 +211,14 @@ var roleHarvesterPlus = {
               (container.store.getUsedCapacity(RESOURCE_ENERGY) > 1000 && (container.hits / container.hitsMax) < 0.9)
               || (container.hits / container.hitsMax) < 0.7)) {
 
+            setDoing(creep, 'repair container')
             creep.repair(container)
           }
 
           //! 帮助建container
 
           else if (!container) {
+            setDoing(creep, 'help building')
             let cts = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 1)
             if (cts.length > 0) {
               creep.build(cts[0])
@@ -223,13 +226,14 @@ var roleHarvesterPlus = {
           }
 
           //* 不用修则尝试向Link输入能量
-          else if (CM.harvester_linkID != 'none' && Game.getObjectById(CM.harvester_linkID).store.getFreeCapacity() != 0) {
-
+          else if (CM.harvester_linkID != 'none' && Game.getObjectById(CM.harvester_linkID).store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
+            setDoing(creep, 'transfer link')
             creep.transfer(Game.getObjectById(CM.harvester_linkID), RESOURCE_ENERGY)
           }
 
           //* 否则向container中输入能量
           else if (CM.harvester_containerID != 'none' && Game.getObjectById(CM.harvester_containerID).store.getFreeCapacity() != 0) {
+            setDoing(creep, 'transfer container')
 
             creep.transfer(Game.getObjectById(CM.harvester_containerID), RESOURCE_ENERGY)
           }
@@ -237,6 +241,8 @@ var roleHarvesterPlus = {
           //* 否则把能量扔地上
 
           else {
+            setDoing(creep, 'drop energy')
+
             creep.drop(RESOURCE_ENERGY)
           }
 

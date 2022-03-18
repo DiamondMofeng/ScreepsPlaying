@@ -102,7 +102,7 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
   let currentRolerArray = _.filter(creepsSpawnAtCurRoom, (creep) => creep.memory.role == roleName);
 
   if (currentRolerArray.length < minNumber) {
-    var newName = roleName + Game.time;
+    var newName = roleName + '_' + Game.time;
     console.log(`Going to spawn new ${roleName} ${currentRolerArray.length + 1}/${minNumber}: ${newName} at ${spawnName} , costing energy ${bodyCost(bodyArray)} `);
     let spawnResult = Game.spawns[spawnName].spawnCreep(bodyArray, newName, opt);
     // console.log('Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt): ', Game.spawns[spawnSite].spawnCreep(bodyArray, newName, opt));
@@ -117,7 +117,7 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
 
 
 /**
- * 于打印此函数的cpu消耗
+ * 打印此函数的cpu消耗
  * @param {Function} func 
  * @returns 函数的原返回值
  */

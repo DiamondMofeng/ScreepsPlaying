@@ -28,9 +28,9 @@ const DrawBuildings = (V, x, y) => {
 
 
   let spawnPos = [
-    { x: x, y: y - 3 },
-    { x: x, y: y - 4 },
-    { x: x, y: y - 5 },
+    { x: x, y: y - 3 }, //1
+    { x: x, y: y - 4 }, //2 at 7
+    { x: x, y: y - 5 }, //3 at 8
   ]
 
   let extensionPos = [
@@ -104,23 +104,23 @@ const DrawBuildings = (V, x, y) => {
   ]
 
   let linkPos = [
-    { x: x, y: y }
+    { x: x, y: y - 1 }
   ]
 
   let labPos = [
-    { x: x + 3, y: y + 3 },
-    { x: x + 3, y: y + 4 },
+    { type: STRUCTURE_LAB, x: x + 3, y: y + 3 },
+    { type: STRUCTURE_LAB, x: x + 3, y: y + 4 },
 
-    { x: x + 4, y: y + 2 },
-    { x: x + 4, y: y + 4 },
-    { x: x + 4, y: y + 5 },
+    { type: STRUCTURE_LAB, x: x + 4, y: y + 2 },  //3
+    { type: STRUCTURE_LAB, x: x + 4, y: y + 4 },
+    { type: STRUCTURE_LAB, x: x + 4, y: y + 5 },
 
-    { x: x + 5, y: y + 2 },
-    { x: x + 5, y: y + 3 },
-    { x: x + 5, y: y + 5 },
+    { type: STRUCTURE_LAB, x: x + 5, y: y + 2 },  //6
+    { type: STRUCTURE_LAB, x: x + 5, y: y + 3 },
+    { type: STRUCTURE_LAB, x: x + 5, y: y + 5 },
 
-    { x: x + 6, y: y + 3 },
-    { x: x + 6, y: y + 4 },
+    { type: STRUCTURE_LAB, x: x + 6, y: y + 3 },
+    { type: STRUCTURE_LAB, x: x + 6, y: y + 4 },  //10
 
 
   ]
@@ -129,25 +129,42 @@ const DrawBuildings = (V, x, y) => {
     { x: x - 1, y: y }  //左
   ]
   let factoryPos = [
-    { x: x + 1, y: y }  //右
+    { type: STRUCTURE_FACTORY, x: x + 1, y: y }  //右
   ]
   let terminalPos = [
-    { x: x, y: y + 1 }  //下
+    { type: STRUCTURE_TERMINAL, x: x, y: y + 1 }  //下
   ]
 
   let towerX = x;
   let towerY = y + 4;
   let towerPos = [
-    { x: towerX - 1, y: towerY - 1 }, //1
-    { x: towerX - 1, y: towerY },     //2
-    { x: towerX - 1, y: towerY + 1 }, //3
-    { x: towerX + 1, y: towerY - 1 },
-    { x: towerX + 1, y: towerY },
-    { x: towerX + 1, y: towerY + 1 }, //6
+    { type: STRUCTURE_TOWER, x: towerX - 1, y: towerY - 1 }, //1 at 3
+    { type: STRUCTURE_TOWER, x: towerX - 1, y: towerY },     //2 at 5
+    { type: STRUCTURE_TOWER, x: towerX - 1, y: towerY + 1 }, //3 at 7
+    { type: STRUCTURE_TOWER, x: towerX + 1, y: towerY - 1 },
+    { type: STRUCTURE_TOWER, x: towerX + 1, y: towerY },
+    { type: STRUCTURE_TOWER, x: towerX + 1, y: towerY + 1 }, //6 at 8
   ]
   let containerPos = [
 
   ]
+
+  let powerSpawnPos = [
+    { type: STRUCTURE_POWER_SPAWN, x: x + 3, y: y + 1 },
+
+  ]
+
+  let observerPos = [
+    { type: STRUCTURE_OBSERVER, x: x + 5, y: y + 1 },
+
+  ]
+
+  let nukerPos = [
+    { type: STRUCTURE_NUKER, x: x + 4, y: y + 1 },
+
+  ]
+
+
 
   for (pos of extensionPos) {
     V.text('ⓔ', pos.x, pos.y, { color: '#f5b400' })
@@ -179,6 +196,15 @@ const DrawBuildings = (V, x, y) => {
   for (pos of towerPos) {
     V.text('♜', pos.x, pos.y, {})
   }
+  for (pos of nukerPos) {
+    V.text('🚀', pos.x, pos.y, { opacity: 0.5 })
+  }
+  for (pos of powerSpawnPos) {
+    V.text('Ⓢ', pos.x, pos.y, { color: '#f03333' })
+  }
+  for (pos of observerPos) {
+    V.text('📡', pos.x, pos.y, { opacity: 0.5 })
+  }
 }
 
 
@@ -197,8 +223,12 @@ const roomBuildingPlanner = (flag) => {
   // if (!flag.room) return;
 
   // let V = new RoomVisual(flag.room.name);
-  let V = new RoomVisual();
-
+  let V;
+  if (flag.room) {
+    V = new RoomVisual(flag.room.name);
+  } else {
+    V = new RoomVisual();
+  }
   DrawBuildings(V, flag.pos.x, flag.pos.y)
 
   //* 基地plan

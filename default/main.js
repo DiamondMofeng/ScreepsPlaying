@@ -22,14 +22,20 @@ const roomBuildingPlanner = require("./util_roomBuildingPlanner")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
 const { getCPUCost } = require("./util_helper")
+const stateScanner = require("./util_stateScanner")
 
-const findCache = require("./util_findCache")()
-
+const findCache = require("./util_cache_find")()
 
 
 
 
 module.exports.loop = function () {
+
+
+  // Game.getObjectById('6231cc64813e2df7e47b87d4').attack(Game.getObjectById('6231ce3b1f3862034ccfc2d2'))
+  // Game.getObjectById('6231cc64813e2df7e47b87d4').heal(Game.getObjectById('6231ce3b1f3862034ccfc2d2'))
+
+
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
@@ -52,31 +58,39 @@ module.exports.loop = function () {
 
   getCPUCost(controller_creeps)
 
-  controller_buildings('W12N16')
-  controller_buildings('W17N15')  //临时
+  controller_buildings()
 
   controller_spawns('Spawn1')
 
   broadcaster()
 
+
+
+  //!
+  stateScanner();
+
+
+
   roleTagger('W12N16')
   roleTagger('W11N16')
   roomPlanner('W17N15')
 
-  roomBuildingPlanner('expend1')
 
+
+
+
+
+  roomBuildingPlanner('expend1')
 
 
 
   // claimNewRoom('expend1', 'W12N16_1', 'W11N8')
   // claimNewRoom('expend2', 'W12N16_1', 'W9N7')
 
-  developNewRoom('expend1', 'W11N8')
-  developNewRoom('expend2', 'W9N7')
+
 
 
   // test.showFIndReslt()
-
 
 
   if (Game.cpu.bucket == 10000) {
@@ -88,15 +102,23 @@ module.exports.loop = function () {
   guardRoom('W11N16')
   guardRoom('W12N17')
 
+
+  // try {
+  developNewRoom('expend1', 'W11N8')
+  // } catch (error) {
+
+  // }
+
+  // try {
+  developNewRoom('expend2', 'W9N7')
+  // } catch (error) {
+
+  // }
+
+
+
   // buildEnergyBase('W17N15_0', 'W17N14')
   // guardRoom('W17N14')
-
-
-  // let a1 = Game.cpu.getUsed()
-  // Game.getObjectById('622732bf2952437d9bc20081').moveTo(Game.getObjectById('621390327c6c81f155da95d0'))
-  // let a2 = Game.cpu.getUsed()
-  // console.log(a2 - a1)
-
 
 
   // cleanInvaderCore('W17N14', 'W17N15')
