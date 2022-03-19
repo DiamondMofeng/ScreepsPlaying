@@ -176,19 +176,19 @@ const controller_spawns = (spawnName) => {
   spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 2)
   spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
 
-  spawnByMinNumber('W17N15_0', 'upgrader2', body([WORK, 10, CARRY, 1, MOVE, 5]), 2)
+  spawnByMinNumber('W17N15_0', 'upgrader2', body([WORK, 5, CARRY, 1, MOVE, 6]), 1)
   // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 2, CARRY, 2, MOVE, 4]), 2)
   if (Game.getObjectById('5bbcb24140062e4259e93823').mineralAmount > 0) {
 
     spawnByMinNumber('W17N15_0', 'miner22', body([WORK, 5, CARRY, 5, MOVE, 5]), 1)
   }
 
-  spawnByMinNumber('W17N15_0', 'base_transferor22', body([CARRY, 6, MOVE, 1]), 1,)
+  // spawnByMinNumber('W17N15_0', 'base_transferor22', body([CARRY, 6, MOVE, 1]), 1,) //! 硬编码，无法使用
 
 
 
-
-
+  // spawnByMinNumber(spawnName, 'scavenger', body([CARRY, 25, MOVE, 25]), 5, { workRoom: 'W11N19' })  //! 临时
+  // spawnByMinNumber('W12N16_1', 'scavenger', body([CARRY, 25, MOVE, 25]), 5, { workRoom: 'W11N19' })
 
   //spawn HarvesterPlus
 

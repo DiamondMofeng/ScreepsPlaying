@@ -32,6 +32,7 @@ const Miner = require('./role_miner')
 const { startWith } = require('./util_helper')
 const role_expend_builder = require('./role_expend_builder')
 const role_expend_claimer = require('./role_expend_claimer')
+const role_scavenger = require('./role_scavenger')
 
 
 
@@ -172,6 +173,14 @@ function controller_creeps() {
       if (startWith(creep.memory.role, 'expend_claimer')) {
         role_expend_claimer(creep)
       }
+
+
+
+      //! 临时
+      if (startWith(creep.memory.role, 'scavenger')) {
+        role_scavenger(creep)
+      }
+
 
       ////  ///////temp for other room/////
 

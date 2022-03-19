@@ -422,9 +422,18 @@ function repireNearbyRoad(creep, range = 2, ratio = 0.8) {
  * @param {String} roomName - 要去的房间名称 
  * @param {Boolean} oneStep - 进入房间后是否往前走一步避免卡在房间出口，默认false
  */
-function moveToRoom(creep, roomName, oneStep = false) {
+function moveToRoom(creep, roomName, oneStep = false, safe = false) {
+
+
+  // let cost = null
+  // if (safe) {
+  //   cost = function (roomName)
+  // }
+
   if (creep.room.name !== roomName) {
-    creep.moveTo(new RoomPosition(25, 25, roomName))
+    let moveRes = creep.moveTo(new RoomPosition(25, 25, roomName))
+    // console.log(creep, 'moveRes: ', moveRes);
+    return false;
   }
   else if (oneStep === true) {
     if (_.isUndefined(creep.memory.oneStep)) {
@@ -437,6 +446,8 @@ function moveToRoom(creep, roomName, oneStep = false) {
         creep.memory.oneStep = true
       }
     }
+
+    return true;
   }
 }
 //5bbcac3c9099fc012e635232

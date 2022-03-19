@@ -32,6 +32,9 @@ const findCache = require("./util_cache_find")()
 module.exports.loop = function () {
 
 
+  
+
+
   // Game.getObjectById('6231cc64813e2df7e47b87d4').attack(Game.getObjectById('6231ce3b1f3862034ccfc2d2'))
   // Game.getObjectById('6231cc64813e2df7e47b87d4').heal(Game.getObjectById('6231ce3b1f3862034ccfc2d2'))
 
