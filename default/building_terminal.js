@@ -16,7 +16,8 @@ const buildingRoleLink = (terminal) => {
 
   //Game.getObjectById('620b93fc1147769b1eb644c2').send(RESOURCE_ENERGY,140*1000,'W17N15','TEST')
 
+  //Game.getObjectById('620b93fc1147769b1eb644c2').send('U',100*1000,'E39S51','TEST')
 
-
+  //Game.getObjectById('620b93fc1147769b1eb644c2').send(RESOURCE_ENERGY,140*1000,'W12N2','TEST')
 }
 module.exports = buildingRoleLink

@@ -35,29 +35,29 @@ const memoryResources = (roomName, timer = true) => {
   let StructureLabs = {}
 
 
-  //* StructureContainer
-  let containers = Structures.filter(s => s.structureType === STRUCTURE_CONTAINER)
-  for (c of containers) {
-    //确定type:source,?mine,?spawn,controller,other
-    //确定？
-    let type = 'unknow'
+  // //* StructureContainer
+  // let containers = Structures.filter(s => s.structureType === STRUCTURE_CONTAINER)
+  // for (c of containers) {
+  //   //确定type:source,?mine,?spawn,controller,other
+  //   //确定？
+  //   let type = 'unknow'
 
-    let sources = room.find(FIND_SOURCES)
-    for (s of sources) {
-      if (c.pos.inRangeTo(s, 1) == true) {
-        type = 'source'
-        break
-      }
-    }
-
-
+  //   let sources = room.find(FIND_SOURCES)
+  //   for (s of sources) {
+  //     if (c.pos.inRangeTo(s, 1) == true) {
+  //       type = 'source'
+  //       break
+  //     }
+  //   }
 
 
-    StructureContainers[c.id] = { type: type }
-  }
 
-  //* SAVE
-  RM.StructureContainers = StructureContainers
+
+  //   StructureContainers[c.id] = { type: type }
+  // }
+
+  // //* SAVE
+  // RM.StructureContainers = StructureContainers
 
 
 

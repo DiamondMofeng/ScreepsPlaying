@@ -124,13 +124,17 @@ const locateSomething_byAux = (room, starter) => {
 
   let terrain = room.getTerrain();
 
-  let result = {
-    containerPos: [],
-    linkPos: [],
-    roadPos_sources: [],
-    roadPos_mineral: [],
-    roadPos_controller: []
-  }
+  let containerPos_sources = [],
+    containerPos_controller = [],
+
+    linkPos_sources = [],
+    linkPos_controller = [],
+
+    roadPos_sources = [],
+    roadPos_mineral = [],
+    roadPos_controller = []
+
+
 
   let costCallback = function (roomName) {
 
@@ -156,9 +160,11 @@ const locateSomething_byAux = (room, starter) => {
     //*设置指定位置的cost为最大
     let reservedPos = CTinfos(starter, 8, false)
     for (pos of reservedPos) {
-      // console.log(JSON.stringify(pos))
       if (!pos) continue
-      costs.set(pos.x, pos.y, 0xff)
+      if (pos.type == STRUCTURE_ROAD) costs.set(pos.x, pos.y, 1)
+      else {
+        costs.set(pos.x, pos.y, 0xff)
+      }
 
     }
     return costs;
@@ -169,25 +175,19 @@ const locateSomething_byAux = (room, starter) => {
   //* 定出source的container和link
 
   for (let s of sources) {
-    // console.log('s: ', s);
+
+    console.log('s: ', s.pos);
     let containerPos;
     let linkPos;
 
-    let { x, y } = s.pos;  //s的位置肯定是个墙
-    // console.log(' s.pos: ', s.pos);
-    // console.log('x, y: ', x, y);
-    // console.log('starter: ', starter);
+    // let { x, y } = s.pos;  //s的位置肯定是个墙
     //! AUX 先找到harvester的工作位置，帮助后续
-
+    console.log(111)
     let hPath = starter.findPathTo(s.pos, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback })
-    // console.log('starter.findPathTo(s.pos, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback }): ', starter.findPathTo(s.pos, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback }));
-    
-    // console.log('hPath: ', hPath);
-    // console.log('hPath: ', typeof hPath);
-    let workPos = hPath[hPath.length - 1]
-    // console.log('workPos: ', workPos);
+    console.log(222)
+    console.log('hPath: ', hPath);
 
-    
+    let workPos = hPath[hPath.length - 1]
 
     containerPos = workPos;
     //确定link位置
@@ -210,6 +210,8 @@ const locateSomething_byAux = (room, starter) => {
     ]; //! 硬编码
 
     for (let pos of possiblePos) {
+      console.log('terrain.get(pos.x, pos.y) != 1  : ', terrain.get(pos.x, pos.y) != 1);
+      console.log('pos.x !== lastPath.x && pos.y !== lastPath.y: ', pos.x !== lastPath.x && pos.y !== lastPath.y);
       if (terrain.get(pos.x, pos.y) != 1    //不是墙
         && (pos.x !== lastPath.x && pos.y !== lastPath.y)) { //不挡路
         linkPos = pos;
@@ -218,47 +220,65 @@ const locateSomething_byAux = (room, starter) => {
 
     }
 
-    result.containerPos.push({ x: containerPos.x, y: containerPos.y, type: STRUCTURE_CONTAINER })
-    result.linkPos.push({ x: linkPos.x, y: linkPos.y, type: STRUCTURE_LINK })
+    containerPos_sources.push({ x: containerPos.x, y: containerPos.y, type: STRUCTURE_CONTAINER })
+    linkPos_sources.push({ x: linkPos.x, y: linkPos.y, type: STRUCTURE_LINK, distance: hPath.length })
+    console.log('linkPos_sources: ', linkPos_sources);
 
     for (let i = 0; i < hPath.length - 1; i++) {  //不为最后一位（container所在）建路
       let pos = hPath[i]
-      result.roadPos_sources.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
+      roadPos_sources.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
     }
 
   }
+  //按照距离排列source link
+
+  _.sortBy(linkPos_sources, (a) => a.distance)
 
 
   // //* 定出controller的Link和container
-
-
-
 
   //* 定出controller的road
   if (room.controller.level >= 3) {
     let x = room.controller.pos.x;
     let y = room.controller.pos.y;
-    let cPath = starter.findPathTo(x, y, { ignoreCreeps: true, range: 2, swampCost: 2.1, plainCost: 2, costCallback: costCallback })
+    let cPath = starter.findPathTo(x, y, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback })
     for (let pos of cPath) {
 
-      result.roadPos_controller.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
+      roadPos_controller.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
     }
+
+    containerPos_controller.push({ x: cPath[cPath.length - 2].x, y: cPath[cPath.length - 2].y, type: STRUCTURE_CONTAINER })
+    linkPos_controller.push({ x: cPath[cPath.length - 1].x, y: cPath[cPath.length - 1].y, type: STRUCTURE_LINK })
+
   }
 
 
 
   //* 定出mineral的road
-  if (room.controller.level >= 6) {
+  if (room.controller.level >= 5) {
     let { x, y } = room.find(FIND_MINERALS)[0].pos
     let mPath = starter.findPathTo(x, y, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback })
     for (let pos of mPath) {
-      result.roadPos_mineral.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
+      roadPos_mineral.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
     }
   }
 
 
 
 
+
+
+  const result = {
+    roadPos_controller,
+    roadPos_mineral,
+    roadPos_sources,
+
+    linkPos_controller,
+    linkPos_sources,
+
+    containerPos_controller,
+    containerPos_sources
+  }
 
 
 
@@ -382,7 +402,13 @@ const CTinfos = (flag, rcl, locate = true) => {
 
         { type: STRUCTURE_TERMINAL, x: x, y: y + 1 },
 
+        //* link
+        { x: x, y: y - 1, type: STRUCTURE_LINK },        //! 级时先修一个最远的source到conrtoller的 ，6级再修基地的
       ])
+
+      if (locate) {
+        CTs = CTs.concat
+      }
     case 5:
       CTs = CTs.concat([
 
@@ -397,12 +423,18 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: x - 3, y: y + 3, type: STRUCTURE_EXTENSION },
         { x: x - 3, y: y + 1, type: STRUCTURE_EXTENSION },  //30
 
-        //* link
-        // { x: x, y: y - 1, type: STRUCTURE_LINK },        //!先修一个最远的source到conrtoller的
 
         //* tower
         { x: towerX - 1, y: towerY, type: STRUCTURE_TOWER },
       ])
+
+      if (locate) {
+
+        CTs = CTs.concat(sth.roadPos_mineral,
+          sth.linkPos_sources[sth.linkPos_sources.length - 1],
+          sth.linkPos_controller[0])
+      }
+
     case 4:
       CTs = CTs.concat([
 
@@ -491,11 +523,14 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: towerX - 1, y: towerY - 1, type: STRUCTURE_TOWER },
       ])
 
-      //* ROAD TO SOURCE
-      CTs = CTs.concat(sth.roadPos_sources)
+      if (locate) {
 
-      //* ROAD TO CONTROLLER
-      CTs = CTs.concat(sth.roadPos_controller)
+        //* ROAD TO SOURCE
+        CTs = CTs.concat(sth.roadPos_sources)
+
+        //* ROAD TO CONTROLLER
+        CTs = CTs.concat(sth.roadPos_controller)
+      }
 
 
 
@@ -508,9 +543,13 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: x - 6, y: y - 1, type: STRUCTURE_EXTENSION },  //5
       ])
 
+      if (locate) {
 
-      //* source的container
-      CTs = CTs.concat(sth.containerPos)
+        //* source的container
+        //* controller的container
+        CTs = CTs.concat(sth.containerPos_sources, sth.containerPos_controller)
+
+      }
 
       break;
     case 1:
@@ -534,10 +573,11 @@ const CTinfos = (flag, rcl, locate = true) => {
 const placeCT = (flag, rcl) => {
 
   if (Game.time % 100 != 0) {
-    return
+    // return
   }
 
   let CTs = CTinfos(flag, rcl)
+  console.log('CTs: ', CTs);
   for ({ x, y, type } of CTs) {
     if (type == STRUCTURE_SPAWN) {
       continue
@@ -627,7 +667,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
 
 
-      
+
 
       spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
 
@@ -641,7 +681,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
         placeCT(flag, rcl)
       }
 
-      
+
 
       break;
     case 5:
@@ -652,7 +692,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
       spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
 
-      
+
 
       if (flag.room.cts && flag.room.cts.length > 0) {
         spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)

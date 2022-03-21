@@ -61,9 +61,10 @@ var role_base_transferor = {
 
     //! 临时 把东西从storage搬到terminal
     let isTransfer = false
+    let type = 'U'
     if (isTransfer) {
-      creep.withdraw(storage, 'U')
-      creep.transfer(terminal, 'U')
+      creep.withdraw(storage, type)
+      creep.transfer(terminal, type)
       return
     }
 
@@ -76,7 +77,7 @@ var role_base_transferor = {
     let isFactory = false
     let factory = Game.getObjectById('622461be2f2a4a4840b6ee24')
     let resourceType = RESOURCE_ENERGY
-    if (isFactory && storage.store.getUsedCapacity(resourceType) > 0 && factory.store.getUsedCapacity(resourceType) < 200) {
+    if (isFactory && storage.store.getUsedCapacity(resourceType) > 0 && factory.store.getUsedCapacity(resourceType) < 10000) {
       if (creep.store.getUsedCapacity - creep.store[resourceType] > 0) {
         moveAndTransfer(creep, storage, RESOURCE_ENERGY);
         // console.log('moveAndTransfer(creep, storage, RESOURCE_ENERGY): ', moveAndTransfer(creep, storage, [RESOURCE_ENERGY]));
@@ -128,7 +129,7 @@ var role_base_transferor = {
 
         // console.log(222);
 
-      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 100 * 1000) {
+      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 200 * 1000) {
 
         //storage->terminal
         getEnergyFromStorage(creep)

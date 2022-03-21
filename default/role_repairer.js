@@ -29,7 +29,7 @@ var roleRepairer = {
           )
             || (
               (s.structureType == STRUCTURE_RAMPART)
-              && ((s.hits < 1 * 1000 * 1000))
+              && ((s.hits < 5 * 1000 * 1000))
             )
             || (
               (s.structureType == STRUCTURE_WALL)

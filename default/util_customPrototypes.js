@@ -36,22 +36,68 @@ const customPrototypes = () => {
     enumerable: true
   })
 
-  Object.defineProperty(StructureContainer.prototype, 'Rmemory', {
-    get() {
-      if (_.isUndefined(Memory.rooms[this.room.name])) {
-        Memory.rooms[this.room.name] = {}
-      }
-      if (_.isUndefined(Memory.rooms[this.room.name][C.RM.CONTAINERS])) {
-        Memory.rooms[this.room.name][C.RM.CONTAINERS] = {}
-      }
-      if (_.isUndefined(Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id])) {
-        Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id] = {}
-      }
-      return Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id]
+
+  Object.defineProperties(StructureContainer.prototype, {
+    'Rmemory': {
+      get() {
+        if (_.isUndefined(Memory.rooms[this.room.name])) {
+          Memory.rooms[this.room.name] = {}
+        }
+        if (_.isUndefined(Memory.rooms[this.room.name][C.RM.CONTAINERS])) {
+          Memory.rooms[this.room.name][C.RM.CONTAINERS] = {}
+        }
+        if (_.isUndefined(Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id])) {
+          Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id] = {}
+        }
+        return Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id]
+      },
+      set(value) { Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id] = value },
+      configurable: true,
+      enumerable: true
     },
-    set(value) { Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id] = value },
-    configurable: true,
-    enumerable: true
+    'type': {
+      get() {
+        if (!_.isUndefined(this.Rmemory && this.Rmemory.type)) {
+          return this.Rmemory.type
+        }
+        else {
+          let sources = this.room.find(FIND_SOURCES)
+          for (s of sources) {
+            if (this.pos.inRangeTo(s, 2) == true) {
+              this.Rmemory.type = 'source'
+            }
+          }
+
+          //storage
+          let storage = this.room.storage
+          if (storage && this.pos.inRangeTo(storage, 2) == true) {
+            this.Rmemory.type = 'storage'
+          }
+
+          //contoller
+          let controller = this.room.controller
+          if (this.pos.inRangeTo(controller, 2) == true) {
+            this.Rmemory.type = 'controller'
+          }
+          //mineral
+          let mineral = this.room.find(FIND_MINERALS)[0]
+          if (this.pos.inRangeTo(mineral, 2) == true) {
+            this.Rmemory.type = 'mineral'
+          }
+
+          //unknow
+          if (_.isUndefined(this.Rmemory.type)) {
+            this.Rmemory.type = 'unknow'
+          }
+          // this.Rmemory.type
+          return this.Rmemory.type
+        }
+
+      },
+      set(value) { this.Rmemory.type = value },
+      configurable: true,
+      enumerable: true
+    }
   })
 
   //? 原来flag自己有memory。。。。
