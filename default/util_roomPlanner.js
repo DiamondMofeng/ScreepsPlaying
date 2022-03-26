@@ -45,8 +45,8 @@ const roomPlanner = (roomName = undefined) => {
       for (pos of roadPos) {
         V.text('▨', pos.x, pos.y, {})
       }
-    }
 
+    }
     //* CENTER/////////
     if (flag.name.indexOf('CENTER') !== -1) {
       let x = flag.pos.x

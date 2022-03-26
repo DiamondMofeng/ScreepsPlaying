@@ -23,7 +23,7 @@ const broadcaster = () => {
 
   //Spawn's energy left
   roomSpawnEnergy('W12N16')
-  RCLprogress('W12N16')
+  // RCLprogress('W12N16')
 
   roomSpawnEnergy('W17N15')
   RCLprogress('W17N15')

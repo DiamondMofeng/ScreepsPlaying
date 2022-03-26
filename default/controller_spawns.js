@@ -176,7 +176,7 @@ const controller_spawns = (spawnName) => {
   spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 2)
   spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
 
-  spawnByMinNumber('W17N15_0', 'upgrader2', body([WORK, 5, CARRY, 1, MOVE, 6]), 1)
+  spawnByMinNumber('W17N15_0', 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 10]), 1)
   // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 2, CARRY, 2, MOVE, 4]), 2)
   if (Game.getObjectById('5bbcb24140062e4259e93823').mineralAmount > 0) {
 

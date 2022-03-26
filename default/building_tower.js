@@ -76,11 +76,25 @@ const roleTower = (tower) => {
     // console.log('roadToRepair:', roadToRepair)
 
 
-
     if (roadToRepair.length) {
       let towerRepairResult = tower.repair(roadToRepair[0])
       // console.log('Tower repair result:', towerRepairResult)
+      return
     }
+
+
+    let containerToRepair = tower.room.find(FIND_STRUCTURES,
+      {
+        filter: s => (s.structureType == STRUCTURE_CONTAINER)
+          && ((s.hits / s.hitsMax) < 0.3)
+      })
+    if (containerToRepair.length) {
+      let towerRepairResult = tower.repair(containerToRepair[0])
+      // console.log('Tower repair result:', towerRepairResult)
+      return
+    }
+
+
   }
 
 

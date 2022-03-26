@@ -5,6 +5,8 @@
     若为true，则：基地派出attacker；room中所有creep尝试逃离敌人
 */
 
+const { body } = require("./util_helper")
+
 //! //////////// HARD CODED /////////////
 /**
  * baseID = "Spawn1",
@@ -29,8 +31,9 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
 
     let hostileAttackers = roomTW.find(FIND_HOSTILE_CREEPS
       , {
-        filter: HC => HC.body.indexOf(ATTACK) != -1
-          || HC.body.indexOf(RANGED_ATTACK != -1)
+        filter: HC => HC.getActiveBodyparts(ATTACK) != 0
+          || HC.getActiveBodyparts(RANGED_ATTACK) != 0
+          || HC.owner.username !== 'Appassionata' //! 临时白名单
       })
 
     if (hostileAttackers.length > 0) {
@@ -75,7 +78,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
     if (hasGuardian == false) {
 
       let guardianName = 'guardian' + roomName + Game.time
-      let spawnResult = Game.spawns[opts.spawnName].spawnCreep([TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE],
+      let spawnResult = Game.spawns[opts.spawnName].spawnCreep(body([TOUGH, 5, MOVE, 14, ATTACK, 10, MOVE, 1]),
 
         guardianName,
         {

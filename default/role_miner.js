@@ -13,7 +13,7 @@ var roleMiner = {
     let CM = creep.memory
 
     if (_.isUndefined(CM.miner_mineID)) {
-      let mine = creep.room.find(FIND_MINERALS)[0]
+      let mine = creep.room.mineral
       CM.miner_mineID = mine.id
     }
 

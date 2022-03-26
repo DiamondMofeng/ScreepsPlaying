@@ -17,7 +17,7 @@ const C = require("./util_consts")
 const customPrototypes = () => {
 
 
-
+  //* LINK
   Object.defineProperty(StructureLink.prototype, 'Rmemory', {
     get() {
       if (_.isUndefined(Memory.rooms[this.room.name])) {
@@ -37,8 +37,12 @@ const customPrototypes = () => {
   })
 
 
+
+
+
+  //* CONTAINER
   Object.defineProperties(StructureContainer.prototype, {
-    'Rmemory': {
+    Rmemory: {
       get() {
         if (_.isUndefined(Memory.rooms[this.room.name])) {
           Memory.rooms[this.room.name] = {}
@@ -55,7 +59,7 @@ const customPrototypes = () => {
       configurable: true,
       enumerable: true
     },
-    'type': {
+    type: {
       get() {
         if (!_.isUndefined(this.Rmemory && this.Rmemory.type)) {
           return this.Rmemory.type
@@ -106,6 +110,23 @@ const customPrototypes = () => {
   //   writable: true
   // })
 
+
+  //* ROOM
+  Object.defineProperties(Room.prototype, {
+    /**
+     * 直接获取mineral对象
+     */
+    mineral: {
+      get() {
+        if (!this.memory._mineralID) {
+          this.memory._mineralID = this.find(FIND_MINERALS)[0].id
+        }
+        return Game.getObjectById(this.memory._mineralID)
+      },
+      configurable: true,
+      enumerable: true
+    }
+  })
 
 
 }

@@ -1,4 +1,5 @@
 const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage } = require('./util_beheavor')
+const C = require('./util_consts')
 
 
 
@@ -17,12 +18,12 @@ var role_base_transferor = {
     // creep.say('✔️ ONLINE',true)
     creep.say('❌ OFFLINE', true)
 
-    if (creep.ticksToLive < 500) {
-      let spawn = Game.spawns[creep.memory.spawnName]
-      if (spawn) {
-        spawn.renewCreep(creep)
-      }
-    }
+    // if (creep.ticksToLive < 500) {
+    //   let spawn = Game.spawns[creep.memory.spawnName]
+    //   if (spawn) {
+    //     spawn.renewCreep(creep)
+    //   }
+    // }
 
 
 
@@ -34,10 +35,35 @@ var role_base_transferor = {
 
     //把能量从link拿到storage:
     // workingStatesKeeper(creep, getEnergyFromNearbyLink(creep, { range: 2, minCap: 0 }), moveAndTransfer(creep.room.storage))
+
+
+
+    const CM_LINKID_CONTROLLER = '_linkID_controller'
+    const CM_LINKID_STORAGE = '_linkID_storage'
+
     let terminal = creep.room.terminal
     let storage = creep.room.storage
-    let link_storage = Game.getObjectById('62041ae6638cf54110e7422d')
-    let link_controller = Game.getObjectById('6209b6db0bd2bf4b0ce577eb')
+
+    if (_.isUndefined(creep.memory[CM_LINKID_STORAGE])) {
+      for (id in creep.room.memory[C.RM.LINKS]) {
+        if (creep.room.memory[C.RM.LINKS][id].type == 'storage') {
+          creep.memory[CM_LINKID_STORAGE] = id
+        }
+      }
+    }
+    let link_storage = Game.getObjectById(creep.memory[CM_LINKID_STORAGE])
+    // console.log('link_storage: ', link_storage);
+
+
+    if (_.isUndefined(creep.memory[CM_LINKID_CONTROLLER])) {
+      for (id in creep.room.memory[C.RM.LINKS]) {
+        if (creep.room.memory[C.RM.LINKS][id].type == 'controller') {
+          creep.memory[CM_LINKID_CONTROLLER] = id
+        }
+      }
+    }
+    let link_controller = Game.getObjectById(creep.memory[CM_LINKID_CONTROLLER])
+    // console.log('link_controller: ', link_controller);
 
 
     //* 把化合物送到lab
@@ -95,20 +121,23 @@ var role_base_transferor = {
 
 
     //* Main////////////
-    //填充spawn的能量
-    let isFillSpawn = false
-    if (isFillSpawn) {
-      let spawn = Game.spawns['Spawn1']
-      if (spawn.store[RESOURCE_ENERGY] < 300) {
-        getEnergyFromStorage(creep)
-        moveAndTransfer(creep, spawn)
-        return
-      }
+    // //填充spawn的能量
+    // let isFillSpawn = false
+    // if (isFillSpawn) {
+    //   let spawn = Game.spawns['Spawn1']
+    //   if (spawn.store[RESOURCE_ENERGY] < 300) {
+    //     getEnergyFromStorage(creep)
+    //     moveAndTransfer(creep, spawn)
+    //     return
+    //   }
+    // }
+
+    if (!creep.memory[CM_LINKID_CONTROLLER]) {
+      return
     }
 
-
     //在LINK，storage,terminal之间转运
-    if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) > 70 * 1000) {
+    if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > 70 * 1000) {
 
 
       if (link_controller.store.getUsedCapacity(RESOURCE_ENERGY) < 300) {

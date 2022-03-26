@@ -14,6 +14,7 @@ const getEnergyFromContainer = (creep, opt = {}) => {
   let BL = opt.BL || []
   let range = opt.range || false
   let moveOpt = opt.moveOpt || {}
+  let ignoreController = opt.ignoreController || false
   let container;
 
   if (range == false) {
@@ -26,8 +27,10 @@ const getEnergyFromContainer = (creep, opt = {}) => {
           if (s.structureType == STRUCTURE_CONTAINER
             && s.store.getUsedCapacity(RESOURCE_ENERGY) > min
             && BL.indexOf(s.id) == -1) {
-            // console.log('BL: ', BL);
-            // console.log('s.id: ', s.id);
+
+            if (ignoreController && s.type == 'controller') {
+              return false;
+            }
 
             return true
           }
@@ -98,7 +101,7 @@ const getEnergyFromNearbyLink = (creep, opt = {}) => {
   let range = opt.range || 2
   let minCap = opt.minCap || 0
   const findLink = (creep) => {
-    return creep.pos.findInRange(FIND_STRUCTURES, 2, {
+    return creep.pos.findInRange(FIND_STRUCTURES, range, {
       filter: (structure) => {
         return structure.structureType == STRUCTURE_LINK && structure.store.getUsedCapacity(RESOURCE_ENERGY) > minCap;
       }

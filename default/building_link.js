@@ -1,3 +1,4 @@
+const C = require("./util_consts")
 
 /**
  * 
@@ -13,6 +14,10 @@ const buildingRoleLink = (link) => {
     upgrade
   */
 
+  if (link.cooldown > 0) {
+    //* 若有冷却则不继续进行
+    return
+  }
 
   let RM = link.room.memory//方便快速访问
 
@@ -51,53 +56,56 @@ const buildingRoleLink = (link) => {
   }
 
   //* 若已定义memory.type:
-  else {
 
-    if (link.cooldown > 0) {
-      //* 若有冷却则不继续进行
-      return
-    }
+  let type = link.Rmemory.type
 
-    let type = link.Rmemory.type
+  // 感觉case不如if清晰啊。。
+  // switch(type){
+  //   case sources:
+  //     break;
+  //   case storage:
+  //     break;
+  //   case controller:
+  //     break;
+  // }
 
-    if (type == 'source') {
 
-      for (ID in RM.BUILDING_LINKS) {
-        let otherLink = Game.getObjectById(ID)
-        // console.log('otherLink: ', otherLink);
-        // console.log('ID: ', ID);
-        // console.log('otherLink === link: ', otherLink === link);
-        if (otherLink === link) {
+  if (type == 'source') {
 
-          continue
-        }
+    for (ID in RM[C.RM.LINKS]) {
+      let otherLink = Game.getObjectById(ID)
 
-        //TODO ! 以下部分不合理,因为没有指定搜索顺序。待修改
-        if (otherLink.Rmemory.type == 'controller'
-          && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 700) {
-          link.transferEnergy(otherLink)
-        }
-
-        else if (otherLink.Rmemory.type == 'storage') {
-          link.transferEnergy(otherLink)
-        }
-      }
-    } else if (type == 'storage') {
-
-      for (ID in RM.BUILDING_LINKS) {
-        let otherLink = Game.getObjectById(ID)
-        if (otherLink === link) { continue }
-
-        if (otherLink.Rmemory.type == 'controller'
-          && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 500) {
-          link.transferEnergy(otherLink)
-        }
-
+      if (otherLink === link) {
+        continue
       }
 
-    } else if (type == 'controller') {
-      //todo 待写
+      //TODO ! 以下部分不合理,因为没有指定搜索顺序。待修改
+      if (otherLink.Rmemory.type == 'controller'
+        && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 700) {
+        link.transferEnergy(otherLink)
+      }
+
+      else if (otherLink.Rmemory.type == 'storage'
+        && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 500) {
+        link.transferEnergy(otherLink)
+      }
     }
+
+  } else if (type == 'storage') {
+
+    for (ID in RM[C.RM.LINKS]) {
+      let otherLink = Game.getObjectById(ID)
+      if (otherLink === link) { continue }
+
+      if (otherLink.Rmemory.type == 'controller'
+        && otherLink.store.getUsedCapacity(RESOURCE_ENERGY) < 500) {
+        link.transferEnergy(otherLink)
+      }
+
+    }
+
+  } else if (type == 'controller') {
+    //todo 待写
   }
 
 

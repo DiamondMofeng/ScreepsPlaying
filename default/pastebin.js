@@ -50,3 +50,4 @@ function test() {
   }
   console.log(a)  //输出1
 }
+

@@ -1,14 +1,37 @@
-const { recycleSelf } = require('./util_beheavor')
+const { recycleSelf, moveToRoom } = require('./util_beheavor')
 
+
+
+
+function insideRoom(roomName) {
+	let costs = new PathFinder.CostMatrix;
+	let exit = [0, 49]
+	let
+}
+
+/**
+ * 
+ * @param {Creep} creep 
+ */
 function attack_attackerCreep(creep) {
-	let targets = creep.room.find(FIND_HOSTILE_CREEPS, {
-		filter: HC => HC.body.indexOf(ATTACK) != -1
-			|| HC.body.indexOf(RANGED_ATTACK != -1)
-	})
+	let targets = creep.room.find(FIND_HOSTILE_CREEPS,
+		{
+			filter: HC => HC.body.indexOf(ATTACK) != -1
+				|| HC.body.indexOf(RANGED_ATTACK != -1)
+		}
+	)
+	let target = creep.pos.findClosestByPath(targets)
 
-	if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {
-		creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#DC143C', opacity: 0.9 } })
-	}
+	let attackRes = creep.attack(target)
+	// if () {
+	creep.moveTo(target, { visualizePathStyle: { stroke: '#DC143C', opacity: 0.9 } })
+	// } else {
+	// 	//* 防止放风筝
+	// 	fleePathFinder = PathFinder.search(target.pos, creep.pos, { flee: true })
+	// 	console.log(JSON.stringify(fleePathFinder))
+	// 	creep.moveTo(fleePathFinder.path[0])
+	// }
+
 
 }
 
@@ -57,12 +80,13 @@ var roleGuardian = (creep) => {
 		console.log(`Don't worry,Guardian of ${CM.guardian_Room} is on the way! `)
 
 		//! 待优化
-		if (creep.room != flag.room || _.isUndefined(flag.room)) {
-			creep.moveTo(flag)
-			console.log('creep.moveTo(flag): ', creep.moveTo(flag));
-		} else {
-			attack_attackerCreep(creep)
-		}
+		// if (creep.room != flag.room || _.isUndefined(flag.room)) {
+		// 	creep.moveTo(flag)
+		// 	console.log('creep.moveTo(flag): ', creep.moveTo(flag));
+		// } else {
+		// }
+		moveToRoom(creep, CM.guardian_Room, true)
+		attack_attackerCreep(creep)
 
 	} else {
 

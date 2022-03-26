@@ -11,7 +11,6 @@ const buildEnergyBase = require('./script_outerEnergyBase_byRoom')
 
 const guardRoom = require('./util_guardRoom')
 
-const customPrototypes = require('./util_customPrototypes')
 const roomPlanner = require("./util_roomPlanner")
 const { cleanInvaderCore } = require("./script_invaderCore")
 
@@ -22,9 +21,10 @@ const roomBuildingPlanner = require("./util_roomBuildingPlanner")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
 const { getCPUCost } = require("./util_helper")
-const stateScanner = require("./util_stateScanner")
+const statsScanner = require("./util_statsScanner")
 
 const findCache = require("./util_cache_find")()
+const customPrototypes = require('./util_customPrototypes')()
 
 
 
@@ -32,11 +32,6 @@ const findCache = require("./util_cache_find")()
 module.exports.loop = function () {
 
 
-  
-
-
-  // Game.getObjectById('6231cc64813e2df7e47b87d4').attack(Game.getObjectById('6231ce3b1f3862034ccfc2d2'))
-  // Game.getObjectById('6231cc64813e2df7e47b87d4').heal(Game.getObjectById('6231ce3b1f3862034ccfc2d2'))
 
 
   console.log(`----------${Game.time}----------`)
@@ -45,7 +40,7 @@ module.exports.loop = function () {
 
   // let a1 = Game.cpu.getUsed()
 
-  customPrototypes()
+  // customPrototypes()
 
   // let a2 = Game.cpu.getUsed()
 
@@ -70,7 +65,7 @@ module.exports.loop = function () {
 
 
   //!
-  stateScanner();
+  statsScanner();
 
 
 

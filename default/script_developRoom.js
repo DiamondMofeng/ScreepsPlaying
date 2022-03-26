@@ -7,6 +7,8 @@ const { spawnByMinNumber, body } = require("./util_helper")
 
 /*
 
+TODO 关于定位container和link，定位前未查找是否已有，可能出现建多个的情况
+
 思路:分RCL进行发展。
 
 *================= RCL1:===============
@@ -132,7 +134,9 @@ const locateSomething_byAux = (room, starter) => {
 
     roadPos_sources = [],
     roadPos_mineral = [],
-    roadPos_controller = []
+    roadPos_controller = [],
+
+    extractorPos = []
 
 
 
@@ -182,21 +186,27 @@ const locateSomething_byAux = (room, starter) => {
 
     // let { x, y } = s.pos;  //s的位置肯定是个墙
     //! AUX 先找到harvester的工作位置，帮助后续
-    console.log(111)
+    // console.log(111)
     let hPath = starter.findPathTo(s.pos, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback })
-    console.log(222)
-    console.log('hPath: ', hPath);
+    // console.log(222)
+    // console.log('hPath: ', hPath);
 
     let workPos = hPath[hPath.length - 1]
 
     containerPos = workPos;
     //确定link位置
     //原则：挨着container且不在路上
+    //*前提： 旁边没有已建成的link
     //1.确定位置数组：与container距离为1，
     //2.getTerrain,此位置不是墙 且不在hPath中 则可以确定。 
+    //
 
     //{ x: 10, y: 5, dx: 1,  dy: 0, direction: RIGHT }
+
+
     let lastPath = hPath[hPath.length - 1 - 1]
+
+
 
     let possiblePos = [
       { x: workPos.x + 1, y: workPos.y + 1 },
@@ -220,9 +230,17 @@ const locateSomething_byAux = (room, starter) => {
 
     }
 
-    containerPos_sources.push({ x: containerPos.x, y: containerPos.y, type: STRUCTURE_CONTAINER })
-    linkPos_sources.push({ x: linkPos.x, y: linkPos.y, type: STRUCTURE_LINK, distance: hPath.length })
-    console.log('linkPos_sources: ', linkPos_sources);
+
+    let nearbyStructures = new RoomPosition(workPos.x, workPos.y, room.name).findInRange(FIND_STRUCTURES, 3)
+
+    if (nearbyStructures.filter(s => s.structureType == STRUCTURE_CONTAINER).length == 0) {
+      containerPos_sources.push({ x: containerPos.x, y: containerPos.y, type: STRUCTURE_CONTAINER })
+    }
+    if (nearbyStructures.filter(s => s.structureType == STRUCTURE_LINK).length == 0) {
+      linkPos_sources.push({ x: linkPos.x, y: linkPos.y, type: STRUCTURE_LINK, distance: hPath.length })
+    }
+
+    // console.log('linkPos_sources: ', linkPos_sources);
 
     for (let i = 0; i < hPath.length - 1; i++) {  //不为最后一位（container所在）建路
       let pos = hPath[i]
@@ -232,7 +250,7 @@ const locateSomething_byAux = (room, starter) => {
   }
   //按照距离排列source link
 
-  _.sortBy(linkPos_sources, (a) => a.distance)
+  _.sortBy(linkPos_sources, (a) => -a.distance) //符号使得大的在前面
 
 
   // //* 定出controller的Link和container
@@ -246,10 +264,13 @@ const locateSomething_byAux = (room, starter) => {
 
       roadPos_controller.push({ x: pos.x, y: pos.y, type: STRUCTURE_ROAD })
     }
-
-    containerPos_controller.push({ x: cPath[cPath.length - 2].x, y: cPath[cPath.length - 2].y, type: STRUCTURE_CONTAINER })
-    linkPos_controller.push({ x: cPath[cPath.length - 1].x, y: cPath[cPath.length - 1].y, type: STRUCTURE_LINK })
-
+    let nearbyStructures = room.controller.pos.findInRange(FIND_STRUCTURES, 3)
+    if (_.filter(nearbyStructures, s => s.structureType == STRUCTURE_CONTAINER).length == 0) {
+      containerPos_controller.push({ x: cPath[cPath.length - 2].x, y: cPath[cPath.length - 2].y, type: STRUCTURE_CONTAINER })
+    }
+    if (_.filter(nearbyStructures, s => s.structureType == STRUCTURE_LINK == 0).length) {
+      linkPos_controller.push({ x: cPath[cPath.length - 1].x, y: cPath[cPath.length - 1].y, type: STRUCTURE_LINK })
+    }
   }
 
 
@@ -263,7 +284,11 @@ const locateSomething_byAux = (room, starter) => {
     }
   }
 
-
+  //* 定出mineral的extractor
+  if (room.controller.level >= 5) {
+    let { x, y } = room.find(FIND_MINERALS)[0].pos
+    extractorPos.push({ x: x, y: y, type: STRUCTURE_EXTRACTOR })
+  }
 
 
 
@@ -277,7 +302,9 @@ const locateSomething_byAux = (room, starter) => {
     linkPos_sources,
 
     containerPos_controller,
-    containerPos_sources
+    containerPos_sources,
+
+    extractorPos,
   }
 
 
@@ -407,7 +434,9 @@ const CTinfos = (flag, rcl, locate = true) => {
       ])
 
       if (locate) {
-        CTs = CTs.concat
+        CTs = CTs.concat(
+          sth.extractorPos
+        )
       }
     case 5:
       CTs = CTs.concat([
@@ -431,7 +460,7 @@ const CTinfos = (flag, rcl, locate = true) => {
       if (locate) {
 
         CTs = CTs.concat(sth.roadPos_mineral,
-          sth.linkPos_sources[sth.linkPos_sources.length - 1],
+          sth.linkPos_sources[0],
           sth.linkPos_controller[0])
       }
 
@@ -472,37 +501,36 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: x - 2, y: y + 1, type: STRUCTURE_ROAD },
 
         //十字干道  
-        //! 因为预留位置寻路时不可通行，所以先注释了。可以把本列表的条件也加入false中
+        // // 已解决？ ! 因为预留位置寻路时不可通行，所以先注释了。可以把本列表的条件也加入false中
         //左
+        { x: x - 2, y: y, type: STRUCTURE_ROAD },
+        { x: x - 3, y: y, type: STRUCTURE_ROAD },
+        { x: x - 4, y: y, type: STRUCTURE_ROAD },
+        { x: x - 5, y: y, type: STRUCTURE_ROAD },
+        { x: x - 6, y: y, type: STRUCTURE_ROAD },
+        //右
+        { x: x + 2, y: y, type: STRUCTURE_ROAD },
+        { x: x + 3, y: y, type: STRUCTURE_ROAD },
+        { x: x + 4, y: y, type: STRUCTURE_ROAD },
+        { x: x + 5, y: y, type: STRUCTURE_ROAD },
+        { x: x + 6, y: y, type: STRUCTURE_ROAD },
+        //下
+        { x: x, y: y + 2, type: STRUCTURE_ROAD },
+        { x: x, y: y + 3, type: STRUCTURE_ROAD },
+        { x: x, y: y + 4, type: STRUCTURE_ROAD },
+        { x: x, y: y + 5, type: STRUCTURE_ROAD },
+        { x: x, y: y + 6, type: STRUCTURE_ROAD },
+
         // { x: x - 2, y: y, type: STRUCTURE_ROAD },
         // { x: x - 3, y: y, type: STRUCTURE_ROAD },
         // { x: x - 4, y: y, type: STRUCTURE_ROAD },
         // { x: x - 5, y: y, type: STRUCTURE_ROAD },
-        // { x: x - 6, y: y, type: STRUCTURE_ROAD },
-        // //右
-        // { x: x + 2, y: y, type: STRUCTURE_ROAD },
-        // { x: x + 3, y: y, type: STRUCTURE_ROAD },
-        // { x: x + 4, y: y, type: STRUCTURE_ROAD },
-        // { x: x + 5, y: y, type: STRUCTURE_ROAD },
-        // { x: x + 6, y: y, type: STRUCTURE_ROAD },
-        // //下
-        // { x: x, y: y + 2, type: STRUCTURE_ROAD },
-        // { x: x, y: y + 3, type: STRUCTURE_ROAD },
-        // { x: x, y: y + 4, type: STRUCTURE_ROAD },
-        // { x: x, y: y + 5, type: STRUCTURE_ROAD },
-        // { x: x, y: y + 6, type: STRUCTURE_ROAD },
 
-        // { x: x - 1, y: y, type: STRUCTURE_ROAD },
-        // { x: x - 2, y: y, type: STRUCTURE_ROAD },
-        // { x: x - 3, y: y, type: STRUCTURE_ROAD },
-        // { x: x - 4, y: y, type: STRUCTURE_ROAD },
-        // { x: x - 5, y: y, type: STRUCTURE_ROAD },
-
-        // //中
-        // { x: x + 1, y: y + 1, type: STRUCTURE_ROAD },
-        // { x: x + 1, y: y - 1, type: STRUCTURE_ROAD },
-        // { x: x - 1, y: y + 1, type: STRUCTURE_ROAD },
-        // { x: x - 1, y: y - 1, type: STRUCTURE_ROAD },
+        //中
+        { x: x + 1, y: y + 1, type: STRUCTURE_ROAD },
+        { x: x + 1, y: y - 1, type: STRUCTURE_ROAD },
+        { x: x - 1, y: y + 1, type: STRUCTURE_ROAD },
+        { x: x - 1, y: y - 1, type: STRUCTURE_ROAD },
 
 
 
@@ -526,10 +554,9 @@ const CTinfos = (flag, rcl, locate = true) => {
       if (locate) {
 
         //* ROAD TO SOURCE
-        CTs = CTs.concat(sth.roadPos_sources)
-
         //* ROAD TO CONTROLLER
-        CTs = CTs.concat(sth.roadPos_controller)
+        CTs = CTs.concat(sth.roadPos_sources, sth.roadPos_controller)
+
       }
 
 
@@ -573,7 +600,7 @@ const CTinfos = (flag, rcl, locate = true) => {
 const placeCT = (flag, rcl) => {
 
   if (Game.time % 100 != 0) {
-    // return
+    return
   }
 
   let CTs = CTinfos(flag, rcl)
@@ -696,13 +723,34 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
       if (flag.room.cts && flag.room.cts.length > 0) {
         spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
-      } else {
+      }
+      else {
         placeCT(flag, rcl)
       }
 
 
       break;
     case 6:
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
+
+      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
+
+      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
+
+      spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
+
+      if (flag.room.mineral.mineralAmount > 0) {
+        spawnByMinNumber(spawnName, 'miner_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 1)
+      }
+
+      if (flag.room.cts && flag.room.cts.length > 0) {
+        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
+      }
+      else {
+        placeCT(flag, rcl)
+      }
+
+
       break;
     case 7:
       break;
