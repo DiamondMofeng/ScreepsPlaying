@@ -1,4 +1,7 @@
 const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage } = require('./util_beheavor')
+
+const { task_powerSpawn } = require('./task_powerSpawn')
+
 const C = require('./util_consts')
 
 
@@ -86,13 +89,16 @@ var role_base_transferor = {
     // }
 
     //! 临时 把东西从storage搬到terminal
-    let isTransfer = false
-    let type = 'U'
-    if (isTransfer) {
-      creep.withdraw(storage, type)
-      creep.transfer(terminal, type)
-      return
-    }
+    // if (creep.room.name == 'W17N15') {
+
+    //   let isTransfer = true
+    //   let type = 'K'
+    //   if (isTransfer) {
+    //     moveAndWithdraw(creep, storage, [type])
+    //     moveAndTransfer(creep, terminal)
+    //     return
+    //   }
+    // }
 
 
 
@@ -101,7 +107,7 @@ var role_base_transferor = {
 
     //! 临时：把原材料送到工厂
     let isFactory = false
-    let factory = Game.getObjectById('622461be2f2a4a4840b6ee24')
+    let factory = creep.room.factory
     let resourceType = RESOURCE_ENERGY
     if (isFactory && storage.store.getUsedCapacity(resourceType) > 0 && factory.store.getUsedCapacity(resourceType) < 10000) {
       if (creep.store.getUsedCapacity - creep.store[resourceType] > 0) {
@@ -132,19 +138,41 @@ var role_base_transferor = {
     //   }
     // }
 
+    if (task_powerSpawn(creep) == 'return') return
+
+
+    //* 保持terminal里面至多有100*1000能量
+
+    if (terminal.store[RESOURCE_ENERGY] > 100000) {
+      if (creep.store.getFreeCapacity() > 0) {
+        moveAndWithdraw(creep, terminal)
+      }
+      else {
+        moveAndTransfer(creep, storage)
+      }
+
+      return;
+    }
+
+
+
+
     if (!creep.memory[CM_LINKID_CONTROLLER]) {
       return
     }
 
     //在LINK，storage,terminal之间转运
-    if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > 70 * 1000) {
+    if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > 100 * 1000) {
 
 
       if (link_controller.store.getUsedCapacity(RESOURCE_ENERGY) < 300) {
 
         // storage-> link storage
         getEnergyFromStorage(creep)
-        creep.transfer(link_storage, RESOURCE_ENERGY)
+        let transRes = creep.transfer(link_storage, RESOURCE_ENERGY)
+        if (transRes == ERR_NOT_IN_RANGE) {
+          creep.moveTo(link_storage)
+        }
         // console.log(333);
 
         // return
@@ -158,7 +186,7 @@ var role_base_transferor = {
 
         // console.log(222);
 
-      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 200 * 1000) {
+      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000) {
 
         //storage->terminal
         getEnergyFromStorage(creep)
@@ -169,7 +197,7 @@ var role_base_transferor = {
     }
     else {
       moveAndWithdraw(creep, link_storage)
-      moveAndTransfer(creep, Game.getObjectById('62043cc4d55ca519e1a7db68'))
+      moveAndTransfer(creep, storage)
     }
 
     // //若能量为空，置为获取能量状态

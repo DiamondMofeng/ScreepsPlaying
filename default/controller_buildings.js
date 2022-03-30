@@ -1,6 +1,7 @@
 const Tower = require('./building_tower')
 const Link = require('./building_link')
 const Factory = require('./building_factory')
+const PowerSpawn = require('./building_powerSpawn')
 
 
 function controller_buildings() {
@@ -23,6 +24,9 @@ function controller_buildings() {
       // if (s.structureType == STRUCTURE_TOWER) {
       //   Tower(s)
       // }
+      if (s.structureType == STRUCTURE_POWER_SPAWN) {
+        PowerSpawn(s)
+      }
     }
 
     catch (e) {

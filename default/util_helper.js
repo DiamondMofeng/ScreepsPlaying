@@ -146,9 +146,6 @@ function startWith(str1, str2) {
   }
   return true
 }
-
-
-
 /**
  * 
  * @param {Array} targets 
@@ -157,12 +154,8 @@ function startWith(str1, str2) {
  * @returns {} - 
  */
 function priorByRef(targets, ref, priority) {
-  _targets=_.groupBy()
+  _targets = _.groupBy()
 }
-
-
-
-
 
 
 

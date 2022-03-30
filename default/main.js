@@ -71,7 +71,8 @@ module.exports.loop = function () {
 
   roleTagger('W12N16')
   roleTagger('W11N16')
-  roomPlanner('W17N15')
+
+  // getCPUCost(roomPlanner, 'W17N15')
 
 
 

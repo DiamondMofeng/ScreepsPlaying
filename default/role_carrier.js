@@ -43,7 +43,6 @@ var roleCarrier = {
             )
             || (s.structureType == STRUCTURE_STORAGE
               && s.store.getUsedCapacity(RESOURCE_ENERGY) < 1000000
-
             )
             || (s.structureType == STRUCTURE_TOWER
               && s.store.getUsedCapacity(RESOURCE_ENERGY) < 900
@@ -53,6 +52,12 @@ var roleCarrier = {
             )
             || (s.structureType == STRUCTURE_TERMINAL
               && s.store.getUsedCapacity(RESOURCE_ENERGY) < 300 * 1000
+            )
+            || (s.structureType == STRUCTURE_NUKER
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 300 * 1000
+            )
+            || (s.structureType == STRUCTURE_POWER_SPAWN
+              && s.store.getUsedCapacity(RESOURCE_ENERGY) < 3000
             )
           )
         )
@@ -104,7 +109,7 @@ var roleCarrier = {
 
       else {
         const priorTargets = targetsPriorizer_byRef('structureType'
-          , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL])(targets)
+          , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL])(targets)
         if (priorTargets.length) {
 
           let closest = creep.pos.findClosestByPath(priorTargets)

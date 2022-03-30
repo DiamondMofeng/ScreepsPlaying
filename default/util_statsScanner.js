@@ -71,11 +71,6 @@ const statsScanner = function () {
     }
 
 
-
-
-
-
-
     Memory.stats = stats;
 
     Memory.stats.rcl = {}

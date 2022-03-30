@@ -131,7 +131,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
       }
       if (creep.memory.flee == true) {
         function fleeTo(creep, destination) {
-          creep.moveTo(destination)
+          creep.moveTo(destination, { range: 2 })
         }
         fleeTo(creep, Game.flags['FleeTo'])
       }

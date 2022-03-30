@@ -289,16 +289,16 @@ function pickUpNearbyDroppedEnergy(creep, range = 1) {
  * @param {StructureContainer|STRUCTURE_STORAGE} container - withdraw from
  * @param {Array} resourceTypes an array
  */
-function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY]) {
+function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], amount) {
   for (rt of resourceTypes) {
 
-    let withdrawResult = creep.withdraw(container, rt)
+    let withdrawResult = creep.withdraw(container, rt, amount)
     // console.log('withdrawResult', rt, withdrawResult)
     // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
     if (withdrawResult == ERR_NOT_IN_RANGE) {
       creep.moveTo(container, { reusePath: 50 })
-      return
+      return withdrawResult
     }
 
     // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());

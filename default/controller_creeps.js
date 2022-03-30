@@ -33,6 +33,7 @@ const { startWith } = require('./util_helper')
 const role_expend_builder = require('./role_expend_builder')
 const role_expend_claimer = require('./role_expend_claimer')
 const role_scavenger = require('./role_scavenger')
+const powerCreep_new = require('./powerCreep_new')
 
 
 
@@ -48,6 +49,9 @@ function controller_creeps() {
 
 
   let CPUcounts = []
+
+  powerCreep_new()
+
   //* beheavor crontroller
   for (creepName in Game.creeps) {
     try {

@@ -527,6 +527,7 @@ const CTinfos = (flag, rcl, locate = true) => {
         // { x: x - 5, y: y, type: STRUCTURE_ROAD },
 
         //中
+        { x: x, y: y, type: STRUCTURE_ROAD },
         { x: x + 1, y: y + 1, type: STRUCTURE_ROAD },
         { x: x + 1, y: y - 1, type: STRUCTURE_ROAD },
         { x: x - 1, y: y + 1, type: STRUCTURE_ROAD },

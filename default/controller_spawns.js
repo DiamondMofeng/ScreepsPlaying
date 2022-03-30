@@ -174,7 +174,7 @@ const controller_spawns = (spawnName) => {
   spawnByMinNumber('W17N15_0', 'harvesterPlus2', evalBody_harvester('W17N15_0'), 2)
 
   spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 2)
-  spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
+  // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
 
   spawnByMinNumber('W17N15_0', 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 10]), 1)
   // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 2, CARRY, 2, MOVE, 4]), 2)
@@ -183,7 +183,7 @@ const controller_spawns = (spawnName) => {
     spawnByMinNumber('W17N15_0', 'miner22', body([WORK, 5, CARRY, 5, MOVE, 5]), 1)
   }
 
-  // spawnByMinNumber('W17N15_0', 'base_transferor22', body([CARRY, 6, MOVE, 1]), 1,) //! 硬编码，无法使用
+  spawnByMinNumber('W17N15_0', 'base_transferor', body([CARRY, 6, MOVE, 1]), 1,)
 
 
 
@@ -228,12 +228,12 @@ const controller_spawns = (spawnName) => {
 
 
   //* spawn Builder
-  if (spawn.room.find(FIND_CONSTRUCTION_SITES).length) {
+  if (spawn.room.cts.length > 0) {
     spawnByMinNumber(spawnName, 'builder', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
   }
 
   //* spawn Upgrader
-  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 6]), 1)//COST: 2300
+  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 10, CARRY, 2, MOVE, 6]), 1)
 
 
   //* spawn Sweepper

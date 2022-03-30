@@ -61,10 +61,12 @@ var roleHarvesterPlus = {
       if (nearSources.length > 0) {
 
 
-        let nearContainers = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER })
+        let nearContainers = nearSources[0].pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER })
+        //如果有source且没有container，则确定source
         if (nearSources.length > 0 && nearContainers.length == 0) {
           CM.harvester_sourceID = nearSources[0].id
         }
+        //如果有source和container，先移动到container上，再确定source
         else if (nearSources.length > 0 && nearContainers.length > 0) {
           for (container of nearContainers) {
             if (container.pos.isEqualTo(creep.pos)) {
@@ -73,7 +75,8 @@ var roleHarvesterPlus = {
               // console.log('container: ', container);
 
               CM.harvester_sourceID = nearSources[0].id
-            } else {
+            }
+            else {
               if (creep.moveTo(container, { noPathFinding: true }) == ERR_NOT_FOUND) {
                 creep.moveTo(container)
               }
@@ -110,7 +113,7 @@ var roleHarvesterPlus = {
 
 
       //? 都没找到咋处理？ 作废？-> useless?
-
+      return;
     }
 
     //* after arrive at workPos
