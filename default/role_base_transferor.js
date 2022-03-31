@@ -1,4 +1,4 @@
-const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage } = require('./util_beheavor')
+const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage, setDoing } = require('./util_beheavor')
 
 const { task_powerSpawn } = require('./task_powerSpawn')
 
@@ -138,46 +138,33 @@ var role_base_transferor = {
     //   }
     // }
 
-    if (task_powerSpawn(creep) == 'return') return
-
-
-    //* 保持terminal里面至多有100*1000能量
-
-    if (terminal.store[RESOURCE_ENERGY] > 100000) {
-      if (creep.store.getFreeCapacity() > 0) {
-        moveAndWithdraw(creep, terminal)
-      }
-      else {
-        moveAndTransfer(creep, storage)
-      }
-
-      return;
-    }
-
-
-
-
-    if (!creep.memory[CM_LINKID_CONTROLLER]) {
+    //* Tasks
+    if (task_powerSpawn(creep) == 'return') {
+      setDoing(creep, 'power')
       return
     }
 
-    //在LINK，storage,terminal之间转运
-    if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > 100 * 1000) {
 
 
-      if (link_controller.store.getUsedCapacity(RESOURCE_ENERGY) < 300) {
 
-        // storage-> link storage
+
+
+    if (link_controller) {
+
+      //在LINK，storage,terminal之间转运
+
+      // storage-> link storage
+      if (storage.store.getUsedCapacity(RESOURCE_ENERGY) > 100 * 1000 && link_controller.store[RESOURCE_ENERGY] < 300) {
+
         getEnergyFromStorage(creep)
-        let transRes = creep.transfer(link_storage, RESOURCE_ENERGY)
-        if (transRes == ERR_NOT_IN_RANGE) {
-          creep.moveTo(link_storage)
-        }
+        moveAndTransfer(creep, link_storage)
         // console.log(333);
+        setDoing(creep, 'storage-> link storage')
 
         // return
 
-      } else if (link_storage.store.getUsedCapacity(RESOURCE_ENERGY) > 500) {
+      }
+      else if (link_storage.store.getUsedCapacity(RESOURCE_ENERGY) > 500) {
 
         //link storage -> storage
         moveAndWithdraw(creep, link_storage)
@@ -185,20 +172,41 @@ var role_base_transferor = {
         creep.transfer(terminal, RESOURCE_ENERGY)
 
         // console.log(222);
+        setDoing(creep, 'link storage -> storage')
 
-      } else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000) {
+
+      }
+      else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000) {
 
         //storage->terminal
         getEnergyFromStorage(creep)
         creep.transfer(terminal, RESOURCE_ENERGY)
+        setDoing(creep, 'storage->terminal')
+
       }
 
 
+      // else {
+      // moveAndWithdraw(creep, link_storage)
+      // moveAndTransfer(creep, storage)
+      // return
     }
-    else {
-      moveAndWithdraw(creep, link_storage)
-      moveAndTransfer(creep, storage)
+
+
+
+
+    //* 保持terminal里面至多有100*1000能量
+
+    if (terminal.store[RESOURCE_ENERGY] > 100000) {
+      
+        moveAndWithdraw(creep, terminal)
+        moveAndTransfer(creep, storage)
+      
+      setDoing(creep, 'terminal->storage')
+
+      return;
     }
+
 
     // //若能量为空，置为获取能量状态
     // if (creep.store.getUsedCapacity() == 0) {

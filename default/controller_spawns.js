@@ -209,7 +209,7 @@ const controller_spawns = (spawnName) => {
     filter: (s) => {
       return (
         (s.structureType == STRUCTURE_CONTAINER
-          && s.hits / s.hitsMax < 0.5)
+          && s.hits / s.hitsMax < 0.3)
         || (s.structureType == STRUCTURE_TOWER
           && s.hits / s.hitsMax < 1)
         || (s.structureType == STRUCTURE_RAMPART
@@ -233,7 +233,7 @@ const controller_spawns = (spawnName) => {
   }
 
   //* spawn Upgrader
-  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 10, CARRY, 2, MOVE, 6]), 1)
+  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 1, CARRY, 2, MOVE, 3]), 1)
 
 
   //* spawn Sweepper
@@ -266,7 +266,7 @@ const controller_spawns = (spawnName) => {
   //! BASE //////////////////
 
   //spawn Base_transeror
-  spawnByMinNumber(spawnName, 'base_transferor', body([CARRY, 6, MOVE, 1]), 1, {}
+  spawnByMinNumber(spawnName, 'base_transferor', body([CARRY, 10, MOVE, 10]), 1, {}
     , { directions: [RIGHT, BOTTOM_RIGHT] }
   )
 

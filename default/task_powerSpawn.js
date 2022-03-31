@@ -25,10 +25,9 @@ const task_powerSpawn = (creep) => {
   let PS = Game.getObjectById(creep.memory[PS_ID])
 
   if (creep.room.terminal.store.power > 0
-    && PS.store.power < 50
-  ) {
+    && PS.store.power < 50) {
     if (creep.store.getUsedCapacity() == 0) {
-      moveAndWithdraw(creep, creep.room.terminal, [RESOURCE_POWER], 50)
+      moveAndWithdraw(creep, creep.room.terminal, [RESOURCE_POWER])
     }
     else {
       moveAndTransfer(creep, PS)
