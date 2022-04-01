@@ -1,3 +1,5 @@
+const { IGNORE_CREEPS } = require("./util_consts")
+
 
 /**
  * 从最近的有充足能量的Container中取走能量
@@ -296,7 +298,7 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], am
     // console.log('withdrawResult', rt, withdrawResult)
 
     if (withdrawResult == ERR_NOT_IN_RANGE) {
-      creep.moveTo(container, { reusePath: 50 })
+      creep.moveTo(container, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
       return withdrawResult
     }
 
@@ -318,7 +320,7 @@ function moveAndHarvest(creep, target) {
   // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
   if (harvestResult == ERR_NOT_IN_RANGE) {
-    creep.moveTo(target, { reusePath: 50 })
+    creep.moveTo(target, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
     return
   }
 
@@ -342,7 +344,7 @@ function moveAndTransfer(creep, container, resourceTypes = []) {
 
     for (rt of resourceTypes) {
       if (creep.transfer(container, rt) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(container, { reusePath: 50 })
+        creep.moveTo(container, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
         return
       }
     }
@@ -356,7 +358,7 @@ function moveAndTransfer(creep, container, resourceTypes = []) {
       // console.log(transferResult)
 
       if (transferResult == ERR_NOT_IN_RANGE) {
-        creep.moveTo(container)
+        creep.moveTo(container, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
         return
       }
     }

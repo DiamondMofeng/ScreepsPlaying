@@ -27,29 +27,22 @@ const findCache = require("./util_cache_find")()
 const customPrototypes = require('./util_customPrototypes')()
 
 
-
+const mountSimpleDuichuan = require("./极简对穿")
+mountSimpleDuichuan()
 
 module.exports.loop = function () {
-
-
 
 
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
 
-  // let a1 = Game.cpu.getUsed()
 
-  // customPrototypes()
 
-  // let a2 = Game.cpu.getUsed()
+
 
   proto_creep()
 
-  // let a3 = Game.cpu.getUsed()
-
-  // console.log(a2 - a1)
-  // console.log(a3 - a2)
 
 
 

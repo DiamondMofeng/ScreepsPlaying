@@ -1,6 +1,6 @@
 const Upgrader = require('./role_upgrader')
 const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy, targetsPriorizer_byRef, getEnergyFromTerminal } = require('./util_beheavor')
-
+const { IGNORE_CREEPS } = require('./util_consts')
 
 
 // const PriorizedTarget = (targets) => {
@@ -113,11 +113,12 @@ var roleCarrier = {
         if (priorTargets.length) {
 
           let closest = creep.pos.findClosestByPath(priorTargets)
+          creep.memory.target = { id: closest.id, stype: closest.structureType }
           // console.log('CarrierTarget' + priorTarget)
 
           if (creep.transfer(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(closest, { visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
-            // creep.goto(closest, { visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
+            let moveRes = creep.moveTo(closest, { ignoreCreeps: IGNORE_CREEPS, visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
+            console.log('moveRes: ', moveRes);
 
           }
 

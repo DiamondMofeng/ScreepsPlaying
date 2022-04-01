@@ -14,8 +14,14 @@ const buildingRoleLink = (link) => {
     upgrade
   */
 
+  const MIN_ENERGY = 500
+
+  //* 若有冷却则不继续进行
   if (link.cooldown > 0) {
-    //* 若有冷却则不继续进行
+    return
+  }
+  //* 若能量小于MIN_ENERGY(500)则不进行传输
+  if (link.store[RESOURCE_ENERGY] < MIN_ENERGY) {
     return
   }
 

@@ -137,9 +137,14 @@ function getCPUCost(func, ...args) {
  * 检测str2是否位于str1的起始位置
  * @param {String} str1 全字符串
  * @param {String} str2 要检测的开头
- * @returns 
+ * @returns {boolean}
  */
 function startWith(str1, str2) {
+
+  if (!(typeof str1 == 'string') || !(typeof str2 == 'string')) return false
+
+  if (str1.length < str2.length) return false
+
   for (let i = 0; i < str2.length; i++) {
     if (str1[i] === str2[i]) { continue }
     else return false

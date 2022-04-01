@@ -44,14 +44,8 @@ var roleHarvesterPlus = {
   run: function (creep) {
 
     let CM = creep.memory//简写
-    //if going to die
-    // if (creep.ticksToLive < 50) {
-    //   //clean memory
-    //   creep.room.memory.sources[CM.harvester_sourceID].onHarvest = false
-    // }
 
 
-    //after spawn
     //尝试寻找一个有空位的source
     if (_.isUndefined(CM.harvester_sourceID)) {
 
@@ -75,6 +69,7 @@ var roleHarvesterPlus = {
               // console.log('container: ', container);
 
               CM.harvester_sourceID = nearSources[0].id
+              return
             }
             else {
               if (creep.moveTo(container, { noPathFinding: true }) == ERR_NOT_FOUND) {

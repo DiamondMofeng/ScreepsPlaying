@@ -10,6 +10,8 @@ const C = {
     LINKS: 'links',
   },
 
+  IGNORE_CREEPS: true
+
 
 
 }
