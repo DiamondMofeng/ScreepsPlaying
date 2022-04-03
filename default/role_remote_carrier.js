@@ -1,4 +1,4 @@
-const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, repireNearbyRoad, moveToRoom } = require('./util_beheavor')
+const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, repireNearbyRoad, moveToRoom, setDoing } = require('./util_beheavor')
 
 
 //TODO 写的乱死了。。希望能重构一下
@@ -77,7 +77,7 @@ var role_remote_carrier = {
           }
         }
 
-      } 
+      }
 
 
 
@@ -102,13 +102,14 @@ var role_remote_carrier = {
 
 
     else {
+      setDoing(creep, 'transfer back')
 
       //清除记忆中的fromContainer
       if (fromContainer) {
         fromContainer = null
       }
 
-      moveAndTransfer(creep, toContainer)
+      moveAndTransfer(creep, toContainer, [], {})
       // console.log('moveAndTransfer(creep, toContainer): ', moveAndTransfer(creep, toContainer));
       // console.log('debug2')
 

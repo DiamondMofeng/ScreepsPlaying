@@ -656,6 +656,14 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
   if (Game.spawns[spawnName] == undefined) {
     return
   }
+
+
+  
+
+
+
+
+
   let rcl = Game.rooms[targetRoom].controller.level
   switch (rcl) {
     case 1:
@@ -754,6 +762,24 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
       break;
     case 7:
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
+
+      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
+
+      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
+
+      spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
+
+      if (flag.room.mineral.mineralAmount > 0) {
+        spawnByMinNumber(spawnName, 'miner_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 1)
+      }
+
+      if (flag.room.cts && flag.room.cts.length > 0) {
+        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
+      }
+      else {
+        placeCT(flag, rcl)
+      }
       break;
     case 8:
       break;

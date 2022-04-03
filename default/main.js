@@ -27,8 +27,11 @@ const findCache = require("./util_cache_find")()
 const customPrototypes = require('./util_customPrototypes')()
 
 
-const mountSimpleDuichuan = require("./极简对穿")
+const mountSimpleDuichuan = require("./Mofeng极简对穿")
 mountSimpleDuichuan()
+
+const keepCreeps = require("./script_keepCreeps")
+
 
 module.exports.loop = function () {
 
@@ -37,13 +40,7 @@ module.exports.loop = function () {
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
 
-
-
-
-
   proto_creep()
-
-
 
 
 
@@ -54,12 +51,9 @@ module.exports.loop = function () {
   controller_spawns('Spawn1')
 
   broadcaster()
-
-
-
-  //!
   statsScanner();
 
+  //!
 
 
   roleTagger('W12N16')
@@ -67,32 +61,20 @@ module.exports.loop = function () {
 
   // getCPUCost(roomPlanner, 'W17N15')
 
-
-
-
-
-
   roomBuildingPlanner('expend1')
 
 
-
-  // claimNewRoom('expend1', 'W12N16_1', 'W11N8')
-  // claimNewRoom('expend2', 'W12N16_1', 'W9N7')
-
-
-
-
-  // test.showFIndReslt()
+  // claimNewRoom('expand3', 'W17N15_0', 'W15N15')
 
 
   if (Game.cpu.bucket == 10000) {
     Game.cpu.generatePixel();
   }
 
-  buildEnergyBase('W12N16_1', 'W12N17')
-  buildEnergyBase('W12N16_1', 'W11N16')
-  guardRoom('W11N16')
-  guardRoom('W12N17')
+  // buildEnergyBase('W12N16_1', 'W12N17')
+  // guardRoom('W12N17')
+  // buildEnergyBase('W12N16_1', 'W11N16')
+  // guardRoom('W11N16')
 
 
   // try {
@@ -114,6 +96,8 @@ module.exports.loop = function () {
 
 
   // cleanInvaderCore('W17N14', 'W17N15')
+
+  keepCreeps('E28N3', {})
 
 
   console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());

@@ -1,5 +1,6 @@
 
-const { moveToRoom } = require("./util_beheavor")
+const { moveToRoom } = require("./util_beheavor");
+const { avoidSourceKeeper } = require("./util_costCallBacks");
 
 /**
  * 
@@ -7,6 +8,15 @@ const { moveToRoom } = require("./util_beheavor")
  * @returns 
  */
 const role_expend_claimer = (creep) => {
+
+  // if (creep.memory.manual === true && creep.memory.flagName) {
+  //   if (!Game.flags[creep.memory.flagName]) {
+  //     return
+  //   }
+
+  //   creep.moveTo(Game.flags[creep.memory.flagName], { costCallback: avoidSourceKeeper })
+  //   return
+  // }
 
   moveToRoom(creep, creep.memory.workRoom, true);
 
@@ -19,7 +29,7 @@ const role_expend_claimer = (creep) => {
   if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
     creep.moveTo(creep.room.controller, { reusePath: 50 })
   }
- 
+
 }
 
 module.exports = role_expend_claimer

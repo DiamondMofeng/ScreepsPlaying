@@ -1,4 +1,5 @@
 const { IGNORE_CREEPS } = require("./util_consts")
+const { avoidSourceKeeper } = require("./util_costCallBacks")
 
 
 /**
@@ -334,18 +335,20 @@ function moveAndHarvest(creep, target) {
  * @param {Array} resourceTypes - 未指定时转移所有资源
  * 
  */
-function moveAndTransfer(creep, container, resourceTypes = []) {
+function moveAndTransfer(creep, container, resourceTypes = [], moveOpt = {}) {
 
   let moveResult
   let transferResult
 
+  moveOpt.ignoreCreeps = moveOpt.ignoreCreeps || IGNORE_CREEPS
   //若给定类型了则按类型transfer
   if (resourceTypes.length > 0) {
 
     for (rt of resourceTypes) {
-      if (creep.transfer(container, rt) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(container, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
-        return
+      let transferResult = creep.transfer(container, rt)
+      if (transferResult == ERR_NOT_IN_RANGE) {
+        creep.moveTo(container, { ...moveOpt, reusePath: 50 })
+        return transferResult
       }
     }
 
@@ -353,13 +356,13 @@ function moveAndTransfer(creep, container, resourceTypes = []) {
 
     for (rt in creep.store) {
 
-      let transferResult = creep.transfer(container, rt)
+      transferResult = creep.transfer(container, rt)
 
       // console.log(transferResult)
 
       if (transferResult == ERR_NOT_IN_RANGE) {
-        creep.moveTo(container, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
-        return
+        creep.moveTo(container, { ...moveOpt, reusePath: 50 })
+        return transferResult
       }
     }
   }
@@ -435,7 +438,11 @@ function moveToRoom(creep, roomName, oneStep = false, safe = false) {
   // }
 
   if (creep.room.name !== roomName) {
-    let moveRes = creep.moveTo(new RoomPosition(25, 25, roomName))
+    if (safe) {
+      var moveRes = creep.moveTo(new RoomPosition(25, 25, roomName), { costCallback: avoidSourceKeeper })
+    } else {
+      var moveRes = creep.moveTo(new RoomPosition(25, 25, roomName))
+    }
     // console.log(creep, 'moveRes: ', moveRes);
     return false;
   }

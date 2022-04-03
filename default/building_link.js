@@ -14,7 +14,7 @@ const buildingRoleLink = (link) => {
     upgrade
   */
 
-  const MIN_ENERGY = 500
+  const MIN_ENERGY = 300
 
   //* 若有冷却则不继续进行
   if (link.cooldown > 0) {

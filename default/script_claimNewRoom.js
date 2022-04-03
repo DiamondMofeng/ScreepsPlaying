@@ -36,19 +36,25 @@ const claimNewRoom = (flag, spawn, targetRoom, opt = {}) => {
 
   if (!flag) {
     //找不到旗子或者旗子.room不是undefined(),或房间已被占领
+    console.log('找不到旗子' + flag)
     return
   }
 
+  let expend_claimer = 'expend_claimer_' + targetRoom
+  let expend_builder = 'expend_builder_' + targetRoom
 
-  expend_claimer = 'expend_claimer_' + targetRoom
-  expend_builder = 'expend_builder_' + targetRoom
-
-  spawnName = targetRoom + '_0'
-
+  let spawnName = targetRoom + '_0'
 
 
+  if (Game.spawns[spawnName] == undefined) {
+    spawnByMinNumber(spawn.name, expend_builder, body([WORK, 15, CARRY, 10, MOVE, 25]), 2,
+      {
+        workRoom: targetRoom
+      })
+  }
 
-  if (_.isUndefined(flag.room) || flag.room.controller.owner.username !== C.myName) {
+
+  if (_.isUndefined(flag.room) || (flag.room.controller && flag.room.controller.owner.username !== C.myName)) {
 
     spawnByMinNumber(spawn.name, expend_claimer, body([TOUGH, 4, MOVE, 4, CLAIM, 1, MOVE, 1]), 1,
       {
@@ -57,12 +63,6 @@ const claimNewRoom = (flag, spawn, targetRoom, opt = {}) => {
 
   }
 
-  if (Game.spawns[spawnName] == undefined) {
-    spawnByMinNumber(spawn.name, expend_builder, body([WORK, 15, CARRY, 10, MOVE, 25]), 2,
-      {
-        workRoom: targetRoom
-      })
-  }
 
 
   if (flag.room) {

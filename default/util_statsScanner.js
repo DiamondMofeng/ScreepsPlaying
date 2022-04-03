@@ -79,7 +79,7 @@ const statsScanner = function () {
     Memory.stats.store = {}
     for (let room of Object.values(Game.rooms)) {
 
-        if (!room.controller.my) continue;
+        if (!room.controller || !room.controller.my) continue;
 
         Memory.stats.rcl[room.name] = {}
         Memory.stats.rclLevel[room.name] = {}

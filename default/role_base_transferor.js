@@ -179,8 +179,8 @@ var role_base_transferor = {
       else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000) {
 
         //storage->terminal
-        getEnergyFromStorage(creep)
-        creep.transfer(terminal, RESOURCE_ENERGY)
+        moveAndWithdraw(creep, storage)
+        moveAndTransfer(creep, terminal)
         setDoing(creep, 'storage->terminal')
 
         return

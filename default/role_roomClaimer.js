@@ -1,4 +1,5 @@
 const { moveToRoom } = require("./util_beheavor")
+const { avoidSourceKeeper } = require("./util_costCallBacks")
 
 /**
  * pionner将前往flag所在房间，采集资源并进行建造
@@ -6,21 +7,21 @@ const { moveToRoom } = require("./util_beheavor")
  */
 const role_roomClaimer = (creep) => {
 
-  if(creep.getActiveBodyparts(HEAL)>0){
+  if (creep.getActiveBodyparts(HEAL) > 0) {
     creep.heal(creep)
   }
 
   if (creep.memory.manual === true) {
     let flagName = ''
     let targetRoom = ''
-    creep.moveTo(Game.flags[creep.memory.flagName], { reusePath: 50 })
+    creep.moveTo(Game.flags[creep.memory.flagName], { reusePath: 50, costCallback: avoidSourceKeeper })
     return
   }
   else {
 
     let workRoom = creep.memory.workRoom
     if (creep.room.name !== workRoom) {
-      moveToRoom(creep, workRoom)
+      moveToRoom(creep, workRoom, true, true)
     }
 
     else if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {

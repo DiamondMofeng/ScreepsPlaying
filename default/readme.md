@@ -6,7 +6,6 @@ todo list:
 
 - [ ] 优化过多使用的find  
 - [ ] spawn队列   
-- [ ] 对穿  
 - [ ] 用任务为repair,sweepper提供目标，避免一直find
 
 
@@ -23,6 +22,8 @@ todo list:
 - [ ] optimize high CPU use roles: sweeper：使用Object.keys reverse来替代优先队列
 
 - [ ] ?
+   
+- [x] 对穿  
 
 BUG list:
 

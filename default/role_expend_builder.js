@@ -1,4 +1,5 @@
-const { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } = require("./util_beheavor")
+const { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } = require("./util_beheavor");
+const { avoidSourceKeeper } = require("./util_costCallBacks");
 
 
 /**
@@ -7,6 +8,18 @@ const { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } = require("./util
  * @returns 
  */
 const role_expend_builder = (creep) => {
+
+
+  // if (creep.memory.manual === true && creep.memory.flagName) {
+  //   if (!Game.flags[creep.memory.flagName]) {
+  //     console.log(creep, '找不到', flagName)
+  //     return
+  //   }
+
+  //   creep.moveTo(Game.flags[creep.memory.flagName], { costCallback: avoidSourceKeeper })
+  //   return
+  // }
+
 
   moveToRoom(creep, creep.memory.workRoom, true);
 

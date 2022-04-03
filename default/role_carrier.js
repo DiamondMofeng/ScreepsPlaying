@@ -113,12 +113,15 @@ var roleCarrier = {
         if (priorTargets.length) {
 
           let closest = creep.pos.findClosestByPath(priorTargets)
-          creep.memory.target = { id: closest.id, stype: closest.structureType }
+          if (closest && closest.id && closest.structureType) {
+            creep.memory.target = { id: closest.id, structureType: closest.structureType }
+
+          }
           // console.log('CarrierTarget' + priorTarget)
 
           if (creep.transfer(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             let moveRes = creep.moveTo(closest, { ignoreCreeps: IGNORE_CREEPS, visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
-            console.log('moveRes: ', moveRes);
+            // console.log('moveRes: ', moveRes);
 
           }
 

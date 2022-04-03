@@ -243,31 +243,11 @@ const controller_spawns = (spawnName) => {
   spawnByMinNumber(spawnName, 'sweepper', body([CARRY, 8, MOVE, 8]), 1)
   // //}
 
-
-
-
-  //! LONG //////////////
-
-
-
-
-  // //spawn long_carrier
-  // spawnByMinNumber(spawnName, 'long_carrier', body([WORK, 1, CARRY, 10, MOVE, 6]), 2)
-
-  // //spawn long_harvester
-  // spawnByMinNumber(spawnName, 'long_harvester', body([WORK, 8, CARRY, 1, MOVE, 4]), 1)
-
-  // //spawn long_pionner
-  // // spawnByMinNumber(spawnName,'long_pionner', body([WORK, 5, CARRY, 5, MOVE, 5]), 0)
-
-  // //spawn long_claimer
-  // spawnByMinNumber(spawnName, 'long_reserver', body([CLAIM, 2, MOVE, 1]), 1)
-
   //! BASE //////////////////
 
   //spawn Base_transeror
   spawnByMinNumber(spawnName, 'base_transferor', body([CARRY, 10, MOVE, 10]), 1, {}
-    , { directions: [RIGHT, BOTTOM_RIGHT] }
+    , {}
   )
 
 
