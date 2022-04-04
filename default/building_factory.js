@@ -24,3 +24,5 @@ const buildingRoleFactory = (factory) => {
 
 }
 module.exports = buildingRoleFactory
+
+//minCut
