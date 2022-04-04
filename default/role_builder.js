@@ -31,7 +31,7 @@ var roleBuilder = {
 			if (creep.memory.building) {
 				let cts = _.groupBy(creep.room.cts, ct => ct.structureType);
 				let targets = []
-				const priorties_cts = [STRUCTURE_STORAGE, STRUCTURE_TOWER, STRUCTURE_EXTENSION,]
+				const priorties_cts = [STRUCTURE_STORAGE, STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_LINK, STRUCTURE_EXTENSION,]
 
 
 

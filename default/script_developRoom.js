@@ -606,10 +606,14 @@ const placeCT = (flag, rcl) => {
 
   let CTs = CTinfos(flag, rcl)
   console.log('CTs: ', CTs);
-  for ({ x, y, type } of CTs) {
-    if (type == STRUCTURE_SPAWN) {
+  for (let s of CTs) {
+    if (!(s.x && s.y && s.type)) {
       continue
     }
+    if (s.type == STRUCTURE_SPAWN) {
+      continue
+    }
+    let { x, y, type } = s
     // console.log('flag.room.: ', flag.room, x, y, type);
     flag.room.createConstructionSite(x, y, type)
   }
@@ -658,7 +662,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
   }
 
 
-  
+
 
 
 
@@ -762,7 +766,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
       break;
     case 7:
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
 
       spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
 

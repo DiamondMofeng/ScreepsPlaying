@@ -112,7 +112,11 @@ var roleCarrier = {
           , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL])(targets)
         if (priorTargets.length) {
 
-          let closest = creep.pos.findClosestByPath(priorTargets)
+          // if (creep.name == 'carrier_W11N8_37208296') {
+          //   console.log(priorTargets)
+          // }
+
+          let closest = creep.pos.findClosestByPath(priorTargets, { ignoreCreeps: true })
           if (closest && closest.id && closest.structureType) {
             creep.memory.target = { id: closest.id, structureType: closest.structureType }
 

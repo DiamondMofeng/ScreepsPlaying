@@ -3,7 +3,7 @@
  * 
  * @param {StructureTerminal} terminal 
  */
-const buildingRoleLink = (terminal) => {
+const Terminal = (terminal) => {
 
   let store = terminal.store;
   if (store[RESOURCE_ENERGY] > 50 * 1000) {
@@ -26,4 +26,4 @@ const buildingRoleLink = (terminal) => {
 
   //Game.rooms['W17N15'].terminal.send('K',50*1000,'E31S54')
 }
-module.exports = buildingRoleLink
+module.exports = Terminal

@@ -124,7 +124,7 @@ const spawnByMinNumber = (spawnName, roleName, bodyArray, minNumber, otherMemory
 function getCPUCost(func, ...args) {
   // console.log(func)
   let startCPU = Game.cpu.getUsed()
-  let res = func(args)
+  let res = func(...args)
   let endCPU = Game.cpu.getUsed()
 
   let costTime = endCPU - startCPU

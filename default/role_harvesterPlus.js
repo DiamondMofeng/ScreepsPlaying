@@ -1,5 +1,6 @@
 const { pickUpNearbyDroppedEnergy, workingStatesKeeper, setDoing } = require("./util_beheavor")
 const { startWith } = require("./util_helper")
+const C = require("./util_consts")
 
 //when spawn, add memory of certain source position to go , and bind with this source.
 //出生时绑定指定能量源，并指定工作坐标（待完成）
@@ -73,7 +74,7 @@ var roleHarvesterPlus = {
             }
             else {
               if (creep.moveTo(container, { noPathFinding: true }) == ERR_NOT_FOUND) {
-                creep.moveTo(container)
+                creep.moveTo(container, { ignoreCreeps: C.IGNORE_CREEPS })
               }
             }
           }
@@ -95,11 +96,11 @@ var roleHarvesterPlus = {
           if (currentHarvesters.length > 0) {
             continue
           } else {
-            creep.moveTo(container, { reusePath: 50 })
+            creep.moveTo(container, { reusePath: 50, ignoreCreeps: C.IGNORE_CREEPS })
           }
         }
         else {
-          let moveResult = creep.moveTo(s, { reusePath: 10 })
+          let moveResult = creep.moveTo(s, { reusePath: 10, ignoreCreeps: C.IGNORE_CREEPS })
           if (moveResult === ERR_NO_PATH) {
             continue
           }
@@ -217,7 +218,7 @@ var roleHarvesterPlus = {
 
           else if (!container) {
             setDoing(creep, 'help building')
-            let cts = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 1)
+            let cts = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES)
             if (cts.length > 0) {
               creep.build(cts[0])
             }

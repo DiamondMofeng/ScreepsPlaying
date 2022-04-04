@@ -30,6 +30,12 @@ const customPrototypes = require('./util_customPrototypes')()
 const mountSimpleDuichuan = require("./Mofeng极简对穿")
 mountSimpleDuichuan()
 
+const mountCLI = require('./util_cli')
+mountCLI();
+
+const mountWhiteList = require('./util_whiteList')
+mountWhiteList()
+
 const keepCreeps = require("./script_keepCreeps")
 
 
@@ -51,7 +57,6 @@ module.exports.loop = function () {
   controller_spawns('Spawn1')
 
   broadcaster()
-  statsScanner();
 
   //!
 
@@ -100,6 +105,7 @@ module.exports.loop = function () {
   keepCreeps('E28N3', {})
 
 
+  statsScanner();
   console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());
 
 
