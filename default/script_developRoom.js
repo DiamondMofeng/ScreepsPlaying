@@ -780,7 +780,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
       else {
         placeCT(flag, rcl)
       }
-
+Game.market.createOrder()
 
       break;
     case 7:
