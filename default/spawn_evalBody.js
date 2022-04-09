@@ -94,10 +94,16 @@ const evalBody_carrier_halfEnergy = (spawnName, opt = {}) => {
   let i;
   if (haveRoad) {
     i = curEnergy / 150 / 2
+    if (i > 50 / 3) {
+      i = 50 / 3
+    }
     return body([CARRY, i, MOVE, 2 * i])
 
   } else {
     i = curEnergy / 100 / 2 //1w1c1m = 200
+    if (i > 50 / 2) {
+      i = 50 / 2
+    }
     return body([CARRY, i, MOVE, i])
 
   }

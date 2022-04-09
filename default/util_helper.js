@@ -2,6 +2,30 @@
 
 
 
+
+
+//使用 _.groupBy选出ref最优先的target,若未满足匹配则返回原数组
+function priorityFilter(targets, ref, priority, returnFirst = true) {
+  let result = []
+  let targetsGroupBy = _.groupBy(targets, ref)
+  for (let i = 0; i < priority.length; i++) {
+    let priorityName = priority[i]
+    if (targetsGroupBy[priorityName]) {
+      if (returnFirst) {
+        return targetsGroupBy[priorityName][0]
+      }
+      result = result.concat(targetsGroupBy[priorityName])
+    }
+  }
+  return result
+
+}
+
+//自动生成代码
+
+
+
+
 /**
    * 输入简化版bodyArray来获取完全版。part可以为字符串或数组
    * @param {Array} simpleBodyArray - [part: String|Array , i, ...] i为'part'的重复次数
@@ -26,9 +50,10 @@ function body(simpleBodyArray) {
     }
     else {
       i++
-      for (; next > 0; next--) {
-        result = result.concat(PART)
-      }
+      // for (; next > 0; next--) {
+      //   result = result.concat(PART)
+      // }
+      result = result.concat(new Array(Math.floor(next)).fill(PART))
     }
   }
   return result

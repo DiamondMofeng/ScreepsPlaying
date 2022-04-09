@@ -60,7 +60,26 @@ const mountCLI = function () {
 
   }
   
+  global.dealAll = function (orderID, roomName) {
+    let amount = Game.market.getOrderById(orderID).remainingAmount
+    return Game.market.deal(orderID, amount, roomName)
+  }
 
+  global.findCheapestOrder = function (resourceType,roomName) {
+    let orders = Game.market.getAllOrders({ type: ORDER_BUY, resourceType: resourceType })
+    let minPrice = Infinity
+    let minOrder = null
+    for (let order of orders) {
+      if (order.price < minPrice) {
+        minPrice = order.price
+        minOrder = order
+      }
+    }
+    if (minOrder) {
+      console.log(minOrder.price, minOrder.remainingAmount, minOrder.roomName)
+      return minOrder
+    }
+  }
 
 }
 

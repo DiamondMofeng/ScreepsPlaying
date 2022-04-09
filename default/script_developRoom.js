@@ -406,6 +406,24 @@ const CTinfos = (flag, rcl, locate = true) => {
         { type: STRUCTURE_FACTORY, x: x + 1, y: y },
 
         { type: STRUCTURE_SPAWN, x: x, y: y - 4 }, //2 at 7
+
+        //* 基地内的路 在这时修建 右上和右下部分
+
+        //右上
+        { x: x + 5, y: y - 4, type: STRUCTURE_ROAD },
+        { x: x + 5, y: y - 2, type: STRUCTURE_ROAD },
+        { x: x + 4, y: y - 3, type: STRUCTURE_ROAD },
+        { x: x + 3, y: y - 4, type: STRUCTURE_ROAD },
+        { x: x + 3, y: y - 2, type: STRUCTURE_ROAD },
+        { x: x + 2, y: y - 1, type: STRUCTURE_ROAD },
+
+        //右下
+        { x: x + 6, y: y + 5, type: STRUCTURE_ROAD },
+        { x: x + 5, y: y + 4, type: STRUCTURE_ROAD },
+        { x: x + 4, y: y + 3, type: STRUCTURE_ROAD },
+        { x: x + 3, y: y + 2, type: STRUCTURE_ROAD },
+        { x: x + 2, y: y + 1, type: STRUCTURE_ROAD },
+
       ])
     case 6:
       CTs = CTs.concat([
@@ -607,7 +625,7 @@ const placeCT = (flag, rcl) => {
   let CTs = CTinfos(flag, rcl)
   console.log('CTs: ', CTs);
   for (let s of CTs) {
-    if (!(s.x && s.y && s.type)) {
+    if (!(s && s.x && s.y && s.type)) {
       continue
     }
     if (s.type == STRUCTURE_SPAWN) {
@@ -766,11 +784,11 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
       break;
     case 7:
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK, 20, CARRY, 2, MOVE, 11]), 1)
 
       spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
 
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
+      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
 
       spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
 
