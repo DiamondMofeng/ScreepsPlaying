@@ -16,7 +16,6 @@ const { cleanInvaderCore } = require("./script_invaderCore")
 
 
 
-const proto_creep = require("./proto_creep")
 const roomBuildingPlanner = require("./util_roomBuildingPlanner")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
@@ -26,6 +25,8 @@ const statsScanner = require("./util_statsScanner")
 const findCache = require("./util_cache_find")()
 const customPrototypes = require('./util_customPrototypes')()
 
+const proto_creep = require("./proto_creep")
+proto_creep()
 
 const mountSimpleDuichuan = require("./Mofeng极简对穿")
 mountSimpleDuichuan()
@@ -46,7 +47,6 @@ module.exports.loop = function () {
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
 
-  proto_creep()
 
 
 
@@ -84,16 +84,10 @@ module.exports.loop = function () {
 
   // try {
   developNewRoom('expend1', 'W11N8')
-  // } catch (error) {
-
-  // }
-
-  // try {
   developNewRoom('expend2', 'W9N7')
-  // } catch (error) {
 
-  // }
-
+  keepCreeps('E28N3', {})
+  keepCreeps('W17N15', {})
 
 
   // buildEnergyBase('W17N15_0', 'W17N14')
@@ -102,7 +96,6 @@ module.exports.loop = function () {
 
   // cleanInvaderCore('W17N14', 'W17N15')
 
-  keepCreeps('E28N3', {})
 
 
   statsScanner();

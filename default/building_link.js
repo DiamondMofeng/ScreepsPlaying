@@ -16,14 +16,7 @@ const buildingRoleLink = (link) => {
 
   const MIN_ENERGY = 300
 
-  //* 若有冷却则不继续进行
-  if (link.cooldown > 0) {
-    return
-  }
-  //* 若能量小于MIN_ENERGY(500)则不进行传输
-  if (link.store[RESOURCE_ENERGY] < MIN_ENERGY) {
-    return
-  }
+
 
   let RM = link.room.memory//方便快速访问
 
@@ -62,6 +55,17 @@ const buildingRoleLink = (link) => {
   }
 
   //* 若已定义memory.type:
+
+  //* 若有冷却则不继续进行
+  if (link.cooldown > 0) {
+    return
+  }
+  //* 若能量小于MIN_ENERGY(500)则不进行传输
+  if (link.store[RESOURCE_ENERGY] < MIN_ENERGY) {
+    return
+  }
+
+
 
   let type = link.Rmemory.type
 

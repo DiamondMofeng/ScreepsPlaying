@@ -4,6 +4,8 @@
  */
 const whiteList = new Set([
 
+  // 'Invader', //for test
+
   '6g3y',
   //A
   'Appassionata',

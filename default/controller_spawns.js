@@ -170,20 +170,20 @@ const controller_spawns = (spawnName) => {
   //   return
   // }
 
-  //! 临时
-  spawnByMinNumber('W17N15_0', 'harvesterPlus2', evalBody_harvester('W17N15_0'), 2)
+  // //! 临时
+  // spawnByMinNumber('W17N15_0', 'harvesterPlus2', evalBody_harvester('W17N15_0'), 2)
 
-  spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 2)
-  // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
+  // spawnByMinNumber('W17N15_0', 'carrier2', body([CARRY, 4, MOVE, 2]), 2)
+  // // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 4, CARRY, 4, MOVE, 4]), 2)
 
-  spawnByMinNumber('W17N15_0', 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 10]), 1)
-  // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 2, CARRY, 2, MOVE, 4]), 2)
-  if (Game.getObjectById('5bbcb24140062e4259e93823').mineralAmount > 0) {
+  // spawnByMinNumber('W17N15_0', 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 10]), 1)
+  // // spawnByMinNumber('W17N15_0', 'builder2', body([WORK, 2, CARRY, 2, MOVE, 4]), 2)
+  // if (Game.getObjectById('5bbcb24140062e4259e93823').mineralAmount > 0) {
 
-    spawnByMinNumber('W17N15_0', 'miner22', body([WORK, 5, CARRY, 5, MOVE, 5]), 1)
-  }
+  //   spawnByMinNumber('W17N15_0', 'miner22', body([WORK, 5, CARRY, 5, MOVE, 5]), 1)
+  // }
 
-  spawnByMinNumber('W17N15_0', 'base_transferor', body([CARRY, 6, MOVE, 1]), 1,)
+  // spawnByMinNumber('W17N15_0', 'base_transferor', body([CARRY, 6, MOVE, 1]), 1,)
 
 
 

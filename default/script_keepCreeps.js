@@ -115,12 +115,9 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       break;
     case 7:
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
-
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK, 15, CARRY, 2, MOVE, 6]), 1)
       spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
-
+      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
       spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
 
       if (room.mineral.mineralAmount > 0) {
@@ -132,6 +129,19 @@ const keepCreeps = (targetRoom, opt = {}) => {
       }
       break;
     case 8:
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK, 1, CARRY, 1, MOVE, 1]), 1)
+      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
+      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
+      spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
+      if (room.mineral.mineralAmount > 0) {
+        spawnByMinNumber(spawnName, 'miner_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 1)
+      }
+
+      if (room.cts && room.cts.length > 0) {
+        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
+      }
+
+
       break;
   }
 }

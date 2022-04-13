@@ -1,3 +1,4 @@
+const keepCreeps = require("./script_keepCreeps")
 const { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy } = require("./spawn_evalBody")
 const C = require("./util_consts")
 const { spawnByMinNumber, body } = require("./util_helper")
@@ -679,12 +680,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
     return
   }
 
-
-
-
-
-
-
+  keepCreeps(targetRoom)
 
   let rcl = Game.rooms[targetRoom].controller.level
   switch (rcl) {
@@ -694,12 +690,8 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
       break;
     case 2:
 
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName, { haveRoad: false }), 5)
-      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
 
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName, { haveRoad: false }), 1)
       } else {
         placeCT(flag, rcl)
       }
@@ -709,12 +701,8 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
       break;
     case 3:
 
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 5)
-      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
 
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       } else {
         placeCT(flag, rcl)
       }
@@ -724,17 +712,7 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
     case 4:
 
 
-
-
-
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
-
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
-
-      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       } else {
         placeCT(flag, rcl)
       }
@@ -744,16 +722,8 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
       break;
     case 5:
 
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
-
-      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
-
-
 
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       }
       else {
         placeCT(flag, rcl)
@@ -762,39 +732,17 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
       break;
     case 6:
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 4)
 
-      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 2)
-
-      spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
-
-      if (flag.room.mineral.mineralAmount > 0) {
-        spawnByMinNumber(spawnName, 'miner_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 1)
-      }
 
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       }
       else {
         placeCT(flag, rcl)
       }
-Game.market.createOrder()
 
       break;
     case 7:
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK, 20, CARRY, 2, MOVE, 11]), 1)
 
-      spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
-
-      spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
-
-      spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
-
-      if (flag.room.mineral.mineralAmount > 0) {
-        spawnByMinNumber(spawnName, 'miner_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 1)
-      }
 
       if (flag.room.cts && flag.room.cts.length > 0) {
         spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)

@@ -199,8 +199,11 @@ var role_base_transferor = {
     //* 保持terminal里面至多有100*1000能量
 
     if (terminal.store[RESOURCE_ENERGY] > 100000) {
-      moveAndTransfer(creep, storage)
+
       moveAndWithdraw(creep, terminal)
+      moveAndTransfer(creep, storage)
+
+
 
       setDoing(creep, 'terminal->storage')
 
