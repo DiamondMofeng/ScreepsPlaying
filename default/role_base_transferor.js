@@ -164,7 +164,7 @@ var role_base_transferor = {
         return
 
       }
-      else if (link_storage.store[RESOURCE_ENERGY] > 500 && link_controller.store[RESOURCE_ENERGY] > 400) {
+      else if (link_storage.store[RESOURCE_ENERGY] >= 500 && link_controller.store[RESOURCE_ENERGY] > 400) {
 
         //link storage -> storage
         moveAndWithdraw(creep, link_storage)
@@ -176,7 +176,8 @@ var role_base_transferor = {
 
         return
       }
-      else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000) {
+      else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000
+        && storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50 * 1000) {
 
         //storage->terminal
         moveAndWithdraw(creep, storage)

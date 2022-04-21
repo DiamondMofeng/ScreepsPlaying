@@ -10,6 +10,10 @@ const task_powerSpawn = (creep) => {
   if (creep.room.controller.level < 8) {
     return
   }
+  
+  if (creep.room.storage && creep.room.storage.store['energy'] < 100000) {
+    return
+  }
 
   const PS_ID = '_PS_ID'
 

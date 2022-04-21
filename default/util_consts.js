@@ -8,6 +8,8 @@ const C = {
   RM: {
     CONTAINERS: 'containers',
     LINKS: 'links',
+
+    SPAWN_QUEUE: 'spawnQueue',
   },
 
   IGNORE_CREEPS: true

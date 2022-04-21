@@ -16,24 +16,51 @@ const C = require("./util_consts")
 
 const customPrototypes = () => {
 
+  //* 全建筑定义
+  Object.defineProperties(Structure.prototype, {
+    /**
+     * Rmemory -> Memory.rooms[this.room.name][this.structureType][this.id]
+     */
+    Rmemory: {
+      get() {
+        if (_.isUndefined(Memory.rooms[this.room.name])) {
+          Memory.rooms[this.room.name] = {}
+        }
+        if (_.isUndefined(Memory.rooms[this.room.name][this.structureType])) {
+          Memory.rooms[this.room.name][this.structureType] = {}
+        }
+        if (_.isUndefined(Memory.rooms[this.room.name][this.structureType][this.id])) {
+          Memory.rooms[this.room.name][this.structureType][this.id] = {}
+        }
+        return Memory.rooms[this.room.name][this.structureType][this.id]
+      },
+      set(value) { Memory.rooms[this.room.name][this.structureType][this.id] = value },
+      configurable: true,
+      enumerable: true
+    },
+  })
+
+  
 
   //* LINK
-  Object.defineProperty(StructureLink.prototype, 'Rmemory', {
-    get() {
-      if (_.isUndefined(Memory.rooms[this.room.name])) {
-        Memory.rooms[this.room.name] = {}
-      }
-      if (_.isUndefined(Memory.rooms[this.room.name][C.RM.LINKS])) {
-        Memory.rooms[this.room.name][C.RM.LINKS] = {}
-      }
-      if (_.isUndefined(Memory.rooms[this.room.name][C.RM.LINKS][this.id])) {
-        Memory.rooms[this.room.name][C.RM.LINKS][this.id] = {}
-      }
-      return Memory.rooms[this.room.name][C.RM.LINKS][this.id]
-    },
-    set(value) { Memory.rooms[this.room.name][C.RM.LINKS][this.id] = value },
-    configurable: true,
-    enumerable: true
+  Object.defineProperties(StructureLink.prototype, {
+    // Rmemory: {
+    //   get() {
+    //     if (_.isUndefined(Memory.rooms[this.room.name])) {
+    //       Memory.rooms[this.room.name] = {}
+    //     }
+    //     if (_.isUndefined(Memory.rooms[this.room.name][C.RM.LINKS])) {
+    //       Memory.rooms[this.room.name][C.RM.LINKS] = {}
+    //     }
+    //     if (_.isUndefined(Memory.rooms[this.room.name][C.RM.LINKS][this.id])) {
+    //       Memory.rooms[this.room.name][C.RM.LINKS][this.id] = {}
+    //     }
+    //     return Memory.rooms[this.room.name][C.RM.LINKS][this.id]
+    //   },
+    //   set(value) { Memory.rooms[this.room.name][C.RM.LINKS][this.id] = value },
+    //   configurable: true,
+    //   enumerable: true
+    // }
   })
 
 
@@ -113,9 +140,11 @@ const customPrototypes = () => {
 
   //* ROOM
   Object.defineProperties(Room.prototype, {
-    /**
-     * 直接获取mineral对象
-     */
+
+
+
+
+    /* 直接获取mineral对象 */
     mineral: {
       get() {
         if (!this.memory._mineralID) {
