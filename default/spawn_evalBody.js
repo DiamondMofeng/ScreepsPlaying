@@ -56,10 +56,13 @@ const evalBody_worker_halfEnergy = (spawnName, opt = {}) => {
   let i;
   if (!haveRoad) {
     i = curEnergy / 250 / 2
+    if (i * 4 > 50) { i = 50 / 4 }
+
     return body([WORK, i, CARRY, i, MOVE, 2 * i])
 
   } else {
     i = curEnergy / 200 / 2 //1w1c1m = 200
+    if (i * 3 > 50) { i = 50 / 3 }
     return body([WORK, i, CARRY, i, MOVE, i])
 
   }
