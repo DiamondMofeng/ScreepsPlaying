@@ -15,9 +15,18 @@ const evalBody_harvester = (spawnName, opt = {}) => {
   let minBody = { w: 1, c: 1, m: 1 }
   let maxBody = { w: 7, c: 1, m: 1 }
 
+  //TODO 比较拖慢效率，待优化
+  if (room.controller.isPowerEnabled == true) {
+    let pcs = room.find(FIND_POWER_CREEPS).find(pc => pc.powers[PWR_REGEN_SOURCE] != undefined)
+    if (pcs) {
+      let pwrLevel = pcs.powers[PWR_REGEN_SOURCE].level
+      maxBody.w = Math.ceil(maxBody.w + (pwrLevel * 1.6))
+    }
+  }
+
   let w = Math.floor((curEnergy - 100) / 100)
-  if (w >= 7) {
-    w = 7
+  if (w > maxBody.w) {
+    w = maxBody.w
   }
 
   let m = Math.floor((curEnergy - 50 - 100 * w) / 50)

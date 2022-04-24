@@ -39,6 +39,16 @@ mountWhiteList()
 
 const keepCreeps = require("./script_keepCreeps")
 
+const playground = require("./test_playground")
+try {
+  // playground.injectRoomTracker()
+  // playground.test()
+
+} catch (error) {
+
+}
+
+
 
 module.exports.loop = function () {
 
@@ -46,8 +56,14 @@ module.exports.loop = function () {
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
+  try {
+    // playground.injectRoomTracker()
+    // playground.test()
+    // playground.temp()
 
+  } catch (error) {
 
+  }
 
 
   getCPUCost(controller_creeps)
