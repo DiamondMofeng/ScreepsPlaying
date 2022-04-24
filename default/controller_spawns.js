@@ -195,7 +195,7 @@ const controller_spawns = (spawnName) => {
   memoryResources(spawn.room.name)
 
 
-  if (spawnByMinNumber(spawnName, 'harvesterPlus', body([WORK, 7, CARRY, 1, MOVE, 4]), 2)) {
+  if (spawnByMinNumber(spawnName, 'harvesterPlus', body(evalBody_harvester(spawnName)), 2)) {
     return
   }
   // else return

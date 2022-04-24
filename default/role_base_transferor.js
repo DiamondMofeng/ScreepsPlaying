@@ -3,6 +3,7 @@ const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStat
 const { task_powerSpawn } = require('./task_powerSpawn')
 
 const C = require('./util_consts')
+const task_factory = require('./task_factory')
 
 
 
@@ -141,6 +142,11 @@ var role_base_transferor = {
     //* Tasks
     if (task_powerSpawn(creep) == 'return') {
       setDoing(creep, 'power')
+      return
+    }
+
+    if (task_factory(creep) == 'return') {
+      setDoing(creep, 'factory')
       return
     }
 
