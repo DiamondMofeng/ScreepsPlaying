@@ -14,7 +14,8 @@ const buildingRoleFactory = (factory) => {
   // }
 
   if (Game.time % 10 == 0) {
-    factory.produce(RESOURCE_UTRIUM_BAR);
+    // factory.produce(RESOURCE_UTRIUM_BAR);
+    factory.produce(RESOURCE_ENERGY)
   }
 
 
