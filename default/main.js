@@ -49,6 +49,16 @@ module.exports.loop = function () {
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
+  //*临时放到这里，到时候挪走
+  //*clean the dead(experiod)
+  for (var name in Memory.creeps) {
+    if (!Game.creeps[name]) {
+      delete Memory.creeps[name];
+      console.log('Clearing non-existing creep memory:', name);
+    }
+  }
+
+
 
 
   try {
@@ -112,7 +122,7 @@ module.exports.loop = function () {
   // try {
   developNewRoom('expend1', 'W11N8')
   developNewRoom('expend2', 'W9N7')
-  
+
   keepCreeps('W12N16', {})
   keepCreeps('E28N3', {})
   keepCreeps('W17N15', {})

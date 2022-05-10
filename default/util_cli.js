@@ -22,14 +22,13 @@ const mountCLI = function () {
     let toRoomName = toRoom.name || toRoom
     let terminal = Game.rooms[fromRoomName].terminal
     if (!terminal) {
-      console.log(fromRoom, '没有terminal')
-      return
+      return `${fromRoom}没有terminal`
     }
     let result = terminal.send(resource, amount, toRoomName, 'TEST')
     if (result == OK) {
-      console.log('发送成功')
+      return '发送成功'
     } else {
-      console.log('发送失败')
+      return '发送失败'
     }
 
   }
@@ -83,7 +82,7 @@ const mountCLI = function () {
 
 
   global.sendEnergy = function (fromRoom, toRoom, amount) {
-    let costUnit = 1 + Game.market.calcTransactionCost(1000, fromRoom, toRoom)/1000
+    let costUnit = 1 + Game.market.calcTransactionCost(1000, fromRoom, toRoom) / 1000
 
     let canSendAmound = Math.floor(amount / costUnit)
 
@@ -107,10 +106,18 @@ const mountCLI = function () {
 
 
 
-
+  global.clearAllSpawnQueue = function () {
+    for (let room of Object.values(Game.rooms)) {
+      if (room.controller && room.controller.my) {
+        if (room.memory.spawnQueue) {
+          delete room.memory.spawnQueue
+        }
+      }
+    }
+    return "已清除所有房间的spawnQueue"
+  }
 
 }
-
 module.exports = mountCLI
 
 

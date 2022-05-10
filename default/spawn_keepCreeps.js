@@ -12,62 +12,81 @@ const {
 
 
 
+/*
+
+roleCounts包括spawning,living,spawnQueue中的数量。
+
+若房间中统计的指定roleCounts的creep数量小于minNumber，则counts+=1，并将指定role的creep推入spawnQueue
+
+
+缓存部分：
+由countCreepsByRole获取总的{room:{role:number}}对象。定时更新一次。
+
+
+
+*/
+
+
 /**
- * 
- * @param {Room} room 
+ * 统计全球的creep,role数量
  * @returns {Object} counts - {role: count}
  */
-function countCreepsByRole(room) {
-  let counts = {}
-  //统计现有的creeps
-  for (let creep of room.find(FIND_MY_CREEPS)) {
-    if (!counts[creep.memory.role]) {
-      counts[creep.memory.role] = 0
+function countAllCreepsByRole() {
+
+  let counts = global.creepCountsByRoom
+  if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= C.TIME_INTERVAL_COUNT_CREEPS) {
+    counts = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
+    for (let roomName in counts) {
+      counts[roomName] = _.countBy(counts[roomName], c => c.memory.role);
     }
-    counts[creep.memory.role] += 1
+
+
+    for (let roomName in Game.rooms) {
+      if (!counts[roomName]) {
+        counts[roomName] = {}
+      }
+
+      for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
+        if (!counts[roomName][creepToSpawn.memory.role]) {
+          counts[roomName][creepToSpawn.memory.role] = 0
+        }
+        counts[roomName][creepToSpawn.memory.role] += 1
+      }
+    }
+
+    global.creepCountsByRoom = { ...counts, lastUpdate: Game.time }
   }
 
-  //统计spawn队列中的creeps
-  for (let creep of room.spawnQueue) {
-    if (!counts[creep.memory.role]) {
-      counts[creep.memory.role] = 0
-    }
-    counts[creep.memory.role] += 1
-  }
-  return counts
-
-  // if (!global.creepCountsByRoom || Game.time % C.TIME_INTERVAL_COUNT_CREEPS == 0) {
-  //   global.creepCountsByRoom = _.groupBy(Game.creeps, (creep) => creep.room)
-  //   for (let room in Object.values(global.creepCountsByRoom)) {
-  //     global.creepCountsByRoom[room] = _.groupBy(global.creepCountsByRoom[room], c => c.memory.role)
-  //   }
-  // }
-
-  // return global.creepCountsByRoom[room]
+  return global.creepCountsByRoom
 
 }
 
 
+// /**
+//  * 获取room内role的creep数量
+//  * @param {Room} room 
+//  */
+// function getCreepCountsByRole(room) {
+
+//   if (_.isUndefined(room.memory.creepCounts)
+//     || _.isUndefined(room.memory.creepCounts.lastUpdate)
+//     // || Game.time - room.memory.creepCounts.lastUpdate > C.TIME_INTERVAL_COUNT_CREEPS
+//   ) {
+
+//     room.memory.creepCounts = { ...countCreepsByRole(room), lastUpdate: Game.time }
+//   }
+
+//   if (room.memory.creepCounts) {
+//     return room.memory.creepCounts
+//   }
+//   else {
+//     // console.log(`unable to get creep counts for ${room}`)
+//     return
+//   }
+// }
+
 /**
- * 
- * @param {Room} room 
- */
-function getCreepCountsByRole(room) {
-
-
-
-  if (Game.time % C.TIME_INTERVAL_COUNT_CREEPS == 0 || !room.memory.creepCounts) {
-    room.memory.creepCounts = countCreepsByRole(room)
-  }
-
-  if (room.memory.creepCounts) {
-    return room.memory.creepCounts
-  }
-
-}
-
-/**
- * 
+ * 通过role获取creep的spawn优先级
  * @param {String} role 
  */
 function getCreepSpawnPriorityByRole(role) {
@@ -113,13 +132,23 @@ function spawnByMinNumber(room, role, body = [], minNumber = 0) {
     }
   }
 
-  // console.log('getCreepCountsByRole(room)[role]: ', getCreepCountsByRole(room)[role]);
-  // console.log('minNumber: ', minNumber);
-  if (getCreepCountsByRole(room)[role] >= minNumber) {
+  let counts = countAllCreepsByRole()
+
+  if (!counts[room.name]) {
+    console.log('spawnByMinNumber: room not found', room)
+    return
+  }
+
+  if (counts[room.name][role] >= minNumber) {
     // console.log('spawnByMinNumber: already enough', role, minNumber)
     return
   }
-  getCreepCountsByRole(room)[role] += 1
+
+  if (!counts[room.name][role]) {
+    counts[room.name][role] = 0
+  }
+  counts[room.name][role] += 1
+
 
 
   if (!body.length) {

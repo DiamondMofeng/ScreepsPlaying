@@ -26,7 +26,6 @@ const mountSpawnQueue = () => {
       },
       set(value) { Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = value },
       configurable: true,
-      enumerable: true
     },
 
 
@@ -96,7 +95,7 @@ const mountSpawnQueue = () => {
           let opt
 
 
-          memory = creepToSpawn.memory
+          memory = creepToSpawn.memory || {}
           if (creepToSpawn.role) {
             memory.role = creepToSpawn.role
           }

@@ -40,7 +40,7 @@ const customPrototypes = () => {
     },
   })
 
-  
+
 
   //* LINK
   Object.defineProperties(StructureLink.prototype, {
@@ -141,9 +141,6 @@ const customPrototypes = () => {
   //* ROOM
   Object.defineProperties(Room.prototype, {
 
-
-
-
     /* 直接获取mineral对象 */
     mineral: {
       get() {
@@ -152,8 +149,6 @@ const customPrototypes = () => {
         }
         return Game.getObjectById(this.memory._mineralID)
       },
-      configurable: true,
-      enumerable: true
     }
   })
 
