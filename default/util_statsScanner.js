@@ -73,10 +73,7 @@ const statsScanner = function () {
     stats.gclLevel = Game.gcl.level
     stats.gpl = (Game.gpl.progress / Game.gpl.progressTotal) * 100
     stats.gplLevel = Game.gpl.level
-    // CPU 的当前使用量
-    stats.cpu = Game.cpu.getUsed()
-    // bucket 当前剩余量
-    stats.bucket = Game.cpu.bucket
+
 
     // 预估*GCL*升级所需时间，以string显示
     if (Memory.stats && Memory.stats.gcl) {
@@ -146,9 +143,13 @@ const statsScanner = function () {
         }
     }
 
+    stats.credits = Game.market.credits
 
-
-
+    //放在最后
+    // CPU 的当前使用量
+    stats.cpu = Game.cpu.getUsed()
+    // bucket 当前剩余量
+    stats.bucket = Game.cpu.bucket
 
     Memory.stats = stats;
 

@@ -28,18 +28,13 @@ const customPrototypes = require('./util_customPrototypes')()
 const proto_creep = require("./proto_creep")
 proto_creep()
 
-const mountSimpleDuichuan = require("./Mofeng极简对穿")
-mountSimpleDuichuan()
+const mountAll = require("./mountAll")
+mountAll()
 
-const mountCLI = require('./util_cli')
-mountCLI();
-
-const mountWhiteList = require('./util_whiteList')
-mountWhiteList()
-
-const keepCreeps = require("./script_keepCreeps")
+const keepCreeps = require("./spawn_keepCreeps")
 
 const playground = require("./test_playground")
+const worldVisual = require("./util_worldVisual")
 try {
   // playground.injectRoomTracker()
   // playground.test()
@@ -49,17 +44,35 @@ try {
 }
 
 
-
 module.exports.loop = function () {
+
 
 
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
 
+
+
   try {
     // playground.injectRoomTracker()
     // playground.test()
     // playground.temp()
+
+
+    let lowest = "E28N3"
+    for (let room in Memory.stats.energy) {
+      if (Memory.stats.energy[room] < Memory.stats.energy[lowest] && ["W12N16", "W17N15", "W9N7"].indexOf(room) == -1) {
+        lowest = room;
+      }
+
+    }
+    sendEnergy('W12N16', lowest, 75000)
+    sendEnergy('W17N15', lowest, 75000)
+
+
+
+
+
 
   } catch (error) {
 
@@ -68,7 +81,7 @@ module.exports.loop = function () {
 
   getCPUCost(controller_creeps)
 
-  controller_buildings()
+  getCPUCost(controller_buildings)
 
   controller_spawns('Spawn1')
 
@@ -105,6 +118,7 @@ module.exports.loop = function () {
   keepCreeps('E28N3', {})
   keepCreeps('W17N15', {})
 
+  getCPUCost(worldVisual)
 
   // buildEnergyBase('W17N15_0', 'W17N14')
   // guardRoom('W17N14')

@@ -16,7 +16,6 @@ const { spawnByMinNumber, body } = require("./util_helper")
  */
 const keepCreeps = (targetRoom, opt = {}) => {
 
-  //* 默认此时已建好spawn，根据flag的位置和rcl自动摆放建筑、生产creep
 
 
   let room = Game.rooms[targetRoom]
@@ -115,7 +114,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       break;
     case 7:
-      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK, 15, CARRY, 2, MOVE, 6]), 1)
+      spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK,20, CARRY, 2, MOVE, 11]), 2)
       spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
       spawnByMinNumber(spawnName, 'carrier_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
       spawnByMinNumber(spawnName, 'base_transferor_' + targetRoom, evalBody_carrier_halfEnergy(spawnName), 1)
@@ -128,6 +127,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
         spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       }
       break;
+
     case 8:
       spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, body([WORK, 1, CARRY, 1, MOVE, 1]), 1)
       spawnByMinNumber(spawnName, 'harvesterPlus_' + targetRoom, evalBody_harvester(spawnName), 2)
@@ -140,7 +140,6 @@ const keepCreeps = (targetRoom, opt = {}) => {
       if (room.cts && room.cts.length > 0) {
         spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       }
-
 
       break;
   }

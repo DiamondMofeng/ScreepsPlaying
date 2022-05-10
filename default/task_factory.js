@@ -4,7 +4,7 @@ const { moveAndTransfer, moveAndWithdraw } = require("./util_beheavor")
 
 const task_factory = (creep) => {
 
-  const IS_WORK = true
+  const IS_WORK = false
 
   const FACTORY_ID = '_FACTORY_ID'
 

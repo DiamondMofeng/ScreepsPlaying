@@ -28,7 +28,6 @@ function controller_buildings() {
         PowerSpawn(s)
       }
     }
-
     catch (e) {
       console.log('!!!!!!!!!!!!ERROR FOUND IN ' + s + ' CONTROLL!!!!!!!!!' + e)
 

@@ -24,6 +24,8 @@ const evalBody_harvester = (spawnName, opt = {}) => {
     }
   }
 
+  maxBody.m = Math.ceil((maxBody.w + maxBody.c) / 2)
+
   let w = Math.floor((curEnergy - 100) / 100)
   if (w > maxBody.w) {
     w = maxBody.w
@@ -32,8 +34,8 @@ const evalBody_harvester = (spawnName, opt = {}) => {
   let m = Math.floor((curEnergy - 50 - 100 * w) / 50)
   if (m < 0) {
     m = 1
-  } else if (m >= 4) {
-    m = 4
+  } else if (m >= maxBody.m) {
+    m = maxBody.m
   }
 
   if (w >= 1) {

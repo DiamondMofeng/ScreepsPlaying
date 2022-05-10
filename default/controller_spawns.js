@@ -233,7 +233,7 @@ const controller_spawns = (spawnName) => {
   }
 
   //* spawn Upgrader
-  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 1, CARRY, 2, MOVE, 3]), 1)
+  spawnByMinNumber(spawnName, 'upgrader', body([WORK, 1, CARRY, 1, MOVE, 1]), 1)
 
 
   //* spawn Sweepper

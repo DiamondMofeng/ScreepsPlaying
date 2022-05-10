@@ -29,6 +29,18 @@ function powerCreep_new() {
       }
     }
 
+    if (pc.powers[PWR_OPERATE_STORAGE] && pc.powers[PWR_OPERATE_STORAGE].cooldown == 0) {
+      let storage = pc.room.storage
+      if (storage) {
+        if (pc.usePower(PWR_OPERATE_STORAGE, storage) == ERR_NOT_IN_RANGE) {
+          pc.moveTo(storage)
+          continue;
+        }
+      }
+    }
+
+
+
   }
 
 }

@@ -54,6 +54,7 @@ function body(simpleBodyArray) {
       //   result = result.concat(PART)
       // }
       result = result.concat(new Array(Math.floor(next)).fill(PART))
+      
     }
   }
   return result

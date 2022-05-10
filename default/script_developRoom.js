@@ -1,4 +1,4 @@
-const keepCreeps = require("./script_keepCreeps")
+const keepCreeps = require("./spawn_keepCreeps")
 const { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy } = require("./spawn_evalBody")
 const C = require("./util_consts")
 const { spawnByMinNumber, body } = require("./util_helper")
@@ -269,7 +269,7 @@ const locateSomething_byAux = (room, starter) => {
     if (_.filter(nearbyStructures, s => s.structureType == STRUCTURE_CONTAINER).length == 0) {
       containerPos_controller.push({ x: cPath[cPath.length - 2].x, y: cPath[cPath.length - 2].y, type: STRUCTURE_CONTAINER })
     }
-    if (_.filter(nearbyStructures, s => s.structureType == STRUCTURE_LINK == 0).length) {
+    if (_.filter(nearbyStructures, s => s.structureType == STRUCTURE_LINK).length == 0) {
       linkPos_controller.push({ x: cPath[cPath.length - 1].x, y: cPath[cPath.length - 1].y, type: STRUCTURE_LINK })
     }
   }
@@ -619,7 +619,7 @@ const CTinfos = (flag, rcl, locate = true) => {
  */
 const placeCT = (flag, rcl) => {
 
-  if (Game.time % 100 != 0) {
+  if (Game.time % 10000 != 0) {
     return
   }
 
@@ -752,7 +752,16 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
       }
       break;
     case 8:
+
+      if (flag.room.cts && flag.room.cts.length > 0) {
+        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
+      }
+      else {
+        placeCT(flag, rcl)
+      }
       break;
+
+
   }
 
 
