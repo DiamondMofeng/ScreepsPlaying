@@ -82,18 +82,15 @@
  * 
  * @param {StructureSpawn} spawn 
  */
-const roleSpawn = (spawn) => {
+const Spawn = (spawn) => {
+
+  if (spawn.spawning) {
+    return;
+  }
 
   spawn.spawnFromQueue()
 
-  // let spawnQueue = spawn.room.spawnQueue
-
-  // if (spawnQueue.length > 0) {
-  //   // let f = spawnQueue.shift()
-  // }
-
-
 }
-module.exports = roleSpawn
+module.exports = Spawn
 
 //StructureSpawn spawnQueue

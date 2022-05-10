@@ -25,9 +25,6 @@ const statsScanner = require("./util_statsScanner")
 const findCache = require("./util_cache_find")()
 const customPrototypes = require('./util_customPrototypes')()
 
-const proto_creep = require("./proto_creep")
-proto_creep()
-
 const mountAll = require("./mountAll")
 mountAll()
 
@@ -35,6 +32,7 @@ const keepCreeps = require("./spawn_keepCreeps")
 
 const playground = require("./test_playground")
 const worldVisual = require("./util_worldVisual")
+const showVisuals = require("./util_visuals")
 try {
   // playground.injectRoomTracker()
   // playground.test()
@@ -83,7 +81,7 @@ module.exports.loop = function () {
 
   getCPUCost(controller_buildings)
 
-  controller_spawns('Spawn1')
+  // controller_spawns('Spawn1')
 
   broadcaster()
 
@@ -114,10 +112,12 @@ module.exports.loop = function () {
   // try {
   developNewRoom('expend1', 'W11N8')
   developNewRoom('expend2', 'W9N7')
-
+  
+  keepCreeps('W12N16', {})
   keepCreeps('E28N3', {})
   keepCreeps('W17N15', {})
 
+  showVisuals()
   getCPUCost(worldVisual)
 
   // buildEnergyBase('W17N15_0', 'W17N14')

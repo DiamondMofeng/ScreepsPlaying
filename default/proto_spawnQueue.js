@@ -1,7 +1,10 @@
+
+const C = require('util_consts')
+
 /**
  * 用于挂载spawnQueue相关原型方法
  */
-const proto_spawmQueue = () => {
+const mountSpawnQueue = () => {
 
 
 
@@ -33,6 +36,7 @@ const proto_spawmQueue = () => {
      */
     pushToSpawnQueue: {
       value: function (creepToSpawn) {
+
         let queue = this.spawnQueue
         queue.push(creepToSpawn)
         let i = queue.length - 1
@@ -47,6 +51,9 @@ const proto_spawmQueue = () => {
             break
           }
         }
+
+        return 0
+
       },
     },
 
@@ -57,7 +64,7 @@ const proto_spawmQueue = () => {
      */
     currentCreeps: {
       get() {
-        
+
       }
 
     },
@@ -80,13 +87,31 @@ const proto_spawmQueue = () => {
     spawnFromQueue: {
       value: function () {
 
-        let creepToSpawn = getSpawnQueue(this.room)[0]
+        let creepToSpawn = this.room.spawnQueue[0]
         if (creepToSpawn) {
-          let memory = { ...creepToSpawn.memory, role: creepToSpawn.role }
-          let opt = { ...creepToSpawn.opt, memory: memory }
-          let spawnRes = this.spawnCreep(creepToSpawn.body, creepToSpawn.name, { ...opt, dryRun: false })
-          if (spawnRes == OK) {
-            getSpawnQueue(spawn.room).shift()
+
+          let name = creepToSpawn.name ||
+            (creepToSpawn.role || creepToSpawn.memory.role) + Game.time
+          let memory
+          let opt
+
+
+          memory = creepToSpawn.memory
+          if (creepToSpawn.role) {
+            memory.role = creepToSpawn.role
+          }
+          opt = { ...creepToSpawn.opt, memory: memory }
+
+          let spawnRes = this.spawnCreep(creepToSpawn.body, name, { ...opt, dryRun: false })
+          // console.log('spawnRes: ', spawnRes, this);
+          switch (spawnRes) {
+            case OK:
+            case ERR_INVALID_ARGS:
+            case ERR_NAME_EXISTS:
+              this.room.spawnQueue.shift()
+              break
+            case ERR_NOT_ENOUGH_ENERGY:
+              break
           }
           return spawnRes
         }
@@ -100,4 +125,4 @@ const proto_spawmQueue = () => {
 
 }
 
-module.exports = proto_spawmQueue
+module.exports = mountSpawnQueue
