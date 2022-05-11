@@ -111,6 +111,9 @@ function getCreepSpawnPriorityByRole(role) {
   else if (role.startsWith('miner')) {
     return C.PRIORITY_SPAWN_MINER
   }
+  else if (role.startsWith('base_transferor')) {
+    return C.PRIORITY_SPAWN_BASE_TRANSFEROR
+  }
 }
 
 

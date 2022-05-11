@@ -10,20 +10,20 @@
 //   return room.spawnQueue.map((creepToSpawn) => creepToSpawn.name || creepToSpawn.role || creepToSpawn.memory.role)
 // }
 
-const showRoomSpawnQueue = () => {
+const showRoomRoleCounts = () => {
 
   let counts = global.creepCountsByRoom
   for (let room of Object.values(Game.rooms)) {
     let counts = global.creepCountsByRoom[room.name]
     let v = new RoomVisual(room.name)
 
-    let y = 30
+    let y = 25
     for (let roleName in counts) {
-      v.text(`${roleName} : ${counts[roleName]}`, 25, y++, { align: 'center' })
+      v.text(`${roleName} : ${counts[roleName]}`, 40, y++, { align: 'center' })
     }
 
   }
 
 }
 
-module.exports = { showRoomSpawnQueue }
+module.exports = { showRoomRoleCounts }

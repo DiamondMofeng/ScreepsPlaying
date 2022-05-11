@@ -745,7 +745,6 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
 
 
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       }
       else {
         placeCT(flag, rcl)
@@ -754,7 +753,6 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
     case 8:
 
       if (flag.room.cts && flag.room.cts.length > 0) {
-        spawnByMinNumber(spawnName, 'builder_' + targetRoom, evalBody_worker_halfEnergy(spawnName), 2)
       }
       else {
         placeCT(flag, rcl)

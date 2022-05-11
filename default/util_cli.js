@@ -117,6 +117,15 @@ const mountCLI = function () {
     return "已清除所有房间的spawnQueue"
   }
 
+  global.killAllCreeps = function () {
+    for (let name in Game.creeps) {
+      let creep = Game.creeps[name]
+      creep.suicide()
+    }
+  }
+
+
+
 }
 module.exports = mountCLI
 
