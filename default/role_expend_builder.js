@@ -29,23 +29,27 @@ const role_expend_builder = (creep) => {
   }
 
   //* 已到达目标房间
+  let cts = creep.room.find(FIND_CONSTRUCTION_SITES)
 
 
-  workingStatesKeeper(creep, () => tryCollectAnyEnergy(creep), () => {
-    let cts = creep.room.find(FIND_CONSTRUCTION_SITES)
-    if (cts.length > 0) {
-      let ct = cts[0]
-      if (creep.build(ct) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(ct, { reusePath: 50 })
-      }
-    }
-    else {
-      roleUpgrader(creep)
-    }
-  })
-
+  if (cts.length > 0) {
+    workingStatesKeeper(creep,
+      () => tryCollectAnyEnergy(creep),
+      () => {
+        let ct = cts[0]
+        if (creep.build(ct) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(ct, { reusePath: 50 })
+        }
+      })
+  }
+  else {
+    roleUpgrader(creep)
+  }
 
 }
+
+
+
 
 module.exports = role_expend_builder
 

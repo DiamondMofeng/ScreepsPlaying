@@ -19,8 +19,9 @@ const { spawnByMinNumber, body } = require("./util_helper")
  * 前往指定旗子放下spawn
  * @param {Flag|String} flag 
  * @param {StructureSpawn|String} spawn
+ * @param {Boolean} keepHelping 是否保持帮助
  */
-const claimNewRoom = (flag, spawn, opt = {}) => {
+const claimNewRoom = (flag, spawn, keepHelping = false) => {
 
   //TODO 暂时没想到好办法，就加了个targetRoom。到时候想办法去掉这个参数
 
@@ -47,7 +48,7 @@ const claimNewRoom = (flag, spawn, opt = {}) => {
   let spawnName = targetRoom + '_0'
 
 
-  if (Game.spawns[spawnName] == undefined) {
+  if (Game.spawns[spawnName] == undefined || keepHelping === true) {
     spawnByMinNumber(spawn.name, expend_builder, body([WORK, 15, CARRY, 10, MOVE, 25]), 3,
       {
         workRoom: targetRoom

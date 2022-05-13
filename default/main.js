@@ -66,7 +66,7 @@ module.exports.loop = function () {
     // playground.test()
     // playground.temp()
 
-    claimNewRoom('claim_W11N4', 'W9N7_0')
+    claimNewRoom('claim_W11N4', 'W9N7_0', true)
 
 
     // let lowest = "E28N3"
