@@ -674,9 +674,13 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
     return
   }
 
-  let spawnName = targetRoom + '_0'  //TODO 到时候用生产队列代替
+  // let spawnName = targetRoom + '_0'  //TODO 到时候用生产队列代替
 
-  if (Game.spawns[spawnName] == undefined) {
+  // if (Game.spawns[spawnName] == undefined) {
+  //   return
+  // }
+  let room = Game.rooms[targetRoom]
+  if (!room) {
     return
   }
 

@@ -66,16 +66,18 @@ module.exports.loop = function () {
     // playground.test()
     // playground.temp()
 
+    claimNewRoom('claim_W11N4', 'W9N7_0')
 
-    let lowest = "E28N3"
-    for (let room in Memory.stats.energy) {
-      if (Memory.stats.energy[room] < Memory.stats.energy[lowest] && ["W12N16", "W17N15", "W9N7"].indexOf(room) == -1) {
-        lowest = room;
-      }
 
-    }
-    sendEnergy('W12N16', lowest, 75000)
-    sendEnergy('W17N15', lowest, 75000)
+    // let lowest = "E28N3"
+    // for (let room in Memory.stats.energy) {
+    //   if (Memory.stats.energy[room] < Memory.stats.energy[lowest] && ["W12N16", "W17N15", "W9N7"].indexOf(room) == -1) {
+    //     lowest = room;
+    //   }
+
+    // }
+    // sendEnergy('W12N16', lowest, 75000)
+    // sendEnergy('W17N15', lowest, 75000)
 
 
 
@@ -126,6 +128,7 @@ module.exports.loop = function () {
   keepCreeps('W12N16', {})
   keepCreeps('E28N3', {})
   keepCreeps('W17N15', {})
+  keepCreeps('W11N4', {})
 
   showVisuals()
   getCPUCost(worldVisual)

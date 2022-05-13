@@ -1,6 +1,7 @@
 const { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } = require("./util_beheavor");
 const { avoidSourceKeeper } = require("./util_costCallBacks");
 
+const roleUpgrader = require("./role_upgrader")
 
 /**
  * 
@@ -37,6 +38,9 @@ const role_expend_builder = (creep) => {
       if (creep.build(ct) == ERR_NOT_IN_RANGE) {
         creep.moveTo(ct, { reusePath: 50 })
       }
+    }
+    else {
+      roleUpgrader(creep)
     }
   })
 

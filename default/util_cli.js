@@ -124,7 +124,25 @@ const mountCLI = function () {
     }
   }
 
+  global.cleanNonMyRoomMemory = function (sure) {
+    let list = []
+    for (let roomName in Memory.rooms) {
+      if (_.isUndefined(Game.rooms[roomName])) {
+        list.push(roomName);
+      }
+    }
+    if (list.length == 0) {
+      return "no room to clean"
+    }
+    if (sure !== true) {
+      return `!!!!!! ${list} 's memory will be clean! use 'cleanNonMyRoomMemory(true)' to confirm clean!!!!!!`
+    }
 
+    for (let roomName of list) {
+      delete Memory.rooms[roomName]
+    }
+    return `memory of ${list} has been cleaned !!!!!!`
+  }
 
 }
 module.exports = mountCLI

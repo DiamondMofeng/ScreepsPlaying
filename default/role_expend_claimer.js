@@ -27,7 +27,7 @@ const role_expend_claimer = (creep) => {
   //* 已到达目标房间
 
   if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(creep.room.controller, { reusePath: 50 })
+    creep.moveTo(creep.room.controller, { reusePath: 5 })
   }
 
 }

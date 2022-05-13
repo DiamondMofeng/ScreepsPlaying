@@ -1,5 +1,5 @@
 const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal } = require('./util_beheavor')
 
 
 
@@ -65,9 +65,11 @@ var roleBuilder = {
 					}
 				}
 			}
+
 			else {
 				if (
 					getEnergyFromStorage(creep)
+					|| getEnergyFromTerminal(creep)
 					|| getEnergyFromContainer(creep)
 					|| pickUpNearbyDroppedEnergy(creep, 2)
 					|| getEnergyFromWasted(creep, 2)

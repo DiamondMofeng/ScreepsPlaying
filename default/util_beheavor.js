@@ -515,11 +515,12 @@ function getEnergyFromWasted(creep, range = 5) {
  * FIND有能源的Source并过去挖
  * @param {Creep} creep 
  */
-function getEnergyFromHarvest(creep) {
+function getEnergyFromHarvest(creep, isCloest = true) {
   let activeSources = creep.room.find(FIND_SOURCES_ACTIVE)
   if (activeSources.length > 0) {
-    if (creep.harvest(activeSources[0]) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(activeSources[0])
+    let source = isCloest ? creep.pos.findClosestByPath(activeSources) : activeSources[1]
+    if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(source)
     }
     return true;
   }

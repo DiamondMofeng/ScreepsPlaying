@@ -18,7 +18,7 @@ const C = {
 
   RM: {
     CONTAINERS: 'containers',
-    LINKS: 'links',
+    LINKS: 'link',
 
     SPAWN_QUEUE: 'spawnQueue',
   },

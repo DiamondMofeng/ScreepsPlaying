@@ -41,7 +41,11 @@ var roleMiner = {
     else if (CM.doing == state_transfering) {
 
       let storage = creep.room.storage
-      moveAndTransfer(creep, storage)
+      if (storage.store.getFreeCapacity() < 100000) {
+        moveAndTransfer(creep, creep.room.terminal)
+      } else {
+        moveAndTransfer(creep, storage)
+      }
 
       if (creep.store.getUsedCapacity() == 0) {
         setDoing(creep, state_mining)

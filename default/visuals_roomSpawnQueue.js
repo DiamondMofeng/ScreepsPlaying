@@ -12,6 +12,11 @@ const processSpawnQueue = (room) => {
 
 const showRoomSpawnQueue = () => {
   for (let room of Object.values(Game.rooms)) {
+    if (!room.controller || !room.controller.my) {
+      return
+    }
+
+
     let spawnQueue = processSpawnQueue(room)
     let v = new RoomVisual(room.name)
 

@@ -158,7 +158,9 @@ function spawnByMinNumber(room, role, body = [], minNumber = 0) {
     body = evalBodyByRole(room.name, role)
   }
   // let name = role + Game.time
-  let memory = { role: role }
+  let memory = {
+    role: role,
+  }
   let pushRes = room.pushToSpawnQueue({
     // name: name,
     body: body,

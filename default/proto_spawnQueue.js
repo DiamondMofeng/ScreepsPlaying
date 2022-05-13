@@ -18,6 +18,9 @@ const mountSpawnQueue = () => {
     spawnQueue: {
       get() {
         //? 没写是否检查这是自己的房间
+        if (_.isUndefined(Memory.rooms[this.name])) {
+          Memory.rooms[this.name] = {}
+        }
 
         if (_.isUndefined(Memory.rooms[this.name][C.RM.SPAWN_QUEUE])) {
           Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = []
@@ -26,6 +29,7 @@ const mountSpawnQueue = () => {
       },
       set(value) { Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = value },
       configurable: true,
+      enumerable: false
     },
 
 
@@ -99,6 +103,13 @@ const mountSpawnQueue = () => {
           if (creepToSpawn.role) {
             memory.role = creepToSpawn.role
           }
+
+          memory = {
+            ...memory,
+            spawnName: this.name,
+            spawnRoom: this.room.name,
+          }
+
           opt = { ...creepToSpawn.opt, memory: memory }
 
           let spawnRes = this.spawnCreep(creepToSpawn.body, name, { ...opt, dryRun: false })

@@ -19,9 +19,8 @@ const { spawnByMinNumber, body } = require("./util_helper")
  * 前往指定旗子放下spawn
  * @param {Flag|String} flag 
  * @param {StructureSpawn|String} spawn
- * @param {String} targetRoom
  */
-const claimNewRoom = (flag, spawn, targetRoom, opt = {}) => {
+const claimNewRoom = (flag, spawn, opt = {}) => {
 
   //TODO 暂时没想到好办法，就加了个targetRoom。到时候想办法去掉这个参数
 
@@ -40,6 +39,8 @@ const claimNewRoom = (flag, spawn, targetRoom, opt = {}) => {
     return
   }
 
+  let targetRoom = flag.pos.roomName
+
   let expend_claimer = 'expend_claimer_' + targetRoom
   let expend_builder = 'expend_builder_' + targetRoom
 
@@ -47,7 +48,7 @@ const claimNewRoom = (flag, spawn, targetRoom, opt = {}) => {
 
 
   if (Game.spawns[spawnName] == undefined) {
-    spawnByMinNumber(spawn.name, expend_builder, body([WORK, 15, CARRY, 10, MOVE, 25]), 2,
+    spawnByMinNumber(spawn.name, expend_builder, body([WORK, 15, CARRY, 10, MOVE, 25]), 3,
       {
         workRoom: targetRoom
       })
@@ -66,7 +67,7 @@ const claimNewRoom = (flag, spawn, targetRoom, opt = {}) => {
 
 
   if (flag.room) {
-    flag.room.createConstructionSite(flag.pos.x, flag.pos.y - 3, STRUCTURE_SPAWN, spawnName)
+    flag.room.createConstructionSite(flag.pos.x, flag.pos.y, STRUCTURE_SPAWN, spawnName)
     // console.log('flag.room.createConstructionSite(flag.pos.x + 3, flag.pos.y, STRUCTURE_SPAWN, `${flag.room.name}_0`): ', flag.room.createConstructionSite(flag.pos.x + 3, flag.pos.y, STRUCTURE_SPAWN, `${flag.room.name}_0`));
   }
 
