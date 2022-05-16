@@ -66,7 +66,7 @@ module.exports.loop = function () {
     // playground.test()
     // playground.temp()
 
-    claimNewRoom('claim_W11N4', 'W9N7_0', true)
+    // claimNewRoom('claim_W11N4', 'W9N7_0', true)
 
 
     // let lowest = "E28N3"
@@ -128,7 +128,8 @@ module.exports.loop = function () {
   keepCreeps('W12N16', {})
   keepCreeps('E28N3', {})
   keepCreeps('W17N15', {})
-  keepCreeps('W11N4', {})
+
+   keepCreeps('W11N4', {})
 
   showVisuals()
   getCPUCost(worldVisual)

@@ -34,6 +34,7 @@ const role_expend_builder = require('./role_expend_builder')
 const role_expend_claimer = require('./role_expend_claimer')
 const role_scavenger = require('./role_scavenger')
 const powerCreep_new = require('./powerCreep_new')
+const roleWallRepairer = require('./role_wallRepairer')
 
 
 
@@ -64,6 +65,18 @@ function controller_creeps() {
 
       if (!creep.memory.role) {
         continue
+      }
+
+      switch (creep.memory.role) {
+        case 'harvester':
+          Harvester(creep)
+          continue;
+        case 'harvesterPlus':
+          HarvesterPlus(creep)
+          continue;
+        case 'wallRepairer':
+          roleWallRepairer(creep)
+          continue;
       }
 
 

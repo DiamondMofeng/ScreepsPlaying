@@ -293,6 +293,9 @@ function pickUpNearbyDroppedEnergy(creep, range = 1) {
  * @param {Array} resourceTypes an array
  */
 function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], amount) {
+  if (Array.isArray(resourceTypes) == false) {
+    resourceTypes = [resourceTypes]
+  }
   for (rt of resourceTypes) {
 
     var withdrawResult = creep.withdraw(container, rt, amount)
@@ -336,7 +339,9 @@ function moveAndHarvest(creep, target) {
  * 
  */
 function moveAndTransfer(creep, container, resourceTypes = [], moveOpt = {}) {
-
+  if (Array.isArray(resourceTypes) == false) {
+    resourceTypes = [resourceTypes]
+  }
   let moveResult
   let transferResult
 
@@ -536,11 +541,11 @@ function getEnergyFromHarvest(creep, isCloest = true) {
  */
 function tryCollectAnyEnergy(creep, ignore = []) {
 
-  if (getEnergyFromWasted(creep)) return
   if (getEnergyFromContainer(creep)) return
   if (getEnergyFromTerminal(creep)) return
   if (getEnergyFromStorage(creep)) return
   if (getEnergyFromHarvest(creep)) return
+  if (getEnergyFromWasted(creep)) return
 
 }
 

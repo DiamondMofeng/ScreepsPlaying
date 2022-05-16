@@ -151,7 +151,15 @@ var role_base_transferor = {
     }
 
 
-
+    // console.log(link_storage && link_controller == undefined)
+    if (link_storage && link_controller == undefined) {
+      if (link_storage.store[RESOURCE_ENERGY] > 0) {
+        setDoing(creep, 'link_storage -> storage')
+        moveAndWithdraw(creep, link_storage, [RESOURCE_ENERGY])
+        moveAndTransfer(creep, storage, [RESOURCE_ENERGY])
+        return
+      }
+    }
 
 
 
@@ -205,7 +213,7 @@ var role_base_transferor = {
 
     //* 保持terminal里面至多有100*1000能量
 
-    if (terminal.store[RESOURCE_ENERGY] > 100000) {
+    if (terminal && terminal.store[RESOURCE_ENERGY] > 100000) {
 
       moveAndWithdraw(creep, terminal)
       moveAndTransfer(creep, storage)

@@ -26,6 +26,12 @@ roleCounts包括spawning,living,spawnQueue中的数量。
 
 */
 
+const config = {
+  wallRepairer: true,
+}
+
+
+
 
 /**
  * 统计全球的creep,role数量
@@ -251,7 +257,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 2)
 
-
+      spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
       if (room.cts && room.cts.length > 0) {
         spawnByMinNumber(targetRoom, 'builder', evalBody_worker_halfEnergy(targetRoom), 2)
@@ -306,6 +312,12 @@ const keepCreeps = (targetRoom, opt = {}) => {
       if (room.cts && room.cts.length > 0) {
         spawnByMinNumber(targetRoom, 'builder', evalBody_worker_halfEnergy(targetRoom), 2)
       }
+
+
+      if (config.wallRepairer) {
+        spawnByMinNumber(targetRoom, 'wallRepairer', evalBody_worker_halfEnergy(targetRoom), 1)
+      }
+
 
       break;
   }
