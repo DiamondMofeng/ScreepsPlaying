@@ -10,6 +10,10 @@
 //   return room.spawnQueue.map((creepToSpawn) => creepToSpawn.name || creepToSpawn.role || creepToSpawn.memory.role)
 // }
 
+/**
+ * 显示自己所有房间中role的计数
+ * @returns 
+ */
 const showRoomRoleCounts = () => {
 
   let counts = global.creepCountsByRoom

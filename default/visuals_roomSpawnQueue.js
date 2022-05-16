@@ -10,6 +10,11 @@ const processSpawnQueue = (room) => {
   return room.spawnQueue.map((creepToSpawn) => creepToSpawn.name || creepToSpawn.role || creepToSpawn.memory.role)
 }
 
+
+/**
+ * 显示自己所有房间的spawnQueue
+ * @returns 
+ */
 const showRoomSpawnQueue = () => {
   for (let room of Object.values(Game.rooms)) {
     if (!room.controller || !room.controller.my) {

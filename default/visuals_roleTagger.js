@@ -1,3 +1,7 @@
+/**
+ * 在roomName中所有creep下方显示其role。
+ * @param {String} roomName 
+ */
 const roleTagger = (roomName = undefined) => {
   let tagger = new RoomVisual(roomName)
   for (i in Game.creeps) {

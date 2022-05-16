@@ -3,24 +3,19 @@ const controller_buildings = require("./controller_buildings")
 const controller_spawns = require('./controller_spawns')
 
 const broadcaster = require('./util_broadcast')
-const roleTagger = require("./util_roleTagger")
 
 const attack = require('./attack_commend')
 const test = require('./test')
+
 const buildEnergyBase = require('./script_outerEnergyBase_byRoom')
-
 const guardRoom = require('./util_guardRoom')
-
-const roomPlanner = require("./util_roomPlanner")
 const { cleanInvaderCore } = require("./script_invaderCore")
-
-
-
-const roomBuildingPlanner = require("./util_roomBuildingPlanner")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
+
 const { getCPUCost } = require("./util_helper")
 const statsScanner = require("./util_statsScanner")
+
 
 const findCache = require("./util_cache_find")()
 const customPrototypes = require('./util_customPrototypes')()
@@ -31,7 +26,7 @@ mountAll()
 const keepCreeps = require("./spawn_keepCreeps")
 
 const playground = require("./test_playground")
-const worldVisual = require("./util_worldVisual")
+
 const showVisuals = require("./util_visuals")
 try {
   // playground.injectRoomTracker()
@@ -100,12 +95,9 @@ module.exports.loop = function () {
   //!
 
 
-  roleTagger('W12N16')
-  roleTagger('W11N16')
 
   // getCPUCost(roomPlanner, 'W17N15')
 
-  roomBuildingPlanner('expend1')
 
 
   // claimNewRoom('expand3', 'W17N15_0', 'W15N15')
@@ -129,10 +121,9 @@ module.exports.loop = function () {
   keepCreeps('E28N3', {})
   keepCreeps('W17N15', {})
 
-   keepCreeps('W11N4', {})
+  keepCreeps('W11N4', {})
 
   showVisuals()
-  getCPUCost(worldVisual)
 
   // buildEnergyBase('W17N15_0', 'W17N14')
   // guardRoom('W17N14')
