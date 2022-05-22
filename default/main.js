@@ -13,7 +13,7 @@ const { cleanInvaderCore } = require("./script_invaderCore")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
 
-const { getCPUCost } = require("./util_helper")
+const { getCPUCost, body } = require("./util_helper")
 const statsScanner = require("./util_statsScanner")
 
 
@@ -35,7 +35,6 @@ try {
 } catch (error) {
 
 }
-
 
 module.exports.loop = function () {
 
@@ -60,8 +59,26 @@ module.exports.loop = function () {
     // playground.injectRoomTracker()
     // playground.test()
     // playground.temp()
-
     // claimNewRoom('claim_W11N4', 'W9N7_0', true)
+
+    // let spawns = ['w', 'W17N15_0', 'W17N15_1'].map(name => Game.spawns[name])
+    // for (let spawn of spawns) {
+    //   spawn.spawnCreep(body([MOVE, 25, WORK, 15, CARRY, 10]), spawn.name)
+    // }
+
+    // let ccs = ['W17N15_0', 'W17N15_1', 'w'].map(name => Game.creeps[name])
+    // for (let cc of ccs) {
+    //   // if(cc.room.name==Game.flags['expand4'].name){
+    //     cc.memory.role='expend_builder'
+    //     continue
+    //   // }
+
+    //   cc.moveTo(Game.flags['expand4'], {
+    //     reusePath: 50,
+    //     ignoreCreeps: true,
+    //   })
+    // }
+
 
 
     // let lowest = "E28N3"
@@ -103,9 +120,7 @@ module.exports.loop = function () {
   // claimNewRoom('expand3', 'W17N15_0', 'W15N15')
 
 
-  if (Game.cpu.bucket == 10000) {
-    Game.cpu.generatePixel();
-  }
+
 
   // buildEnergyBase('W12N16_1', 'W12N17')
   // guardRoom('W12N17')
@@ -123,7 +138,9 @@ module.exports.loop = function () {
 
   keepCreeps('W11N4', {})
 
-  showVisuals()
+  keepCreeps('E44S59', {})
+
+  showVisuals()   //* VISUAL所有的主入口
 
   // buildEnergyBase('W17N15_0', 'W17N14')
   // guardRoom('W17N14')
@@ -132,11 +149,13 @@ module.exports.loop = function () {
   // cleanInvaderCore('W17N14', 'W17N15')
 
 
-
   statsScanner();
   console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());
 
-
+  //* 暂停产出pixel
+  // if (Game.cpu.bucket == 10000) {
+  //   Game.cpu.generatePixel();
+  // }
 
 
 }

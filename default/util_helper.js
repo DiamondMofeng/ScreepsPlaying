@@ -33,7 +33,9 @@ function priorityFilter(targets, ref, priority, returnFirst = true) {
    */
 function body(simpleBodyArray) {
   let result = []
-
+  if (arguments.length > 1) {
+    simpleBodyArray = arguments
+  }
   for (let i = 0; i < simpleBodyArray.length; i++) {
 
     let PART = simpleBodyArray[i]
@@ -54,7 +56,7 @@ function body(simpleBodyArray) {
       //   result = result.concat(PART)
       // }
       result = result.concat(new Array(Math.floor(next)).fill(PART))
-      
+
     }
   }
   return result

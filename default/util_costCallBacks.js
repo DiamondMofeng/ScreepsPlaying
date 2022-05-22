@@ -45,7 +45,7 @@ const avoidSourceKeeper = (roomName) => {
     return
   }
 
-  let costs = new PathFinder.CostMatrix
+  let costs = new PathFinder.CostMatrix()
 
 
   let hostileCreeps = room.find(FIND_HOSTILE_CREEPS)

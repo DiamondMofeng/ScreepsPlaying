@@ -1,9 +1,16 @@
 //import
 const { targetsPriorizer_byRef } = require('./util_beheavor')
+const C = require('./util_consts')
 
 
+/**
+ * 
+ * @param {StructureTower} tower 
+ * @returns 
+ */
 const roleTower = (tower) => {
 
+  const TOWER_REPIRE_TARGET = 'towerRepaireTarget'
 
   //*有敌人时优先攻击敌人
 
@@ -33,68 +40,89 @@ const roleTower = (tower) => {
 
   if (tower.store[RESOURCE_ENERGY] > 600) {
 
+    if (!tower.room[TOWER_REPIRE_TARGET] && Game.time % C.TIME_INTERVAL_TOWER_REPIRE) {
 
-    //修堡垒:
-    let rampartToRepair = tower.room.find(FIND_STRUCTURES,
-      {
-        filter: s => (s.structureType == STRUCTURE_RAMPART)
-          && (s.hits < 10 * 1000)
-      })
-    // console.log('rampartToRepair:', rampartToRepair)
+      let targets = tower.room.find(FIND_STRUCTURES, {
+        filter: (s) =>
+          (s.structureType == STRUCTURE_RAMPART && s.hits < 10 * 1000)
+          || (s.structureType == STRUCTURE_WALL && s.hits < 10 * 1000)
+          || (s.structureType == STRUCTURE_ROAD && (s.hits / s.hitsMax) < 0.6)
+          || (s.structureType == STRUCTURE_CONTAINER && (s.hits / s.hitsMax) < 0.3)
+
+      });
+
+      if (targets.length > 0) {
+        targets.sort((a, b) => a.hits - b.hits);
+        tower.room[TOWER_REPIRE_TARGET] = targets[0].id;
+      }
 
 
-
-    if (rampartToRepair.length) {
-      let towerRepairResult = tower.repair(rampartToRepair[0])
-      // console.log('Tower repair result:', towerRepairResult)
-      return
+    }
+    if (tower.room[TOWER_REPIRE_TARGET]) {
+      tower.repair(tower.room[TOWER_REPIRE_TARGET]);
     }
 
 
-    //修墙:
-    let wallToRepair = tower.room.find(FIND_STRUCTURES,
-      {
-        filter: s => (s.structureType == STRUCTURE_WALL)
-          && (s.hits < 10 * 1000)
-      })
-    // console.log('rampartToRepair:', rampartToRepair)
+    // * ==============OLD==============
+    // //修堡垒:
+    // let rampartToRepair = tower.room.find(FIND_STRUCTURES,
+    //   {
+    //     filter: s => (s.structureType == STRUCTURE_RAMPART)
+    //       && (s.hits < 10 * 1000)
+    //   })
+    // // console.log('rampartToRepair:', rampartToRepair)
 
 
 
-    if (wallToRepair.length) {
-      let towerRepairResult = tower.repair(wallToRepair[0])
-      // console.log('Tower repair result:', towerRepairResult)
-      return
-    }
-
-    //修路：
-    let roadToRepair = tower.room.find(FIND_STRUCTURES,
-      {
-        filter: s => (s.structureType == STRUCTURE_ROAD)
-          && ((s.hits / s.hitsMax) < 0.6)
-      })
-    // console.log('roadToRepair:', roadToRepair)
+    // if (rampartToRepair.length) {
+    //   let towerRepairResult = tower.repair(rampartToRepair[0])
+    //   // console.log('Tower repair result:', towerRepairResult)
+    //   return
+    // }
 
 
-    if (roadToRepair.length) {
-      let towerRepairResult = tower.repair(roadToRepair[0])
-      // console.log('Tower repair result:', towerRepairResult)
-      return
-    }
+    // //修墙:
+    // let wallToRepair = tower.room.find(FIND_STRUCTURES,
+    //   {
+    //     filter: s => (s.structureType == STRUCTURE_WALL)
+    //       && (s.hits < 10 * 1000)
+    //   })
+    // // console.log('rampartToRepair:', rampartToRepair)
 
 
-    let containerToRepair = tower.room.find(FIND_STRUCTURES,
-      {
-        filter: s => (s.structureType == STRUCTURE_CONTAINER)
-          && ((s.hits / s.hitsMax) < 0.3)
-      })
-    if (containerToRepair.length) {
-      let towerRepairResult = tower.repair(containerToRepair[0])
-      // console.log('Tower repair result:', towerRepairResult)
-      return
-    }
+
+    // if (wallToRepair.length) {
+    //   let towerRepairResult = tower.repair(wallToRepair[0])
+    //   // console.log('Tower repair result:', towerRepairResult)
+    //   return
+    // }
+
+    // //修路：
+    // let roadToRepair = tower.room.find(FIND_STRUCTURES,
+    //   {
+    //     filter: s => (s.structureType == STRUCTURE_ROAD)
+    //       && ((s.hits / s.hitsMax) < 0.6)
+    //   })
+    // // console.log('roadToRepair:', roadToRepair)
 
 
+    // if (roadToRepair.length) {
+    //   let towerRepairResult = tower.repair(roadToRepair[0])
+    //   // console.log('Tower repair result:', towerRepairResult)
+    //   return
+    // }
+
+
+    // let containerToRepair = tower.room.find(FIND_STRUCTURES,
+    //   {
+    //     filter: s => (s.structureType == STRUCTURE_CONTAINER)
+    //       && ((s.hits / s.hitsMax) < 0.3)
+    //   })
+    // if (containerToRepair.length) {
+    //   let towerRepairResult = tower.repair(containerToRepair[0])
+    //   // console.log('Tower repair result:', towerRepairResult)
+    //   return
+    // }
   }
 
 

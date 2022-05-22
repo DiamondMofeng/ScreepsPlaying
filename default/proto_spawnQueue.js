@@ -28,8 +28,6 @@ const mountSpawnQueue = () => {
         return Memory.rooms[this.name][C.RM.SPAWN_QUEUE]
       },
       set(value) { Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = value },
-      configurable: true,
-      enumerable: false
     },
 
 

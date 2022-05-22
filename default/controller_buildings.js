@@ -5,32 +5,41 @@ const PowerSpawn = require('./building_powerSpawn')
 const Spawn = require('./building_spawn')
 
 
+const IS_SHOW_CPU = false
+
 function controller_buildings() {
 
   for (s of Object.values(Game.structures)) {
 
     try {
 
+      let startCPU = Game.cpu.getUsed()
+
       switch (s.structureType) {
         case STRUCTURE_TOWER:
           Tower(s)
           break
-        case 'link':
+        case STRUCTURE_LINK:
           Link(s)
           break
-        case 'factory':
+        case STRUCTURE_FACTORY:
           Factory(s)
           break
-        case 'spawn':
+        case STRUCTURE_SPAWN:
           Spawn(s)
           break
-        case 'powerSpawn':
+        case STRUCTURE_POWER_SPAWN:
           PowerSpawn(s)
           break
         default:
-          break
+          continue
       }
 
+      let endCPU = Game.cpu.getUsed()
+
+      if (IS_SHOW_CPU) {
+        console.log(`${s.structureType} ${s.id} ${endCPU - startCPU}`)
+      }
 
 
       // if (s.structureType == STRUCTURE_TOWER) {
