@@ -35,6 +35,7 @@ const role_expend_claimer = require('./role_expend_claimer')
 const role_scavenger = require('./role_scavenger')
 const powerCreep_new = require('./powerCreep_new')
 const roleWallRepairer = require('./role_wallRepairer')
+const C = require('./util_consts')
 
 
 
@@ -42,15 +43,15 @@ const roleWallRepairer = require('./role_wallRepairer')
 //* functions////////////////////////////////
 
 
-
+const SHOW_CPU_CREEPS = C.config.SHOW_CPU_CREEPS
 
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
 
 function controller_creeps() {
 
 
-  let CPUcounts = []
 
+  let CPUcounts = []
   powerCreep_new()
 
   //* beheavor crontroller
@@ -70,13 +71,13 @@ function controller_creeps() {
       switch (creep.memory.role) {
         case 'harvester':
           Harvester(creep)
-          continue;
+          break;
         case 'harvesterPlus':
           HarvesterPlus(creep)
-          continue;
+          break;
         case 'wallRepairer':
           roleWallRepairer(creep)
-          continue;
+          break;
       }
 
 
@@ -203,7 +204,10 @@ function controller_creeps() {
 
       let endCPU = Game.cpu.getUsed()
 
-      CPUcounts.push({ creep: creep.name, cpu: endCPU - startCPU })
+      if (SHOW_CPU_CREEPS) {
+        CPUcounts.push({ creep: creep.name, cpu: endCPU - startCPU, roomName: creep.room.name })
+      }
+
 
     } catch (e) {
       console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)
@@ -211,11 +215,12 @@ function controller_creeps() {
     }
   }
 
-  // CPUcounts.sort((a, b) => a.cpu - b.cpu)
-  // _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep}:   ${i.cpu}`))
+  if (SHOW_CPU_CREEPS) {
+    CPUcounts.sort((a, b) => a.cpu - b.cpu)
+    _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep} at ${i.roomName} : ${i.cpu}`))
+  }
 
 
-  // console.log('1')
 }
 
 module.exports = controller_creeps;

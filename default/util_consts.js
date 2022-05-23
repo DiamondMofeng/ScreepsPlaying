@@ -1,6 +1,11 @@
 
 const C = {
 
+  config: {
+    SHOW_CPU_CREEPS: false,
+    SHOW_CPU_BUILDINGS: false,
+  },
+
   TIME_INTERVAL_COUNT_CREEPS: 10,
 
   TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET: 500,

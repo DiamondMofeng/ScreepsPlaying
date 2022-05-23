@@ -3,11 +3,14 @@ const Link = require('./building_link')
 const Factory = require('./building_factory')
 const PowerSpawn = require('./building_powerSpawn')
 const Spawn = require('./building_spawn')
+const C = require('./util_consts')
 
 
-const IS_SHOW_CPU = false
+const SHOW_CPU_BUILDINGS = C.config.SHOW_CPU_BUILDINGS
 
 function controller_buildings() {
+
+  let CPUcounts = []
 
   for (s of Object.values(Game.structures)) {
 
@@ -37,8 +40,9 @@ function controller_buildings() {
 
       let endCPU = Game.cpu.getUsed()
 
-      if (IS_SHOW_CPU) {
-        console.log(`${s.structureType} ${s.id} ${endCPU - startCPU}`)
+      if (SHOW_CPU_BUILDINGS) {
+        CPUcounts.push({ structureType: s.structureType, cpu: endCPU - startCPU, roomName: s.room.name })
+        // console.log(`CPU of ${s.structureType} at ${s.room.name} : ${endCPU - startCPU}`)
       }
 
 
@@ -68,6 +72,11 @@ function controller_buildings() {
     }
 
   }
+  if (SHOW_CPU_BUILDINGS) {
+    CPUcounts.sort((a, b) => a.cpu - b.cpu)
+    CPUcounts.forEach(i => console.log(`CPU of ${i.structureType} at ${i.roomName} : ${i.cpu}`))
+  }
+
 }
 
 module.exports = controller_buildings;
