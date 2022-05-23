@@ -36,6 +36,8 @@ try {
 
 }
 
+global.lastOnline = Game.time;  //增添趣味性，但是位置待整理
+
 module.exports.loop = function () {
 
 
@@ -153,9 +155,9 @@ module.exports.loop = function () {
   console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());
 
   //* 暂停产出pixel
-  if (Game.cpu.bucket == 10000) {
-    Game.cpu.generatePixel();
-  }
+  // if (Game.cpu.bucket == 10000) {
+  //   Game.cpu.generatePixel();
+  // }
 
 
 }

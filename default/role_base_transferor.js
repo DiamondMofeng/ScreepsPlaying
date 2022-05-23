@@ -19,8 +19,11 @@ var role_base_transferor = {
    */
   run: function (creep) {
 
-    // creep.say('✔️ ONLINE',true)
-    creep.say('❌ OFFLINE', true)
+    if (global.lastOnline && global.lastOnline > Game.time - 750) {
+      creep.say('✔️ ONLINE', true)
+    } else {
+      creep.say('❌ OFFLINE', true)
+    }
 
     // if (creep.ticksToLive < 500) {
     //   let spawn = Game.spawns[creep.memory.spawnName]

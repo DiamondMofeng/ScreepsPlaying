@@ -144,6 +144,11 @@ const mountCLI = function () {
     return `memory of ${list} has been cleaned !!!!!!`
   }
 
+
+  global.online = function () {
+    global.lastOnline = Game.time
+  }
+
 }
 module.exports = mountCLI
 
