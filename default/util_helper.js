@@ -31,10 +31,10 @@ function priorityFilter(targets, ref, priority, returnFirst = true) {
    * @param {Array} simpleBodyArray - [part: String|Array , i, ...] i为'part'的重复次数
    * @returns {Array} fullBodyArray
    */
-function body(simpleBodyArray) {
+function body(...simpleBodyArray) {
   let result = []
-  if (arguments.length > 1) {
-    simpleBodyArray = arguments
+  if (simpleBodyArray.length == 1) {
+    simpleBodyArray = simpleBodyArray[0]
   }
   for (let i = 0; i < simpleBodyArray.length; i++) {
 
@@ -55,7 +55,15 @@ function body(simpleBodyArray) {
       // for (; next > 0; next--) {
       //   result = result.concat(PART)
       // }
-      result = result.concat(new Array(Math.floor(next)).fill(PART))
+      let toPush = []
+      if (!Array.prototype.flat) {
+        toPush = _.flatten(new Array(Math.floor(next)).fill(PART))
+      }
+      else {
+        toPush = new Array(Math.floor(next)).fill(PART).flat()
+      }
+      result = result.concat(toPush)
+
 
     }
   }

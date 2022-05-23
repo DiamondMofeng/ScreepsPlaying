@@ -10,7 +10,7 @@ const C = require('./util_consts')
  */
 const roleTower = (tower) => {
 
-  const TOWER_REPIRE_TARGET = 'towerRepaireTarget'
+  const TOWER_REPIRE_TARGETS = 'towerRepaireTargets'
 
   //*有敌人时优先攻击敌人
 
@@ -40,7 +40,7 @@ const roleTower = (tower) => {
 
   if (tower.store[RESOURCE_ENERGY] > 600) {
 
-    if (!tower.room[TOWER_REPIRE_TARGET] && Game.time % C.TIME_INTERVAL_TOWER_REPIRE) {
+    if (!tower.room[TOWER_REPIRE_TARGETS] && Game.time % C.TIME_INTERVAL_TOWER_REPIRE == 0) {
 
       let targets = tower.room.find(FIND_STRUCTURES, {
         filter: (s) =>
@@ -52,14 +52,15 @@ const roleTower = (tower) => {
       });
 
       if (targets.length > 0) {
-        targets.sort((a, b) => a.hits - b.hits);
-        tower.room[TOWER_REPIRE_TARGET] = targets[0].id;
+        // targets.sort((a, b) => a.hits - b.hits);
+        tower.room[TOWER_REPIRE_TARGETS] = targets;
       }
 
 
     }
-    if (tower.room[TOWER_REPIRE_TARGET]) {
-      tower.repair(tower.room[TOWER_REPIRE_TARGET]);
+    if (tower.room[TOWER_REPIRE_TARGETS] && tower.room[TOWER_REPIRE_TARGETS].length > 0) {
+      let random = Math.floor(Math.random() * tower.room[TOWER_REPIRE_TARGETS].length)
+      tower.repair(tower.room[TOWER_REPIRE_TARGETS][random]);
     }
 
 

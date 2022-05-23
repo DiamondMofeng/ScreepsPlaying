@@ -220,7 +220,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
       break;
     case 3:
 
-      spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_halfEnergy(targetRoom), 5)
+      spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_fullEnergy(targetRoom), 5)
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 2)
 
@@ -236,7 +236,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
 
 
-      spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_halfEnergy(targetRoom), 4)
+      spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_fullEnergy(targetRoom), 4)
 
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 2)
 
@@ -315,7 +315,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
 
       if (config.wallRepairer) {
-        spawnByMinNumber(targetRoom, 'wallRepairer', evalBody_worker_halfEnergy(targetRoom), 1)
+        spawnByMinNumber(targetRoom, 'wallRepairer', body([CARRY, MOVE], 10, WORK, 10), 1)
       }
 
 
