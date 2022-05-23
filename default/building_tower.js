@@ -11,27 +11,35 @@ const C = require('./util_consts')
 const roleTower = (tower) => {
 
   const TOWER_REPIRE_TARGETS = 'towerRepaireTargets'
+  const TOWER_ATTACK_TARGETS = 'towerAttackTargets'
 
   //*有敌人时优先攻击敌人
 
   // [{ creep }, ...]
-  let enemyTargets = tower.room.find(FIND_HOSTILE_CREEPS)
 
-  if (enemyTargets.length) {
+  if (!tower.room[TOWER_ATTACK_TARGETS]) {
+    tower.room[TOWER_ATTACK_TARGETS] = tower.room.find(FIND_HOSTILE_CREEPS)
+  }
 
-    //*先筛选具有攻击性的
-    let enemiesHasAttack = _.filter(enemyTargets, t => (t.getActiveBodyparts(ATTACK) > 0) || (t.getActiveBodyparts(RANGED_ATTACK) > 0))
 
-    if (enemiesHasAttack.length) {
-      tower.attack(tower.pos.findClosestByRange(enemiesHasAttack))
-      return
-    }
+  if (tower.room[TOWER_ATTACK_TARGETS].length > 0) {
+    let random = Math.floor(Math.random() * tower.room[TOWER_ATTACK_TARGETS].length)
+    let target = tower.room[TOWER_ATTACK_TARGETS][random]
+    tower.attack(target)
 
-    //否则攻击最近的
-    else {
-      tower.attack(tower.pos.findClosestByRange(enemyTargets))
-      return
-    }
+    // //*先筛选具有攻击性的
+    // let enemiesHasAttack = _.filter(tower.room[TOWER_ATTACK_TARGETS], t => (t.getActiveBodyparts(ATTACK) > 0) || (t.getActiveBodyparts(RANGED_ATTACK) > 0))
+
+    // if (enemiesHasAttack.length) {
+    //   tower.attack(tower.pos.findClosestByRange(enemiesHasAttack))
+    //   return
+    // }
+
+    // //否则攻击最近的
+    // else {
+    //   tower.attack(tower.pos.findClosestByRange(tower.room[TOWER_ATTACK_TARGETS]))
+    //   return
+    // }
   }
 
 

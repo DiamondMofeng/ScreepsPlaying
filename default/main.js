@@ -13,7 +13,7 @@ const { cleanInvaderCore } = require("./script_invaderCore")
 const claimNewRoom = require("./script_claimNewRoom")
 const developNewRoom = require("./script_developRoom")
 
-const { getCPUCost, body } = require("./util_helper")
+const { getCPUCost } = require("./util_helper")
 const statsScanner = require("./util_statsScanner")
 
 

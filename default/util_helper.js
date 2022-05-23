@@ -164,25 +164,25 @@ function getCPUCost(func, ...args) {
   let endCPU = Game.cpu.getUsed()
 
   let costTime = endCPU - startCPU
-  console.log(`costCPU: of ${func.name}`, costTime);
+  console.log(`CPU cost of '${func.name}' :`, costTime);
   return res
 }
 
 
 /**
- * 检测str2是否位于str1的起始位置
- * @param {String} str1 全字符串
- * @param {String} str2 要检测的开头
+ * 检测head是否位于str的起始位置
+ * @param {String} str 全字符串
+ * @param {String} head 要检测的开头
  * @returns {boolean}
  */
-function startWith(str1, str2) {
+function startWith(str, head) {
 
-  if (!(typeof str1 == 'string') || !(typeof str2 == 'string')) return false
+  if (!(typeof str == 'string') || !(typeof head == 'string')) return false
 
-  if (str1.length < str2.length) return false
+  if (str.length < head.length) return false
 
-  for (let i = 0; i < str2.length; i++) {
-    if (str1[i] === str2[i]) { continue }
+  for (let i = 0; i < head.length; i++) {
+    if (str[i] === head[i]) { continue }
     else return false
   }
   return true
