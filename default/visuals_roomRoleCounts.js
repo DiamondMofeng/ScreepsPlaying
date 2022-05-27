@@ -17,6 +17,9 @@
 const showRoomRoleCounts = () => {
 
   let counts = global.creepCountsByRoom
+  if (!counts) {
+    return
+  }
   for (let room of Object.values(Game.rooms)) {
     if (!room.controller || !room.controller.my) {
       return

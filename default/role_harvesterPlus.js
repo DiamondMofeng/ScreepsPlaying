@@ -207,6 +207,7 @@ var roleHarvesterPlus = {
 
           setDoing(creep, 'repair container')
           creep.repair(container)
+          return
         }
 
         //! 帮助建container
@@ -225,20 +226,20 @@ var roleHarvesterPlus = {
           creep.transfer(Game.getObjectById(CM.harvester_linkID), RESOURCE_ENERGY)
         }
 
-        //* 否则向container中输入能量
-        else if (CM.harvester_containerID != 'none' && Game.getObjectById(CM.harvester_containerID).store.getFreeCapacity() != 0) {
-          setDoing(creep, 'transfer container')
+        // //* 否则向container中输入能量
+        // else if (CM.harvester_containerID != 'none' && Game.getObjectById(CM.harvester_containerID).store.getFreeCapacity() != 0) {
+        //   setDoing(creep, 'transfer container')
 
-          creep.transfer(Game.getObjectById(CM.harvester_containerID), RESOURCE_ENERGY)
-        }
+        //   creep.transfer(Game.getObjectById(CM.harvester_containerID), RESOURCE_ENERGY)
+        // }
 
-        //* 否则把能量扔地上
+        // //* 否则把能量扔地上
 
-        else {
-          setDoing(creep, 'drop energy')
+        // else {
+        //   setDoing(creep, 'drop energy')
 
-          creep.drop(RESOURCE_ENERGY)
-        }
+        //   creep.drop(RESOURCE_ENERGY)
+        // }
 
 
 

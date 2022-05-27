@@ -315,7 +315,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
 
       if (config.wallRepairer) {
-        spawnByMinNumber(targetRoom, 'wallRepairer', body([[CARRY, MOVE], 10, WORK, 10]), 1)
+        spawnByMinNumber(targetRoom, 'wallRepairer', body([[CARRY, MOVE], 15, WORK, 15]), 1)
       }
 
       if (config.upgrader) {

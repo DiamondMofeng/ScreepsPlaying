@@ -95,7 +95,7 @@ module.exports.loop = function () {
 
 
 
-
+// sendEnergy("W12N16","E17S57",75000)
 
 
   } catch (error) {
