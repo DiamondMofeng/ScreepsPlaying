@@ -30,13 +30,15 @@ const customPrototypes = () => {
           Memory.rooms[this.room.name][this.structureType] = {}
         }
         if (_.isUndefined(Memory.rooms[this.room.name][this.structureType][this.id])) {
-          Memory.rooms[this.room.name][this.structureType][this.id] = {}
+          Memory.rooms[this.room.name][this.structureType][this.id] = {
+            '_id': this.id,
+          }
         }
         return Memory.rooms[this.room.name][this.structureType][this.id]
       },
       set(value) { Memory.rooms[this.room.name][this.structureType][this.id] = value },
       configurable: true,
-      enumerable: true
+      enumerable: false
     },
   })
 

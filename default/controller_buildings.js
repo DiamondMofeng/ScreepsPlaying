@@ -3,6 +3,7 @@ const Link = require('./building_link')
 const Factory = require('./building_factory')
 const PowerSpawn = require('./building_powerSpawn')
 const Spawn = require('./building_spawn')
+const Lab = require('./building_lab')
 const C = require('./util_consts')
 
 
@@ -33,6 +34,9 @@ function controller_buildings() {
           break
         case STRUCTURE_POWER_SPAWN:
           PowerSpawn(s)
+          break
+        case STRUCTURE_LAB:
+          Lab(s)
           break
         default:
           continue
