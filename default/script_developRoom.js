@@ -221,10 +221,10 @@ const locateSomething_byAux = (room, starter) => {
     ]; //! 硬编码
 
     for (let pos of possiblePos) {
-      console.log('terrain.get(pos.x, pos.y) != 1  : ', terrain.get(pos.x, pos.y) != 1);
-      console.log('pos.x !== lastPath.x && pos.y !== lastPath.y: ', pos.x !== lastPath.x && pos.y !== lastPath.y);
+      // console.log('terrain.get(pos.x, pos.y) != 1  : ', terrain.get(pos.x, pos.y) != 1);
+      // console.log('pos.x !== lastPath.x && pos.y !== lastPath.y: ', pos.x !== lastPath.x || pos.y !== lastPath.y);
       if (terrain.get(pos.x, pos.y) != 1    //不是墙
-        && (pos.x !== lastPath.x && pos.y !== lastPath.y)) { //不挡路
+        && (pos.x !== lastPath.x || pos.y !== lastPath.y)) { //不挡路
         linkPos = pos;
         break;
       }
@@ -642,7 +642,7 @@ const placeCT = (flag, rcl) => {
 
 
 const RCL1 = () => {
-  spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, [WORK, MOVE, CARRY, MOVE], 3)
+  // spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, [WORK, MOVE, CARRY, MOVE], 3)
 
 }
 

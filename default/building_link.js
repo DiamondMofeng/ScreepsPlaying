@@ -84,6 +84,10 @@ const buildingRoleLink = (link) => {
 
     for (ID in RM[C.RM.LINKS]) {
       let otherLink = Game.getObjectById(ID)
+      if (otherLink == undefined) {
+        delete RM[C.RM.LINKS][ID]
+        continue
+      }
 
       if (otherLink === link) {
         continue
@@ -105,6 +109,10 @@ const buildingRoleLink = (link) => {
 
     for (ID in RM[C.RM.LINKS]) {
       let otherLink = Game.getObjectById(ID)
+      if (otherLink == undefined) {
+        delete RM[C.RM.LINKS][ID]
+        continue
+      }
       if (otherLink === link) { continue }
 
       if (otherLink.Rmemory.type == 'controller'

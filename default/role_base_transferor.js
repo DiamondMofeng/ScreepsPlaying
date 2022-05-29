@@ -193,7 +193,7 @@ var role_base_transferor = {
 
         return
       }
-      else if (terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000
+      else if (terminal && terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 75 * 1000
         && storage.store.getUsedCapacity(RESOURCE_ENERGY) > 50 * 1000) {
 
         //storage->terminal
