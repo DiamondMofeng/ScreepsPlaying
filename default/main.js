@@ -29,6 +29,7 @@ const playground = require("./test_playground")
 
 const showVisuals = require("./util_visuals")
 const { moveAndWithdraw, moveAndTransfer, workingStatesKeeper } = require("./util_beheavor")
+const attack_dismental = require("./attack_dismental")
 try {
   // playground.injectRoomTracker()
   // playground.test()
@@ -61,23 +62,39 @@ module.exports.loop = function () {
   try {
 
 
+    // attack_dismental('W17N15', 'DIS_1')
+    // attack_dismental('W17N15', 'DIS_2')
+
     // Game.spawns['W17N15_1'].spawnCreep(body([CARRY,MOVE],25),'1')
 
-    let c = Game.creeps['1'];
-    let lab_1 = Game.getObjectById('622384ea76cf3af999ef3eaf')
-    let lab_2 = Game.getObjectById('622395a13e744f7c8714790a')
-    workingStatesKeeper(c,
-      () =>
-        moveAndWithdraw(c, c.room.terminal, ['XZH2O'],),
-      () =>
-        // moveAndTransfer(c, c.room.terminal),
-        moveAndTransfer(c, lab_2, ['XZH2O'],)
-    )
+    // let c = Game.creeps['1'];
+    // let lab_1 = Game.getObjectById('622384ea76cf3af999ef3eaf')
+    // let lab_2 = Game.getObjectById('622395a13e744f7c8714790a')
+    // let lab_3 = Game.getObjectById('6230ebca989c0a15fca1c77c')
+    // let lab_4 = Game.getObjectById('62369d7c813e2d01d47cb71d')
+
+    // let res = 'XZHO2'
+    // workingStatesKeeper(c,
+    //   () =>
+    //     // moveAndWithdraw(c, c.room.terminal, [res],),
+    //     moveAndTransfer(c, c.room.terminal),
+
+    //   () =>
+    //     moveAndTransfer(c, c.room.terminal),
+    //     // moveAndTransfer(c, lab_4, [res],)
+    // )
+
+
+    // // moveAndTransfer(c, lab_2, ['XZH2O'],)
+
+
 
     sendEnergy("W12N16", "W11N4", 80000)
 
 
-  } catch (error) {
+  } catch (e) {
+    console.log(e)
+    console.log(e.stack)
 
   }
 

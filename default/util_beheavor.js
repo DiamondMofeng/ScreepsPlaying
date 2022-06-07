@@ -311,12 +311,18 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], am
   return withdrawResult
 }
 
+
+/**
+ * 
+ * @param {Creep} creep 
+ * @param {StructureLab} lab 
+ */
 function moveAndBoost(creep, lab) {
   if (creep.pos.isNearTo(lab)) {
-    creep.boost(lab)
+    lab.boostCreep(creep)
   }
   else {
-    creep.moveTo(lab, { reusePath: 50 })
+    creep.moveTo(lab, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
   }
 }
 
@@ -558,7 +564,42 @@ function tryCollectAnyEnergy(creep, ignore = []) {
 }
 
 
+/**
+ * 
+ * @param {Creep} creep 
+ * @returns 
+ */
+function isFullBoosted(creep) {
+  return creep.body.every(b => b.boost !== undefined)
+}
 
+/**
+ * 
+ * @param {Creep} creep 
+ * @param {BodyPartConstant} part 
+ */
+function isPartAllBoosted(creep, part) {
+  if (creep.body.some(b => b.type == part && b.boost == undefined)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * 
+ * @param {Creep} creep 
+ * @param {Number} range 
+ */
+function healLower(creep, range = 3) {
+  let targets = creep.pos.findInRange(FIND_MY_CREEPS, range, { filter: c => c.hits < c.hitsMax })
+  if (targets.length > 0) {
+    targets.sort((a, b) => a.hits - b.hits)
+
+    if (creep.heal(targets[0]) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(targets[0])
+    }
+  }
+}
 
 module.exports = {
   getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink,
@@ -569,10 +610,16 @@ module.exports = {
   recycleSelf,
   transferAllToStorage,
   pickUpNearbyDroppedEnergy,
-  moveAndWithdraw, moveAndTransfer, moveAndHarvest,
+
+  moveAndWithdraw, moveAndTransfer, moveAndHarvest, moveAndBoost,
+
   setDoing,
   repireNearbyRoad,
   moveToRoom,
-  workingStatesKeeper
+  workingStatesKeeper,
+
+  isFullBoosted, isPartAllBoosted,
+
+  healLower,
 
 }

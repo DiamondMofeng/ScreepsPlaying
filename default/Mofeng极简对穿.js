@@ -38,6 +38,7 @@ const getPostionByDirection = (curPos, dir) => {
 
 /**
  * 高消耗的对穿，为每个move增加>0.03 CPU成本
+ * TODO 跨房时会导致MOVE出现BUG，暂未修复
  * @param {Creep} creep 
  * @param {RoomPosition} targetPos 
  * @returns 
