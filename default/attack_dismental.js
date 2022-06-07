@@ -137,6 +137,9 @@ const attack_dismental = function (fromRoomName, toFlagName) {
     let desRes = dismentaler.dismantle(target);
     console.log('desRes: ', desRes);
 
+    if (healer.pos.getRangeTo(dismentaler) > 1) {
+      healer.moveTo(dismentaler, { range: 1 });
+    }
     healer.heal(dismentaler);
     healLower(healer, 3);
   }

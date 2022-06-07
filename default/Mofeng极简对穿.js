@@ -50,6 +50,9 @@ const lookAndDuichuan = (creep, targetPos) => {
   // console.log('lookCreeps: ', creep, lookCreeps);
   if (lookCreeps.length > 0) {
     let otherCreep = lookCreeps[0]
+    if(!otherCreep.my){
+      return
+    }
     //如果没有_lastPos则对穿
     //如果对方creep上tick未进行move，则认定为站住的creep，进行对穿
     if (_.isUndefined(otherCreep.memory[CM_LAST_MOVE])

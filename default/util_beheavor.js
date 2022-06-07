@@ -596,8 +596,31 @@ function healLower(creep, range = 3) {
     targets.sort((a, b) => a.hits - b.hits)
 
     if (creep.heal(targets[0]) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(targets[0])
+      // creep.moveTo(targets[0])
     }
+  }
+}
+
+function getOppoDir(dir) {
+  switch (dir) {
+    case TOP:
+      return BOTTOM
+    case BOTTOM:
+      return TOP
+    case LEFT:
+      return RIGHT
+    case RIGHT:
+      return LEFT
+    case TOP_LEFT:
+      return BOTTOM_RIGHT
+    case TOP_RIGHT:
+      return BOTTOM_LEFT
+    case BOTTOM_LEFT:
+      return TOP_RIGHT
+    case BOTTOM_RIGHT:
+      return TOP_LEFT
+    default:
+      return null
   }
 }
 
@@ -621,5 +644,7 @@ module.exports = {
   isFullBoosted, isPartAllBoosted,
 
   healLower,
+  
+  getOppoDir,
 
 }

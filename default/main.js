@@ -30,6 +30,7 @@ const playground = require("./test_playground")
 const showVisuals = require("./util_visuals")
 const { moveAndWithdraw, moveAndTransfer, workingStatesKeeper } = require("./util_beheavor")
 const attack_dismental = require("./attack_dismental")
+const attack_yitiji = require("./attack_yitiji")
 try {
   // playground.injectRoomTracker()
   // playground.test()
@@ -61,27 +62,33 @@ module.exports.loop = function () {
 
   try {
 
-
-    // attack_dismental('W17N15', 'DIS_1')
+    // attack_yitiji('W17N15', 'YTJ_1')
+    attack_dismental('W17N15', 'DIS_1')
     // attack_dismental('W17N15', 'DIS_2')
 
     // Game.spawns['W17N15_1'].spawnCreep(body([CARRY,MOVE],25),'1')
 
-    // let c = Game.creeps['1'];
+    // let c = Game.creeps['base_transferor38882936'];
     // let lab_1 = Game.getObjectById('622384ea76cf3af999ef3eaf')
-    // let lab_2 = Game.getObjectById('622395a13e744f7c8714790a')
-    // let lab_3 = Game.getObjectById('6230ebca989c0a15fca1c77c')
-    // let lab_4 = Game.getObjectById('62369d7c813e2d01d47cb71d')
+    // let lab_2 = Game.getObjectById('622395a13e744f7c8714790a')   //XZH2O
+    // let lab_3 = Game.getObjectById('6230ebca989c0a15fca1c77c')  //XLHO2
+    // let lab_4 = Game.getObjectById('62369d7c813e2d01d47cb71d')  //XZHO2
+    // let lab_5 = Game.getObjectById('6231fc2f1f145966ef20b283')
+    // let res = 'XZH2O'
 
-    // let res = 'XZHO2'
+    // moveAndWithdraw(c, c.room.terminal, [res])
+    // moveAndTransfer(c, lab_2, [res])
+    // moveAndTransfer(c, c.room.terminal)
+
+
     // workingStatesKeeper(c,
     //   () =>
     //     // moveAndWithdraw(c, c.room.terminal, [res],),
     //     moveAndTransfer(c, c.room.terminal),
 
     //   () =>
-    //     moveAndTransfer(c, c.room.terminal),
-    //     // moveAndTransfer(c, lab_4, [res],)
+    //     // moveAndTransfer(c, c.room.terminal),
+    //     moveAndTransfer(c, lab_5, [res])
     // )
 
 
@@ -93,7 +100,7 @@ module.exports.loop = function () {
 
 
   } catch (e) {
-    console.log(e)
+    // console.log(e)
     console.log(e.stack)
 
   }
