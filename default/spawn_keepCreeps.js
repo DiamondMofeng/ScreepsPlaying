@@ -267,7 +267,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       break;
     case 6:
-      spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_halfEnergy(targetRoom), 4)
+      spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_fullEnergy(targetRoom), 4)
 
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
 

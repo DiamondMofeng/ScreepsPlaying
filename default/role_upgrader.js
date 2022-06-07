@@ -49,7 +49,7 @@ var roleUpgrader = {
 
 
       //* 依次从Link,Container,Storage里拿
-      if (getEnergyFromNearbyLink(creep, { range: 3, minCap: 0 })
+      if (getEnergyFromNearbyLink(creep, { range: 4, minCap: 0 })
         || getEnergyFromContainer(creep, { range: 3, })
         || getEnergyFromTerminal(creep)
         || getEnergyFromStorage(creep)

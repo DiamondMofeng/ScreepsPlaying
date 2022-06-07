@@ -29,6 +29,9 @@ const whiteList = new Set([
   //M
   'mcnianyu',
   'Monero',
+  //O
+  'owwwman',
+
   //R
   'RayAidas',
   //S

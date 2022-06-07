@@ -311,6 +311,14 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], am
   return withdrawResult
 }
 
+function moveAndBoost(creep, lab) {
+  if (creep.pos.isNearTo(lab)) {
+    creep.boost(lab)
+  }
+  else {
+    creep.moveTo(lab, { reusePath: 50 })
+  }
+}
 
 /**
  * 输入creep和mineral对象
