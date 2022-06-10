@@ -54,6 +54,11 @@ function countAllCreepsByRole() {
       }
 
       for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
+
+        if (!creepToSpawn.memory || !creepToSpawn.memory.role) {
+          continue;
+        }
+
         if (!counts[roomName][creepToSpawn.memory.role]) {
           counts[roomName][creepToSpawn.memory.role] = 0
         }
@@ -286,7 +291,14 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       break;
     case 7:
-      spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 11]), 2)
+
+      if (room.storage && room.storage.store.energy > 1e5) {
+        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 11]), 2)
+      }
+      else {
+        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 15, CARRY, 2, MOVE, 9]), 1)
+      }
+
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
@@ -315,7 +327,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
 
       if (config.wallRepairer) {
-        spawnByMinNumber(targetRoom, 'wallRepairer', body([[CARRY, MOVE], 10, WORK, 10]), 1)
+        spawnByMinNumber(targetRoom, 'wallRepairer', body([[CARRY, MOVE, WORK], 15]), 1)
       }
 
       if (config.upgrader) {
