@@ -16,36 +16,36 @@
 const mountTaskCenter = () => {
 
   class TaskCenter {
-    constructor(tasks) {
-      this.Tasks = tasks;
+    constructor(_tasks) {
+      this.tasks = _tasks;
     }
 
     addTask(task) {
-      this.Tasks.push(task);
+      this.tasks.push(task);
       //使用priority向上浮动
-      this.Tasks.sort((a, b) => {
+      this.tasks.sort((a, b) => {
         return a.priority - b.priority;
       });
 
     }
     removeTask(taskID) {
-      this.Tasks = this.Tasks.filter(task => task.TaskID != taskID);
+      this.tasks = this.tasks.filter(task => task.TaskID != taskID);
     }
 
     getTaskByID(taskID) {
-      return this.Tasks.find(task => task.TaskID == taskID);
+      return this.tasks.find(task => task.TaskID == taskID);
     }
     getTasksByType(taskType) {
-      return this.Tasks.filter(task => task.TaskType == taskType);
+      return this.tasks.filter(task => task.TaskType == taskType);
     }
     getTasksByCreep(creep) {
-      return this.Tasks.filter(task => task.Creep == creep);
+      return this.tasks.filter(task => task.Creep == creep);
     }
 
   }
 
   Object.defineProperties(Room.prototype, {
-    TaskCenter: {
+    taskCenter: {
       get: function () {
         if (!this.memory.TaskCenter) {
           this.memory.TaskCenter = [];

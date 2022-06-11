@@ -12,7 +12,7 @@ const TASKTYPE_CARRIER = 'carrier'
 const task_carrier = (creep) => {
   if (creep.memory.task == undefined) {
 
-    creep.memory.task = creep.room.TaskCenter.getTasksByType(TASKTYPE_CARRIER)
+    creep.memory.task = creep.room.taskCenter.getTasksByType(TASKTYPE_CARRIER)
 
   }
 

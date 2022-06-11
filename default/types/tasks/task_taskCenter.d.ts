@@ -12,7 +12,7 @@ interface TaskCenter {
 
 
 interface Room {
-  TaskCenter: TaskCenter;
+  taskCenter: TaskCenter;
 }
 
 
