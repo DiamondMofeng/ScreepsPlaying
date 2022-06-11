@@ -117,16 +117,33 @@ const attack_dismental = function (fromRoomName, toFlagName) {
     return;
   }
 
+
+  healer.heal(dismentaler);
+  healLower(healer, 3);
+
+  //靠近
+  if (dismentaler.room.name === healer.room.name) {
+    if (dismentaler.pos.getRangeTo(healer) > 1) {
+      dismentaler.moveTo(healer, { range: 1 });
+      healer.moveTo(dismentaler, { range: 1 });
+      
+    }
+  }
+
+
   //前往地点
   if (flag.pos.getRangeTo(dismentaler) > 1) {
 
     //保持同步移动
     if (dismentaler.fatigue == 0 && healer.fatigue == 0) {
+      // if (dismentaler.pos.getRangeTo(healer) > 1) {
+      //   //跳过移动
+      // } else {
       dismentaler.moveTo(flag);
+      // }
     }
-    healer.moveTo(dismentaler, { ignoreCreeps: true });
-    healer.heal(dismentaler);
-    healLower(healer, 3);
+    healer.moveTo(dismentaler, { ignoreCreeps: false });
+
 
   }
 
