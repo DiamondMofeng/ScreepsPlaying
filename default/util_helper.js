@@ -200,6 +200,43 @@ function priorByRef(targets, ref, priority) {
 
 
 
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function cronRun(func, interval) {
+
+  if (!_.isFunction(func)) {
+    console.log('func is not a function')
+  }
+  if (!_.isNumber(interval)) {
+    // console.log('interval is not a number')
+    return;
+  }
+
+  if (Game.time % interval === 0) {
+    return func()
+  }
+
+
+}
+
+
+/**
+ * 
+ * @param {Function} func 
+ * @returns 
+ */
+function errorIsolater(func) {
+
+  try {
+    return func()
+  }
+  catch (e) {
+    console.log(e.stack)
+  }
+
+}
 
 
 
@@ -207,5 +244,9 @@ function priorByRef(targets, ref, priority) {
 module.exports = {
   body, bodyCost, spawnByMinNumber,
   getCPUCost,
-  startWith
+  startWith,
+
+  randomInt,
+  cronRun,
+  errorIsolater,
 }

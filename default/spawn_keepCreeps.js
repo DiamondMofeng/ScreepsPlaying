@@ -27,7 +27,7 @@ roleCounts包括spawning,living,spawnQueue中的数量。
 */
 
 const config = {
-  wallRepairer: true,
+  wallRepairer: false,
   upgrader: false
 }
 
@@ -317,8 +317,11 @@ const keepCreeps = (targetRoom, opt = {}) => {
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
+
       if (room.mineral.mineralAmount > 0) {
-        spawnByMinNumber(targetRoom, 'miner', evalBody_worker_halfEnergy(targetRoom), 1)
+        if (room.storage && room.storage.store.getFreeCapacity() > 0.2 * 1000 * 1000) {
+          spawnByMinNumber(targetRoom, 'miner', evalBody_worker_halfEnergy(targetRoom), 1)
+        }
       }
 
       if (room.cts && room.cts.length > 0) {
