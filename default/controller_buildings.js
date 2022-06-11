@@ -5,6 +5,7 @@ const PowerSpawn = require('./building_powerSpawn')
 const Spawn = require('./building_spawn')
 const Lab = require('./building_lab')
 const C = require('./util_consts')
+const Observer = require('./building_observer')
 
 
 const SHOW_CPU_BUILDINGS = C.config.SHOW_CPU_BUILDINGS
@@ -37,6 +38,9 @@ function controller_buildings() {
           break
         case STRUCTURE_LAB:
           Lab(s)
+          break
+        case STRUCTURE_OBSERVER:
+          Observer(s)
           break
         default:
           continue

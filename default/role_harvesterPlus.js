@@ -169,6 +169,9 @@ var roleHarvesterPlus = {
 
       //! WORK
 
+      if (_.isUndefined(CM.workParts)) {
+        CM.workParts = creep.getActiveBodyparts(WORK)
+      }
 
 
       const harvestResult = creep.harvest(Game.getObjectById(CM.harvester_sourceID))
@@ -178,7 +181,7 @@ var roleHarvesterPlus = {
       }
 
 
-      if (creep.store.getFreeCapacity(RESOURCE_ENERGY) < creep.getActiveBodyparts(WORK) * 2) {
+      if (creep.store.getFreeCapacity(RESOURCE_ENERGY) < CM.workParts * 2) {
 
         //* 尝试向extension中注入能量
         if (CM.harvester_extensionIDs.length > 0) {
