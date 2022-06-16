@@ -29,7 +29,7 @@ const RoomClaimer = require('./role_roomClaimer')
 const Miner = require('./role_miner')
 
 
-const { startWith } = require('./util_helper')
+const { startWith, getBodyArray } = require('./util_helper')
 const role_expend_builder = require('./role_expend_builder')
 const role_expend_claimer = require('./role_expend_claimer')
 const role_scavenger = require('./role_scavenger')
@@ -46,6 +46,50 @@ const C = require('./util_consts')
 const SHOW_CPU_CREEPS = C.config.SHOW_CPU_CREEPS
 
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
+
+let activePreSpawn = [
+  'carrier',
+  'base_transferor',
+  'harvesterPlus',
+]
+
+
+/**
+ * 
+ * @param {Creep} creep 
+ */
+function addToSpawnQueueBeforeDead(creep) {
+  creep.room.pushToSpawnQueue({
+    name: creep.memory.role + Game.time,
+    role: creep.memory.role,
+    // memory: creep.memory,
+    body: getBodyArray(creep),
+    priority: C.ROLE_TO_PRIORITY[creep.memory.role],
+  })
+}
+
+
+/**
+ * 
+ * @param {Creep} creep 
+ * @returns 
+ */
+function checkShouldPreAddToSpawnQueue(creep) {
+  if (creep.memory.preAddedToSpawnQueue) {
+    return
+  }
+  if (creep.ticksToLive <= creep.body.length * 3) {
+    addToSpawnQueueBeforeDead(creep)
+    creep.memory.preAddedToSpawnQueue = true
+  }
+}
+
+
+
+
+
+//*  /////////////////////////////MAIN入口////////////////////////////////////////////////////////////////////////////////////////
+
 
 function controller_creeps() {
 
@@ -68,6 +112,14 @@ function controller_creeps() {
         continue
       }
 
+      //TODO 先放在这里，待整理
+
+      if (activePreSpawn.indexOf(creep.memory.role) !== -1) {
+        checkShouldPreAddToSpawnQueue(creep)
+      }
+
+
+
       switch (creep.memory.role) {
         case 'harvester':
           Harvester(creep)
@@ -85,8 +137,9 @@ function controller_creeps() {
 
         if (startWith(creep.memory.role, 'harvesterPlus')) {
           HarvesterPlus(creep)
-
-        } else { Harvester(creep) }
+        } else {
+          Harvester(creep)
+        }
       }
 
       if (startWith(creep.memory.role, 'carrier')) {
@@ -117,25 +170,25 @@ function controller_creeps() {
       if (startWith(creep.memory.role, 'long_pionner')) {
         long_Pionner(creep, 'out')
       }
-
+ 
       if (startWith(creep.memory.role, 'long_reserver')) {
         long_Reserver(creep, 'out')
       }
-
+ 
       if (startWith(creep.memory.role, 'long_carrier')) {
         // long_Carrier(creep, Game.getObjectById('6200bf0e9b3fe1ad6927628f'), Game.getObjectById('6200bf0e9b3fe1ad6927628f'))
         long_Carrier(creep
           , '6204d67b3a03e2154eb99bde'
           , '620b405774b79b735e8dcaa4') // normal
-
+ 
       }
-
+ 
       if (startWith(creep.memory.role, 'long_harvester')) {
         // console.log('Game.getObjectById(): ', Game.getObjectById('5bbcac4a9099fc012e6353bc'));
         long_Harvester(creep
           , '6204d67b3a03e2154eb99bde'//container
           , '5bbcac4a9099fc012e6353bc'//source
-
+ 
         )
       }
     */

@@ -18,6 +18,10 @@ const mountSpawnQueue = () => {
     spawnQueue: {
       get() {
         //? 没写是否检查这是自己的房间
+        if(_.isUndefined(Memory.rooms)) {
+          Memory.rooms = {}
+        }
+
         if (_.isUndefined(Memory.rooms[this.name])) {
           Memory.rooms[this.name] = {}
         }
@@ -28,6 +32,7 @@ const mountSpawnQueue = () => {
         return Memory.rooms[this.name][C.RM.SPAWN_QUEUE]
       },
       set(value) { Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = value },
+      enumerable: false,
     },
 
 

@@ -6,7 +6,7 @@ const { randomInt } = require("./util_helper");
  * @param {String[]} fromRoomList - 自己的房间，用于功能
  * @param {String[]} toRoomList - 
  */
-function supportEnergy(fromRoomList, toRoomList) {
+function supportEnergy(fromRoomList, toRoomList, amount = 75 * 1000) {
 
   if (fromRoomList.length == 0 || toRoomList.length == 0) {
     console.log('fromRoomList or toRoomList is empty');
@@ -19,7 +19,7 @@ function supportEnergy(fromRoomList, toRoomList) {
       continue
     }
 
-    if (!fromRoom.terminal || fromRoom.terminal.store[RESOURCE_ENERGY] < 80 * 1000) {
+    if (!fromRoom.terminal || fromRoom.terminal.store[RESOURCE_ENERGY] < amount) {
       continue
     }
 
@@ -27,7 +27,7 @@ function supportEnergy(fromRoomList, toRoomList) {
 
     let toRoomName = toRoomList[randomInt(0, toRoomList.length - 1)];
 
-    sendEnergy(fromRoomName, toRoomName, 75 * 1000)
+    sendEnergy(fromRoomName, toRoomName, amount)
 
   }
 

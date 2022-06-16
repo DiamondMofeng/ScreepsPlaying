@@ -3,6 +3,11 @@ const { moveAndTransfer } = require("./util_beheavor")
 function powerCreep_new() {
   for (pc of Object.values(Game.powerCreeps)) {
 
+    // 若未出生则跳过
+    if (!pc.room) {
+      continue;
+    }
+
     renewPC(pc)
     enablePower(pc, pc.room.name)
     // console.log(pc.name)

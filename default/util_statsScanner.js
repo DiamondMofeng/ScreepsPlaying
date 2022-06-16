@@ -37,10 +37,15 @@ function secondToDateStr_DHMS(sec) {
 const statsScanner = function () {
 
     const FREQUENCY = 20
-    const SECOND_PER_TICK = 3
+    let SECOND_PER_TICK = 3
+    if (Memory.stats && Memory.stats.secondsPerTick) {
+        SECOND_PER_TICK = Memory.stats.secondsPerTick
+    }
 
     // 每 20 tick 运行一次
-    if (Game.time % FREQUENCY) return
+    if (Game.time % FREQUENCY !== 0) {
+        return
+    }
 
 
     /**
@@ -144,6 +149,13 @@ const statsScanner = function () {
     }
 
     stats.credits = Game.market.credits
+
+    //* 统计tick时间
+    if (Memory.stats && Memory.stats.realTime) {
+        let realTimeBetweenFrequency = new Date().getTime() - Memory.stats.realTime
+        stats.secondsPerTick = realTimeBetweenFrequency / FREQUENCY / 1000;
+    }
+    stats.realTime = new Date().getTime()
 
     //放在最后
     // CPU 的当前使用量

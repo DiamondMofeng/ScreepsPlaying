@@ -204,7 +204,7 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-function cronRun(func, interval) {
+function cronRun(interval, func) {
 
   if (!_.isFunction(func)) {
     console.log('func is not a function')
@@ -239,6 +239,66 @@ function errorIsolater(func) {
 }
 
 
+function getRemainingRenewTime(creep, targetTicksToLive = 1500) {
+
+  /*
+  增加目标 creep 的剩余生存时间。目标应在相邻的方格处。spawn 不应忙于孵化过程，且不能包含 CLAIM 身体部件。每次执行都会增加 creep 的计时器，根据此公式按 ticks 数计算：
+
+  floor(600/body_size)
+
+  每次执行所需的能量由以下公式确定:
+
+  ceil(creep_cost/2.5/body_size)
+  */
+
+  // let renewTime = 0
+  // let curLife = 1
+  let curLife = creep.ticksToLive
+  let bodySize = creep.body.length
+  let creepCost = bodyCost(creep.body.map(part => part.type))
+
+  let onceCost = Math.ceil(creepCost / 2.5 / bodySize)
+
+  let onceTick = Math.floor(600 / bodySize) - 1
+
+  let renewTimeCost = Math.ceil((targetTicksToLive - curLife) / onceTick)
+  let renewEnergyCost = onceCost * renewTimeCost
+
+  //计算是否节约能量
+  //原始1tick的能量消耗
+  let originEnergyCostPerTick = creepCost / targetTicksToLive
+  //现在的能量消耗
+  let nowEnergyCostPerTick = renewEnergyCost / (targetTicksToLive - curLife)  
+  console.log(originEnergyCostPerTick, nowEnergyCostPerTick)
+  
+  //重造至当前水平所需时间
+
+
+
+  return {
+    renewTimeCost,
+    renewEnergyCost,
+    originTimeCost: bodySize * 3,
+    originEnergyCost: creepCost,
+
+    // lostRatio: curLife / targetTicksToLive,
+
+    // lostEnergyRatio: renewEnergyCost / creepCost,
+    // lostTimeRatio: renewTimeCost / (bodySize * 3)
+
+
+
+  }
+}
+
+/**
+ * 
+ * @param {Creep} creep 
+ */
+function getBodyArray(creep) {
+  return creep.body.map(part => part.type)
+}
+
 
 
 module.exports = {
@@ -249,4 +309,6 @@ module.exports = {
   randomInt,
   cronRun,
   errorIsolater,
+  getRemainingRenewTime,
+  getBodyArray,
 }

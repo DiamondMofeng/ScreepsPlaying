@@ -10,7 +10,7 @@ const task_powerSpawn = (creep) => {
   if (creep.room.controller.level < 8) {
     return
   }
-  
+
   if (creep.room.storage && creep.room.storage.store['energy'] < 100000) {
     return
   }
@@ -40,8 +40,8 @@ const task_powerSpawn = (creep) => {
     (creep.room.terminal.store.power > 0 || creep.room.storage.store.power > 0 || creep.store.power > 0)
   ) {
     if (creep.store.getUsedCapacity(RESOURCE_POWER) == 0) {
-      moveAndWithdraw(creep, creep.room.storage, [RESOURCE_POWER])
-      moveAndWithdraw(creep, creep.room.terminal, [RESOURCE_POWER])
+      moveAndWithdraw(creep, creep.room.storage, [RESOURCE_POWER], 100)
+      moveAndWithdraw(creep, creep.room.terminal, [RESOURCE_POWER], 100)
     }
     else {
       moveAndTransfer(creep, PS)

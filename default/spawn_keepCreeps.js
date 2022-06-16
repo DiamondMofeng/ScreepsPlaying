@@ -292,11 +292,14 @@ const keepCreeps = (targetRoom, opt = {}) => {
       break;
     case 7:
 
-      if (room.storage && room.storage.store.energy > 1e5) {
+      if (room.storage && room.storage.store.energy > 2e5) {
+        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 11]), 3)
+      }
+      else if (room.storage && room.storage.store.energy > 1e5) {
         spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 20, CARRY, 2, MOVE, 11]), 2)
       }
       else {
-        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 15, CARRY, 2, MOVE, 9]), 1)
+        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 10, CARRY, 2, MOVE, 6]), 1)
       }
 
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
