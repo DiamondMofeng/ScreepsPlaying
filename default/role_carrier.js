@@ -1,6 +1,7 @@
 const Upgrader = require('./role_upgrader')
 const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy, targetsPriorizer_byRef, getEnergyFromTerminal, targetsPriorizer_structureType } = require('./util_beheavor')
 const { IGNORE_CREEPS } = require('./util_consts')
+const { cpuStart, cpuEnd } = require('./util_helper')
 
 
 const MIN_ENERGY = {
@@ -15,28 +16,12 @@ const MIN_ENERGY = {
 
 }
 
-// const PriorizedTarget = (targets) => {
-//   // console.log("t1:", targets)  
-//   if (!targets.length) return (any) => null
-//   const getPriority = (priorArray) => {
-
-//     const curType = priorArray.shift()
-//     const result = _.filter(targets, t => t.structureType == curType)
-//     return result.length
-//       ? result[0]
-//       : getPriority(priorArray)
-
-//   }
-
-//   return getPriority
-// }
-
 var roleCarrier = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    //! HARD CODED!!!!!!
-
+    //! TODO 每tick都过滤极其消耗cpu，需要优化
+    // cpuStart('getTargets')
     let targets = creep.room.find(FIND_STRUCTURES, {
       filter: (s) => {
         return (
@@ -72,6 +57,7 @@ var roleCarrier = {
         )
       }
     });
+    // cpuEnd('getTargets')
 
     const haveJob = () => {
       if (targets.length > 0) {
@@ -104,11 +90,6 @@ var roleCarrier = {
         }
 
 
-
-
-
-
-        // // ! 转变为sweepper
       }
 
 
@@ -120,12 +101,12 @@ var roleCarrier = {
       else {
         // const priorTargets = targetsPriorizer_byRef('structureType'
         //   , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL])(targets)
+        // cpuStart('carrier_priorTargets')
         const priorTargets = targetsPriorizer_structureType(targets, [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL]);
+        // cpuEnd('carrier_priorTargets')
+        // console.log('priorTargets: ', priorTargets);
+        // console.log(priorTargets instanceof Array)
         if (priorTargets.length) {
-
-          // if (creep.name == 'carrier_W11N8_37208296') {
-          //   console.log(priorTargets)
-          // }
 
           let closest = creep.pos.findClosestByRange(priorTargets, { ignoreCreeps: true })
           if (closest && closest.id && closest.structureType) {

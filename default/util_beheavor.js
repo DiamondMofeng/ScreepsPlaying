@@ -187,18 +187,22 @@ const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
 }
 
 
-const targetsPriorizer_structureType = (source, priorArray, returnArray = true) => {
+const targetsPriorizer_structureType = (targets, priorArray, returnArray = true) => {
 
-  priorObj = _.groupBy(source, 'structureType');
-  for (const priorType in priorArray) {
+  let groupedTargets = _.groupBy(targets, 'structureType');
+  // console.log('priorObj: ', JSON.stringify(priorObj));
 
-    if (source[priorType] !== undefined) {
+  for (const priorType of priorArray) {
+    // console.log('targets[priorType]: ', groupedTargets[priorType]);
+    // console.log('priorType: ', priorType);
+    if (groupedTargets[priorType] !== undefined) {
       return returnArray
-        ? source[priorType]
-        : source[priorType][0]
+        ? groupedTargets[priorType]
+        : groupedTargets[priorType][0]
     }
 
   }
+  return targets[0]
 
 }
 
