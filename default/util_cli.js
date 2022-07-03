@@ -59,6 +59,35 @@ toMount.dealAll = function (orderID, roomName) {
   return Game.market.deal(orderID, amount, roomName)
 }
 
+toMount.sellEnergy = function (roomName, orderID = undefined) {
+
+  if (!Game.rooms[roomName] || !Game.rooms[roomName].controller || !Game.rooms[roomName].controller.my || !Game.rooms[roomName].terminal) {
+    return `${roomName} is not my room or do not have terminal`
+  }
+
+  if (!orderID) {
+    //TODO 自动寻找合适的order
+  }
+
+  let fromRoom = Game.rooms[roomName]
+  let order = Game.market.getOrderById(orderID)
+  if (!order) {
+    return `${orderID} is not exist`
+  }
+  let costUnit = 1 + Game.market.calcTransactionCost(1000, roomName, order.roomName) / 1000
+  let canSellAmount = Math.floor(fromRoom.terminal.store[RESOURCE_ENERGY] / costUnit)
+  if (canSellAmount < order.amount) {
+    Game.market.deal(orderID, canSellAmount, roomName)
+    return `${canSellAmount} energy has been sold`
+  }
+  else {
+    Game.market.deal(orderID, order.amount, roomName)
+    return `${order.amount} energy has been sold`
+  }
+
+
+}
+
 toMount.findCheapestOrder = function (resourceType, roomName) {
   let orders = Game.market.getAllOrders({ type: ORDER_BUY, resourceType: resourceType })
   let minPrice = Infinity
@@ -79,14 +108,14 @@ toMount.findCheapestOrder = function (resourceType, roomName) {
 toMount.sendEnergy = function (fromRoom, toRoom, amount) {
   let costUnit = 1 + Game.market.calcTransactionCost(1000, fromRoom, toRoom) / 1000
 
-  let canSendAmound = Math.floor(amount / costUnit)
+  let canSendAmount = Math.floor(amount / costUnit)
 
   let terminal = Game.rooms[fromRoom].terminal
   if (!terminal) {
     console.log(fromRoom, '没有terminal')
     return
   }
-  let result = terminal.send(RESOURCE_ENERGY, canSendAmound, toRoom, 'TEST')
+  let result = terminal.send(RESOURCE_ENERGY, canSendAmount, toRoom, 'TEST')
   if (result == OK) {
     console.log('发送成功')
   }
