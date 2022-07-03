@@ -133,14 +133,14 @@ function controller_creeps() {
       }
 
 
-      if (startWith(creep.memory.role, 'harvester')) {
+      // if (startWith(creep.memory.role, 'harvester')) {
 
-        if (startWith(creep.memory.role, 'harvesterPlus')) {
-          HarvesterPlus(creep)
-        } else {
-          Harvester(creep)
-        }
-      }
+      //   if (startWith(creep.memory.role, 'harvesterPlus')) {
+      //     HarvesterPlus(creep)
+      //   } else {
+      //     Harvester(creep)
+      //   }
+      // }
 
       if (startWith(creep.memory.role, 'carrier')) {
         //   Harvester(creep)
