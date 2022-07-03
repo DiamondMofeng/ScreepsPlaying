@@ -187,7 +187,20 @@ const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
 }
 
 
+const targetsPriorizer_structureType = (source, priorArray, returnArray = true) => {
 
+  priorObj = _.groupBy(source, 'structureType');
+  for (const priorType in priorArray) {
+
+    if (source[priorType] !== undefined) {
+      return returnArray
+        ? source[priorType]
+        : source[priorType][0]
+    }
+
+  }
+
+}
 
 
 
@@ -630,6 +643,7 @@ module.exports = {
   tryCollectAnyEnergy,
 
   targetsPriorizer_byRef,
+  targetsPriorizer_structureType,
   recycleSelf,
   transferAllToStorage,
   pickUpNearbyDroppedEnergy,
@@ -644,7 +658,7 @@ module.exports = {
   isFullBoosted, isPartAllBoosted,
 
   healLower,
-  
+
   getOppoDir,
 
 }
