@@ -28,7 +28,7 @@ roleCounts包括spawning,living,spawnQueue中的数量。
 
 const config = {
   wallRepairer: false,
-  upgrader: false
+  upgrader: true
 }
 
 
@@ -263,7 +263,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 2)
 
-      spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
+      // spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
       if (room.cts && room.cts.length > 0) {
         spawnByMinNumber(targetRoom, 'builder', evalBody_worker_halfEnergy(targetRoom), 2)
@@ -334,10 +334,12 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       if (config.wallRepairer) {
         spawnByMinNumber(targetRoom, 'wallRepairer', body([[CARRY, MOVE, WORK], 15]), 1)
+      } else {
+        // spawnByMinNumber(targetRoom, 'wallRepairer', body([[CARRY, MOVE, WORK], 5]), 1)
       }
 
       if (config.upgrader) {
-        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 15, CARRY, 3, MOVE, 9]), 1)
+        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 15, CARRY, 1, MOVE, 6]), 1)
       } else {
         if (Game.rooms[targetRoom].controller.ticksToDowngrade < 150000) {
           spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 1, CARRY, 1, MOVE, 1]), 1)

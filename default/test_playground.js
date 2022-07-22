@@ -55,35 +55,55 @@ const playground = {
   },
 
 
-  // test: function () {
+  test: function () {
 
-  //   global.injectTest = function () {//*
-  //     if (!global.NAMEInjected) {
-  //       global.NAMEInjected = true;
-  //       var output = `<SPAN>Trying to inject NAME code!</SPAN>
-  //       <div class="iframediv">
-  //       <iframe
-  //         src="http://grafana.mofengfeng.com/dashboard/snapshot/4M6WcC1hnAzwn4kgGxD3Mg2ZeRgCuEYd?orgId=16&refresh=5m"
-  //         ></iframe>
-  //     </div>`
-  //       console.log(output.replace(/(\r\n|\n|\r)\t+|(\r\n|\n|\r) +|(\r\n|\n|\r)/gm, ''));
-  //     }
-  //     //*/
+    global.injectTest = function () {//*
+      if (global.NAMEInjected) {
+        return;
+      }
+      global.NAMEInjected = true;
+      var output = `<SPAN>Trying to inject NAME code!</SPAN>
+      <SCRIPT>
+      (function(){
+        if(window.RoomTrackerHook)return;
+        let Api = angular.element($('section.game')).injector().get('Api');  
+        let Connection = angular.element($('body')).injector().get('Connection');
+        let roomScope = angular.element(document.getElementsByClassName("room ng-scope")).scope();
+        Connection.onRoomUpdate(roomScope, function()
+        {
+        let roomName = roomScope.Room.roomName;
+        let tick = roomScope.Room.gameTime;
+            Api.post('user/console',{
+                /*global.roomsViewed = global.roomsViewed || {}; global.roomsViewed.push({tick: 12345, roomName: 'E1S1'; roomsViewed = _.filter(roomsViewed, (v)=>v.tick>=12345);''*/
+                  expression: "global.roomsViewed = global.roomsViewed || []; global.roomsViewed.push({tick: "+tick+", roomName: '"+roomName+"'}); global.roomsViewed = _.filter(global.roomsViewed, (v)=>v.tick>="+tick+");''",
+                  shard: roomScope.Room.shardName,
+                  hidden: true
+            });
+        });
+        window.RoomTrackerHook = true;
+      })()
+      </SCRIPT>`
+      console.log(output.replace(/(\r\n|\n|\r)\t+|(\r\n|\n|\r) +|(\r\n|\n|\r)/gm, ''));
+    }
+    //*/
 
-  //     /*
-  //     `<iframe
-  //         src="http://grafana.mofengfeng.com/dashboard/snapshot/4M6WcC1hnAzwn4kgGxD3Mg2ZeRgCuEYd?orgId=16&refresh=5m"
-  //         ></iframe>`
-  //     */
+    /*
+    `<iframe
+        src="http://grafana.mofengfeng.com/dashboard/snapshot/4M6WcC1hnAzwn4kgGxD3Mg2ZeRgCuEYd?orgId=16&refresh=5m"
+        ></iframe>`
+    */
 
-  //   }
+  
 
-  //   global.forceInjectTest = () => { global.NAMEInjected = false; injectTest(); }
+    global.forceInjectTest = () => {
+    global.NAMEInjected = false;
+    injectTest();
+  }
 
-  //   injectTest();
-  // },
+    injectTest();
+},
 
-
+ 
 
 
   temple: function () {
@@ -107,10 +127,10 @@ const playground = {
   },
 
 
-  temp: function () {
-    console.log(body(evalBody_harvester('Spawn1')))
+temp: function () {
+  console.log(body(evalBody_harvester('Spawn1')))
 
-  }
+}
 
 }
 

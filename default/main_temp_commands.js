@@ -33,9 +33,9 @@ const main_temp_commands = () => {
 
   //support energy
   errorIsolater(() => {
-    let fromRoomList = ['W12N16', 'W11N8', 'W9N7', 'W17N15']
-    let toRoomList = ['W11N4', 'E44S59']
-    cronRun(1000, () => supportEnergy(fromRoomList, toRoomList))
+    // let fromRoomList = ['W12N16', 'W11N8', 'W9N7', 'W17N15', 'W11N4']
+    // let toRoomList = ['W24N32']
+    // cronRun(1000, () => supportEnergy(fromRoomList, toRoomList))
   })
 
 

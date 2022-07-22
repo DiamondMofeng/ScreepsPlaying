@@ -66,11 +66,15 @@ module.exports.loop = function () {
     // Game.spawns['w'].spawnCreep(body([WORK, MOVE], 25), '1')
     // Game.spawns['W17N15_0'].spawnCreep(body([WORK, MOVE], 25), '2')
 
+    // let cpu1 = Game.cpu.getUsed()
+    // let orders = Game.market.getAllOrders({ resourceType: RESOURCE_ENERGY, type: ORDER_BUY })
+    // let cpu2 = Game.cpu.getUsed()
+    // console.log(`orders:${orders.length} cpu:${cpu2 - cpu1}`)
 
 
 
     // attack_yitiji('W17N15', 'YTJ_1')
-    attack_dismental('W17N15', 'DIS_1')
+    // attack_dismental('W17N15', 'DIS_1')
     // attack_dismental('W17N15', 'DIS_2')
 
 
@@ -94,12 +98,12 @@ module.exports.loop = function () {
     // Game.spawns['W17N15_1'].spawnCreep(body([CARRY,MOVE],25),'1')
 
     // let c = Game.creeps['wallRepairer38965765'];
-    let lab_1 = Game.getObjectById('622384ea76cf3af999ef3eaf') //XGHO2
-    let lab_2 = Game.getObjectById('622395a13e744f7c8714790a')   //XZH2O
-    let lab_3 = Game.getObjectById('6230ebca989c0a15fca1c77c')  //XLHO2
-    let lab_4 = Game.getObjectById('62369d7c813e2d01d47cb71d')  //XZHO2
-    let lab_5 = Game.getObjectById('6231fc2f1f145966ef20b283')
-    let res = 'XZH2O'
+    // let lab_1 = Game.getObjectById('622384ea76cf3af999ef3eaf') //XGHO2
+    // let lab_2 = Game.getObjectById('622395a13e744f7c8714790a')   //XZH2O
+    // let lab_3 = Game.getObjectById('6230ebca989c0a15fca1c77c')  //XLHO2
+    // let lab_4 = Game.getObjectById('62369d7c813e2d01d47cb71d')  //XZHO2
+    // let lab_5 = Game.getObjectById('6231fc2f1f145966ef20b283')
+    // let res = 'XZH2O'
 
     // moveAndWithdraw(c, c.room.terminal, [res])
     // moveAndTransfer(c, lab_2, [res])
@@ -146,7 +150,7 @@ module.exports.loop = function () {
     keepCreeps(roomName, {})
   }
 
-  showVisuals()   //* VISUAL所有的主入口
+  // showVisuals()   //* VISUAL所有的主入口
 
   // buildEnergyBase('W17N15_0', 'W17N14')
   // guardRoom('W17N14')
@@ -159,11 +163,11 @@ module.exports.loop = function () {
   console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());
 
   //* 暂停产出pixel
-  if (Game.cpu.bucket == 10000) {
-    if (Game.cpu.generatePixel) {
-      Game.cpu.generatePixel();
-    }
-  }
+  // if (Game.cpu.bucket == 10000) {
+  //   if (Game.cpu.generatePixel) {
+  //     Game.cpu.generatePixel();
+  //   }
+  // }
 
 
 }

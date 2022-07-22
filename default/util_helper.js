@@ -78,33 +78,9 @@ function body(...simpleBodyArray) {
 const bodyCost = (bodyArray) => {
   let cost = 0
   for (part of bodyArray) {
-    switch (part) {
-      case MOVE:
-        cost += 50
-        break
-      case WORK:
-        cost += 100
-        break
-      case CARRY:
-        cost += 50
-        break
-      case ATTACK:
-        cost += 80
-        break
-      case RANGED_ATTACK:
-        cost += 150
-        break
-      case HEAL:
-        cost += 250
-        break
-      case CLAIM:
-        cost += 600
-        break
-      case TOUGH:
-        cost += 10
-        break
-    }
+    cost += BODYPART_COST[part]
   }
+
   return cost
 }
 
@@ -167,6 +143,26 @@ function getCPUCost(func, ...args) {
   console.log(`CPU cost of '${func.name}' :`, costTime);
   return res
 }
+
+/**
+ * 
+ * @param {String} tag 
+ */
+function cpuStart(tag) {
+  global['tempCpuRecord_' + tag] = Game.cpu.getUsed()
+}
+
+/**
+ * 
+ * @param {String} tag 
+ */
+function cpuEnd(tag) {
+  let start = global['tempCpuRecord_' + tag]
+  let end = Game.cpu.getUsed()
+  let costTime = end - start
+  console.log(`CPU cost of tag '${tag}' :`, costTime);
+}
+
 
 
 /**
@@ -268,9 +264,9 @@ function getRemainingRenewTime(creep, targetTicksToLive = 1500) {
   //原始1tick的能量消耗
   let originEnergyCostPerTick = creepCost / targetTicksToLive
   //现在的能量消耗
-  let nowEnergyCostPerTick = renewEnergyCost / (targetTicksToLive - curLife)  
+  let nowEnergyCostPerTick = renewEnergyCost / (targetTicksToLive - curLife)
   console.log(originEnergyCostPerTick, nowEnergyCostPerTick)
-  
+
   //重造至当前水平所需时间
 
 
@@ -301,9 +297,11 @@ function getBodyArray(creep) {
 
 
 
+
+
 module.exports = {
   body, bodyCost, spawnByMinNumber,
-  getCPUCost,
+  getCPUCost, cpuStart, cpuEnd,
   startWith,
 
   randomInt,
