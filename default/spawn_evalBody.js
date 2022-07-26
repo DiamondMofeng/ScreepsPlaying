@@ -13,7 +13,7 @@ const evalBody_harvester = (roomName, opt = {}) => {
   let haveRoad = opt.haveRoad || false
 
   let minBody = { w: 1, c: 1, m: 1 }
-  let maxBody = { w: 7, c: 1, m: 1 }
+  let maxBody = { w: 10, c: 2, m: 1 }
 
   //TODO 比较拖慢效率，待优化
   if (room.controller.isPowerEnabled == true) {
