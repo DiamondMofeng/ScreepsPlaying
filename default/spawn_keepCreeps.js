@@ -339,12 +339,18 @@ const keepCreeps = (targetRoom, opt = {}) => {
       }
 
       if (config.upgrader) {
-        spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 15, CARRY, 1, MOVE, 6]), 1)
-      } else {
+        if (room.storage && room.storage.store[RESOURCE_ENERGY] > 1e5) {
+          spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 15, CARRY, 1, MOVE, 6]), 1)
+        }
+        else {
+          spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 10, CARRY, 1, MOVE, 6]), 1)
+        }
+      }
+      else
         if (Game.rooms[targetRoom].controller.ticksToDowngrade < 150000) {
           spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 1, CARRY, 1, MOVE, 1]), 1)
         }
-      }
+
 
 
       break;

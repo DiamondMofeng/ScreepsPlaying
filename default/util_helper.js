@@ -30,6 +30,9 @@ function priorityFilter(targets, ref, priority, returnFirst = true) {
    * 输入简化版bodyArray来获取完全版。part可以为字符串或数组
    * @param {Array} simpleBodyArray - [part: String|Array , i, ...] i为'part'的重复次数
    * @returns {Array} fullBodyArray
+   * 
+   * @example [WORK, 2, CARRY, 2, MOVE, 2] => [WORK, WORK, CARRY, CARRY, MOVE, MOVE]
+   * @example [[WORK, CARRY, MOVE], 2] => [WORK, CARRY, MOVE, WORK, CARRY, MOVE]
    */
 function body(...simpleBodyArray) {
   let result = []
