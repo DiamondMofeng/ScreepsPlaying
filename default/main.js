@@ -23,6 +23,8 @@ const customPrototypes = require('./util_customPrototypes')()
 const mountAll = require("./mountAll")
 mountAll()
 
+require('./helper_roomResources')
+
 const keepCreeps = require("./spawn_keepCreeps")
 
 const playground = require("./test_playground")
