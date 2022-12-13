@@ -1,3 +1,48 @@
+function bubbleUpEnqueue(arr, item) {
+  arr.push(item)
+  let i = arr.length - 1
+  while (i > 0) {
+    let parent = (i - 1) >> 1
+    if (arr[parent].priority < arr[i].priority) {
+      [arr[parent], arr[i]] = [arr[i], arr[parent]] //swap
+    }
+    else {
+      break
+    }
+  }
+}
+
+function bubbleDownDequeue(arr) {
+  let item = arr[0]
+  let last = arr.pop()
+  if (arr.length > 0) {
+    arr[0] = last
+    let i = 0
+    while (true) {
+      let left = i * 2 + 1;
+      let right = i * 2 + 2;
+      // 找到left,right,i中的最大值位置
+      let largest = i;
+      if (left < arr.length && arr[left].priority > arr[largest].priority) {
+        largest = left
+      }
+      if (right < arr.length && arr[right].priority > arr[largest].priority) {
+        largest = right
+      }
+
+      if (largest != i) {
+        // swap
+        [arr[i], arr[largest]] = [arr[largest], arr[i]]
+        i = largest
+      } else {
+        break;
+      }
+
+    }
+  }
+  return item
+}
+
 
 /**
  * @class PriorityQueue     
@@ -9,7 +54,7 @@ class PriortyQueue {
   }
 
 
-  enqueue(item) {
+  sortEnqueue(item) {
     this.queue.push(item);
     this.queue.sort(function (b, a) {
       return a.priority - b.priority;
@@ -17,32 +62,20 @@ class PriortyQueue {
   }
 
   // 使用上浮的方法插入
-  enqueue2(item) {
-    this.queue.push(item);
-    let i = this.queue.length - 1;
-    while (i > 0) {
-      let parent = (i - 1) >> 1;
-      if (this.queue[parent].priority < this.queue[i].priority) {
-        let temp = this.queue[parent];
-        this.queue[parent] = this.queue[i];
-        this.queue[i] = temp;
-      }
-      else {
-        break;
-      }
-    }
+  bubbleUpEnqueue(item) {
+    return bubbleUpEnqueue(this.queue, item);
   }
 
-  dequeue() {
-    return this.queue.shift();
+  bubbleDownDequeue() {
+    return bubbleDownDequeue(this.queue);
   }
 
   push(...args) {
-    return this.enqueue2(...args);
+    return this.bubbleUpEnqueue(...args);
   }
 
   pop() {
-    return this.dequeue();
+    return this.bubbleDownDequeue();
   }
 
   front() {
@@ -77,4 +110,10 @@ class PriortyQueue {
     }
     return true;
   }
+}
+
+module.exports = {
+  PriortyQueue,
+  bubbleUpEnqueue,
+  bubbleDownDequeue
 }

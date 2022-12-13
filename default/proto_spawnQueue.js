@@ -1,5 +1,6 @@
 
 const C = require('util_consts')
+const { bubbleDownDequeue, bubbleUpEnqueue } = require('./util_priorityQueue')
 
 /**
  * 用于挂载spawnQueue相关原型方法
@@ -18,7 +19,7 @@ const mountSpawnQueue = () => {
     spawnQueue: {
       get() {
         //? 没写是否检查这是自己的房间
-        if(_.isUndefined(Memory.rooms)) {
+        if (_.isUndefined(Memory.rooms)) {
           Memory.rooms = {}
         }
 
@@ -43,20 +44,7 @@ const mountSpawnQueue = () => {
     pushToSpawnQueue: {
       value: function (creepToSpawn) {
 
-        let queue = this.spawnQueue
-        queue.push(creepToSpawn)
-        let i = queue.length - 1
-        while (i > 0) {
-          let parent = (i - 1) >> 1
-          if (queue[parent].priority < queue[i].priority) {
-            let temp = queue[parent]
-            queue[parent] = queue[i]
-            queue[i] = temp
-          }
-          else {
-            break
-          }
-        }
+        bubbleUpEnqueue(this.spawnQueue, creepToSpawn)
 
         return 0
 
@@ -121,7 +109,7 @@ const mountSpawnQueue = () => {
             case OK:
             case ERR_INVALID_ARGS:
             case ERR_NAME_EXISTS:
-              this.room.spawnQueue.shift()
+              bubbleDownDequeue(this.room.spawnQueue)
               break
             case ERR_NOT_ENOUGH_ENERGY:
               break
