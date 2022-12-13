@@ -23,9 +23,6 @@ const { spawnByMinNumber, body } = require("./util_helper")
  */
 const claimNewRoom = (flag, spawn, keepHelping = false) => {
 
-  //TODO 暂时没想到好办法，就加了个targetRoom。到时候想办法去掉这个参数
-
-
   if (typeof flag === "string") {
     flag = Game.flags[flag]
   }
@@ -68,7 +65,7 @@ const claimNewRoom = (flag, spawn, keepHelping = false) => {
 
 
   if (flag.room) {
-    flag.room.createConstructionSite(flag.pos.x, flag.pos.y, STRUCTURE_SPAWN, spawnName)
+    flag.room.createConstructionSite(flag.pos.x, flag.pos.y - 3, STRUCTURE_SPAWN, spawnName)
     // console.log('flag.room.createConstructionSite(flag.pos.x + 3, flag.pos.y, STRUCTURE_SPAWN, `${flag.room.name}_0`): ', flag.room.createConstructionSite(flag.pos.x + 3, flag.pos.y, STRUCTURE_SPAWN, `${flag.room.name}_0`));
   }
 

@@ -623,6 +623,7 @@ const placeCT = (flag, rcl) => {
     return
   }
 
+  let terrain = new Room.Terrain(flag.room.name)  // 防止建到墙上 //TODO 中心位置仍依赖于手动观察
   let CTs = CTinfos(flag, rcl)
   console.log('CTs: ', CTs);
   for (let s of CTs) {
@@ -630,6 +631,9 @@ const placeCT = (flag, rcl) => {
       continue
     }
     if (s.type == STRUCTURE_SPAWN) {
+      continue
+    }
+    if (terrain.get(s.x, s.y) === TERRAIN_MASK_WALL) {
       continue
     }
     let { x, y, type } = s
@@ -640,23 +644,6 @@ const placeCT = (flag, rcl) => {
 }
 
 
-
-const RCL1 = () => {
-  // spawnByMinNumber(spawnName, 'upgrader_' + targetRoom, [WORK, MOVE, CARRY, MOVE], 3)
-
-}
-
-const RCL2 = () => {
-
-}
-
-
-
-
-
-
-
-
 /**
  * 前往指定旗子放下spawn
  * @param {Flag|String} flag 
@@ -664,7 +651,7 @@ const RCL2 = () => {
  */
 const developNewRoom = (flag, targetRoom, opt = {}) => {
 
-  //* 默认此时已建好spawn，根据flag的位置和rcl自动摆放建筑、生产creep
+  //* 默认此时已建好spawn，根据flag的位置和rcl自动摆放建筑
 
   if (typeof flag == 'string') {
     flag = Game.flags[flag]
@@ -674,100 +661,21 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
     return
   }
 
-  // let spawnName = targetRoom + '_0'  //TODO 到时候用生产队列代替
-
-  // if (Game.spawns[spawnName] == undefined) {
-  //   return
-  // }
   let room = Game.rooms[targetRoom]
   if (!room) {
     return
   }
 
-  keepCreeps(targetRoom)
+  // keepCreeps(targetRoom)
 
   let rcl = Game.rooms[targetRoom].controller.level
-  switch (rcl) {
-    case 1:
-      RCL1();
-
-      break;
-    case 2:
 
 
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      } else {
-        placeCT(flag, rcl)
-      }
+  if (flag.room.cts && flag.room.cts.length > 0) {
 
-
-
-      break;
-    case 3:
-
-
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      } else {
-        placeCT(flag, rcl)
-      }
-
-
-      break;
-    case 4:
-
-
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      } else {
-        placeCT(flag, rcl)
-      }
-
-
-
-      break;
-    case 5:
-
-
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      }
-      else {
-        placeCT(flag, rcl)
-      }
-
-
-      break;
-    case 6:
-
-
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      }
-      else {
-        placeCT(flag, rcl)
-      }
-
-      break;
-    case 7:
-
-
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      }
-      else {
-        placeCT(flag, rcl)
-      }
-      break;
-    case 8:
-
-      if (flag.room.cts && flag.room.cts.length > 0) {
-      }
-      else {
-        placeCT(flag, rcl)
-      }
-      break;
-
-
+  } else {
+    placeCT(flag, rcl)
   }
-
-
-
 
 
 }
