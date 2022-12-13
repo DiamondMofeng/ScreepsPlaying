@@ -556,7 +556,7 @@ function getEnergyFromHarvest(creep, isCloest = true) {
   if (activeSources.length > 0) {
     let source = isCloest ? creep.pos.findClosestByPath(activeSources) : activeSources[1]
     if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(source)
+      creep.moveTo(source, { swampCost: 2 })  //TODO 防止出房间。可以考虑不放到这里
     }
     return true;
   }

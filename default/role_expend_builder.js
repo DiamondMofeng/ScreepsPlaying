@@ -38,7 +38,7 @@ const role_expend_builder = (creep) => {
       () => {
         let ct = cts[0]
         if (creep.build(ct) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(ct, { reusePath: 50 })
+          creep.moveTo(ct, { reusePath: 5, swampCost: 2 }) //防止出房间
         }
       })
   }
