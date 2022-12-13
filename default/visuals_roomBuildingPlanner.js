@@ -11,16 +11,6 @@ const drawExtension = (v, x, y) => {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 const DrawBuildings = (V, x, y) => {
 
   // let x=x;
@@ -211,30 +201,20 @@ const DrawBuildings = (V, x, y) => {
 
 /**
  * 以指定旗帜为中心，显示城市布局。
- * @param {String|Flag} flagName 
+ * @param {String|Flag} flag 
  * @returns 
  */
-const roomBuildingPlanner = (flagName) => {
-  if (typeof flagName === 'string') {
-    flagName = Game.flags[flagName];
+const roomBuildingPlanner = (flag) => {
+  if (typeof flag === 'string') {
+    flag = Game.flags[flag];
   }
-  if (!flagName) return;
+  if (!flag) return;
 
-  // if (!flag.room) return;
+  let V = new RoomVisual(flag.pos.roomName);
 
-  // let V = new RoomVisual(flag.room.name);
-  let V;
-  if (flagName.room) {
-    V = new RoomVisual(flagName.room.name);
-  } else {
-    V = new RoomVisual();
-  }
-  DrawBuildings(V, flagName.pos.x, flagName.pos.y)
+  DrawBuildings(V, flag.pos.x, flag.pos.y)
 
   //* 基地plan
-
-
-
 
 
 }
