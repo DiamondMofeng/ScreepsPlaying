@@ -1,7 +1,7 @@
 const commonjs = require('@rollup/plugin-commonjs');
 
 module.exports = {
-  input: 'default/main.js',
+  input: 'src/main.js',
   output: {
     file: 'dist/main.js',
     format: 'cjs',
