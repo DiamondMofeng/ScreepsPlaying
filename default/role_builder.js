@@ -1,5 +1,6 @@
 const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal, getEnergyFromHarvest } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal, getEnergyFromHarvest } = require('./util_beheavor');
+const { stayInRoomCallBack } = require('./util_costCallBacks');
 
 
 
@@ -61,7 +62,7 @@ var roleBuilder = {
 					let target = buildNewer ? targets[targets.length - 1] : targets[0]
 
 					if (creep.build(target) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+						creep.moveTo(target, { costCallback: stayInRoomCallBack, visualizePathStyle: { stroke: '#ffffff' } });
 					}
 				}
 			}

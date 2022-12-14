@@ -1,6 +1,7 @@
 const { pickUpNearbyDroppedEnergy, workingStatesKeeper, setDoing } = require("./util_beheavor")
 const { startWith } = require("./util_helper")
 const C = require("./util_consts")
+const { stayInRoomCallBack } = require("./util_costCallBacks")
 
 //when spawn, add memory of certain source position to go , and bind with this source.
 //出生时绑定指定能量源，并指定工作坐标（待完成）
@@ -74,7 +75,7 @@ var roleHarvesterPlus = {
             }
             else {
               if (creep.moveTo(container, { noPathFinding: true }) == ERR_NOT_FOUND) {
-                creep.moveTo(container, { ignoreCreeps: C.IGNORE_CREEPS })
+                creep.moveTo(container, { costCallback: stayInRoomCallBack, ignoreCreeps: C.IGNORE_CREEPS })
               }
             }
           }
@@ -87,7 +88,7 @@ var roleHarvesterPlus = {
       //* 尝试寻找
       let sources = creep.room.find(FIND_SOURCES);
 
-      for (s of sources) {
+      for (const s of sources) {
         //先找container,如果有container那么这个source只需要一个harvester
         //;若无container，则没有数量限制。
         let container = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType === STRUCTURE_CONTAINER })[0]
@@ -96,11 +97,11 @@ var roleHarvesterPlus = {
           if (currentHarvesters.length > 0) {
             continue
           } else {
-            creep.moveTo(container, { reusePath: 50, ignoreCreeps: C.IGNORE_CREEPS })
+            creep.moveTo(container, { costCallback: stayInRoomCallBack, reusePath: 50, ignoreCreeps: C.IGNORE_CREEPS })
           }
         }
         else {
-          let moveResult = creep.moveTo(s, { reusePath: 10, ignoreCreeps: C.IGNORE_CREEPS })
+          let moveResult = creep.moveTo(s, { costCallback: stayInRoomCallBack, reusePath: 10, ignoreCreeps: C.IGNORE_CREEPS })
           if (moveResult === ERR_NO_PATH) {
             continue
           }
