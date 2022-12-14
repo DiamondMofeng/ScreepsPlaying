@@ -53,7 +53,8 @@ const getEnergyFromContainer = (creep, opt = {}) => {
     // console.log(creep, container)
     let witRes = creep.withdraw(container, RESOURCE_ENERGY)
     if (witRes == ERR_NOT_IN_RANGE) {
-      creep.moveTo(container, { ...moveOpt, visualizePathStyle: { stroke: '#ffaa00' } });
+      let movRes = creep.moveTo(container, { ...moveOpt, visualizePathStyle: { stroke: '#ffaa00' } });
+      // console.log('movRes: ', movRes);
     }
     return true
   }
