@@ -3,3 +3,4 @@ node_modules
 .sync
 sourceCode
 default-test
+dist

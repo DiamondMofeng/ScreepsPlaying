@@ -2,7 +2,7 @@ interface CreepToSpawn {
   body: BodyPartConstant[];
   name?: string;
   role?: string;
-  memory: Object;
+  memory: any;
   spawnOpt?: SpawnOptions;
   priority: number;
 }

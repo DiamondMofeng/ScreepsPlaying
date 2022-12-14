@@ -1,5 +1,5 @@
 
-const C = require('util_consts')
+const C = require('./util_consts')
 const { bubbleDownDequeue, bubbleUpEnqueue } = require('./util_priorityQueue')
 
 /**
