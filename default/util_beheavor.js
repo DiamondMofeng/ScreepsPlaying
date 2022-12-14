@@ -313,7 +313,7 @@ function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], am
   if (Array.isArray(resourceTypes) == false) {
     resourceTypes = [resourceTypes]
   }
-  for (rt of resourceTypes) {
+  for (const rt of resourceTypes) {
 
     var withdrawResult = creep.withdraw(container, rt, amount)
     // console.log('withdrawResult', rt, withdrawResult)
@@ -380,7 +380,7 @@ function moveAndTransfer(creep, container, resourceTypes = [], moveOpt = {}) {
   //若给定类型了则按类型transfer
   if (resourceTypes.length > 0) {
 
-    for (rt of resourceTypes) {
+    for (const rt of resourceTypes) {
       let transferResult = creep.transfer(container, rt)
       if (transferResult == ERR_NOT_IN_RANGE) {
         creep.moveTo(container, { ...moveOpt, reusePath: 50 })
@@ -390,7 +390,7 @@ function moveAndTransfer(creep, container, resourceTypes = [], moveOpt = {}) {
 
   } else {
 
-    for (rt in creep.store) {
+    for (const rt in creep.store) {
 
       transferResult = creep.transfer(container, rt)
 

@@ -52,7 +52,7 @@ function getUpgradePos(creep) {
 
   // console.log('creep.room.memory', creep.room.memory)
   // console.log('upgradePosArray', upgradePosArray)
-  for (i in upgradePosArray) {
+  for (const i in upgradePosArray) {
     // console.log('i:', i)
     let pos = upgradePosArray[i]
     if (pos.used == false) {

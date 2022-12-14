@@ -37,7 +37,7 @@ const role_scavenger = (creep) => {
         grouped_resources = _.groupBy(resources, r => r.resourceType)
         console.log('grouped_resources: ', grouped_resources);
 
-        for (type of RESOURCES_ALL.reverse()) {
+        for (const type of RESOURCES_ALL.reverse()) {
           console.log('type: ', type);
           if (grouped_resources[type] && grouped_resources[type].length > 0) {
             target = grouped_resources[type][0]
@@ -58,7 +58,7 @@ const role_scavenger = (creep) => {
   },
     () => {
       moveToRoom(creep, creep.memory.spawnRoom)
-      for (type in creep.store) {
+      for (const type in creep.store) {
         if (creep.transfer(creep.room.storage, type) == ERR_NOT_IN_RANGE) {
           creep.moveTo(creep.room.storage);
           break;

@@ -64,7 +64,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
     let hasGuardian = false
 
 
-    for (creepName in Game.creeps) {
+    for (const creepName in Game.creeps) {
       let creep = Game.creeps[creepName]
       let CM = creep.memory
       if (CM.role == 'guardian' && CM.guardian_Room == roomName) {
@@ -93,7 +93,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
     }
 
     //* worker逃命
-    for (creepName in Game.creeps) {
+    for (const creepName in Game.creeps) {
       let creep = Game.creeps[creepName]
       //* 若此creep在inDanger房间内，且无还手之力
 

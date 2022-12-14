@@ -43,7 +43,7 @@ const memoryResources = (roomName, timer = true) => {
   //   let type = 'unknow'
 
   //   let sources = room.find(FIND_SOURCES)
-  //   for (s of sources) {
+  //   for (const s of sources) {
   //     if (c.pos.inRangeTo(s, 1) == true) {
   //       type = 'source'
   //       break
@@ -81,7 +81,7 @@ const memoryResources = (roomName, timer = true) => {
 
     }
 
-    for (s of sources) {
+    for (const s of sources) {
 
       // const s = sources[i]
       room.memory.sources[s.id] = {

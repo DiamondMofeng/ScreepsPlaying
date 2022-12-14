@@ -34,7 +34,7 @@ const cleanInvaderCore = (invaderRoom, spawnRoom) => {
   }
 
   if (flag.memory.attackers.length > 0) {
-    for (i in flag.memory.attackers) {
+    for (const i in flag.memory.attackers) {
 
       let a = flag.memory.attackers[i];
 

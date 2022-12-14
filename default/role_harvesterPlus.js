@@ -25,7 +25,7 @@ const { stayInRoomCallBack } = require("./util_costCallBacks")
 // if (!creep.memory.harvester_sourceID) {
 //   let sources = creep.room.find(FIND_SOURCES);
 
-//   for (s of sources) {
+//   for (const s of sources) {
 //     if (s.pos.findInRange(FIND_CREEPS, 1, { filter: c => startWith(c.memory.role, 'harvester') }).length === 0) {
 //       creep.memory.harvester_sourceID = s.id
 //       let container = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType === STRUCTURE_CONTAINER })[0]
@@ -64,7 +64,7 @@ var roleHarvesterPlus = {
         }
         //如果有source和container，先移动到container上，再确定source
         else if (nearSources.length > 0 && nearContainers.length > 0) {
-          for (container of nearContainers) {
+          for (const container of nearContainers) {
             if (container.pos.isEqualTo(creep.pos)) {
               // console.log('creep.pos: ', creep.pos);
               // console.log('container.pos: ', container.pos);
@@ -186,7 +186,7 @@ var roleHarvesterPlus = {
 
         //* 尝试向extension中注入能量
         if (CM.harvester_extensionIDs.length > 0) {
-          for (eID of CM.harvester_extensionIDs) {
+          for (const eID of CM.harvester_extensionIDs) {
             let e = Game.getObjectById(eID)
             if (e.store.getFreeCapacity(RESOURCE_ENERGY) !== 0) {
               // console.log('e.store.getFreeCapacity(): ', e.store.getFreeCapacity());

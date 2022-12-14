@@ -164,7 +164,7 @@ const locateSomething_byAux = (room, starter) => {
 
     //*设置指定位置的cost为最大
     let reservedPos = CTinfos(starter, 8, false)
-    for (pos of reservedPos) {
+    for (const pos of reservedPos) {
       if (!pos) continue
       if (pos.type == STRUCTURE_ROAD) costs.set(pos.x, pos.y, 1)
       else {

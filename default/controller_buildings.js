@@ -14,7 +14,7 @@ function controller_buildings() {
 
   let CPUcounts = []
 
-  for (s of Object.values(Game.structures)) {
+  for (const s of Object.values(Game.structures)) {
 
     try {
 

@@ -53,7 +53,7 @@ function main() {
 
   let flag = Game.flags[flagID]
 
-  for (i in attackerCreepsId) {
+  for (let i in attackerCreepsId) {
     let c = Game.creeps[attackerCreepsId[i]]
 
     if (_.isUndefined(c)) continue

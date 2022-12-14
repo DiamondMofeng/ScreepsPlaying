@@ -135,7 +135,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
 
     //清除死去的pionner creep
     //? 不知道有没有bug,这个for splice
-    for (creepName of RM[energyBase_pionners]) {
+    for (const creepName of RM[energyBase_pionners]) {
       if (Object.keys(Game.creeps).indexOf(creepName) == -1) {
         let indexToDelete = RM[energyBase_pionners].indexOf(creepName)
         RM[energyBase_pionners].splice(indexToDelete, 1)
@@ -161,7 +161,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
     //! 正式开始开拓任务
 
     else {
-      for (pionnerName of RM[energyBase_pionners]) {
+      for (const pionnerName of RM[energyBase_pionners]) {
         let pionner = Game.creeps[pionnerName]
         let PM = Memory.creeps[pionnerName] //快捷访问
         // console.log('PM: ', JSON.stringify(PM));
@@ -227,7 +227,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
             }
 
             //* 进行铺路
-            for (pos of PM[pPath]) {
+            for (const pos of PM[pPath]) {
               pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD)
               // console.log('pionner.room.createConstructionSite(pos, STRUCTURE_ROAD): ', pionner.room.createConstructionSite(pos, STRUCTURE_ROAD));
             }
@@ -337,7 +337,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
               }
               //* //////////// opt定义结束///////////////////
 
-              for (s of sources) {
+              for (const s of sources) {
                 console.log('s: ', s);
                 paths_toSoure.push(pionner.pos.findPathTo(s, opt_avoidClaimer))
               }
@@ -360,7 +360,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
               //? 这块代码太乱了，有时间重构一下
               //放container
               let toSaveInMemory = []
-              for (pos of posArrayForContainer) {
+              for (const pos of posArrayForContainer) {
                 pionner.room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER)
 
                 //顺便把container位置存到room.memory.energyBase里
@@ -418,7 +418,7 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
                   costs.set(workPos_claimer.x, workPos_claimer.y, 0xff)
   
                   let workPosArray_harvester = pionner.room.memory.energyBase.workPosArray_harvester
-                  for (pos in workPosArray_harvester) {
+                  for (const pos in workPosArray_harvester) {
                     costs.set(pos.x, pos.y, 0xff)
                   }
   

@@ -75,7 +75,7 @@ var roleSweeper = {
           let priorizedResource = resourcePriorizer(resourcesTypesInTomb)
 
 
-          for (rt in resourcesTypesInTomb) {
+          for (const rt in resourcesTypesInTomb) {
 
             if (creep.withdraw(tomb0, priorizedResource) == ERR_NOT_IN_RANGE) {
 

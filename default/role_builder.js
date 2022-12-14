@@ -36,13 +36,13 @@ var roleBuilder = {
 
 
 
-				for (Ptype of priorties_cts) {
+				for (const Ptype of priorties_cts) {
 
 					if (targets.length > 0) {
 						break;
 					}
 
-					for (type in cts) {
+					for (const type in cts) {
 						if (Ptype == type) {
 							targets = cts[type];
 							break;

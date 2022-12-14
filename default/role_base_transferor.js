@@ -52,7 +52,7 @@ var role_base_transferor = {
     let storage = creep.room.storage
 
     if (_.isUndefined(creep.memory[CM_LINKID_STORAGE])) {
-      for (id in creep.room.memory[C.RM.LINKS]) {
+      for (const id in creep.room.memory[C.RM.LINKS]) {
         if (creep.room.memory[C.RM.LINKS][id].type == 'storage') {
           creep.memory[CM_LINKID_STORAGE] = id
         }
@@ -63,7 +63,7 @@ var role_base_transferor = {
 
 
     if (_.isUndefined(creep.memory[CM_LINKID_CONTROLLER])) {
-      for (id in creep.room.memory[C.RM.LINKS]) {
+      for (const id in creep.room.memory[C.RM.LINKS]) {
         if (creep.room.memory[C.RM.LINKS][id].type == 'controller') {
           creep.memory[CM_LINKID_CONTROLLER] = id
         }

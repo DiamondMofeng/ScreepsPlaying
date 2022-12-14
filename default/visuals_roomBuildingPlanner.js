@@ -156,43 +156,43 @@ const DrawBuildings = (V, x, y) => {
 
 
 
-  for (pos of extensionPos) {
+  for (const pos of extensionPos) {
     V.text('ⓔ', pos.x, pos.y, { color: '#f5b400' })
   }
-  for (pos of linkPos) {
+  for (const pos of linkPos) {
     V.text('◊', pos.x, pos.y, { color: '#f5b400' })
   }
-  for (pos of spawnPos) {
+  for (const pos of spawnPos) {
     V.text('Ⓢ', pos.x, pos.y, { color: '#0f9d58' })
   }
-  for (pos of containerPos) {
+  for (const pos of containerPos) {
     V.text('▯', pos.x, pos.y, { color: '#f5b400' })
   }
-  for (pos of labPos) {
+  for (const pos of labPos) {
     V.text('💡', pos.x, pos.y, { opacity: 0.5 })
   }
-  for (pos of storagePos) {
+  for (const pos of storagePos) {
     V.text('💾', pos.x, pos.y, {})
   }
-  for (pos of factoryPos) {
+  for (const pos of factoryPos) {
     V.text('🏭', pos.x, pos.y, {})
   }
-  for (pos of terminalPos) {
+  for (const pos of terminalPos) {
     V.text('💰', pos.x, pos.y, {})
   }
-  // for (pos of roadPos) {
+  // for (const pos of roadPos) {
   //   V.text('▨', pos.x, pos.y, {})
   // }
-  for (pos of towerPos) {
+  for (const pos of towerPos) {
     V.text('♜', pos.x, pos.y, {})
   }
-  for (pos of nukerPos) {
+  for (const pos of nukerPos) {
     V.text('🚀', pos.x, pos.y, { opacity: 0.5 })
   }
-  for (pos of powerSpawnPos) {
+  for (const pos of powerSpawnPos) {
     V.text('Ⓢ', pos.x, pos.y, { color: '#f03333' })
   }
-  for (pos of observerPos) {
+  for (const pos of observerPos) {
     V.text('📡', pos.x, pos.y, { opacity: 0.5 })
   }
 }

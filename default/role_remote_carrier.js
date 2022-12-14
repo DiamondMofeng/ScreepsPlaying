@@ -25,7 +25,7 @@ var role_remote_carrier = {
     let energyBase_containers = 'energyBase_containers'
     if (_.isUndefined(CM[remote_carrier_fromContainerIDs])) {
       CM[remote_carrier_fromContainerIDs] = []
-      for (c of RM[energyBase_containers]) {
+      for (const c of RM[energyBase_containers]) {
         // console.log('c: ', JSON.stringify(c));
         CM[remote_carrier_fromContainerIDs].push(c.id)
       }
@@ -69,7 +69,7 @@ var role_remote_carrier = {
 
       if (!CM[remote_carrier_fromContainerID]) {
 
-        for (cID of CM[remote_carrier_fromContainerIDs]) {
+        for (const cID of CM[remote_carrier_fromContainerIDs]) {
           let c = Game.getObjectById(cID)   //? 这个时候丢了视野怎么办
           if (c.store.getUsedCapacity() > 350) {  //TODO 不合理啊，待优化，根据这个罐子负责的carrier来调节
             CM[remote_carrier_fromContainerID] = c.id

@@ -54,7 +54,7 @@ const controller_spawns = (spawnName) => {
    */
   const bodyCost = (bodyArray) => {
     let cost = 0
-    for (part of bodyArray) {
+    for (const part of bodyArray) {
       switch (part) {
         case MOVE:
           cost += 50

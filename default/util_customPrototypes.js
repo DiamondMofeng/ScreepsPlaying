@@ -95,7 +95,7 @@ const customPrototypes = () => {
         }
         else {
           let sources = this.room.find(FIND_SOURCES)
-          for (s of sources) {
+          for (const s of sources) {
             if (this.pos.inRangeTo(s, 2) == true) {
               this.Rmemory.type = 'source'
             }

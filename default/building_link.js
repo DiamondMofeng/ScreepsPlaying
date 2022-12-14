@@ -28,7 +28,7 @@ const buildingRoleLink = (link) => {
 
     //source
     let sources = link.room.find(FIND_SOURCES)
-    for (s of sources) {
+    for (const s of sources) {
       if (link.pos.inRangeTo(s, 2) == true) {
         link.Rmemory.type = 'source'
       }
@@ -82,7 +82,7 @@ const buildingRoleLink = (link) => {
 
   if (type == 'source') {
 
-    for (ID in RM[C.RM.LINKS]) {
+    for (const ID in RM[C.RM.LINKS]) {
       let otherLink = Game.getObjectById(ID)
       if (otherLink == undefined) {
         delete RM[C.RM.LINKS][ID]
@@ -107,7 +107,7 @@ const buildingRoleLink = (link) => {
 
   } else if (type == 'storage') {
 
-    for (ID in RM[C.RM.LINKS]) {
+    for (const ID in RM[C.RM.LINKS]) {
       let otherLink = Game.getObjectById(ID)
       if (otherLink == undefined) {
         delete RM[C.RM.LINKS][ID]

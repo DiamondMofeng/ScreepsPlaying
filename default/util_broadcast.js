@@ -11,7 +11,7 @@ const RCLprogress = (roomName) => {
 }
 const creepRoleCounter = (roleTypeArray) => {
   // console.log(roleTypeArray)
-  for (i in roleTypeArray) {
+  for (const i in roleTypeArray) {
     // console.log(role)
     console.log(`${roleTypeArray[i]}: ${_.filter(Game.creeps, (creep) => creep.memory.role == roleTypeArray[i]).length}`)
   }

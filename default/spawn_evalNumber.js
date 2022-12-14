@@ -30,7 +30,7 @@ const evaluNumber = (roomName) => {
   let CSs = room.memory.ConstructionSites
   let progressNeeded = 0
   if (CSs.length > 0) {
-    for (c of CSs) {
+    for (const c of CSs) {
       progressNeeded += c.progressTotal - c.progress
     }
   }
@@ -141,7 +141,7 @@ const pushByDiff = (roomName) => {
   let miner = 'miner'
   let carrier = 'carrier'
 
-  for (c of creeps) {
+  for (const c of creeps) {
     if (_.startsWith(c, harvester)) {
       if (_.isUndefined(roleCounts[harvester])) {
         roleCounts[harvester] = 1
