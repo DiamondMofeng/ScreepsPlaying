@@ -1,4 +1,5 @@
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal, getEnergyFromHarvest, moveAndWithdraw } = require('./util_beheavor')
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal, getEnergyFromHarvest, moveAndWithdraw } = require('./util_beheavor');
+const { stayInRoomCallBack } = require('./util_costCallBacks');
 
 
 
@@ -26,7 +27,7 @@ var roleUpgrader = {
     //   }
     // }
 
-    if (creep.room.controller.level >= 8) {
+    if (creep.room.controller && creep.room.controller.my && creep.room.controller.level >= 8) {
       let CM = creep.memory//简写
 
       if (_.isUndefined(CM.upgrader_linkID)) {
@@ -80,7 +81,7 @@ var roleUpgrader = {
 
     if (creep.memory.upgrading) {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#FFFF00' } });
+        creep.moveTo(creep.room.controller, { costCallback: stayInRoomCallBack, visualizePathStyle: { stroke: '#FFFF00' } });
       }
     }
     else {//dont have energy
