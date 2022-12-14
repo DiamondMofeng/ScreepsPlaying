@@ -1,14 +1,14 @@
-const C = require("./util_consts")
+// const C = require("./util_consts")
 
-/**
- * 
- * @param {RoomVisual} v
- * @param {number} x 
- * @param {number} y 
- */
-const drawExtension = (v, x, y) => {
+// /**
+//  * 
+//  * @param {RoomVisual} v
+//  * @param {number} x 
+//  * @param {number} y 
+//  */
+// const drawExtension = (v, x, y) => {
 
-}
+// }
 
 
 const DrawBuildings = (V, x, y) => {

@@ -63,9 +63,6 @@ const mountSpawnQueue = () => {
      * 鉴于Room对象每tick都会重新构建，所以挂载Room对象下的属性不用担心跨tick污染
      */
     currentCreeps: {
-      get() {
-
-      }
 
     },
 

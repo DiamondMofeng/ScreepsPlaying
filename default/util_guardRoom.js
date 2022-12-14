@@ -98,7 +98,7 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
       //* 若此creep在inDanger房间内，且无还手之力
 
       function isBattleable(creep) {
-        for (part of creep.body) {
+        for (let part of creep.body) {
           if (part.type == ATTACK || part.type == RANGED_ATTACK) {
             return true
           }

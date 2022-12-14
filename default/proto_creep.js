@@ -7,8 +7,8 @@ const proto_creep = () => {
 
 
   Object.defineProperty(Creep.prototype, 'isMoving', {
-    get() { },
-    set() { },
+    // get() { },
+    // set() { },
     configurable: true
   })
 

@@ -42,7 +42,7 @@ function body(...simpleBodyArray) {
   for (let i = 0; i < simpleBodyArray.length; i++) {
 
     let PART = simpleBodyArray[i]
-    if (!PART instanceof Array) {
+    if (!(PART instanceof Array)) {
       if (typeof PART !== 'string') {
         throw new Error('error input of body function')
       }

@@ -4,10 +4,6 @@ const attack_moveToFlag = (creep, flagID) => {
   creep.moveTo(flag)
 }
 
-const attack_attackAtFlag = (creep, flag) => {
-
-}
-
 function attack_anyCreep(creep) {
   let targets = creep.room.find(FIND_HOSTILE_CREEPS)
 

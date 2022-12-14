@@ -5,7 +5,7 @@ module.exports = {
         "es2021": true
     },
     "extends": [
-        "eslint:recommended",
+        // "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
     "overrides": [
@@ -24,6 +24,9 @@ module.exports = {
         'prefer-const': 'off',
         "no-redeclare": "off",  //ts-eslint里面有
         'no-await-in-loop': 'warn',
+        'no-empty': 'warn',
+
+        'no-constant-condition': ["error", { "checkLoops": false }],
 
         //ts
         '@typescript-eslint/no-explicit-any': 'off',
@@ -31,9 +34,9 @@ module.exports = {
         '@typescript-eslint/no-inferrable-types': 'warn',
         '@typescript-eslint/ban-ts-comment': 'warn',
         "@typescript-eslint/no-redeclare": ["error", { "ignoreDeclarationMerge": true }],
+        '@typescript-eslint/no-empty-function': 'warn',
 
-        "@typescript-eslint/no-var-requires": "off"
-
+        "@typescript-eslint/no-var-requires": "off",
 
     }
 }

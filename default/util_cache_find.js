@@ -58,12 +58,12 @@ const findCache = () => {
      * 缓存掉落物
      */
     cacheDrops: {
-      get() {
-        return () => {
+      // get() {
+      //   return () => {
 
 
-        }
-      },
+      //   }
+      // },
 
     },
 
@@ -86,9 +86,9 @@ const findCache = () => {
           }
         }
       },
-      set() {
+      // set() {
 
-      }
+      // }
     },
     cts: {
       get() {

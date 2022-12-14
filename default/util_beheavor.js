@@ -474,11 +474,10 @@ function moveToRoom(creep, roomName, oneStep = false, safe = false) {
   // }
 
   if (creep.room.name !== roomName) {
-    if (safe) {
-      var moveRes = creep.moveTo(new RoomPosition(25, 25, roomName), { costCallback: avoidSourceKeeper })
-    } else {
-      var moveRes = creep.moveTo(new RoomPosition(25, 25, roomName))
-    }
+
+    var moveRes = creep.moveTo(new RoomPosition(25, 25, roomName), {
+      costCallback: safe ? avoidSourceKeeper : undefined
+    })
     // console.log(creep, 'moveRes: ', moveRes);
     return false;
   }
