@@ -88,16 +88,20 @@ const avoidSourceKeeper = (roomName) => {
 
 }
 
-const stayInRoomCostMatrix = (function () {
-  let costs = new PathFinder.CostMatrix()
-  for (let [x, y] of getBorder(0, 0, 49, 49)) {
-    costs.set(x, y, 0xff)
-  }
-  return costs
-})()
+const roomBorder = getBorder(0, 0, 49, 49);
 
-const stayInRoomCallBack = (roomName) => {
-  return stayInRoomCostMatrix
+// const stayInRoomCostMatrix = (function () {
+//   let costs = new PathFinder.CostMatrix()
+//   for (let [x, y] of roomBorder) {
+//     costs.set(x, y, 0xff)
+//   }
+//   return costs
+// })()
+
+const stayInRoomCallBack = (roomName, costMatrix) => {
+  for (let [x, y] of roomBorder) {
+    costMatrix.set(x, y, 0xff)
+  }
 }
 
 

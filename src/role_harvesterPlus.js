@@ -108,6 +108,8 @@ var roleHarvesterPlus = {
         }
       }
 
+      // console.log('failed')
+
 
       //? 都没找到咋处理？ 作废？-> useless?
       return;

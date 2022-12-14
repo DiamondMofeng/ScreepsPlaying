@@ -53,7 +53,7 @@ const getEnergyFromContainer = (creep, opt = {}) => {
     // console.log(creep, container)
     let witRes = creep.withdraw(container, RESOURCE_ENERGY)
     if (witRes == ERR_NOT_IN_RANGE) {
-      let movRes = creep.moveTo(container, { ...moveOpt, visualizePathStyle: { stroke: '#ffaa00' } });
+      creep.moveTo(container, { ...moveOpt, costCallback: stayInRoomCallBack, visualizePathStyle: { stroke: '#ffaa00' } });
       // console.log('movRes: ', movRes);
     }
     return true
@@ -126,38 +126,6 @@ const getEnergyFromNearbyLink = (creep, opt = {}) => {
 }
 
 
-
-/**
- * 用于建筑：从targets中按照priorArray的顺序返回最优先项</br>
- * 调用方法：PriorizedTarget(targets)(priorArray)
- * @param {[]} targets 
- * @param {[]} priorArray
- * @returns 
- */
-const PriorizedTarget = (targets) => {
-
-  // console.log('ts:' + transTargets)
-  // const priorArray = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER]
-
-  //1. input targets to get a func needs priorArray
-
-  const getPriority = (priorArray) => {
-
-    const curType = priorArray.shift()
-
-    const result = _.filter(targets, t => t.structureType == curType)
-    return result.length
-      ? result[0]
-      : getPriority(priorArray)
-
-  }
-
-  return getPriority
-}
-
-
-
-
 /**
  * 
  * @param {string} priorRef - 用于 filter: t[priorRef] in targets == priorArray[i] 的t属性
@@ -184,6 +152,20 @@ const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
   }
 
   return processTargets
+}
+
+const prioritySelect = (targets, priorArray, keyCallBack = (item) => item) => {
+  let result = targets[0];
+  let resultWeight = priorArray.indexOf(keyCallBack(result));
+  for (const target of targets) {
+    let key = keyCallBack(target)
+    let weight = priorArray.indexOf(key)
+    if (weight < resultWeight) {
+      result = target
+      resultWeight = weight
+    }
+  }
+  return result
 }
 
 
@@ -233,7 +215,7 @@ function recycleSelf(creep, spawnName = '') {
   console.log(`${creep} is going to recycle at ${nearest}`)
 
   let result = nearest.recycleCreep(creep)
-  if (result == ERR_NOT_IN_RANGE) {
+  if (result === ERR_NOT_IN_RANGE) {
     creep.moveTo(nearest, { reusePath: 50 })
   }
 
@@ -252,10 +234,15 @@ function transferAllToStorage(creep, certainStorage = null) {
 
     let result = creep.transfer(storage, rt)
 
-    if (result = ERR_NOT_IN_RANGE) {
+    if (result === ERR_NOT_IN_RANGE) {
       creep.moveTo(storage)
       return
     }
+
+    if (result === OK) {
+      return
+    }
+
   }
 
 }
@@ -373,7 +360,6 @@ function moveAndTransfer(creep, container, resourceTypes = [], moveOpt = {}) {
   if (Array.isArray(resourceTypes) == false) {
     resourceTypes = [resourceTypes]
   }
-  let moveResult
   let transferResult
 
   moveOpt.ignoreCreeps = moveOpt.ignoreCreeps || IGNORE_CREEPS
@@ -475,7 +461,8 @@ function moveToRoom(creep, roomName, oneStep = false, safe = false) {
 
   if (creep.room.name !== roomName) {
 
-    var moveRes = creep.moveTo(new RoomPosition(25, 25, roomName), {
+    // var moveRes =
+    creep.moveTo(new RoomPosition(25, 25, roomName), {
       costCallback: safe ? avoidSourceKeeper : undefined
     })
     // console.log(creep, 'moveRes: ', moveRes);
@@ -496,9 +483,6 @@ function moveToRoom(creep, roomName, oneStep = false, safe = false) {
     return true;
   }
 }
-//5bbcac3c9099fc012e635232
-//5bbcac3c9099fc012e635233
-
 
 /**
  * 从房间内的resource,tomb,ruin获取能量
@@ -514,7 +498,7 @@ function getEnergyFromWasted(creep, range = 5) {
     let droppedEnergys = creep.pos.findInRange(FIND_DROPPED_RESOURCES, range, { filter: r => r.resourceType == RESOURCE_ENERGY })
     if (droppedEnergys.length > 0) {
       if (creep.pickup(droppedEnergys[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(droppedEnergys[0])
+        creep.moveTo(droppedEnergys[0], { costCallback: stayInRoomCallBack })
       }
       founded = true
       return founded
@@ -523,7 +507,7 @@ function getEnergyFromWasted(creep, range = 5) {
     let tombsHaveEnergy = creep.pos.findInRange(FIND_TOMBSTONES, range, { filter: t => t.store.energy > 0 })
     if (tombsHaveEnergy.length > 0) {
       if (creep.withdraw(tombsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(tombsHaveEnergy[0])
+        creep.moveTo(tombsHaveEnergy[0], { costCallback: stayInRoomCallBack })
       }
       founded = true
       return founded
@@ -533,7 +517,7 @@ function getEnergyFromWasted(creep, range = 5) {
     let ruinsHaveEnergy = creep.pos.findInRange(FIND_RUINS, range, { filter: t => t.store.energy > 0 })
     if (ruinsHaveEnergy.length > 0) {
       if (creep.withdraw(ruinsHaveEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(ruinsHaveEnergy[0])
+        creep.moveTo(ruinsHaveEnergy[0], { costCallback: stayInRoomCallBack })
       }
       founded = true
       return founded
@@ -553,7 +537,7 @@ function getEnergyFromWasted(creep, range = 5) {
 function getEnergyFromHarvest(creep, isCloest = true) {
   let activeSources = creep.room.find(FIND_SOURCES_ACTIVE)
   if (activeSources.length > 0) {
-    let source = isCloest ? creep.pos.findClosestByPath(activeSources) : activeSources[1]
+    let source = isCloest ? creep.pos.findClosestByPath(activeSources) : activeSources[activeSources.length - 1]
     if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
       creep.moveTo(source, { costCallback: stayInRoomCallBack })  //TODO 防止出房间。可以考虑不放到这里
     }
@@ -566,10 +550,9 @@ function getEnergyFromHarvest(creep, isCloest = true) {
  * 在Creep房间中尽一切办法尝试获取能量
  * 注意！很耗CPU
  * @param {Creep} creep 
- * @param {Array} ignore - 不想要获取能源的方法
  * @ignore wasted,container,terminal,storage,harvest
  */
-function tryCollectAnyEnergy(creep, ignore = []) {
+function tryCollectAnyEnergy(creep) {
 
   if (getEnergyFromContainer(creep)) return
   if (getEnergyFromTerminal(creep)) return
@@ -645,6 +628,7 @@ module.exports = {
   getEnergyFromTerminal, getEnergyFromWasted, getEnergyFromHarvest,
   tryCollectAnyEnergy,
 
+  prioritySelect,
   targetsPriorizer_byRef,
   targetsPriorizer_structureType,
   recycleSelf,

@@ -29,30 +29,30 @@ const findCache = () => {
     /**
      * 缓存建筑
      */
-    cacheStructures: {
-      get() {
-        return () => {
-          console.log(this)
-          let time = Game.time
-          this.cacheTime_structures = time;
+    // cacheStructures: {
+    //   get() {
+    //     return () => {
+    //       console.log(this)
+    //       let time = Game.time
+    //       this.cacheTime_structures = time;
 
-          let structures = _.groupBy(this.find(FIND_STRUCTURES), s => s.structureType)
+    //       let structures = _.groupBy(this.find(FIND_STRUCTURES), s => s.structureType)
 
-          //* structures
-          for (let type in structures) {
-            console.log(type)
-            if (singleList.has(type)) {
-              this[type] =
-                structures[type][0]
-            } else if (multipleList.has(type)) {
-              this[type + 's'] =
-                structures[type + 's']
-            }
-          }
-          return 'cached at ' + time
-        }
-      },
-    },
+    //       //* structures
+    //       for (let type in structures) {
+    //         console.log(type)
+    //         if (singleList.has(type)) {
+    //           this[type] =
+    //             structures[type][0]
+    //         } else if (multipleList.has(type)) {
+    //           this[type + 's'] =
+    //             structures[type + 's']
+    //         }
+    //       }
+    //       return 'cached at ' + time
+    //     }
+    //   },
+    // },
 
     /**
      * 缓存掉落物
