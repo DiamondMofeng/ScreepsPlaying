@@ -1,4 +1,6 @@
 const attack_dismental = require("./attack_dismental");
+const claimNewRoom = require("./script_claimNewRoom");
+const developNewRoom = require("./script_developRoom");
 const supportEnergy = require("./script_supportEnergy");
 const { cronRun, errorIsolater, getRemainingRenewTime } = require("./util_helper");
 
@@ -11,17 +13,11 @@ const main_temp_commands = () => {
 
   //临时
   errorIsolater(() => {
-    // console.log(JSON.stringify(
-    //   // getRemainingRenewTime(Game.getObjectById('62a5f9a461680030e0670faf'))
-    // ))
-    // getCPUCost(roomPlanner, 'W17N15')
 
-
-
-    // claimNewRoom('expand3', 'W17N15_0', 'W15N15')
+    claimNewRoom('develop_W21N14', 'W17N15_0')
+    developNewRoom('develop_W21N14')
 
     // Game.market.createOrder(ORDER_SELL, 'O', 1.5, 300000, 'W11N8');
-
 
     // buildEnergyBase('W12N16_1', 'W12N17')
     // guardRoom('W12N17')
