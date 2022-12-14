@@ -102,24 +102,23 @@ const statsScanner = function () {
     stats.rclTime = {}
     stats.store = {}
 
-    for (let room of Object.values(Game.rooms)) {
+    for (const room of Object.values(Game.rooms)) {
 
-        if (!room.controller || !room.controller.my) continue;
+        if (!room.controller || !room.controller.my) { continue }
 
-        stats.rcl[room.name] = {}
-        stats.rclLevel[room.name] = {}
+        // RCL进度统计 只统计非满级的
+        if (room.controller.level < 8) {
+            
+            stats.rclLevel[room.name] = room.controller.level
+            stats.rcl[room.name] = (room.controller.progress / room.controller.progressTotal) * 100
+            //获取剩余升级时间
+
+            if (Memory.stats && Memory.stats.rcl && Memory.stats.rcl[room.name]) {
+                calcTimeToLevelUp(stats.rcl[room.name], Memory.stats.rcl[room.name], stats.rclTime, room.name)
+            }
+        }
 
         stats.store[room.name] = {}
-
-        //RCL进度统计
-        stats.rclLevel[room.name] = room.controller.level
-        stats.rcl[room.name] = (room.controller.progress / room.controller.progressTotal) * 100
-
-        //获取剩余升级时间
-
-        if (Memory.stats && Memory.stats.rcl && Memory.stats.rcl[room.name]) {
-            calcTimeToLevelUp(stats.rcl[room.name], Memory.stats.rcl[room.name], stats.rclTime, room.name)
-        }
 
         //store统计
         if (room.storage) {
