@@ -3,4 +3,5 @@ node_modules
 .sync
 sourceCode
 default-test
+default copy
 dist
