@@ -1,14 +1,6 @@
 const { recycleSelf, moveToRoom } = require('./util_beheavor')
 
 
-
-
-function insideRoom(roomName) {
-	let costs = new PathFinder.CostMatrix;
-	let exit = [0, 49]
-	let
-}
-
 /**
  * 
  * @param {Creep} creep 

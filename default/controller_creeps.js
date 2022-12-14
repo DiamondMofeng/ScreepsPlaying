@@ -99,7 +99,7 @@ function controller_creeps() {
   powerCreep_new()
 
   //* beheavor crontroller
-  for (creepName in Game.creeps) {
+  for (let creepName in Game.creeps) {
     try {
 
 
