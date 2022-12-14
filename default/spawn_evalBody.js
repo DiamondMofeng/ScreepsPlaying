@@ -38,15 +38,13 @@ const evalBody_harvester = (roomName, opt = {}) => {
     m = maxBody.m
   }
 
-  if (w >= 1) {
+  //TODO use _.clamp
 
-
-    return body([WORK, w, CARRY, 1, MOVE, m])
-  }
-  else {
-    // console.log(`${spawnName}'s energy 不足以产生 harvesterplus`)
-    return []
-  }
+  return body([
+    WORK, Math.max(w, minBody.w),
+    CARRY, 1,
+    MOVE, Math.max(m, minBody.m),
+  ])
 
 }
 
