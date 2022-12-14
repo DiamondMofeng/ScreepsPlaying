@@ -645,11 +645,10 @@ const placeCT = (flag, rcl) => {
 
 
 /**
- * 前往指定旗子放下spawn
+ * 根据flag位置自动摆放建筑
  * @param {Flag|String} flag 
- * @param {String} targetRoom
  */
-const developNewRoom = (flag, targetRoom, opt = {}) => {
+const developNewRoom = (flag, opt = {}) => {
 
   //* 默认此时已建好spawn，根据flag的位置和rcl自动摆放建筑
 
@@ -661,17 +660,16 @@ const developNewRoom = (flag, targetRoom, opt = {}) => {
     return
   }
 
-  let room = Game.rooms[targetRoom]
+  let room = Game.rooms[flag.pos.roomName]
   if (!room) {
     return
   }
 
   // keepCreeps(targetRoom)
 
-  let rcl = Game.rooms[targetRoom].controller.level
+  let rcl = room.controller.level
 
-
-  if (flag.room.cts && flag.room.cts.length > 0) {
+  if (room.cts && room.cts.length > 0) {
 
   } else {
     placeCT(flag, rcl)

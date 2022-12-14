@@ -18,7 +18,13 @@ const mountSpawnQueue = () => {
     //注：这是一个大顶堆。
     spawnQueue: {
       get() {
-        //? 没写是否检查这是自己的房间
+
+        // 如果不是自己的房间，则返回
+        if (!this.controller || !this.controller.my) {
+          return []
+        }
+
+
         if (_.isUndefined(Memory.rooms)) {
           Memory.rooms = {}
         }
