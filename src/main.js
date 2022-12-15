@@ -76,7 +76,7 @@ module.exports.loop = function () {
     keepCreeps(roomName, {})
   }
 
-  showVisuals()   //* VISUAL所有的主入口
+  // showVisuals()   //* VISUAL所有的主入口
 
   statsScanner();
   console.log('Game.cpu.getUsed() this tick: ', Game.cpu.getUsed());

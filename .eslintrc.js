@@ -5,7 +5,7 @@ module.exports = {
         "es2021": true
     },
     "extends": [
-        // "eslint:recommended",
+        "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
     "overrides": [
@@ -26,7 +26,7 @@ module.exports = {
         'no-await-in-loop': 'warn',
         'no-empty': 'warn',
 
-        'no-constant-condition': ["error", { "checkLoops": false }],
+        'no-constant-condition': ["warn", { "checkLoops": false }],
 
         //ts
         '@typescript-eslint/no-explicit-any': 'off',
