@@ -1,31 +1,5 @@
 //? 用[...array].reverse以达到unmutable的效果
 
-
-
-
-
-//使用 _.groupBy选出ref最优先的target,若未满足匹配则返回原数组
-function priorityFilter(targets, ref, priority, returnFirst = true) {
-  let result = []
-  let targetsGroupBy = _.groupBy(targets, ref)
-  for (let i = 0; i < priority.length; i++) {
-    let priorityName = priority[i]
-    if (targetsGroupBy[priorityName]) {
-      if (returnFirst) {
-        return targetsGroupBy[priorityName][0]
-      }
-      result = result.concat(targetsGroupBy[priorityName])
-    }
-  }
-  return result
-
-}
-
-//自动生成代码
-
-
-
-
 /**
    * 输入简化版bodyArray来获取完全版。part可以为字符串或数组
    * @param {Array} simpleBodyArray - [part: String|Array , i, ...] i为'part'的重复次数
@@ -185,16 +159,6 @@ function startWith(str, head) {
     else return false
   }
   return true
-}
-/**
- * 
- * @param {Array} targets 
- * @param {*} ref - 属性
- * @param {Array} priority 
- * @returns {} - 
- */
-function priorByRef(targets, ref, priority) {
-  _targets = _.groupBy()
 }
 
 

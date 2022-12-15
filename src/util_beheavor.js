@@ -154,15 +154,33 @@ const targetsPriorizer_byRef = (priorRef, priorArray, returnArray = true) => {
   return processTargets
 }
 
-const prioritySelect = (targets, priorArray, keyCallBack = (item) => item) => {
-  let result = targets[0];
+const prioritySelect = (targets, priorArray, keyCallBack = (item) => item, isReturnArray = false) => {
+
+  if (!targets.length) {
+    return isReturnArray ? [] : undefined;
+  }
+
+  let result = isReturnArray
+    ? [targets[0]]
+    : targets[0];
+
   let resultWeight = priorArray.indexOf(keyCallBack(result));
+  
   for (const target of targets) {
     let key = keyCallBack(target)
     let weight = priorArray.indexOf(key)
+    if (weight === -1) {
+      continue;
+    }
+
     if (weight < resultWeight) {
-      result = target
+      result = isReturnArray
+        ? [target]
+        : target;
       resultWeight = weight
+
+    } else if (weight === resultWeight && isReturnArray) {
+      result.push(target)
     }
   }
   return result

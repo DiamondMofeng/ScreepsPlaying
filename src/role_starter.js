@@ -1,4 +1,4 @@
-const { targetsPriorizer_byRef, workingStatesKeeper, tryCollectAnyEnergy } = require('./util_beheavor')
+const { workingStatesKeeper, tryCollectAnyEnergy } = require('./util_beheavor')
 
 /**
  * 

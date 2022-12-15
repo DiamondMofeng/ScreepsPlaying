@@ -1,7 +1,6 @@
-const Upgrader = require('./role_upgrader')
-const { getEnergyFromContainer, getEnergyFromStorage, pickUpNearbyDroppedEnergy, targetsPriorizer_byRef, getEnergyFromTerminal, targetsPriorizer_structureType } = require('./util_beheavor')
-const { IGNORE_CREEPS } = require('./util_consts')
-const { cpuStart, cpuEnd } = require('./util_helper')
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } = require('./util_beheavor')
+const { IGNORE_CREEPS } = require('./util_consts');
+const { stayInRoomCallBack } = require('./util_costCallBacks');
 
 
 const MIN_ENERGY = {
@@ -99,10 +98,13 @@ var roleCarrier = {
 
 
       else {
-        // const priorTargets = targetsPriorizer_byRef('structureType'
-        //   , [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL])(targets)
-        // cpuStart('carrier_priorTargets')
-        const priorTargets = targetsPriorizer_structureType(targets, [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL]);
+        
+        const priorTargets = prioritySelect(
+          targets,
+          [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL],
+          (s) => s.structureType,
+          true
+        );
         // cpuEnd('carrier_priorTargets')
         // console.log('priorTargets: ', priorTargets);
         // console.log(priorTargets instanceof Array)
@@ -116,9 +118,7 @@ var roleCarrier = {
           // console.log('CarrierTarget' + priorTarget)
 
           if (creep.transfer(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            let moveRes = creep.moveTo(closest, { ignoreCreeps: IGNORE_CREEPS, visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
-            // console.log('moveRes: ', moveRes);
-
+            creep.moveTo(closest, { costCallback: stayInRoomCallBack, ignoreCreeps: IGNORE_CREEPS, visualizePathStyle: { visualizePathStyle: { stroke: '#FFFF00' } } });
           }
 
           // if (haveJob)

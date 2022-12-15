@@ -1,6 +1,6 @@
 // const Builder = require('./role_builder')
 
-const { getEnergyFromContainer, recycleSelf, targetsPriorizer_byRef } = require('./util_beheavor')
+const { getEnergyFromContainer, recycleSelf, prioritySelect } = require('./util_beheavor')
 
 
 var roleRepairer = {
@@ -50,15 +50,18 @@ var roleRepairer = {
       });
       // console.log('repireList:' + targets)
       if (targets.length) {
-        let priorizedTarget = targetsPriorizer_byRef('structureType'
-          , [
+        let priorizedTarget = prioritySelect(
+          targets,
+          [
             STRUCTURE_TOWER,
             STRUCTURE_CONTAINER,
             STRUCTURE_RAMPART,
             STRUCTURE_ROAD,
             STRUCTURE_WALL
-          ]
-          , false)(targets)
+          ],
+          (s) => s.structureType,
+          false
+        )
 
         if (creep.repair(priorizedTarget) == ERR_NOT_IN_RANGE) {
           creep.moveTo(priorizedTarget, { visualizePathStyle: { stroke: '#0000CD', opacity: 0.2 } });
@@ -73,7 +76,7 @@ var roleRepairer = {
     }
     else {
       if (getEnergyFromContainer(creep)) {
-
+        //
       }
       else {//dig
         var sources = creep.room.find(FIND_SOURCES);

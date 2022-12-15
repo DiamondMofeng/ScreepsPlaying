@@ -1,5 +1,5 @@
 const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal, getEnergyFromHarvest } = require('./util_beheavor');
+const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal, getEnergyFromHarvest, prioritySelect } = require('./util_beheavor');
 const { stayInRoomCallBack } = require('./util_costCallBacks');
 
 
@@ -7,7 +7,7 @@ const { stayInRoomCallBack } = require('./util_costCallBacks');
 var roleBuilder = {
 
 	/** @param {Creep} creep **/
-	run: function (creep, buildNewer = false) {
+	run: function (creep) {
 		var targets
 		const haveJob = () => {
 			targets = creep.room.cts
@@ -30,40 +30,17 @@ var roleBuilder = {
 			}
 
 			if (creep.memory.building) {
-				let cts = _.groupBy(creep.room.cts, ct => ct.structureType);
-				let targets = []
+
 				const priorties_cts = [STRUCTURE_STORAGE, STRUCTURE_TOWER, STRUCTURE_CONTAINER, STRUCTURE_LINK, STRUCTURE_EXTENSION,]
+				let target = prioritySelect(creep.room.cts, priorties_cts, (ct) => ct.structureType)
+				// console.log('target: ', target);
 
-
-
-				for (const Ptype of priorties_cts) {
-
-					if (targets.length > 0) {
-						break;
-					}
-
-					for (const type in cts) {
-						if (Ptype == type) {
-							targets = cts[type];
-							break;
-						}
-					}
-				}
-
-
-				if (targets.length == 0) {
-					targets = creep.room.cts
-				}
-
-
-
-				if (targets.length) {
-
-					let target = buildNewer ? targets[targets.length - 1] : targets[0]
+				if (target) {
 
 					if (creep.build(target) == ERR_NOT_IN_RANGE) {
 						creep.moveTo(target, { costCallback: stayInRoomCallBack, visualizePathStyle: { stroke: '#ffffff' } });
 					}
+
 				}
 			}
 

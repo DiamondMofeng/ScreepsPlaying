@@ -1,4 +1,4 @@
-const { targetsPriorizer_byRef, recycleSelf, transferAllToStorage } = require('./util_beheavor')
+const { recycleSelf, } = require('./util_beheavor')
 
 
 var roleUseless = {
@@ -6,8 +6,8 @@ var roleUseless = {
   /** @param {Creep} creep **/
   run: function (creep) {
 
-    recycleSelf(creep,'Spawn1')
-    
+    recycleSelf(creep, 'Spawn1')
+
   }
 }
 module.exports = roleUseless.run;

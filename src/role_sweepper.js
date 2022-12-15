@@ -1,5 +1,5 @@
 const Carrier = require('./role_carrier')
-const { targetsPriorizer_byRef, recycleSelf, transferAllToStorage, setDoing } = require('./util_beheavor')
+const { transferAllToStorage, setDoing, prioritySelect } = require('./util_beheavor')
 
 
 var roleSweeper = {
@@ -44,10 +44,8 @@ var roleSweeper = {
         if (creep.store.getFreeCapacity() != 0) {
 
 
-
-          let resourcePriorizer = targetsPriorizer_byRef('resourceType', [...RESOURCES_ALL].reverse(), false)
-          let priorizedResource = resourcePriorizer(droppedResources)
-
+          //TODO use cache
+          let priorizedResource = prioritySelect(droppedResources, [...RESOURCES_ALL].reverse(), res => res.resourceType, false)
 
           if (creep.pickup(priorizedResource) == ERR_NOT_IN_RANGE) {
             creep.moveTo(priorizedResource, { visualizePathStyle: { stroke: '#ffaa00' } })
@@ -66,27 +64,18 @@ var roleSweeper = {
 
         if (creep.store.getFreeCapacity() !== 0) {
 
-          let tomb0 = tombsHaveResource[0]
+          const tomb0 = tombsHaveResource[0]
 
-          let resourcePriorizer = targetsPriorizer_byRef('resourceType', [...RESOURCES_ALL].reverse(), false)
+          //TODO use cahce
 
-          let resourcesTypesInTomb = Object.keys(tomb0.store)
+          const prioritizedResourceType = prioritySelect(Object.keys(tomb0.store), [...RESOURCES_ALL].reverse())
 
-          let priorizedResource = resourcePriorizer(resourcesTypesInTomb)
+          if (creep.withdraw(tomb0, prioritizedResourceType) == ERR_NOT_IN_RANGE) {
 
+            creep.moveTo(tomb0, { visualizePathStyle: { stroke: '#ffaa00' } })
 
-          for (const rt in resourcesTypesInTomb) {
-
-            if (creep.withdraw(tomb0, priorizedResource) == ERR_NOT_IN_RANGE) {
-
-
-              creep.moveTo(tomb0, { visualizePathStyle: { stroke: '#ffaa00' } })
-
-            }
-            return
           }
 
-          //if 
         } else {
           transferAllToStorage(creep)
         }

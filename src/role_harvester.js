@@ -1,4 +1,4 @@
-const { targetsPriorizer_byRef } = require('./util_beheavor')
+const { prioritySelect } = require('./util_beheavor')
 
 
 var roleHarvester = {
@@ -28,8 +28,12 @@ var roleHarvester = {
       // console.log(targets[1])
 
 
-      const priorTarget = targetsPriorizer_byRef('structureType',
-        [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER], false)(targets)
+      const priorTarget = prioritySelect(targets,
+        [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_CONTAINER],
+        (s) => s.structureType,
+        false
+      )
+
       if (priorTarget) {
 
         // console.log('HarvesterTarget' + priorTarget)
