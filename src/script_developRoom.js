@@ -1,9 +1,7 @@
-const keepCreeps = require("./spawn_keepCreeps")
-const { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy } = require("./spawn_evalBody")
+/* eslint-disable no-fallthrough */
 const C = require("./util_consts")
-const { spawnByMinNumber, body } = require("./util_helper")
 
-
+const INTERVAL_PLACE_CONSTRUCTION_SITES = 3000;
 
 
 /*
@@ -619,7 +617,7 @@ const CTinfos = (flag, rcl, locate = true) => {
  */
 const placeCT = (flag, rcl) => {
 
-  if (Game.time % 10000 != 0) {
+  if (Game.time % INTERVAL_PLACE_CONSTRUCTION_SITES != 0) {
     return
   }
 
