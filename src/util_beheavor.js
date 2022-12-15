@@ -165,7 +165,10 @@ const prioritySelect = (targets, priorArray, keyCallBack = (item) => item, isRet
     : targets[0];
 
   let resultWeight = priorArray.indexOf(keyCallBack(result));
-  
+  if (resultWeight === -1) {
+    resultWeight = Infinity
+  }
+
   for (const target of targets) {
     let key = keyCallBack(target)
     let weight = priorArray.indexOf(key)
