@@ -161,7 +161,10 @@ function startWith(str, head) {
   return true
 }
 
-
+function calcEnergyRealPrice(basePrice, room1, room2) {
+  let realUnit = 1 + Game.market.calcTransactionCost(1000, room1, room2) / 1000
+  return basePrice / realUnit
+}
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -270,6 +273,8 @@ module.exports = {
   body, bodyCost, spawnByMinNumber,
   getCPUCost, cpuStart, cpuEnd,
   startWith,
+
+  calcEnergyRealPrice,
 
   randomInt,
   cronRun,

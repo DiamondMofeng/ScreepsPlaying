@@ -1,3 +1,4 @@
+const { calcEnergyRealPrice } = require("./util_helper");
 
 let toMount = {};
 
@@ -49,10 +50,10 @@ toMount.showRoomProgressPercent = function () {
 
 }
 
-toMount.consoleAbuse = function () {
+// toMount.consoleAbuse = function () {
 
 
-}
+// }
 
 toMount.dealAll = function (orderID, roomName) {
   let amount = Game.market.getOrderById(orderID).remainingAmount
@@ -65,8 +66,16 @@ toMount.sellEnergy = function (roomName, orderID = undefined) {
     return `${roomName} is not my room or do not have terminal`
   }
 
+  if (Game.rooms[roomName].terminal.cooldown) {
+    return `${roomName} terminal is cooling`
+  }
+
   if (!orderID) {
-    //TODO 自动寻找合适的order
+    //TODO 自动寻找合适的order 算法是否合适？
+    //TODO use cache
+    const energyBuyOrders = Game.market.getAllOrders({ type: ORDER_BUY, resourceType: RESOURCE_ENERGY });
+    energyBuyOrders.sort((o2, o1) => calcEnergyRealPrice(o1.price, roomName, o1.roomName) - calcEnergyRealPrice(o2.price, roomName, o2.roomName))
+    orderID = energyBuyOrders[0].id
   }
 
   let fromRoom = Game.rooms[roomName]
@@ -75,16 +84,13 @@ toMount.sellEnergy = function (roomName, orderID = undefined) {
     return `${orderID} is not exist`
   }
   let costUnit = 1 + Game.market.calcTransactionCost(1000, roomName, order.roomName) / 1000
-  let canSellAmount = Math.floor(fromRoom.terminal.store[RESOURCE_ENERGY] / costUnit)
-  if (canSellAmount < order.amount) {
-    Game.market.deal(orderID, canSellAmount, roomName)
-    return `${canSellAmount} energy has been sold`
-  }
-  else {
-    Game.market.deal(orderID, order.amount, roomName)
-    return `${order.amount} energy has been sold`
-  }
+  let canSellAmount = Math.min(
+    Math.floor(fromRoom.terminal.store[RESOURCE_ENERGY] / costUnit),
+    order.amount
+  );
 
+  Game.market.deal(orderID, canSellAmount, roomName)
+  return `${canSellAmount} energy has been sold`
 
 }
 
@@ -106,6 +112,11 @@ toMount.findCheapestOrder = function (resourceType, roomName) {
 
 
 toMount.sendEnergy = function (fromRoom, toRoom, amount) {
+
+  if (!amount) {
+    return `please provide amount`
+  }
+
   let costUnit = 1 + Game.market.calcTransactionCost(1000, fromRoom, toRoom) / 1000
 
   let canSendAmount = Math.floor(amount / costUnit)
