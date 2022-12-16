@@ -39,12 +39,12 @@ const claimNewRoom = (flag, spawn, keepHelping = false) => {
 
   let targetRoom = flag.pos.roomName
 
-  let expend_claimer = 'expend_claimer_' + targetRoom
-  let expend_builder = 'expend_builder_' + targetRoom
+  let expend_claimer = 'expend_claimer';
+  let expend_builder = 'expend_builder';
 
   let spawnName = targetRoom + '_0'
 
-
+  //! TODO 换为使用spawnQueue。
   if (Game.spawns[spawnName] == undefined || keepHelping === true) {
     spawnByMinNumber(spawn.name, expend_builder, body([WORK, 15, CARRY, 10, MOVE, 25]), 3,
       {
