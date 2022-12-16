@@ -47,10 +47,10 @@ const SHOW_CPU_CREEPS = C.config.SHOW_CPU_CREEPS
 
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
 
-let activePreSpawn = [
-  'carrier',
-  'base_transferor',
-  'harvesterPlus',
+const activePreSpawn = [
+  // 'carrier',
+  // 'base_transferor',
+  // 'harvesterPlus',
 ]
 
 
@@ -114,7 +114,7 @@ function controller_creeps() {
 
       //TODO 先放在这里，待整理
 
-      if (activePreSpawn.indexOf(creep.memory.role) !== -1) {
+      if (activePreSpawn.includes(creep.memory.role)) {
         checkShouldPreAddToSpawnQueue(creep)
       }
 
