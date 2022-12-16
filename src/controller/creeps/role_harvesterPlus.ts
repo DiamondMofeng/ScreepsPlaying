@@ -24,7 +24,7 @@ import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
 interface HarvesterPlusMemory extends CreepMemory {
   workParts?: number
 
-  harvester_sourceID?: Id<Source> | 'none'
+  harvester_sourceID?: Id<Source>
   harvester_linkID?: Id<StructureLink> | 'none'
   harvester_containerID?: Id<StructureContainer> | 'none'
   harvester_extensionIDs?: Id<StructureExtension>[]
@@ -140,15 +140,7 @@ const roleHarvesterPlus = {
       }
 
       // save source
-      if (_.isUndefined(CM.harvester_sourceID)) {
-        let sources = creep.pos.findInRange(FIND_SOURCES, 1)
-        if (sources.length > 0) {
-          CM.harvester_sourceID = sources[0].id
-        }
-        else {
-          CM.harvester_sourceID = 'none'
-        }
-      }
+      // 前面save过了
 
       if (_.isUndefined(CM.harvester_extensionIDs)) {
         let extensions = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: (s): s is StructureExtension => s.structureType === STRUCTURE_EXTENSION })
@@ -175,9 +167,9 @@ const roleHarvesterPlus = {
         }
       }
 
-      const harvestResult = creep.harvest(Game.getObjectById(CM.harvester_sourceID))
+      const harvestResult = creep.harvest(Game.getObjectById<Source>(CM.harvester_sourceID))
       if (harvestResult == ERR_NOT_IN_RANGE) {
-        creep.moveTo(Game.getObjectById(CM.harvester_sourceID))
+        creep.moveTo(Game.getObjectById<Source>(CM.harvester_sourceID))
         return
       }
 
