@@ -1,4 +1,4 @@
-import controller_creeps from "./controller_creeps"
+import controller_creeps from "./controller/controller_creeps"
 import controller_structures from "./controller/controller_structures"
 
 import broadcaster from '@/utils/util_broadcast'
