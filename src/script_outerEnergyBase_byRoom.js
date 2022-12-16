@@ -1,6 +1,5 @@
-// const Builder = require('./role_builder')
-const { setDoing } = require('./util_beheavor')
-const { body, spawnByMinNumber, bodyCost } = require('./util_helper')
+import { setDoing } from './util_beheavor'
+import { body, spawnByMinNumber, bodyCost } from './util_helper'
 /*
 param:baseRoom,targetRoom
 思路:
@@ -704,4 +703,4 @@ function buildEnergyBase(spawnName, roomNameTo = 'W12N17', startPos = null) {
 
 
 
-module.exports = buildEnergyBase
+export default buildEnergyBase

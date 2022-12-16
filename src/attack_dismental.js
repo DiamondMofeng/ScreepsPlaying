@@ -1,5 +1,5 @@
-const { moveAndBoost, isPartAllBoosted, healLower } = require("./util_beheavor");
-const { body } = require("./util_helper");
+import { moveAndBoost, isPartAllBoosted, healLower } from "./util_beheavor";
+import { body } from "./util_helper";
 
 
 const attack_dismental = function (fromRoomName, toFlagName) {
@@ -171,4 +171,4 @@ const attack_dismental = function (fromRoomName, toFlagName) {
 
 }
 
-module.exports = attack_dismental;
+export default attack_dismental;

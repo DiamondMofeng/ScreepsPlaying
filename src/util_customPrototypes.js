@@ -10,7 +10,7 @@
 如：Link.Rmemory==Link.room.memory['BUINDING_LINK'][Link.id]
 */
 
-const C = require("./util_consts")
+import { RM } from "./util_consts"
 
 
 
@@ -76,15 +76,15 @@ const customPrototypes = () => {
         if (_.isUndefined(Memory.rooms[this.room.name])) {
           Memory.rooms[this.room.name] = {}
         }
-        if (_.isUndefined(Memory.rooms[this.room.name][C.RM.CONTAINERS])) {
-          Memory.rooms[this.room.name][C.RM.CONTAINERS] = {}
+        if (_.isUndefined(Memory.rooms[this.room.name][RM.CONTAINERS])) {
+          Memory.rooms[this.room.name][RM.CONTAINERS] = {}
         }
-        if (_.isUndefined(Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id])) {
-          Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id] = {}
+        if (_.isUndefined(Memory.rooms[this.room.name][RM.CONTAINERS][this.id])) {
+          Memory.rooms[this.room.name][RM.CONTAINERS][this.id] = {}
         }
-        return Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id]
+        return Memory.rooms[this.room.name][RM.CONTAINERS][this.id]
       },
-      set(value) { Memory.rooms[this.room.name][C.RM.CONTAINERS][this.id] = value },
+      set(value) { Memory.rooms[this.room.name][RM.CONTAINERS][this.id] = value },
       configurable: true,
       enumerable: true
     },
@@ -160,4 +160,4 @@ const customPrototypes = () => {
 
 
 
-module.exports = customPrototypes
+export default customPrototypes

@@ -1,5 +1,5 @@
-const Carrier = require('./role_carrier')
-const { transferAllToStorage, setDoing, prioritySelect } = require('./util_beheavor')
+import Carrier from './role_carrier';
+import { transferAllToStorage, setDoing, prioritySelect } from './util_beheavor';
 
 
 var roleSweeper = {
@@ -125,4 +125,4 @@ var roleSweeper = {
   }
 };
 
-module.exports = roleSweeper.run;
+export default roleSweeper.run;

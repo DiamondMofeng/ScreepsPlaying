@@ -1,11 +1,10 @@
 
 
-const { body } = require("./util_helper")
+import { body } from "./util_helper"
 //withRoad
 //withBoost
-let min
 
-const evalBody_harvester = (roomName, opt = {}) => {
+export const evalBody_harvester = (roomName, opt = {}) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
@@ -55,7 +54,7 @@ const evalBody_harvester = (roomName, opt = {}) => {
  * @opt haveRoad - 默认为true,若为false则move=2*(w+c)
  * @returns 
  */
-const evalBody_worker_halfEnergy = (roomName, opt = {}) => {
+export const evalBody_worker_halfEnergy = (roomName, opt = {}) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
@@ -79,7 +78,7 @@ const evalBody_worker_halfEnergy = (roomName, opt = {}) => {
   }
 }
 
-const evalBody_worker_fullEnergy = (roomName, opt = {}) => {
+export const evalBody_worker_fullEnergy = (roomName, opt = {}) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
@@ -98,7 +97,7 @@ const evalBody_worker_fullEnergy = (roomName, opt = {}) => {
   }
 }
 
-const evalBody_carrier_halfEnergy = (roomName, opt = {}) => {
+export const evalBody_carrier_halfEnergy = (roomName, opt = {}) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
@@ -130,7 +129,7 @@ const evalBody_carrier_halfEnergy = (roomName, opt = {}) => {
  * @param {String} role 
  * @param {Object|SpawnOptions} opt 
  */
-const evalBodyByRole = (roomName, role, opt = {}) => {
+export const evalBodyByRole = (roomName, role, opt = {}) => {
 
   //* 因为role名是role+房间名，所以没法直接用switch
   // switch (role) {
@@ -176,7 +175,7 @@ const evalBodyByRole = (roomName, role, opt = {}) => {
     return []
   }
 }
-module.exports = {
+export default {
   evalBodyByRole,
   evalBody_harvester, evalBody_worker_halfEnergy, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy
 }

@@ -1,4 +1,4 @@
-const { recycleSelf, moveToRoom } = require('./util_beheavor')
+import { recycleSelf, moveToRoom } from './util_beheavor'
 
 
 /**
@@ -96,4 +96,4 @@ var roleGuardian = (creep) => {
 
 };
 
-module.exports = roleGuardian
+export default roleGuardian

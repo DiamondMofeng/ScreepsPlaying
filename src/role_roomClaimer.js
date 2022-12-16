@@ -1,5 +1,5 @@
-const { moveToRoom } = require("./util_beheavor")
-const { avoidSourceKeeper } = require("./util_costCallBacks")
+import { moveToRoom } from "./util_beheavor"
+import { avoidSourceKeeper } from "./util_costCallBacks"
 
 /**
  * pionner将前往flag所在房间，采集资源并进行建造
@@ -34,5 +34,5 @@ const role_roomClaimer = (creep) => {
 
 //8*work,4*CARRY,13*MOVE,1*HEAL 250+800+850
 //Game.spawns.Spawn1.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,HEAL],'c2',{memory:{role:'roomClaimer'},manual:true})
-module.exports = role_roomClaimer
+export default role_roomClaimer
 

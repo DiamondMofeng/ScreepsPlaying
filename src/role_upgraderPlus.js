@@ -1,5 +1,3 @@
-// const { getEnergyFromContainer } = require('./util_beheavor')
-const { memoryUpgradePosArray } = require('./util_getMemories')
 
 //upgraderByPos
 
@@ -206,4 +204,4 @@ var roleUpgrader = {
   }
 }
 
-module.exports = roleUpgrader.run;
+export default roleUpgrader.run;

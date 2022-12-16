@@ -29,6 +29,7 @@ module.exports = {
         'no-constant-condition': ["warn", { "checkLoops": false }],
 
         //ts
+        '@typescript-eslint/no-empty-interface': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-inferrable-types': 'warn',

@@ -1,6 +1,6 @@
 
-const { moveToRoom } = require("./util_beheavor");
-const { avoidSourceKeeper } = require("./util_costCallBacks");
+import { moveToRoom } from "./util_beheavor";
+import { avoidSourceKeeper } from "./util_costCallBacks";
 
 /**
  * 
@@ -32,5 +32,5 @@ const role_expend_claimer = (creep) => {
 
 }
 
-module.exports = role_expend_claimer
+export default role_expend_claimer
 

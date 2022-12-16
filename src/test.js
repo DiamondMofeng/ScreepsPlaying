@@ -1,4 +1,4 @@
-const { memoryResources, memoryUpgradePosArray } = require('./util_getMemories')
+import { memoryUpgradePosArray } from './util_getMemories'
 
 function transferEnergyToContainer(creep) {
 
@@ -49,7 +49,7 @@ function outMineFinder() {
       if (allowedRooms[roomName] === undefined) {
         return false;
       }
-      else{
+      else {
 
       }
     }
@@ -89,4 +89,4 @@ let test = {
 
 
 
-module.exports = test
+export default test

@@ -1,4 +1,4 @@
-const { workingStatesKeeper, tryCollectAnyEnergy } = require('./util_beheavor')
+import { workingStatesKeeper, tryCollectAnyEnergy } from './util_beheavor'
 
 /**
  * 
@@ -21,6 +21,6 @@ const roleStarter = function (creep) {
 }
 
 
-module.exports = roleStarter
+export default roleStarter
 
 

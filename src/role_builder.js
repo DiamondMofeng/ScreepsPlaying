@@ -1,6 +1,6 @@
-const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal, getEnergyFromHarvest, prioritySelect } = require('./util_beheavor');
-const { stayInRoomCallBack } = require('./util_costCallBacks');
+import Repairer from './role_repairer';
+import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy, getEnergyFromTerminal, getEnergyFromHarvest, prioritySelect } from './util_beheavor';
+import { stayInRoomCallBack } from './util_costCallBacks';
 
 
 
@@ -61,4 +61,4 @@ var roleBuilder = {
 	}
 };
 
-module.exports = roleBuilder.run;
+export default roleBuilder.run;

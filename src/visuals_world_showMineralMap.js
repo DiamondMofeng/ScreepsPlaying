@@ -15,4 +15,5 @@ const worldVisual_showMineralMap = () => {
     }
   }
 }
+
 module.exports = worldVisual_showMineralMap

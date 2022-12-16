@@ -1,5 +1,5 @@
-const Repairer = require('./role_repairer')
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy } = require('./util_beheavor')
+import Repairer from './role_repairer';
+import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy } from './util_beheavor';
 
 
 
@@ -60,4 +60,4 @@ var roleBuilder = {
 	}
 };
 
-module.exports = roleBuilder.run;
+export default roleBuilder.run;

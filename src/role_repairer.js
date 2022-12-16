@@ -1,6 +1,5 @@
-// const Builder = require('./role_builder')
 
-const { getEnergyFromContainer, recycleSelf, prioritySelect } = require('./util_beheavor')
+import { getEnergyFromContainer, recycleSelf, prioritySelect } from './util_beheavor';
 
 
 var roleRepairer = {
@@ -89,4 +88,4 @@ var roleRepairer = {
   }
 };
 
-module.exports = roleRepairer.run;
+export default roleRepairer.run;

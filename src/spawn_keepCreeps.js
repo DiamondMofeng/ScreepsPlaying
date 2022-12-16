@@ -4,11 +4,9 @@
  * 
  */
 
-const { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy, evalBodyByRole } = require("./spawn_evalBody")
-const C = require("./util_consts")
-const {
-  // spawnByMinNumber,
-  body } = require("./util_helper")
+import { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy, evalBodyByRole } from "./spawn_evalBody"
+import { TIME_INTERVAL_COUNT_CREEPS, PRIORITY_SPAWN_HARVESTER, PRIORITY_SPAWN_WORKER, PRIORITY_SPAWN_CARRIER, PRIORITY_SPAWN_UPGRADER, PRIORITY_SPAWN_BUILDER, PRIORITY_SPAWN_REPAIRER, PRIORITY_SPAWN_MINER, PRIORITY_SPAWN_BASE_TRANSFEROR } from "./util_consts"
+import { body } from "./util_helper"
 
 
 
@@ -41,7 +39,7 @@ const config = {
 function countAllCreepsByRole() {
 
   let counts = global.creepCountsByRoom
-  if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= C.TIME_INTERVAL_COUNT_CREEPS) {
+  if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= TIME_INTERVAL_COUNT_CREEPS) {
     counts = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
     for (let roomName in counts) {
       counts[roomName] = _.countBy(counts[roomName], c => c.memory.role);
@@ -103,28 +101,28 @@ function countAllCreepsByRole() {
  */
 function getCreepSpawnPriorityByRole(role) {
   if (role.startsWith('harvester')) {
-    return C.PRIORITY_SPAWN_HARVESTER
+    return PRIORITY_SPAWN_HARVESTER
   }
   else if (role.startsWith('worker')) {
-    return C.PRIORITY_SPAWN_WORKER
+    return PRIORITY_SPAWN_WORKER
   }
   else if (role.startsWith('carrier')) {
-    return C.PRIORITY_SPAWN_CARRIER
+    return PRIORITY_SPAWN_CARRIER
   }
   else if (role.startsWith('upgrader')) {
-    return C.PRIORITY_SPAWN_UPGRADER
+    return PRIORITY_SPAWN_UPGRADER
   }
   else if (role.startsWith('builder')) {
-    return C.PRIORITY_SPAWN_BUILDER
+    return PRIORITY_SPAWN_BUILDER
   }
   else if (role.startsWith('repairer')) {
-    return C.PRIORITY_SPAWN_REPAIRER
+    return PRIORITY_SPAWN_REPAIRER
   }
   else if (role.startsWith('miner')) {
-    return C.PRIORITY_SPAWN_MINER
+    return PRIORITY_SPAWN_MINER
   }
   else if (role.startsWith('base_transferor')) {
-    return C.PRIORITY_SPAWN_BASE_TRANSFEROR
+    return PRIORITY_SPAWN_BASE_TRANSFEROR
   }
 }
 
@@ -357,4 +355,4 @@ const keepCreeps = (targetRoom, opt = {}) => {
   }
 }
 
-module.exports = keepCreeps
+export default keepCreeps

@@ -1,5 +1,5 @@
-const { workingStatesKeeper, getEnergyFromStorage } = require("./util_beheavor");
-const C = require("./util_consts");
+import { workingStatesKeeper, getEnergyFromStorage } from "./util_beheavor";
+import { TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET } from "./util_consts";
 
 
 let repairTargetId = "repairerTargetId"
@@ -14,7 +14,7 @@ const roleWallRepairer = (creep) => {
       getEnergyFromStorage(creep)
     },
     () => {
-      if (Game.time % C.TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET == 0) {
+      if (Game.time % TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET == 0) {
         delete creep.memory[repairTargetId]
       }
 
@@ -46,4 +46,4 @@ const roleWallRepairer = (creep) => {
 }
 
 
-module.exports = roleWallRepairer;
+export default roleWallRepairer;

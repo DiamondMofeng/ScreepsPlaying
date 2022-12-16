@@ -1,4 +1,4 @@
-const { moveToRoom, workingStatesKeeper } = require("./util_beheavor")
+import { moveToRoom, workingStatesKeeper } from "./util_beheavor"
 
 
 /**
@@ -78,4 +78,4 @@ const role_scavenger = (creep) => {
 
 }
 
-module.exports = role_scavenger
+export default role_scavenger

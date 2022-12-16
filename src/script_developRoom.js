@@ -1,5 +1,5 @@
 /* eslint-disable no-fallthrough */
-const C = require("./util_consts")
+import { myName } from "./util_consts";
 
 const INTERVAL_PLACE_CONSTRUCTION_SITES = 3000;
 
@@ -74,7 +74,7 @@ const locateSomething = (room) => {
   if (typeof room == 'string') {
     room = Game.rooms[room]
   }
-  if (!room || room.controller.owner.username != C.myName) {
+  if (!room || room.controller.owner.username != myName) {
     return
   }
 
@@ -115,7 +115,7 @@ const locateSomething_byAux = (room, starter) => {
     room = Game.rooms[room]
   }
 
-  if (!room || room.controller.owner.username != C.myName) {
+  if (!room || room.controller.owner.username != myName) {
     return
   }
 
@@ -677,4 +677,4 @@ const developNewRoom = (flag, opt = {}) => {
 }
 
 
-module.exports = developNewRoom
+export default developNewRoom

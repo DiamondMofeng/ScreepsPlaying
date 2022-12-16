@@ -10,8 +10,8 @@
  * Use `getViewedRooms()` each tick to retrieve any viewed rooms. It returns an array or rooms.
  */
 
-const { evalBody_harvester } = require("./spawn_evalBody");
-const { body } = require("./util_helper");
+import { evalBody_harvester } from "./spawn_evalBody";
+import { body } from "./util_helper";
 
 const playground = {
   injectRoomTracker: function () {
@@ -136,4 +136,4 @@ temp: function () {
 
 
 
-module.exports = playground
+export default playground

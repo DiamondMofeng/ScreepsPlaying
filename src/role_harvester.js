@@ -1,4 +1,4 @@
-const { prioritySelect } = require('./util_beheavor')
+import { prioritySelect } from './util_beheavor';
 
 
 var roleHarvester = {
@@ -47,6 +47,6 @@ var roleHarvester = {
   }
 }
 
-module.exports = roleHarvester.run;
+export default roleHarvester.run;
 
 

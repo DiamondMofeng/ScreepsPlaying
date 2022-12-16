@@ -1,6 +1,6 @@
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } = require('./util_beheavor')
-const { IGNORE_CREEPS } = require('./util_consts');
-const { stayInRoomCallBack } = require('./util_costCallBacks');
+import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } from './util_beheavor';
+import { IGNORE_CREEPS } from './util_consts';
+import { stayInRoomCallBack } from './util_costCallBacks';
 
 
 const MIN_ENERGY = {
@@ -135,6 +135,6 @@ var roleCarrier = {
 
 }
 
-module.exports = roleCarrier.run;
+export default roleCarrier.run;
 
 

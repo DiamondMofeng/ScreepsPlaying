@@ -1,5 +1,5 @@
-const C = require("./util_consts")
-const { spawnByMinNumber, body } = require("./util_helper")
+import { myName } from "./util_consts"
+import { spawnByMinNumber, body } from "./util_helper"
 
 
 
@@ -53,7 +53,7 @@ const claimNewRoom = (flag, spawn, keepHelping = false) => {
   }
 
 
-  if (_.isUndefined(flag.room) || (flag.room.controller && flag.room.controller.owner.username !== C.myName)) {
+  if (_.isUndefined(flag.room) || (flag.room.controller && flag.room.controller.owner.username !== myName)) {
 
     spawnByMinNumber(spawn.name, expend_claimer, body([TOUGH, 4, MOVE, 4, CLAIM, 1, MOVE, 1]), 1,
       {
@@ -86,4 +86,4 @@ const claimNewRoom = (flag, spawn, keepHelping = false) => {
 }
 
 
-module.exports = claimNewRoom
+export default claimNewRoom

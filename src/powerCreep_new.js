@@ -1,4 +1,4 @@
-const { moveAndTransfer } = require("./util_beheavor")
+import { moveAndTransfer } from "./util_beheavor";
 
 function powerCreep_new() {
   for (const pc of Object.values(Game.powerCreeps)) {
@@ -85,4 +85,4 @@ function renewPC(pc) {
   }
 }
 
-module.exports = powerCreep_new
+export default powerCreep_new

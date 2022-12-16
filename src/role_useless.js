@@ -1,4 +1,4 @@
-const { recycleSelf, } = require('./util_beheavor')
+import { recycleSelf } from './util_beheavor';
 
 
 var roleUseless = {
@@ -10,4 +10,4 @@ var roleUseless = {
 
   }
 }
-module.exports = roleUseless.run;
+export default roleUseless.run;

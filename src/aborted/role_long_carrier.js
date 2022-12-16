@@ -1,5 +1,5 @@
-const Upgrader = require('./role_upgrader')
-const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } = require('./util_beheavor')
+import Upgrader from './role_upgrader'
+import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } from './util_beheavor'
 
 
 
@@ -76,6 +76,6 @@ var roleCarrier = {
   }
 }
 
-module.exports = roleCarrier.run;
+export default roleCarrier.run;
 
 

@@ -1,5 +1,5 @@
 //import
-const C = require('./util_consts')
+import { TIME_INTERVAL_TOWER_REPIRE } from './util_consts'
 
 
 /**
@@ -47,7 +47,7 @@ const roleTower = (tower) => {
 
   if (tower.store[RESOURCE_ENERGY] > 600) {
 
-    if (!tower.room[TOWER_REPIRE_TARGETS] && Game.time % C.TIME_INTERVAL_TOWER_REPIRE == 0) {
+    if (!tower.room[TOWER_REPIRE_TARGETS] && Game.time % TIME_INTERVAL_TOWER_REPIRE == 0) {
 
       let targets = tower.room.find(FIND_STRUCTURES, {
         filter: (s) =>
@@ -136,4 +136,4 @@ const roleTower = (tower) => {
 
 
 }
-module.exports = roleTower
+export default roleTower

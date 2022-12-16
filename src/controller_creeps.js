@@ -1,34 +1,34 @@
-const Harvester = require('./role_harvester')
-const HarvesterPlus = require('./role_harvesterPlus')
-const Carrier = require('./role_carrier')
-const Upgrader = require('./role_upgrader')
-const Builder = require('./role_builder')
-const Repairer = require('./role_repairer')
-const Sweepper = require('./role_sweepper')
+import Harvester from './role_harvester'
+import HarvesterPlus from './role_harvesterPlus'
+import Carrier from './role_carrier'
+import Upgrader from './role_upgrader'
+import Builder from './role_builder'
+import Repairer from './role_repairer'
+import Sweepper from './role_sweepper'
 
-const base_Transferor = require('./role_base_transferor')
+import base_Transferor from './role_base_transferor'
 
-const remote_Carrier = require('./role_remote_carrier')
-const remote_Claimer = require('./role_remote_claimer')
-const remote_Harvester = require('./role_remote_harvester')
+import remote_Carrier from './role_remote_carrier'
+import remote_Claimer from './role_remote_claimer'
+import remote_Harvester from './role_remote_harvester'
 
-const Useless = require('./role_useless')
+import Useless from './role_useless'
 
-const Guardian = require('./role_guardian')
+import Guardian from './role_guardian'
 
-const RoomClaimer = require('./role_roomClaimer')
-
-
-const Miner = require('./role_miner')
+import RoomClaimer from './role_roomClaimer'
 
 
-const { getBodyArray } = require('./util_helper')
-const role_expend_builder = require('./role_expend_builder')
-const role_expend_claimer = require('./role_expend_claimer')
-const role_scavenger = require('./role_scavenger')
-const powerCreep_new = require('./powerCreep_new')
-const roleWallRepairer = require('./role_wallRepairer')
-const C = require('./util_consts')
+import Miner from './role_miner'
+
+
+import { getBodyArray } from './util_helper'
+import role_expend_builder from './role_expend_builder'
+import role_expend_claimer from './role_expend_claimer'
+import role_scavenger from './role_scavenger'
+import powerCreep_new from './powerCreep_new'
+import roleWallRepairer from './role_wallRepairer'
+import { config, ROLE_TO_PRIORITY } from './util_consts'
 
 
 
@@ -36,7 +36,7 @@ const C = require('./util_consts')
 //* functions////////////////////////////////
 
 
-const SHOW_CPU_CREEPS = C.config.SHOW_CPU_CREEPS
+const SHOW_CPU_CREEPS = config.SHOW_CPU_CREEPS
 
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
 
@@ -89,7 +89,7 @@ function addToSpawnQueueBeforeDead(creep) {
     role: creep.memory.role,
     // memory: creep.memory,
     body: getBodyArray(creep),
-    priority: C.ROLE_TO_PRIORITY[creep.memory.role],
+    priority: ROLE_TO_PRIORITY[creep.memory.role],
   })
 }
 
@@ -160,5 +160,5 @@ function controller_creeps() {
 
 }
 
-module.exports = controller_creeps;
+export default controller_creeps;
 
