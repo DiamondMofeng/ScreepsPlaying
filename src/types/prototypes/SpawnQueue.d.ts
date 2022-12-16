@@ -1,3 +1,4 @@
+
 interface CreepToSpawn {
   body: BodyPartConstant[];
   name?: string;
@@ -7,12 +8,17 @@ interface CreepToSpawn {
   priority: number;
 }
 
+//访问时如果没有会自动初始化，所以不是可选属性
 interface Room {
-  spawnQueue: Array<CreepToSpawn>;
+  spawnQueue: CreepToSpawn[];
   pushToSpawnQueue(creepToSpawn: CreepToSpawn): void;
+}
 
+interface RoomMemory {
+  spawnQueue: CreepToSpawn[];
 }
 
 interface StructureSpawn {
   spawnFromQueue(): void;
 }
+

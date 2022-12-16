@@ -1,26 +1,24 @@
 import { calcEnergyRealPrice } from "@/utils/util_helper";
 
-let toMount = {};
-
 /**
  * 通过fromRoom的Terminal,发送资源到toRoom的Terminal
- * @param {String|Room} fromRoom 
- * @param {String|Room} toRoom 
- * @param {String} resource 
- * @param {Number} amount 
  */
-toMount.Msend = function (fromRoom, toRoom, resource, amount) {
+export const Msend = function (fromRoom: string | Room, toRoom: string | Room, resource: ResourceConstant, amount: number) {
   if (!fromRoom || !toRoom || !resource || !amount) {
     console.log('参数不正确')
     return
   }
-  let fromRoomName = fromRoom.name || fromRoom
-  let toRoomName = toRoom.name || toRoom
-  let terminal = Game.rooms[fromRoomName].terminal
+  if (fromRoom instanceof Room) {
+    fromRoom = fromRoom.name
+  }
+  if (toRoom instanceof Room) {
+    toRoom = toRoom.name
+  }
+  let terminal = Game.rooms[fromRoom].terminal
   if (!terminal) {
     return `${fromRoom}没有terminal`
   }
-  let result = terminal.send(resource, amount, toRoomName, 'TEST')
+  let result = terminal.send(resource, amount, toRoom, 'TEST')
   if (result == OK) {
     return '发送成功'
   } else {
@@ -31,7 +29,7 @@ toMount.Msend = function (fromRoom, toRoom, resource, amount) {
 
 
 //if room.controller&&room.controller.my
-toMount.myRoomsInfo = function () {
+export const myRoomsInfo = function () {
   for (let roomName in Game.rooms) {
     let room = Game.rooms[roomName]
     if (room.controller && room.controller.my) {
@@ -40,7 +38,7 @@ toMount.myRoomsInfo = function () {
   }
 }
 
-toMount.showRoomProgressPercent = function () {
+export const showRoomProgressPercent = function () {
   for (let roomName in Game.rooms) {
     let room = Game.rooms[roomName]
     if (room.controller && room.controller.my) {
@@ -55,18 +53,20 @@ toMount.showRoomProgressPercent = function () {
 
 // }
 
-toMount.dealAll = function (orderID, roomName) {
-  let amount = Game.market.getOrderById(orderID).remainingAmount
+export const dealAll = function (orderID: string, roomName: string) {
+  let order = Game.market.getOrderById(orderID);
+  if (!order) { return }
+  let amount = order.remainingAmount
   return Game.market.deal(orderID, amount, roomName)
 }
 
-toMount.sellEnergy = function (roomName, orderID = undefined) {
+export const sellEnergy = function (roomName: string, orderID?: string) {
+  const room = Game.rooms[roomName]
 
-  if (!Game.rooms[roomName] || !Game.rooms[roomName].controller || !Game.rooms[roomName].controller.my || !Game.rooms[roomName].terminal) {
+  if (!room.controller?.my || !room.terminal) {
     return `${roomName} is not my room or do not have terminal`
   }
-
-  if (Game.rooms[roomName].terminal.cooldown) {
+  if (Game.rooms[roomName].terminal?.cooldown) {
     return `${roomName} terminal is cooling`
   }
 
@@ -78,14 +78,16 @@ toMount.sellEnergy = function (roomName, orderID = undefined) {
     orderID = energyBuyOrders[0].id
   }
 
-  let fromRoom = Game.rooms[roomName]
   let order = Game.market.getOrderById(orderID)
   if (!order) {
-    return `${orderID} is not exist`
+    return `order ${orderID} is not exist`
+  }
+  if (!order.roomName) {
+    return `order ${orderID} do not have a roomName`
   }
   let costUnit = 1 + Game.market.calcTransactionCost(1000, roomName, order.roomName) / 1000
   let canSellAmount = Math.min(
-    Math.floor(fromRoom.terminal.store[RESOURCE_ENERGY] / costUnit),
+    Math.floor(room.terminal.store[RESOURCE_ENERGY] / costUnit),
     order.amount
   );
 
@@ -94,24 +96,25 @@ toMount.sellEnergy = function (roomName, orderID = undefined) {
 
 }
 
-toMount.findCheapestOrder = function (resourceType, roomName) {
-  let orders = Game.market.getAllOrders({ type: ORDER_BUY, resourceType: resourceType })
-  let minPrice = Infinity
-  let minOrder = null
-  for (let order of orders) {
-    if (order.price < minPrice) {
-      minPrice = order.price
-      minOrder = order
-    }
-  }
-  if (minOrder) {
-    console.log(minOrder.price, minOrder.remainingAmount, minOrder.roomName)
-    return minOrder
-  }
-}
+// //TODO 没考虑距离
+// export const findCheapestOrder = function (resourceType: ResourceConstant, roomName?: string) {
+//   let orders = Game.market.getAllOrders({ type: ORDER_BUY, resourceType: resourceType })
+//   let minPrice = Infinity
+//   let minOrder = null
+//   for (let order of orders) {
+//     if (order.price < minPrice) {
+//       minPrice = order.price
+//       minOrder = order
+//     }
+//   }
+//   if (minOrder) {
+//     console.log(minOrder.price, minOrder.remainingAmount, minOrder.roomName)
+//     return minOrder
+//   }
+// }
 
 
-toMount.sendEnergy = function (fromRoom, toRoom, amount) {
+export const sendEnergy = function (fromRoom: string, toRoom: string, amount: number) {
 
   if (!amount) {
     return `please provide amount`
@@ -141,25 +144,25 @@ toMount.sendEnergy = function (fromRoom, toRoom, amount) {
 
 
 
-toMount.clearAllSpawnQueue = function () {
+export const clearAllSpawnQueue = function () {
   for (let room of Object.values(Game.rooms)) {
     if (room.controller && room.controller.my) {
       if (room.memory.spawnQueue) {
-        delete room.memory.spawnQueue
+        room.memory.spawnQueue = [];
       }
     }
   }
   return "已清除所有房间的spawnQueue"
 }
 
-toMount.killAllCreeps = function () {
+export const killAllCreeps = function () {
   for (let name in Game.creeps) {
     let creep = Game.creeps[name]
     creep.suicide()
   }
 }
 
-toMount.cleanNonMyRoomMemory = function (sure) {
+export const cleanNonMyRoomMemory = function (sure?: boolean) {
   let list = []
   for (let roomName in Memory.rooms) {
     if (_.isUndefined(Game.rooms[roomName])) {
@@ -180,24 +183,35 @@ toMount.cleanNonMyRoomMemory = function (sure) {
 }
 
 
-toMount.online = function () {
-  toMount.lastOnline = Game.time
+export const online = function () {
+  global.lastOnline = Game.time
 }
 
 
+export const cli = {
+  myRoomsInfo, showRoomProgressPercent,
+
+  Msend,
+  sendEnergy,
+  dealAll, sellEnergy,
+  // findCheapestOrder,
+
+  clearAllSpawnQueue,
+  killAllCreeps, cleanNonMyRoomMemory,
+
+  online
+}
+
 
 //挂载控制台命令到全局对象上
+//TODO 可以用下面的方法来方便global的类型检查
 const mountCLI = function () {
-
-  for (let key in toMount) {
-    global[key] = toMount[key]
-  }
+  Object.assign(global, cli);
+  // for (let key in cli) {
+  //   global[key] = cli[key]
+  // }
 
 }
 
 
 export default mountCLI
-
-
-
-
