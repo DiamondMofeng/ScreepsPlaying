@@ -1,4 +1,4 @@
-import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, repireNearbyRoad, moveToRoom, setDoing } from './util_beheavor'
+import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, repireNearbyRoad, moveToRoom, setDoing } from '@/utils/util_beheavor'
 
 
 //TODO 写的乱死了。。希望能重构一下

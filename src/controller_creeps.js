@@ -22,13 +22,13 @@ import RoomClaimer from './role_roomClaimer'
 import Miner from './role_miner'
 
 
-import { getBodyArray } from './util_helper'
+import { getBodyArray } from '@/utils/util_helper'
 import role_expend_builder from './role_expend_builder'
 import role_expend_claimer from './role_expend_claimer'
 import role_scavenger from './role_scavenger'
 import powerCreep_new from './powerCreep_new'
 import roleWallRepairer from './role_wallRepairer'
-import { config, ROLE_TO_PRIORITY } from './util_consts'
+import { config, ROLE_TO_PRIORITY } from '@/utils/util_consts'
 
 
 

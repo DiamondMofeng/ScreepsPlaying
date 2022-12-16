@@ -1,4 +1,4 @@
-import { RM as _RM } from "../../util_consts"
+import { RM as _RM } from "@/utils/util_consts"
 
 /**
  * 
@@ -6,7 +6,7 @@ import { RM as _RM } from "../../util_consts"
  */
 const buildingRoleLink = (link) => {
   /*
-  ! 已于'./util_customPrototypes.js'为StructureLink定义了Rmemory属性：link在本房间中的memory.BUILDING_LINKS
+  ! 已于'@/utils/util_customPrototypes.js'为StructureLink定义了Rmemory属性：link在本房间中的memory.BUILDING_LINKS
 
   link types:
     source,

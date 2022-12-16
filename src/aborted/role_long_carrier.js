@@ -1,5 +1,5 @@
 import Upgrader from './role_upgrader'
-import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } from './util_beheavor'
+import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer } from '@/utils/util_beheavor'
 
 
 

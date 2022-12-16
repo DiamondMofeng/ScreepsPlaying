@@ -1,6 +1,6 @@
 
-import { moveToRoom } from "./util_beheavor";
-import { avoidSourceKeeper } from "./util_costCallBacks";
+import { moveToRoom } from "@/utils/util_beheavor";
+import { avoidSourceKeeper } from "@/utils/util_costCallBacks";
 
 /**
  * 

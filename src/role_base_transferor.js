@@ -1,8 +1,8 @@
-import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage, setDoing } from './util_beheavor'
+import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage, setDoing } from '@/utils/util_beheavor'
 
 import { task_powerSpawn } from './task_powerSpawn'
 
-import { RM } from './util_consts'
+import { RM } from '@/utils/util_consts'
 import task_factory from './task_factory'
 
 

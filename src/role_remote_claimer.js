@@ -1,4 +1,4 @@
-import { moveToRoom } from "./util_beheavor";
+import { moveToRoom } from "@/utils/util_beheavor";
 
 /**
  * pionner将前往flag所在房间，采集资源并进行建造

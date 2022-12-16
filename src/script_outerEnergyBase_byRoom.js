@@ -1,5 +1,5 @@
-import { setDoing } from './util_beheavor'
-import { body, spawnByMinNumber, bodyCost } from './util_helper'
+import { setDoing } from '@/utils/util_beheavor'
+import { body, spawnByMinNumber, bodyCost } from '@/utils/util_helper'
 /*
 param:baseRoom,targetRoom
 思路:

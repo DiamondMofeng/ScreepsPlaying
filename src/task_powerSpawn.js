@@ -1,4 +1,4 @@
-import { moveAndWithdraw, moveAndTransfer } from "./util_beheavor"
+import { moveAndWithdraw, moveAndTransfer } from "@/utils/util_beheavor"
 
 
 /**

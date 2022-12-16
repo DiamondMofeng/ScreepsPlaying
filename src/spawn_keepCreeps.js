@@ -5,8 +5,8 @@
  */
 
 import { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy, evalBodyByRole } from "./spawn_evalBody"
-import { TIME_INTERVAL_COUNT_CREEPS, PRIORITY_SPAWN_HARVESTER, PRIORITY_SPAWN_WORKER, PRIORITY_SPAWN_CARRIER, PRIORITY_SPAWN_UPGRADER, PRIORITY_SPAWN_BUILDER, PRIORITY_SPAWN_REPAIRER, PRIORITY_SPAWN_MINER, PRIORITY_SPAWN_BASE_TRANSFEROR } from "./util_consts"
-import { body } from "./util_helper"
+import { TIME_INTERVAL_COUNT_CREEPS, PRIORITY_SPAWN_HARVESTER, PRIORITY_SPAWN_WORKER, PRIORITY_SPAWN_CARRIER, PRIORITY_SPAWN_UPGRADER, PRIORITY_SPAWN_BUILDER, PRIORITY_SPAWN_REPAIRER, PRIORITY_SPAWN_MINER, PRIORITY_SPAWN_BASE_TRANSFEROR } from "@/utils/util_consts"
+import { body } from "@/utils/util_helper"
 
 
 

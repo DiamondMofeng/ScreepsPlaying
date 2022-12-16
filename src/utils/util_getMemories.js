@@ -118,7 +118,7 @@ const memoryUpgradePosArray = (room) => {
 }
 
 
-// const { memoryResources, memoryUpgradePosArray } = require('./util_getMemories')
+// const { memoryResources, memoryUpgradePosArray } = require('@/utils/util_getMemories')
 
 export default {
   memoryResources,

@@ -1,5 +1,5 @@
-import { moveAndBoost, isPartAllBoosted, healLower, moveToRoom, getOppoDir } from "./util_beheavor";
-import { body } from "./util_helper";
+import { moveAndBoost, isPartAllBoosted, healLower, moveToRoom, getOppoDir } from "@/utils/util_beheavor";
+import { body } from "@/utils/util_helper";
 
 
 

@@ -1,5 +1,5 @@
-import { workingStatesKeeper, getEnergyFromStorage } from "./util_beheavor";
-import { TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET } from "./util_consts";
+import { workingStatesKeeper, getEnergyFromStorage } from "@/utils/util_beheavor";
+import { TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET } from "@/utils/util_consts";
 
 
 let repairTargetId = "repairerTargetId"

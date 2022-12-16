@@ -1,6 +1,6 @@
 //所有visuals的入口
 
-// import { getCPUCost } from "./util_helper"
+// import { getCPUCost } from "@/utils/util_helper"
 // import roleTagger from "./visuals_roleTagger"
 import roomBuildingPlanner from "./visuals_roomBuildingPlanner"
 import { showRoomRoleCounts } from "./visuals_roomRoleCounts"

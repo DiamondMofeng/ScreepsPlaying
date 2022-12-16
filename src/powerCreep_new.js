@@ -1,4 +1,4 @@
-import { moveAndTransfer } from "./util_beheavor";
+import { moveAndTransfer } from "@/utils/util_beheavor";
 
 function powerCreep_new() {
   for (const pc of Object.values(Game.powerCreeps)) {

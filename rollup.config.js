@@ -1,4 +1,5 @@
 const commonjs = require('@rollup/plugin-commonjs');
+const typescriptPaths = require('rollup-plugin-typescript-paths');
 const typescript = require('rollup-plugin-typescript2');
 
 
@@ -12,6 +13,7 @@ module.exports = {
   },
   plugins: [
     commonjs(),
+    typescriptPaths(),
     typescript({ tsconfig: './tsconfig.json' }),
   ]
 };

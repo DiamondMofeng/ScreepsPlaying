@@ -1,15 +1,15 @@
 import controller_creeps from "./controller_creeps"
 import controller_structures from "./controller/controller_structures"
 
-import broadcaster from './util_broadcast'
+import broadcaster from '@/utils/util_broadcast'
 
-import { getCPUCost } from "./util_helper"
-import statsScanner from "./util_statsScanner"
+import { getCPUCost } from "@/utils/util_helper"
+import statsScanner from "@/utils/util_statsScanner"
 
-import findCache from "./util_cache_find"
+import findCache from "@/utils/util_cache_find"
 findCache();
 
-import customPrototypes from './util_customPrototypes'
+import customPrototypes from '@/utils/util_customPrototypes'
 customPrototypes()
 
 import mountAll from "./mountAll"

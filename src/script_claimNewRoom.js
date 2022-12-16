@@ -1,5 +1,5 @@
-import { myName } from "./util_consts"
-import { spawnByMinNumber, body } from "./util_helper"
+import { myName } from "@/utils/util_consts"
+import { spawnByMinNumber, body } from "@/utils/util_helper"
 
 
 
