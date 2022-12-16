@@ -20,32 +20,22 @@ import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
 //sourceId:
 //}
 
-//临时
 
-// if (!creep.memory.harvester_sourceID) {
-//   let sources = creep.room.find(FIND_SOURCES);
+interface HarvesterPlusMemory extends CreepMemory {
+  workParts?: number
 
-//   for (const s of sources) {
-//     if (s.pos.findInRange(FIND_CREEPS, 1, { filter: c => startWith(c.memory.role, 'harvester') }).length === 0) {
-//       creep.memory.harvester_sourceID = s.id
-//       let container = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType === STRUCTURE_CONTAINER })[0]
-//       if (container) {
-//         creep.memory.harvester_workPos = { x: container.pos.x, y: container.pos.y, roomName: container.pos.roomName }
-//       }
-//       break
-//     }
-//   }
-// }
+  harvester_sourceID?: Id<Source> | 'none'
+  harvester_linkID?: Id<StructureLink> | 'none'
+  harvester_containerID?: Id<StructureContainer> | 'none'
+  harvester_extensionIDs?: Id<StructureExtension>[]
+}
+
+const roleHarvesterPlus = {
 
 
+  run: function (creep: Creep) {
 
-var roleHarvesterPlus = {
-
-
-  /** @param {Creep} creep **/
-  run: function (creep) {
-
-    let CM = creep.memory//简写
+    let CM: HarvesterPlusMemory = creep.memory //简写
 
 
     //尝试寻找一个有空位的source
@@ -129,7 +119,7 @@ var roleHarvesterPlus = {
 
       // console.log(`test`);
       if (_.isUndefined(CM.harvester_linkID)) {
-        let links = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_LINK })
+        let links = creep.pos.findInRange(FIND_MY_STRUCTURES, 1).filter<StructureLink>((s): s is StructureLink => s.structureType === STRUCTURE_LINK);
         if (links.length > 0) {
           CM.harvester_linkID = links[0].id
         }
@@ -140,7 +130,7 @@ var roleHarvesterPlus = {
 
       // save container
       if (_.isUndefined(CM.harvester_containerID)) {
-        let containers = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER })
+        let containers = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: (s): s is StructureContainer => s.structureType == STRUCTURE_CONTAINER })
         if (containers.length > 0) {
           CM.harvester_containerID = containers[0].id
         }
@@ -161,7 +151,7 @@ var roleHarvesterPlus = {
       }
 
       if (_.isUndefined(CM.harvester_extensionIDs)) {
-        let extensions = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_EXTENSION })
+        let extensions = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: (s): s is StructureExtension => s.structureType === STRUCTURE_EXTENSION })
         if (extensions.length > 0) {
           CM.harvester_extensionIDs = extensions.map(e => e.id)
         }
@@ -170,12 +160,20 @@ var roleHarvesterPlus = {
         }
       }
 
-      //! WORK
+      //* WORK
 
       if (_.isUndefined(CM.workParts)) {
         CM.workParts = creep.getActiveBodyparts(WORK)
       }
 
+      //TODO 防止被其他creep对穿时换走位置后不回来 不知道会不会有其他后果
+      if (CM.harvester_containerID !== 'none') {
+        let container = Game.getObjectById(CM.harvester_containerID)
+        if (!container.pos.isEqualTo(creep.pos)) {
+          creep.moveTo(container);
+          return
+        }
+      }
 
       const harvestResult = creep.harvest(Game.getObjectById(CM.harvester_sourceID))
       if (harvestResult == ERR_NOT_IN_RANGE) {
@@ -203,31 +201,31 @@ var roleHarvesterPlus = {
         }
 
         //* 修container
-
-        let container = Game.getObjectById(CM.harvester_containerID)
-        // console.log('container: ', container);
-        if (container
-          && (
+        if (CM.harvester_containerID !== 'none') {
+          let container = Game.getObjectById(CM.harvester_containerID)
+          if (container && (
             (container.store.getUsedCapacity(RESOURCE_ENERGY) > 1000 && (container.hits / container.hitsMax) < 0.9)
-            || (container.hits / container.hitsMax) < 0.7)) {
+            || (container.hits / container.hitsMax) < 0.7
+          )) {
 
-          setDoing(creep, 'repair container')
-          creep.repair(container)
-          return
-        }
-
-        //! 帮助建container
-
-        else if (!container) {
-          setDoing(creep, 'help building')
-          let cts = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES)
-          if (cts.length > 0) {
-            creep.build(cts[0])
+            setDoing(creep, 'repair container')
+            creep.repair(container)
+            return
+          }
+          else if (!container) {
+            //* 帮助建container
+            setDoing(creep, 'help building')
+            let cts = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES)
+            if (cts.length > 0) {
+              creep.build(cts[0])
+            }
           }
         }
 
+
+
         //* 不用修则尝试向Link输入能量
-        else if (CM.harvester_linkID != 'none' && Game.getObjectById(CM.harvester_linkID).store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
+        else if (CM.harvester_linkID !== 'none' && Game.getObjectById(CM.harvester_linkID).store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
           setDoing(creep, 'transfer link')
           creep.transfer(Game.getObjectById(CM.harvester_linkID), RESOURCE_ENERGY)
         }
