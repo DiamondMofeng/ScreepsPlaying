@@ -1,6 +1,6 @@
 // import attack_dismental from "./attack_dismental";
-import claimNewRoom from "./script_claimNewRoom";
-import developNewRoom from "./script_developRoom";
+import claimNewRoom from "./scripts/script_claimNewRoom";
+import developNewRoom from "./scripts/script_developRoom";
 // import supportEnergy from "./script_supportEnergy";
 import { cronRun, errorIsolater } from "@/utils/util_helper";
 
