@@ -2,6 +2,7 @@ import { setDoing } from "@/utils/util_beheavor"
 import { startWith } from "@/utils/util_helper"
 import { IGNORE_CREEPS } from "@/utils/util_consts"
 import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
+import { isStructureType } from "@/utils/typer"
 
 //when spawn, add memory of certain source position to go , and bind with this source.
 //出生时绑定指定能量源，并指定工作坐标（待完成）
@@ -119,7 +120,7 @@ const roleHarvesterPlus = {
 
       // console.log(`test`);
       if (_.isUndefined(CM.harvester_linkID)) {
-        let links = creep.pos.findInRange(FIND_MY_STRUCTURES, 1).filter<StructureLink>((s): s is StructureLink => s.structureType === STRUCTURE_LINK);
+        let links = creep.pos.findInRange(FIND_MY_STRUCTURES, 1).filter<StructureLink>(isStructureType(STRUCTURE_LINK));
         if (links.length > 0) {
           CM.harvester_linkID = links[0].id
         }
@@ -130,6 +131,7 @@ const roleHarvesterPlus = {
 
       // save container
       if (_.isUndefined(CM.harvester_containerID)) {
+        // let containers = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: (s): s is StructureContainer => s.structureType == STRUCTURE_CONTAINER })
         let containers = creep.pos.findInRange(FIND_STRUCTURES, 1, { filter: (s): s is StructureContainer => s.structureType == STRUCTURE_CONTAINER })
         if (containers.length > 0) {
           CM.harvester_containerID = containers[0].id

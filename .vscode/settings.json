@@ -1,6 +1,4 @@
 {
-  
-
   "better-comments.tags": [
     {
       //! 
@@ -22,9 +20,19 @@
       "bold": false,
       "italic": false
     },
+    // {
+    //   // //
+    //   "tag": "//",
+    //   "color": "#737373",
+    //   "strikethrough": true,
+    //   "underline": false,
+    //   "backgroundColor": "transparent",
+    //   "bold": false,
+    //   "italic": false
+    // },
     {
-      // //
-      "tag": "//",
+      //~ 123
+      "tag": "~",
       "color": "#737373",
       "strikethrough": true,
       "underline": false,
@@ -32,17 +40,8 @@
       "bold": false,
       "italic": false
     },
-    // {
-    //   // /////
-    //   "tag": "/////",
-    //   "color": "#FF8C00",
-    //   "strikethrough": false,
-    //   "underline": false,
-    //   "backgroundColor": "transparent",
-    //   "bold": false,
-    //   "italic": false
-    // },
     {
+      //TODO 
       "tag": "todo",
       "color": "#FF8C00",
       "strikethrough": false,
@@ -51,7 +50,8 @@
       "bold": false,
       "italic": false
     },
-    {
+    { 
+      //* 
       "tag": "*",
       "color": "#98C379",
       "strikethrough": false,
@@ -61,5 +61,4 @@
       "italic": false
     }
   ]
-
 }
