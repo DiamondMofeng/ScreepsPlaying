@@ -1,5 +1,5 @@
 import controller_creeps from "./controller_creeps"
-import controller_buildings from "./controller_buildings"
+import controller_structures from "./controller/controller_structures"
 
 import broadcaster from './util_broadcast'
 
@@ -48,7 +48,7 @@ module.exports.loop = function () {//
 
   getCPUCost(controller_creeps)
 
-  getCPUCost(controller_buildings)
+  getCPUCost(controller_structures)
 
   broadcaster()
 

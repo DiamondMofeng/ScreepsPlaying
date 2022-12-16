@@ -1,16 +1,17 @@
-import { config } from './util_consts'
-import Tower from './building_tower'
-import Link from './building_link'
-import Factory from './building_factory'
-import PowerSpawn from './building_powerSpawn'
-import Spawn from './building_spawn'
-import Lab from './building_lab'
-import Observer from './building_observer'
+import { config } from '../util_consts'
+
+import Tower from './structures/building_tower'
+import Link from './structures/building_link'
+import Factory from './structures/building_factory'
+import PowerSpawn from './structures/building_powerSpawn'
+import Spawn from './structures/building_spawn'
+import Lab from './structures/building_lab'
+import Observer from './structures/building_observer'
 
 
 const SHOW_CPU_BUILDINGS = config.SHOW_CPU_BUILDINGS
 
-function controller_buildings() {
+function controller_structures() {
 
   let CPUcounts = []
 
@@ -87,5 +88,5 @@ function controller_buildings() {
 
 }
 
-export default controller_buildings;
+export default controller_structures;
 
