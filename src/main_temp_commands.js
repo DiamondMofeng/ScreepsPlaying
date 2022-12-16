@@ -13,6 +13,7 @@ const main_temp_commands = () => {
 
   //临时
   errorIsolater(() => {
+    cronRun(2000, () => sellEnergy('W12N16'))
 
     claimNewRoom('develop_W21N14', 'W17N15_0')
     developNewRoom('develop_W21N14')

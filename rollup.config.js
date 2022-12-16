@@ -1,4 +1,6 @@
 const commonjs = require('@rollup/plugin-commonjs');
+// const typescript = require('rollup-plugin-typescript2');
+
 
 module.exports = {
   input: 'src/main.js',
@@ -7,5 +9,8 @@ module.exports = {
     format: 'cjs',
     sourcemap: true
   },
-  plugins: [commonjs()]
+  plugins: [
+    commonjs(),
+    // typescript({ tsconfig: './tsconfig.json' })
+  ]
 };

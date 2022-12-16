@@ -28,7 +28,6 @@ try {
 }
 
 global.lastOnline = Game.time;  //增添趣味性，但是位置待整理
-
 module.exports.loop = function () {
 
 
@@ -38,7 +37,7 @@ module.exports.loop = function () {
 
   //*临时放到这里，到时候挪走
   //*clean the dead(experiod)
-  for (var name in Memory.creeps) {
+  for (const name in Memory.creeps) {
     if (!Game.creeps[name]) {
       delete Memory.creeps[name];
       console.log('Clearing non-existing creep memory:', name);
