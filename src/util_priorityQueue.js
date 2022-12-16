@@ -1,10 +1,12 @@
-function bubbleUpEnqueue(arr, item) {
+export function bubbleUpEnqueue(arr, item) {
   arr.push(item)
   let i = arr.length - 1
   while (i > 0) {
     let parent = (i - 1) >> 1
+    console.log(i, parent, JSON.stringify(arr[parent]), JSON.stringify(arr[i]))
     if (arr[parent].priority < arr[i].priority) {
       [arr[parent], arr[i]] = [arr[i], arr[parent]] //swap
+      i = parent
     }
     else {
       break
@@ -12,7 +14,7 @@ function bubbleUpEnqueue(arr, item) {
   }
 }
 
-function bubbleDownDequeue(arr) {
+export function bubbleDownDequeue(arr) {
   let item = arr[0]
   let last = arr.pop()
   if (arr.length > 0) {
@@ -112,7 +114,7 @@ class PriortyQueue {
   }
 }
 
-module.exports = {
+export default {
   PriortyQueue,
   bubbleUpEnqueue,
   bubbleDownDequeue
