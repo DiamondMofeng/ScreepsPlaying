@@ -1,5 +1,5 @@
-import { moveToRoom } from "./util_beheavor";
-import { body, spawnByMinNumber } from "./util_helper";
+import { moveToRoom } from "@/utils/util_beheavor";
+import { body, spawnByMinNumber } from "@/utils/util_helper";
 
 const cleanInvaderCore = (invaderRoom, spawnRoom) => {
 

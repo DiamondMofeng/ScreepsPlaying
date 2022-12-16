@@ -5,7 +5,7 @@
     若为true，则：基地派出attacker；room中所有creep尝试逃离敌人
 */
 
-import { body } from "./util_helper"
+import { body } from "@/utils/util_helper"
 
 //! //////////// HARD CODED /////////////
 /**

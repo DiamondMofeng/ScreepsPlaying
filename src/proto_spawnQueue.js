@@ -1,6 +1,6 @@
 
-import { RM } from './util_consts'
-import { bubbleDownDequeue, bubbleUpEnqueue } from './util_priorityQueue'
+import { RM } from '@/utils/util_consts'
+import { bubbleDownDequeue, bubbleUpEnqueue } from '@/utils/util_priorityQueue'
 
 /**
  * 用于挂载spawnQueue相关原型方法

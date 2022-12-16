@@ -1,4 +1,4 @@
-import { moveToRoom, workingStatesKeeper } from "./util_beheavor"
+import { moveToRoom, workingStatesKeeper } from "@/utils/util_beheavor"
 
 
 /**

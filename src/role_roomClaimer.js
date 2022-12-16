@@ -1,5 +1,5 @@
-import { moveToRoom } from "./util_beheavor"
-import { avoidSourceKeeper } from "./util_costCallBacks"
+import { moveToRoom } from "@/utils/util_beheavor"
+import { avoidSourceKeeper } from "@/utils/util_costCallBacks"
 
 /**
  * pionner将前往flag所在房间，采集资源并进行建造

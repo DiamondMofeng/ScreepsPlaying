@@ -1,6 +1,6 @@
-import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } from './util_beheavor';
-import { IGNORE_CREEPS } from './util_consts';
-import { stayInRoomCallBack } from './util_costCallBacks';
+import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } from '@/utils/util_beheavor';
+import { IGNORE_CREEPS } from '@/utils/util_consts';
+import { stayInRoomCallBack } from '@/utils/util_costCallBacks';
 
 
 const MIN_ENERGY = {

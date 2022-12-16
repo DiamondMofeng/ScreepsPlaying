@@ -1,4 +1,4 @@
-import { memoryUpgradePosArray } from './util_getMemories'
+import { memoryUpgradePosArray } from '@/utils/util_getMemories'
 
 function transferEnergyToContainer(creep) {
 

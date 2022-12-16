@@ -1,5 +1,5 @@
 import Repairer from './role_repairer';
-import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy } from './util_beheavor';
+import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromWasted, pickUpNearbyDroppedEnergy } from '@/utils/util_beheavor';
 
 
 

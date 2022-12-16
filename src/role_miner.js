@@ -1,4 +1,4 @@
-import { setDoing, moveAndHarvest, moveAndTransfer } from "./util_beheavor"
+import { setDoing, moveAndHarvest, moveAndTransfer } from "@/utils/util_beheavor"
 
 
 var roleMiner = {

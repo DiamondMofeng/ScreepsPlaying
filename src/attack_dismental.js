@@ -1,5 +1,5 @@
-import { moveAndBoost, isPartAllBoosted, healLower } from "./util_beheavor";
-import { body } from "./util_helper";
+import { moveAndBoost, isPartAllBoosted, healLower } from "@/utils/util_beheavor";
+import { body } from "@/utils/util_helper";
 
 
 const attack_dismental = function (fromRoomName, toFlagName) {

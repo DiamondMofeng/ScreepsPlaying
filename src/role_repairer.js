@@ -1,5 +1,5 @@
 
-import { getEnergyFromContainer, recycleSelf, prioritySelect } from './util_beheavor';
+import { getEnergyFromContainer, recycleSelf, prioritySelect } from '@/utils/util_beheavor';
 
 
 var roleRepairer = {

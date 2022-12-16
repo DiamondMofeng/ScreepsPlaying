@@ -1,5 +1,5 @@
 /* eslint-disable no-fallthrough */
-import { myName } from "./util_consts";
+import { myName } from "@/utils/util_consts";
 
 const INTERVAL_PLACE_CONSTRUCTION_SITES = 3000;
 

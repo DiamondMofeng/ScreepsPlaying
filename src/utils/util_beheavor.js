@@ -1,5 +1,5 @@
-const { IGNORE_CREEPS } = require("./util_consts")
-const { avoidSourceKeeper, stayInRoomCallBack } = require("./util_costCallBacks")
+const { IGNORE_CREEPS } = require("@/utils/util_consts")
+const { avoidSourceKeeper, stayInRoomCallBack } = require("@/utils/util_costCallBacks")
 
 
 /**

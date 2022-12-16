@@ -1,4 +1,4 @@
-import { recycleSelf } from './util_beheavor';
+import { recycleSelf } from '@/utils/util_beheavor';
 
 
 var roleUseless = {

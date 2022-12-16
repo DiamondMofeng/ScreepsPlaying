@@ -1,7 +1,7 @@
-import { setDoing } from "./util_beheavor"
-import { startWith } from "./util_helper"
-import { IGNORE_CREEPS } from "./util_consts"
-import { stayInRoomCallBack } from "./util_costCallBacks"
+import { setDoing } from "@/utils/util_beheavor"
+import { startWith } from "@/utils/util_helper"
+import { IGNORE_CREEPS } from "@/utils/util_consts"
+import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
 
 //when spawn, add memory of certain source position to go , and bind with this source.
 //出生时绑定指定能量源，并指定工作坐标（待完成）

@@ -1,4 +1,4 @@
-import { workingStatesKeeper, tryCollectAnyEnergy } from './util_beheavor'
+import { workingStatesKeeper, tryCollectAnyEnergy } from '@/utils/util_beheavor'
 
 /**
  * 

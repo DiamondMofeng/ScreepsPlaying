@@ -3,7 +3,7 @@
 //工作时站在container上不动，采集的资源自动掉到container里面
 //[WORK*5,MOVE] COST:550
 
-import { moveToRoom } from "./util_beheavor"
+import { moveToRoom } from "@/utils/util_beheavor"
 import role_harvesterPlus from './role_harvesterPlus'
 
 

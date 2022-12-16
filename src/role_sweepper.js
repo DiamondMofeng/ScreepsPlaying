@@ -1,5 +1,5 @@
 import Carrier from './role_carrier';
-import { transferAllToStorage, setDoing, prioritySelect } from './util_beheavor';
+import { transferAllToStorage, setDoing, prioritySelect } from '@/utils/util_beheavor';
 
 
 var roleSweeper = {

@@ -11,7 +11,7 @@
  */
 
 import { evalBody_harvester } from "./spawn_evalBody";
-import { body } from "./util_helper";
+import { body } from "@/utils/util_helper";
 
 const playground = {
   injectRoomTracker: function () {

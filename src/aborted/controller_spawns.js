@@ -1,5 +1,5 @@
 const { evalBody_harvester, evalBody_worker_halfEnergy } = require('./spawn_evalBody');
-const { memoryResources } = require('./util_getMemories')
+const { memoryResources } = require('@/utils/util_getMemories')
 
 const controller_spawns = (spawnName) => {
 

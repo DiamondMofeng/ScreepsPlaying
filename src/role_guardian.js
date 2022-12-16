@@ -1,4 +1,4 @@
-import { recycleSelf, moveToRoom } from './util_beheavor'
+import { recycleSelf, moveToRoom } from '@/utils/util_beheavor'
 
 
 /**

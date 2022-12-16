@@ -1,4 +1,4 @@
-import { randomInt } from "./util_helper";
+import { randomInt } from "@/utils/util_helper";
 
 
 /**

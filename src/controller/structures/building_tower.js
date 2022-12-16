@@ -1,5 +1,5 @@
 //import
-import { TIME_INTERVAL_TOWER_REPIRE } from '../../util_consts'
+import { TIME_INTERVAL_TOWER_REPIRE } from '@/utils/util_consts'
 
 
 /**

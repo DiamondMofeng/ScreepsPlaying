@@ -1,4 +1,4 @@
-import { prioritySelect } from './util_beheavor';
+import { prioritySelect } from '@/utils/util_beheavor';
 
 
 var roleHarvester = {
