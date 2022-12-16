@@ -5,7 +5,7 @@
     若为true，则：基地派出attacker；room中所有creep尝试逃离敌人
 */
 
-const { body } = require("./util_helper")
+import { body } from "./util_helper"
 
 //! //////////// HARD CODED /////////////
 /**
@@ -162,4 +162,4 @@ let guardRoom = (roomName, opts = { spawnName: 'Spawn1', broadcast: true }) => {
     }
   }
 }
-module.exports = guardRoom
+export default guardRoom

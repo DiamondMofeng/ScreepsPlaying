@@ -1,5 +1,5 @@
-const { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal, getEnergyFromHarvest, moveAndWithdraw } = require('./util_beheavor');
-const { stayInRoomCallBack } = require('./util_costCallBacks');
+import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal, getEnergyFromHarvest, moveAndWithdraw } from './util_beheavor';
+import { stayInRoomCallBack } from './util_costCallBacks';
 
 
 
@@ -111,4 +111,4 @@ var roleUpgrader = {
     }
   }
 }
-module.exports = roleUpgrader.run;
+export default roleUpgrader.run;

@@ -1,4 +1,4 @@
-// const C = require("./util_consts")
+// import C from "./util_consts"
 
 // /**
 //  * 
@@ -225,4 +225,4 @@ const roomBuildingPlanner = (flag) => {
 
 
 
-module.exports = roomBuildingPlanner;
+export default roomBuildingPlanner;

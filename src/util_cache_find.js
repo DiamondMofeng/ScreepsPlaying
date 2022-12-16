@@ -115,4 +115,4 @@ const findCache = () => {
 }
 
 
-module.exports = findCache
+export default findCache

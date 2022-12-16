@@ -1,11 +1,11 @@
-const { moveAndWithdraw, moveAndTransfer } = require("./util_beheavor")
+import { moveAndWithdraw, moveAndTransfer } from "./util_beheavor"
 
 
 /**
  * 
  * @param {Creep} creep 
  */
-const task_powerSpawn = (creep) => {
+export const task_powerSpawn = (creep) => {
 
   if (creep.room.controller.level < 8) {
     return
@@ -61,5 +61,3 @@ const task_powerSpawn = (creep) => {
 }
 
 
-
-module.exports = { task_powerSpawn }

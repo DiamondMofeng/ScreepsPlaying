@@ -1,9 +1,9 @@
-const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage, setDoing } = require('./util_beheavor')
+import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, workingStatesKeeper, getEnergyFromNearbyLink, getEnergyFromStorage, setDoing } from './util_beheavor'
 
-const { task_powerSpawn } = require('./task_powerSpawn')
+import { task_powerSpawn } from './task_powerSpawn'
 
-const C = require('./util_consts')
-const task_factory = require('./task_factory')
+import { RM } from './util_consts'
+import task_factory from './task_factory'
 
 
 
@@ -52,8 +52,8 @@ var role_base_transferor = {
     let storage = creep.room.storage
 
     if (_.isUndefined(creep.memory[CM_LINKID_STORAGE])) {
-      for (const id in creep.room.memory[C.RM.LINKS]) {
-        if (creep.room.memory[C.RM.LINKS][id].type == 'storage') {
+      for (const id in creep.room.memory[RM.LINKS]) {
+        if (creep.room.memory[RM.LINKS][id].type == 'storage') {
           creep.memory[CM_LINKID_STORAGE] = id
         }
       }
@@ -63,8 +63,8 @@ var role_base_transferor = {
 
 
     if (_.isUndefined(creep.memory[CM_LINKID_CONTROLLER])) {
-      for (const id in creep.room.memory[C.RM.LINKS]) {
-        if (creep.room.memory[C.RM.LINKS][id].type == 'controller') {
+      for (const id in creep.room.memory[RM.LINKS]) {
+        if (creep.room.memory[RM.LINKS][id].type == 'controller') {
           creep.memory[CM_LINKID_CONTROLLER] = id
         }
       }
@@ -268,6 +268,6 @@ var role_base_transferor = {
   }
 }
 
-module.exports = role_base_transferor.run;
+export default role_base_transferor.run;
 
 

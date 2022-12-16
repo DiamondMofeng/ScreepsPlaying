@@ -1,4 +1,4 @@
-const { randomInt } = require("./util_helper");
+import { randomInt } from "./util_helper";
 
 
 /**
@@ -33,4 +33,4 @@ function supportEnergy(fromRoomList, toRoomList, amount = 75 * 1000) {
 
 }
 
-module.exports = supportEnergy
+export default supportEnergy

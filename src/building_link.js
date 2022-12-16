@@ -1,4 +1,4 @@
-const C = require("./util_consts")
+import { RM as _RM } from "./util_consts"
 
 /**
  * 
@@ -82,10 +82,10 @@ const buildingRoleLink = (link) => {
 
   if (type == 'source') {
 
-    for (const ID in RM[C.RM.LINKS]) {
+    for (const ID in RM[_RM.LINKS]) {
       let otherLink = Game.getObjectById(ID)
       if (otherLink == undefined) {
-        delete RM[C.RM.LINKS][ID]
+        delete RM[_RM.LINKS][ID]
         continue
       }
 
@@ -107,10 +107,10 @@ const buildingRoleLink = (link) => {
 
   } else if (type == 'storage') {
 
-    for (const ID in RM[C.RM.LINKS]) {
+    for (const ID in RM[_RM.LINKS]) {
       let otherLink = Game.getObjectById(ID)
       if (otherLink == undefined) {
-        delete RM[C.RM.LINKS][ID]
+        delete RM[_RM.LINKS][ID]
         continue
       }
       if (otherLink === link) { continue }
@@ -128,4 +128,4 @@ const buildingRoleLink = (link) => {
 
 
 }
-module.exports = buildingRoleLink
+export default buildingRoleLink

@@ -1,36 +1,27 @@
-const controller_creeps = require("./controller_creeps")
-const controller_buildings = require("./controller_buildings")
+import controller_creeps from "./controller_creeps"
+import controller_buildings from "./controller_buildings"
 
-const broadcaster = require('./util_broadcast')
+import broadcaster from './util_broadcast'
 
-const { getCPUCost } = require("./util_helper")
-const statsScanner = require("./util_statsScanner")
+import { getCPUCost } from "./util_helper"
+import statsScanner from "./util_statsScanner"
 
+import findCache from "./util_cache_find"
+findCache();
 
-require("./util_cache_find")()
-require('./util_customPrototypes')()
+import customPrototypes from './util_customPrototypes'
+customPrototypes()
 
-require("./mountAll")()
+import mountAll from "./mountAll"
+mountAll();
 
-require('./helper_roomResources')
+import keepCreeps from "./spawn_keepCreeps"
 
-const keepCreeps = require("./spawn_keepCreeps")
-
-const showVisuals = require("./util_visuals")
-const main_temp_commands = require("./main_temp_commands")
-
-try {
-  // playground.injectRoomTracker()
-  // playground.test()
-
-} catch (error) {
-
-}
+import main_temp_commands from "./main_temp_commands"
 
 global.lastOnline = Game.time;  //增添趣味性，但是位置待整理
-module.exports.loop = function () {
 
-
+module.exports.loop = function () {//
 
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
@@ -48,7 +39,7 @@ module.exports.loop = function () {
 
     main_temp_commands()
 
-  } catch (e) {
+  } catch (e: any) {
     // console.log(e)
     console.log(e.stack)
 

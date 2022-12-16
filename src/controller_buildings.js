@@ -1,14 +1,14 @@
-const Tower = require('./building_tower')
-const Link = require('./building_link')
-const Factory = require('./building_factory')
-const PowerSpawn = require('./building_powerSpawn')
-const Spawn = require('./building_spawn')
-const Lab = require('./building_lab')
-const C = require('./util_consts')
-const Observer = require('./building_observer')
+import { config } from './util_consts'
+import Tower from './building_tower'
+import Link from './building_link'
+import Factory from './building_factory'
+import PowerSpawn from './building_powerSpawn'
+import Spawn from './building_spawn'
+import Lab from './building_lab'
+import Observer from './building_observer'
 
 
-const SHOW_CPU_BUILDINGS = C.config.SHOW_CPU_BUILDINGS
+const SHOW_CPU_BUILDINGS = config.SHOW_CPU_BUILDINGS
 
 function controller_buildings() {
 
@@ -87,5 +87,5 @@ function controller_buildings() {
 
 }
 
-module.exports = controller_buildings;
+export default controller_buildings;
 

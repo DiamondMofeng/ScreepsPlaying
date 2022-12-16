@@ -1,4 +1,4 @@
-const { setDoing, moveAndHarvest, moveAndTransfer } = require("./util_beheavor")
+import { setDoing, moveAndHarvest, moveAndTransfer } from "./util_beheavor"
 
 
 var roleMiner = {
@@ -59,6 +59,6 @@ var roleMiner = {
   }
 }
 
-module.exports = roleMiner.run;
+export default roleMiner.run;
 
 

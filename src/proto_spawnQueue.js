@@ -1,6 +1,6 @@
 
-const C = require('./util_consts')
-const { bubbleDownDequeue, bubbleUpEnqueue } = require('./util_priorityQueue')
+import { RM } from './util_consts'
+import { bubbleDownDequeue, bubbleUpEnqueue } from './util_priorityQueue'
 
 /**
  * 用于挂载spawnQueue相关原型方法
@@ -33,12 +33,12 @@ const mountSpawnQueue = () => {
           Memory.rooms[this.name] = {}
         }
 
-        if (_.isUndefined(Memory.rooms[this.name][C.RM.SPAWN_QUEUE])) {
-          Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = []
+        if (_.isUndefined(Memory.rooms[this.name][RM.SPAWN_QUEUE])) {
+          Memory.rooms[this.name][RM.SPAWN_QUEUE] = []
         }
-        return Memory.rooms[this.name][C.RM.SPAWN_QUEUE]
+        return Memory.rooms[this.name][RM.SPAWN_QUEUE]
       },
-      set(value) { Memory.rooms[this.name][C.RM.SPAWN_QUEUE] = value },
+      set(value) { Memory.rooms[this.name][RM.SPAWN_QUEUE] = value },
       enumerable: false,
     },
 
@@ -129,4 +129,4 @@ const mountSpawnQueue = () => {
 
 }
 
-module.exports = mountSpawnQueue
+export default mountSpawnQueue

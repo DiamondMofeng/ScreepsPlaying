@@ -1,7 +1,7 @@
-const { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } = require("./util_beheavor");
-const { avoidSourceKeeper } = require("./util_costCallBacks");
+import { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } from "./util_beheavor";
+import { avoidSourceKeeper } from "./util_costCallBacks";
 
-const roleUpgrader = require("./role_upgrader")
+import roleUpgrader from "./role_upgrader";
 
 /**
  * 
@@ -51,5 +51,5 @@ const role_expend_builder = (creep) => {
 
 
 
-module.exports = role_expend_builder
+export default role_expend_builder
 

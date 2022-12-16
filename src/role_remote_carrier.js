@@ -1,4 +1,4 @@
-const { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, repireNearbyRoad, moveToRoom, setDoing } = require('./util_beheavor')
+import { pickUpNearbyDroppedEnergy, moveAndWithdraw, moveAndTransfer, repireNearbyRoad, moveToRoom, setDoing } from './util_beheavor'
 
 
 //TODO 写的乱死了。。希望能重构一下
@@ -134,6 +134,6 @@ var role_remote_carrier = {
   }
 }
 
-module.exports = role_remote_carrier.run;
+export default role_remote_carrier.run;
 
 

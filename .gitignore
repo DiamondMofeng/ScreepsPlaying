@@ -4,6 +4,7 @@ node_modules
 sourceCode
 default-test
 dist
+dist copy
 tutorial-1
 test
 test default

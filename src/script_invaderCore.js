@@ -1,5 +1,5 @@
-const { moveToRoom } = require("./util_beheavor")
-const { body, spawnByMinNumber } = require("./util_helper")
+import { moveToRoom } from "./util_beheavor";
+import { body, spawnByMinNumber } from "./util_helper";
 
 const cleanInvaderCore = (invaderRoom, spawnRoom) => {
 
@@ -60,4 +60,4 @@ const cleanInvaderCore = (invaderRoom, spawnRoom) => {
 
 }
 
-module.exports = { cleanInvaderCore }
+export default { cleanInvaderCore }

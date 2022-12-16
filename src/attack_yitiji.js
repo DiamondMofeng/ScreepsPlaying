@@ -1,5 +1,5 @@
-const { moveAndBoost, isPartAllBoosted, healLower, moveToRoom, getOppoDir } = require("./util_beheavor");
-const { body } = require("./util_helper");
+import { moveAndBoost, isPartAllBoosted, healLower, moveToRoom, getOppoDir } from "./util_beheavor";
+import { body } from "./util_helper";
 
 
 
@@ -223,4 +223,4 @@ const attack_yitiji = function (fromRoomName, toFlagName) {
 
 }
 
-module.exports = attack_yitiji;
+export default attack_yitiji;

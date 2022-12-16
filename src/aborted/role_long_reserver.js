@@ -1,5 +1,5 @@
 
-const Builder = require('./role_builder')
+import Builder from './role_builder'
 
 /**
  * pionner将前往flag所在房间，采集资源并进行建造
@@ -21,5 +21,5 @@ const role_long_reserver = (creep, flagName) => {
 
 }
 
-module.exports = role_long_reserver
+export default role_long_reserver
 

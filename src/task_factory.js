@@ -1,4 +1,4 @@
-const { moveAndTransfer, moveAndWithdraw } = require("./util_beheavor")
+import { moveAndTransfer, moveAndWithdraw } from "./util_beheavor"
 
 
 
@@ -87,4 +87,4 @@ const task_factory = (creep) => {
   // }
 }
 
-module.exports = task_factory
+export default task_factory

@@ -1,10 +1,10 @@
-const mountSimpleDuichuan = require("./Mofeng极简对穿");
-const mountSpawnQueue = require("./proto_spawnQueue");
-const mountCLI = require("./util_cli");
-const mountWhiteList = require("./util_whiteList");
+import mountSimpleDuichuan from "./Mofeng极简对穿";
+import mountSpawnQueue from "./proto_spawnQueue";
+import mountCLI from "./util_cli";
+import mountWhiteList from "./util_whiteList";
 
-const mountCreep = require("./proto_creep");
-const mountTaskCenter = require("./task_taskCenter");
+import mountCreep from "./proto_creep";
+import mountTaskCenter from "./task_taskCenter";
 
 const mountAll = () => {
 
@@ -21,4 +21,4 @@ const mountAll = () => {
 
 }
 
-module.exports = mountAll
+export default mountAll

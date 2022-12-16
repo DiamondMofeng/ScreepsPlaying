@@ -1,4 +1,4 @@
-const { moveToRoom } = require("./util_beheavor")
+import { moveToRoom } from "./util_beheavor";
 
 /**
  * pionner将前往flag所在房间，采集资源并进行建造
@@ -33,5 +33,5 @@ const role_remote_claimer = (creep) => {
 
 }
 
-module.exports = role_remote_claimer
+export default role_remote_claimer
 

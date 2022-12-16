@@ -1,4 +1,4 @@
-const { calcEnergyRealPrice } = require("./util_helper");
+import { calcEnergyRealPrice } from "./util_helper";
 
 let toMount = {};
 
@@ -196,7 +196,7 @@ const mountCLI = function () {
 }
 
 
-module.exports = mountCLI
+export default mountCLI
 
 
 

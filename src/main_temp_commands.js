@@ -1,8 +1,8 @@
-const attack_dismental = require("./attack_dismental");
-const claimNewRoom = require("./script_claimNewRoom");
-const developNewRoom = require("./script_developRoom");
-const supportEnergy = require("./script_supportEnergy");
-const { cronRun, errorIsolater, getRemainingRenewTime } = require("./util_helper");
+import attack_dismental from "./attack_dismental";
+import claimNewRoom from "./script_claimNewRoom";
+import developNewRoom from "./script_developRoom";
+import supportEnergy from "./script_supportEnergy";
+import { cronRun, errorIsolater, getRemainingRenewTime } from "./util_helper";
 
 
 /**
@@ -44,4 +44,4 @@ const main_temp_commands = () => {
 
 
 }
-module.exports = main_temp_commands;
+export default main_temp_commands;

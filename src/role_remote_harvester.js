@@ -3,8 +3,8 @@
 //工作时站在container上不动，采集的资源自动掉到container里面
 //[WORK*5,MOVE] COST:550
 
-const { moveToRoom } = require("./util_beheavor")
-const role_harvesterPlus = require('./role_harvesterPlus')
+import { moveToRoom } from "./util_beheavor"
+import role_harvesterPlus from './role_harvesterPlus'
 
 
 //memory:
@@ -37,6 +37,6 @@ var role_remote_harvester = {
   }
 }
 
-module.exports = role_remote_harvester.run;
+export default role_remote_harvester.run;
 
 
