@@ -3,6 +3,7 @@ import claimNewRoom from "./scripts/script_claimNewRoom";
 import developNewRoom from "./scripts/script_developRoom";
 // import supportEnergy from "./script_supportEnergy";
 import { cronRun, errorIsolater } from "@/utils/util_helper";
+import { sellEnergy } from "./mount/cli/cli";
 
 
 /**
@@ -18,6 +19,8 @@ const main_temp_commands = () => {
     claimNewRoom('develop_W21N14', 'W17N15_0')
     developNewRoom('develop_W21N14')
 
+
+    // Object.entries(_.groupBy(Game.creeps, (c) => c.room.name)).forEach(([room, creeps]) => console.log(room, creeps.length));
     // Game.market.createOrder(ORDER_SELL, 'O', 1.5, 300000, 'W11N8');
 
     // buildEnergyBase('W12N16_1', 'W12N17')
