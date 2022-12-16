@@ -1,5 +1,5 @@
 const commonjs = require('@rollup/plugin-commonjs');
-const typescriptPaths = require('rollup-plugin-typescript-paths');
+const { default: typescriptPaths } = require('rollup-plugin-typescript-paths');
 const typescript = require('rollup-plugin-typescript2');
 
 
