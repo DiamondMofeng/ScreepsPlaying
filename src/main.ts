@@ -6,13 +6,9 @@ import broadcaster from '@/utils/util_broadcast'
 import { getCPUCost } from "@/utils/util_helper"
 import statsScanner from "@/utils/util_statsScanner"
 
-import findCache from "@/utils/util_cache_find"
-findCache();
 
-import customPrototypes from '@/utils/util_customPrototypes'
-customPrototypes()
 
-import mountAll from "./mountAll"
+import { mountAll } from "./mount/mountAll"
 mountAll();
 
 import keepCreeps from "./spawn_keepCreeps"
