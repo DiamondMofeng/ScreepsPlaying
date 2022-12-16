@@ -78,14 +78,14 @@ const findCache = () => {
     },
 
     spawns: {
-      get() {
-        if (_.isUndefined(this._spawns)) {
-          this._spawns = {
-            lastFind: Game.time,
+      // get() {
+      //   if (_.isUndefined(this._spawns)) {
+      //     this._spawns = {
+      //       lastFind: Game.time,
 
-          }
-        }
-      },
+      //     }
+      //   }
+      // },
       // set() {
 
       // }
