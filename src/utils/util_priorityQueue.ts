@@ -1,4 +1,8 @@
-export function bubbleUpEnqueue(arr, item) {
+export type hasPriority = {
+  priority: number
+}
+
+export function bubbleUpEnqueue(arr: hasPriority[], item: hasPriority) {
   arr.push(item)
   let i = arr.length - 1
   while (i > 0) {
@@ -14,9 +18,12 @@ export function bubbleUpEnqueue(arr, item) {
   }
 }
 
-export function bubbleDownDequeue(arr) {
+export function bubbleDownDequeue(arr: hasPriority[]) {
+  if (!arr.length) {
+    return;
+  }
   let item = arr[0]
-  let last = arr.pop()
+  let last = arr.pop()!  //TODO add test
   if (arr.length > 0) {
     arr[0] = last
     let i = 0
@@ -51,12 +58,15 @@ export function bubbleDownDequeue(arr) {
  * 构造时传入一个数组，操作时等于对原数组进行操作，所以无需担心无法同步
  */
 class PriortyQueue {
-  constructor(queue) {
+
+  queue: hasPriority[];
+
+  constructor(queue: hasPriority[]) {
     this.queue = queue;
   }
 
 
-  sortEnqueue(item) {
+  sortEnqueue(item: hasPriority) {
     this.queue.push(item);
     this.queue.sort(function (b, a) {
       return a.priority - b.priority;
@@ -64,7 +74,7 @@ class PriortyQueue {
   }
 
   // 使用上浮的方法插入
-  bubbleUpEnqueue(item) {
+  bubbleUpEnqueue(item: hasPriority) {
     return bubbleUpEnqueue(this.queue, item);
   }
 
@@ -72,8 +82,10 @@ class PriortyQueue {
     return bubbleDownDequeue(this.queue);
   }
 
-  push(...args) {
-    return this.bubbleUpEnqueue(...args);
+  push(...args: hasPriority[]) {
+    args.forEach(item => {
+      this.bubbleUpEnqueue(item);
+    });
   }
 
   pop() {
@@ -89,7 +101,7 @@ class PriortyQueue {
   }
 
   isEmpty() {
-    return this.queue.length == 0;
+    return this.queue.length === 0;
   }
 
   size() {
