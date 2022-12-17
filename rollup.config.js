@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: [
     commonjs(),
-    typescriptPaths(),
+    typescriptPaths({ preserveExtensions: true }),
     typescript({ tsconfig: './tsconfig.json' }),
   ]
 };
