@@ -15,9 +15,10 @@ import keepCreeps from "./spawn_keepCreeps"
 
 import main_temp_commands from "./main_temp_commands"
 
+import { errorMapper } from "./errorMapper"
 global.lastOnline = Game.time;  //增添趣味性，但是位置待整理
 
-module.exports.loop = function () {//
+module.exports.loop = errorMapper(function () {//
 
   console.log(`----------${Game.time}----------`)
   console.log('Game.cpu.getUsed(): at start ', Game.cpu.getUsed());
@@ -75,4 +76,4 @@ module.exports.loop = function () {//
   // }
 
 
-}
+})
