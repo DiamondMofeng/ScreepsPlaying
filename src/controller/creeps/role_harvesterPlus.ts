@@ -1,5 +1,4 @@
 import { setDoing } from "@/utils/util_beheavor"
-import { startWith } from "@/utils/util_helper"
 import { IGNORE_CREEPS } from "@/utils/util_consts"
 import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
 import { isStructureType } from "@/utils/typer"
@@ -21,7 +20,7 @@ import { isStructureType } from "@/utils/typer"
 //sourceId:
 //}
 
-
+//TODO 替代'none'
 interface HarvesterPlusMemory extends CreepMemory {
   workParts?: number
 
@@ -84,7 +83,7 @@ const roleHarvesterPlus = {
         //;若无container，则没有数量限制。
         let container = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType === STRUCTURE_CONTAINER })[0]
         if (container) {
-          let currentHarvesters = s.pos.findInRange(FIND_CREEPS, 1, { filter: c => c.memory && startWith(c.memory.role, 'harvester') })
+          let currentHarvesters = s.pos.findInRange(FIND_CREEPS, 1, { filter: c => c.memory.role.startsWith('harvester') })
           if (currentHarvesters.length > 0) {
             continue
           } else {
@@ -161,28 +160,30 @@ const roleHarvesterPlus = {
       }
 
       //TODO 防止被其他creep对穿时换走位置后不回来 不知道会不会有其他后果
-      if (CM.harvester_containerID !== 'none') {
+      if (CM.harvester_containerID && CM.harvester_containerID !== 'none') {
         let container = Game.getObjectById(CM.harvester_containerID)
-        if (!container.pos.isEqualTo(creep.pos)) {
+        if (container && !container.pos.isEqualTo(creep.pos)) {
           creep.moveTo(container);
           return
         }
       }
 
-      const harvestResult = creep.harvest(Game.getObjectById<Source>(CM.harvester_sourceID))
-      if (harvestResult == ERR_NOT_IN_RANGE) {
-        creep.moveTo(Game.getObjectById<Source>(CM.harvester_sourceID))
-        return
+      if (CM.harvester_sourceID && CM.harvester_sourceID !== 'none') {
+        const harvestResult = creep.harvest(Game.getObjectById(CM.harvester_sourceID)!)
+        if (harvestResult == ERR_NOT_IN_RANGE) {
+          creep.moveTo(Game.getObjectById(CM.harvester_sourceID)!)
+          return
+        }
       }
 
 
-      if (creep.store.getFreeCapacity(RESOURCE_ENERGY) < CM.workParts * 2) {
+      if (creep.store.getFreeCapacity(RESOURCE_ENERGY) < CM.workParts! * 2) {
 
         //* 尝试向extension中注入能量
-        if (CM.harvester_extensionIDs.length > 0) {
+        if (CM.harvester_extensionIDs && CM.harvester_extensionIDs.length > 0) {
           for (const eID of CM.harvester_extensionIDs) {
             let e = Game.getObjectById(eID)
-            if (e.store.getFreeCapacity(RESOURCE_ENERGY) !== 0) {
+            if (e && e.store.getFreeCapacity(RESOURCE_ENERGY) !== 0) {
               // console.log('e.store.getFreeCapacity(): ', e.store.getFreeCapacity());
               // console.log('e.store: ', e.store);
               // console.log('e: ', e);
@@ -195,7 +196,7 @@ const roleHarvesterPlus = {
         }
 
         //* 修container
-        if (CM.harvester_containerID !== 'none') {
+        if (CM.harvester_containerID && CM.harvester_containerID !== 'none') {
           let container = Game.getObjectById(CM.harvester_containerID)
           if (container && (
             (container.store.getUsedCapacity(RESOURCE_ENERGY) > 1000 && (container.hits / container.hitsMax) < 0.9)
@@ -219,9 +220,12 @@ const roleHarvesterPlus = {
 
 
         //* 不用修则尝试向Link输入能量
-        else if (CM.harvester_linkID !== 'none' && Game.getObjectById(CM.harvester_linkID).store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
-          setDoing(creep, 'transfer link')
-          creep.transfer(Game.getObjectById(CM.harvester_linkID), RESOURCE_ENERGY)
+        else if (CM.harvester_linkID && CM.harvester_linkID !== 'none') {
+          const link = Game.getObjectById(CM.harvester_linkID);
+          if (link && link.store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
+            setDoing(creep, 'transfer link')
+            creep.transfer(link, RESOURCE_ENERGY)
+          }
         }
 
         // //* 否则向container中输入能量
@@ -247,18 +251,6 @@ const roleHarvesterPlus = {
       }
 
     }
-    // }
-
-
-    // creep.transfer(container, RESOURCE_ENERGY)
-
-    //* 
-
-
-
-
-
-
 
 
   }
