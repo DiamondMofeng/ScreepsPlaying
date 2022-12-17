@@ -4,7 +4,7 @@ interface Creep extends RoomObject {
 }
 
 interface CreepMemory {
-  role?: string;
+  role: string;
   task?: BasicTask;
 }
 
