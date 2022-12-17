@@ -19,8 +19,6 @@ interface PlannedLink extends PlannedStructure {
 
 /*
 
-TODO 关于定位container和link，定位前未查找是否已有，可能出现建多个的情况
-
 思路:分RCL进行发展。
 
 *================= RCL1:===============
@@ -190,7 +188,6 @@ const locateSomething_byAux = (room: string | Room, starter: RoomPosition) => {
 
   for (let s of sources) {
 
-    console.log('s: ', s.pos);
     let containerPos;
     let linkPos;
 
@@ -317,7 +314,6 @@ const locateSomething_byAux = (room: string | Room, starter: RoomPosition) => {
     extractorPos,
   }
 
-  console.log('containerPos_controller: ', containerPos_controller);
 
 
   return result
@@ -610,6 +606,8 @@ const CTinfos = (flag: string | Flag | RoomPosition, rcl: number, locate = true)
 
   }
 
+  //这里别sort
+
   return CTs;
 
 
@@ -634,6 +632,8 @@ const placeCT = (flag: Flag, rcl: number) => {
 
   let terrain = new Room.Terrain(flag.pos.roomName)  // 防止建到墙上 //TODO 中心位置仍依赖于手动观察
   let CTs = CTinfos(flag, rcl)
+  const priority = ['tower', 'extension', 'container', 'link', 'storage', 'observer', 'powerSpawn', 'extractor', 'lab', 'terminal', 'nuker', 'spawn', 'road']
+  CTs = CTs.sort((a, b) => priority.indexOf(a.type) - priority.indexOf(b.type))
   // console.log('CTs: ', CTs);
   for (let s of CTs) {
     if (!(s && s.x && s.y && s.type)) {
@@ -645,9 +645,11 @@ const placeCT = (flag: Flag, rcl: number) => {
     if (terrain.get(s.x, s.y) === TERRAIN_MASK_WALL) {
       continue
     }
+
     let { x, y, type } = s
-    // console.log('flag.room.: ', flag.room, x, y, type);
-    flag.room.createConstructionSite(x, y, type)
+    if (flag.room.createConstructionSite(x, y, type) === ERR_FULL) {
+      break;
+    }
   }
 
 }
