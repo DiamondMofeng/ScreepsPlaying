@@ -1,7 +1,20 @@
 /* eslint-disable no-fallthrough */
-import { myName } from "@/utils/util_consts";
 
-const INTERVAL_PLACE_CONSTRUCTION_SITES = 3000;
+const INTERVAL_PLACE_CONSTRUCTION_SITES = 5;
+
+interface PlannedStructure {
+  x: number,
+  y: number,
+  type: BuildableStructureConstant,
+}
+
+interface PlannedLink extends PlannedStructure {
+  x: number,
+  y: number,
+  type: STRUCTURE_LINK,
+  distance: number
+}
+
 
 
 /*
@@ -62,41 +75,41 @@ body自动由评估决定。每种worker尽量少，保持n*harvester,1*upgrader
 
 
 
-/**
- * 定出
- * 
- * source的container,link,
- * 
- * upgrade的container,link位置
- * @param {Room|String} room 
- */
-const locateSomething = (room) => {
-  if (typeof room == 'string') {
-    room = Game.rooms[room]
-  }
-  if (!room || room.controller.owner.username != myName) {
-    return
-  }
+// /**
+//  * 定出
+//  * 
+//  * source的container,link,
+//  * 
+//  * upgrade的container,link位置
+//  * @param {Room|String} room 
+//  */
+// const locateSomething = (room) => {
+//   if (typeof room == 'string') {
+//     room = Game.rooms[room]
+//   }
+//   if (!room || room.controller.owner.username != myName) {
+//     return
+//   }
 
-  let sources = room.find(FIND_SOURCES);
-  let controller = room.controller;
+//   let sources = room.find(FIND_SOURCES);
+//   let controller = room.controller;
 
-  let terrain = room.getTerrain();
+//   let terrain = room.getTerrain();
 
-  //* 定出source的container和link
+//   //* 定出source的container和link
 
-  for (let s of sources) {
-    let { x, y } = s.pos;  //s的位置肯定是个墙
-
-
-
-  }
+//   for (let s of sources) {
+//     let { x, y } = s.pos;  //s的位置肯定是个墙
 
 
 
+//   }
 
 
-}
+
+
+
+// }
 
 
 /**
@@ -109,40 +122,38 @@ const locateSomething = (room) => {
  * linkPos:[ ]  
  * }
  */
-const locateSomething_byAux = (room, starter) => {
+const locateSomething_byAux = (room: string | Room, starter: RoomPosition) => {
 
   if (typeof room == 'string') {
     room = Game.rooms[room]
   }
 
-  if (!room || room.controller.owner.username != myName) {
+  if (!room.controller?.my) {
     return
   }
 
-
   let sources = room.find(FIND_SOURCES);
-  let controller = room.controller;
 
   let terrain = room.getTerrain();
 
-  let containerPos_sources = [],
-    containerPos_controller = [],
+  let containerPos_sources: PlannedStructure[] = [],
+    containerPos_controller: PlannedStructure[] = [],
 
-    linkPos_sources = [],
-    linkPos_controller = [],
+    linkPos_sources: PlannedLink[] = [],
+    linkPos_controller: PlannedStructure[] = [],
 
-    roadPos_sources = [],
-    roadPos_mineral = [],
-    roadPos_controller = [],
+    roadPos_sources: PlannedStructure[] = [],
+    roadPos_mineral: PlannedStructure[] = [],
+    roadPos_controller: PlannedStructure[] = [],
 
-    extractorPos = []
+    extractorPos: PlannedStructure[] = []
 
 
 
-  let costCallback = function (roomName) {
+  let costCallback = function (roomName: string) {
 
     let room = Game.rooms[roomName];
-    if (_.isUndefined(room)) return false;
+    if (_.isUndefined(room)) return;
 
     let costs = new PathFinder.CostMatrix;
 
@@ -306,6 +317,7 @@ const locateSomething_byAux = (room, starter) => {
     extractorPos,
   }
 
+  console.log('containerPos_controller: ', containerPos_controller);
 
 
   return result
@@ -323,33 +335,29 @@ const locateSomething_byAux = (room, starter) => {
  * @param {boolean} locate 
  * @returns {Array}
  */
-const CTinfos = (flag, rcl, locate = true) => {
+const CTinfos = (flag: string | Flag | RoomPosition, rcl: number, locate = true): Array<PlannedStructure> => {
 
-
-  let starterPos
+  let starterPos: RoomPosition
   if (typeof flag == 'string') {
     flag = Game.flags[flag]
   }
+
   if (flag instanceof RoomObject) {
     starterPos = flag.pos
-  }
-  if (flag instanceof RoomPosition) {
+  } else if (flag instanceof RoomPosition) {
     starterPos = flag
+  } else {
+    return [];
   }
-
-
 
   let x = starterPos.x;
   let y = starterPos.y;
-  let CTs = [];
+  let CTs: PlannedStructure[] = [];
 
   let towerX = x;
   let towerY = y + 4;
 
-  let sth = []
-  if (locate == true) {
-    sth = locateSomething_byAux(flag.room, flag.pos)
-  }
+  let sth = locate ? locateSomething_byAux(starterPos.roomName, starterPos) : null;
 
   switch (rcl) {
     case 8:
@@ -450,7 +458,7 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: x, y: y - 1, type: STRUCTURE_LINK },        //! 级时先修一个最远的source到conrtoller的 ，6级再修基地的
       ])
 
-      if (locate) {
+      if (locate && sth) {
         CTs = CTs.concat(
           sth.extractorPos
         )
@@ -474,7 +482,7 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: towerX - 1, y: towerY, type: STRUCTURE_TOWER },
       ])
 
-      if (locate) {
+      if (locate && sth) {
 
         CTs = CTs.concat(sth.roadPos_mineral,
           sth.linkPos_sources[0],
@@ -569,7 +577,7 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: towerX - 1, y: towerY - 1, type: STRUCTURE_TOWER },
       ])
 
-      if (locate) {
+      if (locate && sth) {
 
         //* ROAD TO SOURCE
         //* ROAD TO CONTROLLER
@@ -588,7 +596,7 @@ const CTinfos = (flag, rcl, locate = true) => {
         { x: x - 6, y: y - 1, type: STRUCTURE_EXTENSION },  //5
       ])
 
-      if (locate) {
+      if (locate && sth) {
 
         //* source的container
         //* controller的container
@@ -615,15 +623,18 @@ const CTinfos = (flag, rcl, locate = true) => {
  * @param {Flag} flag 
  * @param {Number} rcl 
  */
-const placeCT = (flag, rcl) => {
+const placeCT = (flag: Flag, rcl: number) => {
 
   if (Game.time % INTERVAL_PLACE_CONSTRUCTION_SITES != 0) {
     return
   }
+  if (!flag.room) {
+    return;
+  }
 
-  let terrain = new Room.Terrain(flag.room.name)  // 防止建到墙上 //TODO 中心位置仍依赖于手动观察
+  let terrain = new Room.Terrain(flag.pos.roomName)  // 防止建到墙上 //TODO 中心位置仍依赖于手动观察
   let CTs = CTinfos(flag, rcl)
-  console.log('CTs: ', CTs);
+  // console.log('CTs: ', CTs);
   for (let s of CTs) {
     if (!(s && s.x && s.y && s.type)) {
       continue
@@ -646,7 +657,7 @@ const placeCT = (flag, rcl) => {
  * 根据flag位置自动摆放建筑
  * @param {Flag|String} flag 
  */
-const developNewRoom = (flag, opt = {}) => {
+const developNewRoom = (flag) => {
 
   //* 默认此时已建好spawn，根据flag的位置和rcl自动摆放建筑
 
@@ -659,7 +670,7 @@ const developNewRoom = (flag, opt = {}) => {
   }
 
   let room = Game.rooms[flag.pos.roomName]
-  if (!room) {
+  if (!room.controller?.my) {
     return
   }
 
@@ -667,9 +678,7 @@ const developNewRoom = (flag, opt = {}) => {
 
   let rcl = room.controller.level
 
-  if (room.cts && room.cts.length > 0) {
-
-  } else {
+  if (!room.cts || !room.cts.length) {
     placeCT(flag, rcl)
   }
 
