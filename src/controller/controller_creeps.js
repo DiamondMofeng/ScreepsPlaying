@@ -147,7 +147,7 @@ function controller_creeps() {
 
 
     } catch (e) {
-      console.log('!!!!!!!!!ERROR FOUND IN ' + creep + ' CONTROLL!!!!!!' + e)
+      console.log(`!!!!!!!!!ERROR FOUND IN [${creepName}] CONTROLL!!!!!! ${e}`)
       console.log(e.stack)
     }
   }
