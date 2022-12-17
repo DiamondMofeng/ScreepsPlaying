@@ -163,23 +163,18 @@ export const killAllCreeps = function () {
 }
 
 export const cleanNonMyRoomMemory = function (sure?: boolean) {
-  let list = []
-  for (let roomName in Memory.rooms) {
-    if (_.isUndefined(Game.rooms[roomName])) {
-      list.push(roomName);
-    }
-  }
-  if (list.length == 0) {
+  let noVisionRoomList = Object.keys(Memory.rooms).filter((roomName) => !Game.rooms[roomName]);
+  if (noVisionRoomList.length == 0) {
     return "no room to clean"
   }
   if (sure !== true) {
-    return `!!!!!! ${list} 's memory will be clean! use 'cleanNonMyRoomMemory(true)' to confirm clean!!!!!!`
+    return `!!!!!! ${noVisionRoomList} 's memory will be clean! use 'cleanNonMyRoomMemory(true)' to confirm clean!!!!!!`
   }
 
-  for (let roomName of list) {
+  for (let roomName of noVisionRoomList) {
     delete Memory.rooms[roomName]
   }
-  return `memory of ${list} has been cleaned !!!!!!`
+  return `memory of ${noVisionRoomList} has been cleaned !!!!!!`
 }
 
 
