@@ -1,16 +1,12 @@
 
-import { RM } from '@/utils/util_consts'
 import { bubbleDownDequeue, bubbleUpEnqueue } from '@/utils/util_priorityQueue'
+
+const priorityCompareFn = (a: CreepToSpawn, b: CreepToSpawn) => a.priority - b.priority
 
 /**
  * 用于挂载spawnQueue相关原型方法
  */
 const mountSpawnQueue = () => {
-
-
-
-
-
 
   Object.defineProperties(Room.prototype, {
 
@@ -18,58 +14,36 @@ const mountSpawnQueue = () => {
     //注：这是一个大顶堆。
     spawnQueue: {
       get() {
-
         // 如果不是自己的房间，则返回
-        if (!this.controller || !this.controller.my) {
+        if (!this.controller?.my) {
           return []
         }
 
-
-        if (_.isUndefined(Memory.rooms)) {
-          Memory.rooms = {}
+        if (_.isUndefined(this.memory.spawnQueue)) {
+          this.memory.spawnQueue = []
         }
-
-        if (_.isUndefined(Memory.rooms[this.name])) {
-          Memory.rooms[this.name] = {}
-        }
-
-        if (_.isUndefined(Memory.rooms[this.name][RM.SPAWN_QUEUE])) {
-          Memory.rooms[this.name][RM.SPAWN_QUEUE] = []
-        }
-        return Memory.rooms[this.name][RM.SPAWN_QUEUE]
+        return this.memory.spawnQueue
       },
-      set(value) { Memory.rooms[this.name][RM.SPAWN_QUEUE] = value },
+      set(value) { this.memory.spawnQueue = value },
       enumerable: false,
     },
-
 
     /**
      * 将Creep插入到arr末端,并通过其priority属性上浮排序至合适位置。
      * @param {CreepToSpawn} creepToSpawn 
      */
     pushToSpawnQueue: {
-      value: function (creepToSpawn) {
+      value: function (creepToSpawn: CreepToSpawn) {
 
-        bubbleUpEnqueue(this.spawnQueue, creepToSpawn)
+        bubbleUpEnqueue(this.spawnQueue, creepToSpawn, priorityCompareFn)
 
         return 0
 
       },
+      writable: false,
     },
 
-
-
-    /**
-     * 鉴于Room对象每tick都会重新构建，所以挂载Room对象下的属性不用担心跨tick污染
-     */
-    currentCreeps: {
-
-    },
-
-
-
-
-  })
+  } as PropertyDescriptorMap & ThisType<Room>)
 
 
 
@@ -112,7 +86,7 @@ const mountSpawnQueue = () => {
             case OK:
             case ERR_INVALID_ARGS:
             case ERR_NAME_EXISTS:
-              bubbleDownDequeue(this.room.spawnQueue)
+              bubbleDownDequeue(this.room.spawnQueue, priorityCompareFn)
               break
             case ERR_NOT_ENOUGH_ENERGY:
               break

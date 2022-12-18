@@ -1,14 +1,15 @@
-export type hasPriority = {
-  priority: number
-}
-
-export function bubbleUpEnqueue(arr: hasPriority[], item: hasPriority) {
+export type CompareFn<T> = (a: T, b: T) => number
+/**
+ * @param {T[]} arr
+ * @param {T} item
+ * @param {CompareFn<T>} compareFn - 默认顺序为从大到小,你可以反转两个参数的顺序来实现从小到大
+ */
+export function bubbleUpEnqueue<T>(arr: T[], item: T, compareFn: CompareFn<T>) {
   arr.push(item)
   let i = arr.length - 1
   while (i > 0) {
     let parent = (i - 1) >> 1
-    console.log(i, parent, JSON.stringify(arr[parent]), JSON.stringify(arr[i]))
-    if (arr[parent].priority < arr[i].priority) {
+    if (compareFn(arr[parent], arr[i]) < 0) {
       [arr[parent], arr[i]] = [arr[i], arr[parent]] //swap
       i = parent
     }
@@ -18,7 +19,7 @@ export function bubbleUpEnqueue(arr: hasPriority[], item: hasPriority) {
   }
 }
 
-export function bubbleDownDequeue(arr: hasPriority[]) {
+export function bubbleDownDequeue<T>(arr: T[], compareFn: CompareFn<T>) {
   if (!arr.length) {
     return;
   }
@@ -32,10 +33,10 @@ export function bubbleDownDequeue(arr: hasPriority[]) {
       let right = i * 2 + 2;
       // 找到left,right,i中的最大值位置
       let largest = i;
-      if (left < arr.length && arr[left].priority > arr[largest].priority) {
+      if (left < arr.length && compareFn(arr[left], arr[largest]) > 0) {
         largest = left
       }
-      if (right < arr.length && arr[right].priority > arr[largest].priority) {
+      if (right < arr.length && compareFn(arr[right], arr[largest]) > 0) {
         largest = right
       }
 
@@ -53,37 +54,49 @@ export function bubbleDownDequeue(arr: hasPriority[]) {
 }
 
 
+function isSorted<T>(arr: T[], compareFn: CompareFn<T>): boolean {
+  for (let i = 1; i < arr.length; i++) {
+    if (compareFn(arr[i - 1], arr[i]) < 0) {
+      return false
+    }
+  }
+  return true;
+}
+
 /**
  * @class PriorityQueue     
  * 构造时传入一个数组，操作时等于对原数组进行操作，所以无需担心无法同步
  */
-class PriortyQueue {
+class PriortyQueue<T> {
 
-  queue: hasPriority[];
+  compareFn: CompareFn<T>;
+  queue: T[];
 
-  constructor(queue: hasPriority[]) {
+  constructor(compareFn: CompareFn<T>, queue: T[], sortOnInit = false) {
+    this.compareFn = compareFn;
     this.queue = queue;
+    if (sortOnInit && !isSorted(queue, compareFn)) {
+      this.queue.sort(compareFn);
+    }
   }
 
 
-  sortEnqueue(item: hasPriority) {
+  sortEnqueue(item: T) {
     this.queue.push(item);
-    this.queue.sort(function (b, a) {
-      return a.priority - b.priority;
-    });
+    this.queue.sort(this.compareFn);
   }
 
   // 使用上浮的方法插入
-  bubbleUpEnqueue(item: hasPriority) {
-    return bubbleUpEnqueue(this.queue, item);
+  bubbleUpEnqueue(item: T) {
+    return bubbleUpEnqueue(this.queue, item, this.compareFn);
   }
 
   bubbleDownDequeue() {
-    return bubbleDownDequeue(this.queue);
+    return bubbleDownDequeue(this.queue, this.compareFn);
   }
 
-  push(...args: hasPriority[]) {
-    args.forEach(item => {
+  push(...items: T[]) {
+    items.forEach(item => {
       this.bubbleUpEnqueue(item);
     });
   }
@@ -117,12 +130,7 @@ class PriortyQueue {
    * @returns 
    */
   check() {
-    for (let i = 1; i < this.queue.length; i++) {
-      if (this.queue[i].priority >= this.queue[i - 1].priority) {
-        return false
-      }
-    }
-    return true;
+    return isSorted(this.queue, this.compareFn);
   }
 }
 
