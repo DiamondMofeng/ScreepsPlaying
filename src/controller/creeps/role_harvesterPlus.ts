@@ -83,7 +83,7 @@ const roleHarvesterPlus = {
         //;若无container，则没有数量限制。
         let container = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType === STRUCTURE_CONTAINER })[0]
         if (container) {
-          let currentHarvesters = s.pos.findInRange(FIND_CREEPS, 1, { filter: c => c.memory.role.startsWith('harvester') })
+          let currentHarvesters = s.pos.findInRange(FIND_CREEPS, 1, { filter: c => c.memory?.role?.startsWith('harvester') })
           if (currentHarvesters.length > 0) {
             continue
           } else {
