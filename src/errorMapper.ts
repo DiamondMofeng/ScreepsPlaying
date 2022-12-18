@@ -19,7 +19,7 @@ const getConsumer = function (): SourceMapConsumer {
 }
 
 // 缓存映射关系以提高性能
-const cache = {}
+const cache: any = {}
 
 /**
  * 使用源映射生成堆栈跟踪，并生成原始标志位
@@ -29,8 +29,8 @@ const cache = {}
  * @param {Error | string} error 错误或原始追踪栈
  * @returns {string} 映射之后的源代码追踪栈
  */
-const sourceMappedStackTrace = function (error) {
-  const stack = error instanceof Error ? error.stack : error
+const sourceMappedStackTrace = function (error: Error) {
+  const stack = error instanceof Error ? error.stack ?? '' : error
   // 有缓存直接用
   if (Object.prototype.hasOwnProperty.call(cache, stack)) { return cache[stack] }
 
@@ -73,7 +73,7 @@ const sourceMappedStackTrace = function (error) {
  * 
  * @param next 玩家代码
  */
-export const errorMapper = function (next) {
+export const errorMapper = function (next: () => any) {
   return () => {
     try {
       // 执行玩家代码

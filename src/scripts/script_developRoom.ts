@@ -244,7 +244,9 @@ const locateSomething_byAux = (room: string | Room, starter: RoomPosition) => {
       containerPos_sources.push({ x: containerPos.x, y: containerPos.y, type: STRUCTURE_CONTAINER })
     }
     if (nearbyStructures.filter(s => s.structureType == STRUCTURE_LINK).length == 0) {
-      linkPos_sources.push({ x: linkPos.x, y: linkPos.y, type: STRUCTURE_LINK, distance: hPath.length })
+      if (linkPos) {
+        linkPos_sources.push({ x: linkPos.x, y: linkPos.y, type: STRUCTURE_LINK, distance: hPath.length })
+      }
     }
 
     // console.log('linkPos_sources: ', linkPos_sources);
@@ -659,7 +661,7 @@ const placeCT = (flag: Flag, rcl: number) => {
  * 根据flag位置自动摆放建筑
  * @param {Flag|String} flag 
  */
-const developNewRoom = (flag) => {
+const developNewRoom = (flag: Flag | string) => {
 
   //* 默认此时已建好spawn，根据flag的位置和rcl自动摆放建筑
 
