@@ -215,38 +215,16 @@ const roleHarvesterPlus = {
               creep.build(cts[0])
             }
           }
-        }
-
-
-
-        //* 不用修则尝试向Link输入能量
-        else if (CM.harvester_linkID && CM.harvester_linkID !== 'none') {
-          const link = Game.getObjectById(CM.harvester_linkID);
-          if (link && link.store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
-            setDoing(creep, 'transfer link')
-            creep.transfer(link, RESOURCE_ENERGY)
+          //TODO 这个分支条件不大好，会被上面影响
+          //* 不用修则尝试向Link输入能量
+          else if (CM.harvester_linkID && CM.harvester_linkID !== 'none') {
+            const link = Game.getObjectById(CM.harvester_linkID);
+            if (link && link.store.getFreeCapacity(RESOURCE_ENERGY) != 0) {
+              setDoing(creep, 'transfer link')
+              creep.transfer(link, RESOURCE_ENERGY)
+            }
           }
         }
-
-        // //* 否则向container中输入能量
-        // else if (CM.harvester_containerID != 'none' && Game.getObjectById(CM.harvester_containerID).store.getFreeCapacity() != 0) {
-        //   setDoing(creep, 'transfer container')
-
-        //   creep.transfer(Game.getObjectById(CM.harvester_containerID), RESOURCE_ENERGY)
-        // }
-
-        // //* 否则把能量扔地上
-
-        // else {
-        //   setDoing(creep, 'drop energy')
-
-        //   creep.drop(RESOURCE_ENERGY)
-        // }
-
-
-
-
-
 
       }
 
