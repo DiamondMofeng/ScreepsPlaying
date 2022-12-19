@@ -22,14 +22,15 @@ import RoomClaimer from './creeps/role_roomClaimer'
 import Miner from './creeps/role_miner'
 
 
-import { getBodyArray } from '@/utils/util_helper'
+// import { getBodyArray } from '@/utils/util_helper'
 import role_expend_builder from './creeps/role_expend_builder'
 import role_expend_claimer from './creeps/role_expend_claimer'
 import role_scavenger from './creeps/role_scavenger'
 import roleWallRepairer from './creeps/role_wallRepairer'
-import { config, ROLE_TO_PRIORITY } from '@/utils/util_consts'
+import { config } from '@/utils/util_consts'
 
 import powerCreep_new from './powerCreeps/powerCreep_new'
+import { errorIsolater } from '@/utils/util_helper'
 
 
 
@@ -40,13 +41,15 @@ const SHOW_CPU_CREEPS = config.SHOW_CPU_CREEPS
 
 //! script_outerEnergyBase中存在对 pionner_leader 和 remoteBuilder 的控制！
 
-const activePreSpawn = [
-  // 'carrier',
-  // 'base_transferor',
-  // 'harvesterPlus',
-]
+// const activePreSpawn = [
+//   // 'carrier',
+//   // 'base_transferor',
+//   // 'harvesterPlus',
+// ]
 
-const roleMap = {
+
+
+const roleMap: Record<CreepRole, (creep: Creep) => void> = {
   //* core
   harvester: Harvester,
   harvesterPlus: HarvesterPlus,
@@ -83,38 +86,41 @@ const roleMap = {
  * 
  * @param {Creep} creep 
  */
-function addToSpawnQueueBeforeDead(creep) {
-  creep.room.pushToSpawnQueue({
-    name: creep.memory.role + Game.time,
-    role: creep.memory.role,
-    // memory: creep.memory,
-    body: getBodyArray(creep),
-    priority: ROLE_TO_PRIORITY[creep.memory.role],
-  })
-}
+// function addToSpawnQueueBeforeDead(creep) {
+//   creep.room.pushToSpawnQueue({
+//     name: creep.memory.role + Game.time,
+//     role: creep.memory.role,
+//     // memory: creep.memory,
+//     body: getBodyArray(creep),
+//     priority: ROLE_TO_PRIORITY[creep.memory.role],
+//   })
+// }
 
 
-/**
- * 
- * @param {Creep} creep 
- * @returns 
- */
-function checkShouldPreAddToSpawnQueue(creep) {
-  if (creep.memory.preAddedToSpawnQueue) {
-    return
-  }
-  if (creep.ticksToLive <= creep.body.length * 3) {
-    addToSpawnQueueBeforeDead(creep)
-    creep.memory.preAddedToSpawnQueue = true
-  }
-}
+// /**
+//  * 
+//  * @param {Creep} creep 
+//  * @returns 
+//  */
+// function checkShouldPreAddToSpawnQueue(creep) {
+//   if (creep.memory.preAddedToSpawnQueue) {
+//     return
+//   }
+//   if (creep.ticksToLive <= creep.body.length * 3) {
+//     addToSpawnQueueBeforeDead(creep)
+//     creep.memory.preAddedToSpawnQueue = true
+//   }
+// }
 
 //*  /////////////////////////////MAIN入口////////////////////////////////////////////////////////////////////////////////////////
-
+/**
+ * 控制所有creep的主入口
+ */
 function controller_creeps() {
 
   let CPUcounts = []
-  powerCreep_new()
+
+  errorIsolater(() => powerCreep_new())
 
   //* beheavor crontroller
   for (let creepName in Game.creeps) {
@@ -125,19 +131,19 @@ function controller_creeps() {
 
       const creep = Game.creeps[creepName]
 
-      if (!creep.memory.role) {
+      if (!creep.memory.role || !Object.prototype.hasOwnProperty.call(roleMap, creep.memory.role)) {
         continue
       }
 
-      //TODO 先放在这里，待整理
-
-      if (activePreSpawn.includes(creep.memory.role)) {
-        checkShouldPreAddToSpawnQueue(creep)
-      }
-
-
       // *run
       roleMap[creep.memory.role](creep)
+      //TODO 先放在这里，待整理
+
+      // if (activePreSpawn.includes(creep.memory.role)) {
+      //   checkShouldPreAddToSpawnQueue(creep)
+      // }
+
+
 
       let endCPU = Game.cpu.getUsed()
 
@@ -146,9 +152,11 @@ function controller_creeps() {
       }
 
 
-    } catch (e) {
-      console.log(`!!!!!!!!!ERROR FOUND IN [${creepName}] CONTROLL!!!!!! ${e}`)
-      console.log(e.stack)
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.log(`!!!!!!!!!ERROR FOUND IN [${creepName}] CONTROLL!!!!!! ${e}`)
+        console.log(e.stack)
+      }
     }
   }
 
