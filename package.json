@@ -1,9 +1,11 @@
 {
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -cw",
+    "build": "cross-env COPY_TARGET=default/ rollup -c",
+    "dev": "cross-env COPY_TARGET=default/ rollup -cw",
+    "dev:local": "cross-env COPY_TARGET=../127_0_0_1___21025/default rollup -cw",
     "jest": "jest",
-    "lint": "eslint --ext .ts src/"
+    "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.ts .",
+    "lint:fix": "eslint --fix --ignore-path ./.gitignore --ext .js,.ts ."
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^23.0.4",
@@ -16,14 +18,15 @@
     "typescript": "^4.9.4"
   },
   "devDependencies": {
-    "@types/lodash": "^3.10.1",
     "@types/jest": "^29.2.4",
+    "@types/lodash": "^3.10.1",
     "@types/node": "^12.20.55",
     "@types/power-assert": "^1.5.8",
     "@types/screeps": "^3.3.0",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "babel-preset-power-assert": "^3.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.29.0",
     "jest": "^29.3.1",
     "power-assert": "^1.6.1",
