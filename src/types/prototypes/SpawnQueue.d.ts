@@ -19,6 +19,6 @@ interface RoomMemory {
 }
 
 interface StructureSpawn {
-  spawnFromQueue(): void;
+  spawnFromQueue(): ScreepsReturnCode;
 }
 

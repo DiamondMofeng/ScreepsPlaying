@@ -51,54 +51,53 @@ const mountSpawnQueue = () => {
   //* SPAWN
   Object.defineProperties(StructureSpawn.prototype, {
 
-
     /**
      * 尝试从spawn的room的spawnQueue生成一个creep
      */
     spawnFromQueue: {
-      value: function () {
+      value: function (): ScreepsReturnCode {
 
         let creepToSpawn = this.room.spawnQueue[0]
-        if (creepToSpawn) {
-
-          let name = creepToSpawn.name ||
-            (creepToSpawn.role || creepToSpawn.memory.role) + Game.time
-          let memory
-          let opt
-
-
-          memory = creepToSpawn.memory || {}
-          if (creepToSpawn.role) {
-            memory.role = creepToSpawn.role
-          }
-
-          memory = {
-            ...memory,
-            spawnName: this.name,
-            spawnRoom: this.room.name,
-          }
-
-          opt = { ...creepToSpawn.opt, memory: memory }
-
-          let spawnRes = this.spawnCreep(creepToSpawn.body, name, { ...opt, dryRun: false })
-          // console.log('spawnRes: ', spawnRes, this);
-          switch (spawnRes) {
-            case OK:
-            case ERR_INVALID_ARGS:
-            case ERR_NAME_EXISTS:
-              bubbleDownDequeue(this.room.spawnQueue, priorityCompareFn)
-              break
-            case ERR_NOT_ENOUGH_ENERGY:
-              break
-          }
-          return spawnRes
+        if (!creepToSpawn) {
+          return OK
         }
+
+        let name: string = creepToSpawn.name ||
+          (creepToSpawn.role || creepToSpawn.memory.role) + Game.time
+        let opt: SpawnOptions
+        let memory
+
+
+        memory = creepToSpawn.memory ?? {}
+        if (creepToSpawn.role) {
+          memory.role = creepToSpawn.role
+        }
+
+        memory = {
+          ...memory,
+          spawnName: this.name,
+          spawnRoom: this.room.name,
+        }
+
+        opt = { ...creepToSpawn.spawnOpt, memory: memory }
+
+        let spawnRes = this.spawnCreep(creepToSpawn.body, name, { ...opt, dryRun: false })
+        // console.log('spawnRes: ', spawnRes, this);
+        switch (spawnRes) {
+          case OK:
+          case ERR_INVALID_ARGS:
+          case ERR_NAME_EXISTS:
+            bubbleDownDequeue(this.room.spawnQueue, priorityCompareFn)
+            break
+          case ERR_NOT_ENOUGH_ENERGY:
+            break
+        }
+        return spawnRes
 
       }
     },
 
-  })
-
+  } as PropertyDescriptorMap & ThisType<StructureSpawn>)
 
 
 }
