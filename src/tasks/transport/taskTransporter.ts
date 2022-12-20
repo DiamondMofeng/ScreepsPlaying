@@ -1,4 +1,5 @@
-import { AnyTransportTask, TransportTaskCenter, transportTaskCompareFn } from ".";
+import { isDefined, resourceTypesIn } from "@/utils/typer";
+import { AnyTransportTask, PickupTask, TransferTask, TransportTaskCenter, transportTaskCompareFn, WithdrawTask } from ".";
 
 interface TaskTransporterMemory extends CreepMemory {
   taskID?: string
@@ -67,6 +68,134 @@ export function TaskTransporter(creep: Creep) {
   }
 
   //TODO 做任务
+  doTransportTask(creep, task);
 }
+
+/**
+ * 从多个来源中取出资源
+ * @param creep
+ * @param fromIds
+ * @param resourceType
+ * @param targetCapacity - 取到最少剩多少。不是withdraw任务的话不要填
+ */
+function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceType?: ResourceConstant, targetCapacity?: number) {
+  let fromStructures = fromIds
+    .map(id => Game.getObjectById(id))
+    .filter(isDefined);
+
+  let target = creep.pos.findClosestByPath(fromStructures, {
+
+    filter: (s) => {
+      if (resourceType && s.store[resourceType] === 0) {
+        return false;
+      }
+      if (targetCapacity && (s.store.getUsedCapacity(resourceType) ?? 0) <= targetCapacity) {
+        return false;
+      }
+      if (resourceTypesIn(s.store).length === 0) {
+        return false;
+      }
+      return true;
+    }
+  });
+  if (!target) {
+    return ERR_NOT_FOUND;
+  }
+
+  let amount = Math.min(
+    creep.store.getFreeCapacity(),
+    (target.store.getUsedCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
+  );
+
+  return creep.withdraw(target,
+    resourceType ?? resourceTypesIn(target.store)[0],
+    amount
+  );
+}
+
+/**
+ * 从多个目标中存入资源
+ * @param creep
+ * @param toIds
+ * @param resourceType
+ * @param targetCapacity - 存到最多剩多少。不是transfer任务的话不要填
+  */
+function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?: ResourceConstant, targetCapacity?: number) {
+  let toStructures = toIds
+    .map(id => Game.getObjectById(id))
+    .filter(isDefined);
+
+  let target = creep.pos.findClosestByPath(toStructures, {
+
+    filter: (s) => {
+      if (resourceType && s.store.getFreeCapacity(resourceType) === 0) {
+        return false;
+      }
+      if (targetCapacity && (s.store.getFreeCapacity(resourceType) ?? 0) <= targetCapacity) {
+        return false;
+      }
+      if (resourceTypesIn(s.store).length === 0) {
+        return false;
+      }
+      return true;
+    }
+  });
+  if (!target) {
+    return ERR_NOT_FOUND;
+  }
+
+  let amount = Math.min(
+    creep.store.getUsedCapacity(resourceType),
+    (target.store.getFreeCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
+  );
+
+  return creep.transfer(target,
+    resourceType ?? resourceTypesIn(target.store)[0],
+    amount
+  );
+
+}
+
+
+
+function doTransportTask(creep: Creep, task: AnyTransportTask) {
+
+
+  switch (task.type) {
+    case "transfer":
+      doTransferTask(creep, task);
+      break;
+    case "withdraw":
+      doWithdrawTask(creep, task);
+      break;
+    case "pickup":
+      doPickupTask(creep, task);
+      break;
+    default:
+      throw new Error('未知的任务类型')
+  }
+
+}
+
+function doTransferTask(creep: Creep, task: TransferTask) {
+
+  const { from, to, resourceType, targetCapacity } = task;
+
+  if (creep.store.getUsedCapacity(resourceType) === 0) {
+    withdrawFrom(creep, from, resourceType, undefined);
+  } else {
+    transferTo(creep, to, resourceType, targetCapacity);
+  }
+
+}
+
+function doWithdrawTask(creep: Creep, task: WithdrawTask) {
+  //TODO
+}
+
+function doPickupTask(creep: Creep, task: PickupTask) {
+  //TODO
+}
+
 
 
