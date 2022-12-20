@@ -8,16 +8,7 @@ export type CompareFn<T> = (a: T, b: T) => number
 export function bubbleUpEnqueue<T>(arr: T[], item: T, compareFn: CompareFn<T>) {
   arr.push(item)
   let i = arr.length - 1
-  while (i > 0) {
-    let parent = (i - 1) >> 1
-    // if cur > parent
-    if (compareFn(arr[i], arr[parent]) > 0) {
-      [arr[parent], arr[i]] = [arr[i], arr[parent]] //swap
-      i = parent
-    } else {
-      break
-    }
-  }
+  bubbleUp(arr, i, compareFn);
 }
 
 /**
@@ -28,44 +19,78 @@ export function bubbleDownDequeue<T>(arr: T[], compareFn: CompareFn<T>) {
   if (!arr.length) {
     return;
   }
-  let item = arr[0]
-  let last = arr.pop()!  // 因为长度最少为1，所以一定不为空
-  if (arr.length > 0) {
-    arr[0] = last
-    let i = 0
-    while (true) {
-      let left = i * 2 + 1;
-      let right = i * 2 + 2;
-      // 找到left,right,i中的最大值位置
-      let largest = i;
-      if (left < arr.length && compareFn(arr[left], arr[largest]) > 0) {
-        largest = left
-      }
-      if (right < arr.length && compareFn(arr[right], arr[largest]) > 0) {
-        largest = right
-      }
 
-      if (largest != i) {
-        // swap
-        [arr[i], arr[largest]] = [arr[largest], arr[i]]
-        i = largest
-      } else {
-        break;
-      }
-
-    }
-  }
-  return item
+  return heapDelete(arr, 0, compareFn);
 }
 
-/** 是否按 **大顶** 顺序sorted */
-function isSorted<T>(arr: T[], compareFn: CompareFn<T>): boolean {
-  for (let i = 1; i < arr.length; i++) {
-    if (compareFn(arr[i - 1], arr[i]) < 0) {
-      return false
-    }
+export function heapDelete<T>(arr: T[], idx: number, compareFn: (a: T, b: T) => number): T | undefined {
+  // 将要删除的元素和堆的最后一个元素交换位置
+  [arr[idx], arr[arr.length - 1]] = [arr[arr.length - 1], arr[idx]];
+  // 删除最后一个元素，即删除原来要删除的元素
+  const deletedItem = arr.pop();
+
+  bubbleUp(arr, idx, compareFn);
+  bubbleDown(arr, idx, compareFn);
+
+  return deletedItem;
+}
+
+function bubbleDown<T>(arr: T[], idx: number, compareFn: (a: T, b: T) => number) {
+  if (idx >= arr.length) {
+    return;
   }
-  return true;
+  // 计算当前元素的左右子节点的下标
+  const leftChildIdx = 2 * idx + 1;
+  const rightChildIdx = 2 * idx + 2;
+  let maxIdx = idx;
+  if (leftChildIdx < arr.length && compareFn(arr[leftChildIdx], arr[maxIdx]) > 0) {
+    maxIdx = leftChildIdx;
+  }
+  if (rightChildIdx < arr.length && compareFn(arr[rightChildIdx], arr[maxIdx]) > 0) {
+    maxIdx = rightChildIdx;
+  }
+  // 如果最大元素的下标发生了变化，则交换位置，并继续递归
+  if (maxIdx !== idx) {
+    [arr[idx], arr[maxIdx]] = [arr[maxIdx], arr[idx]];
+    bubbleDown(arr, maxIdx, compareFn);
+  }
+}
+
+function bubbleUp<T>(arr: T[], idx: number, compareFn: (a: T, b: T) => number) {
+  if (idx == 0) {
+    return;
+  }
+  // 计算当前元素的父节点下标
+  const parentIdx = (idx - 1) >> 1;
+  // 如果当前元素比父节点大，则交换位置，并继续递归
+  if (compareFn(arr[idx], arr[parentIdx]) > 0) {
+    [arr[idx], arr[parentIdx]] = [arr[parentIdx], arr[idx]];
+    bubbleUp(arr, parentIdx, compareFn);
+  }
+}
+
+
+
+/** 是否是 **大顶** 有序 二叉堆 */
+export function isOrderedHeap<T>(arr: T[], compareFn: CompareFn<T>): boolean {
+  //简单地递归检查父节点与子节点的关系即可
+
+  function check(idx: number): boolean {
+    if (idx >= arr.length) {
+      return true;
+    }
+    let left = idx * 2 + 1;
+    let right = idx * 2 + 2;
+    if (left < arr.length && compareFn(arr[idx], arr[left]) < 0) {
+      return false;
+    }
+    if (right < arr.length && compareFn(arr[idx], arr[right]) < 0) {
+      return false;
+    }
+    return check(left) && check(right);
+  }
+
+  return check(0);
 }
 
 /**
@@ -85,14 +110,14 @@ export class PriorityQueue<T> {
   constructor(compareFn: CompareFn<T>, queue: T[], sortOnInit = false) {
     this.compareFn = compareFn;
     this.queue = queue;
-    if (sortOnInit && !isSorted(queue, compareFn)) {
+    if (sortOnInit && !isOrderedHeap(queue, compareFn)) {
       this.queue.sort((a, b) => -compareFn(a, b));
     }
   }
 
   sortEnqueue(item: T) {
     this.queue.push(item);
-    this.queue.sort(this.compareFn);
+    this.queue.sort((a, b) => -this.compareFn(a, b));
   }
 
   // 使用上浮的方法插入
@@ -156,6 +181,6 @@ export class PriorityQueue<T> {
    * @returns 
    */
   check() {
-    return isSorted(this.queue, this.compareFn);
+    return isOrderedHeap(this.queue, this.compareFn);
   }
 }
