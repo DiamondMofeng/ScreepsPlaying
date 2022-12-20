@@ -119,7 +119,7 @@ const roleHarvesterPlus = {
 
       // console.log(`test`);
       if (_.isUndefined(CM.harvester_linkID)) {
-        let links = creep.pos.findInRange(FIND_MY_STRUCTURES, 1).filter<StructureLink>(isStructureType(STRUCTURE_LINK));
+        let links = creep.pos.findInRange(FIND_MY_STRUCTURES, 1).filter(isStructureType(STRUCTURE_LINK));
         if (links.length > 0) {
           CM.harvester_linkID = links[0].id
         }

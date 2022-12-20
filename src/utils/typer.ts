@@ -1,13 +1,27 @@
 /**
+ * Better version of Array.includes().  
+ * You can use this for narrowing down types.
+ */
+export function includes<T extends U, U>(arr: ReadonlyArray<T>, item: U): item is T {
+  return arr.includes(item as T);
+}
+
+/**
  * Can be used as filter callback for convenience.
  * Solves equations of the form a * x = b
  * @example
  * // type of links is StructureLinks[]
  * let links = creep.pos.findInRange(FIND_STRUCTURES, 1).filter<StructureLink>(isStructureType(STRUCTURE_LINK));
  */
-export function isStructureType<T extends AnyStructure>(structureType: T["structureType"]) {
-  return (s: AnyStructure): s is T => {
+export function isStructureType<T extends AnyStructure["structureType"]>(structureType: T) {
+  return (s: AnyStructure): s is ConcreteStructure<T> => {
     return s.structureType === structureType;
+  }
+}
+
+export function isStructureTypeAmong<T extends AnyStructure["structureType"]>(structureTypes: T[]) {
+  return (s: AnyStructure): s is ConcreteStructure<T> => {
+    return includes(structureTypes, s.structureType);
   }
 }
 
