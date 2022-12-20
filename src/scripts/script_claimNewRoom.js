@@ -33,7 +33,12 @@ const claimNewRoom = (flag, spawn, keepHelping = false) => {
 
   if (!flag) {
     //找不到旗子或者旗子.room不是undefined(),或房间已被占领
-    console.log('找不到旗子' + flag)
+    console.log(`claimNewRoom ${flag} 找不到旗子 ${flag}`)
+    return
+  }
+
+  if (!spawn) {
+    console.log(`claimNewRoom ${flag} 找不到spawn ${spawn}`)
     return
   }
 
