@@ -10,3 +10,7 @@ export function isStructureType<T extends AnyStructure>(structureType: T["struct
     return s.structureType === structureType;
   }
 }
+
+export function isDefined<T>(value: T | undefined | null): value is T {
+  return value !== undefined && value !== null;
+}
