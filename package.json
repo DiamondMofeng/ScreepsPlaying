@@ -3,6 +3,7 @@
     "build": "cross-env COPY_TARGET=default/ rollup -c",
     "dev": "cross-env COPY_TARGET=default/ rollup -cw",
     "dev:local": "cross-env COPY_TARGET=../127_0_0_1___21025/default rollup -cw",
+    "dev:nullptr": "cross-env COPY_TARGET=../101_33_204_229___21025/default rollup -cw",
     "jest": "jest",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.ts .",
     "lint:fix": "eslint --fix --ignore-path ./.gitignore --ext .js,.ts ."
