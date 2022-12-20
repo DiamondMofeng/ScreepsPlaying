@@ -7,16 +7,17 @@ export type TransportTaskType =
   | "withdraw"
   | "pickup"
 
-export type TransportTaskName =
-  | "extension"   //填充ext,spawn
+export type TransportTaskName = string
 
-  | "fill_lab"    //填充lab原料
-  | "harvest_lab" //回收lab产物
+// | "extension"   //填充ext,spawn
 
-  | "clear"       //清空from目标建筑
+// | "fill_lab"    //填充lab原料
+// | "harvest_lab" //回收lab产物
 
-  | "misc"        //杂项
-  ;
+// | "clear"       //清空from目标建筑
+
+// | "misc"        //杂项
+// ;
 
 
 interface TransportTask {
@@ -75,6 +76,7 @@ export function transportTaskCompareFn(a: TransportTask, b: TransportTask) {
 }
 
 export class TransportTaskCenter {
+
   taskQueue: AnyTransportTask[];
   acceptedTasks: Record<TransportTask['id'], AnyTransportTask>;
 
@@ -85,6 +87,13 @@ export class TransportTaskCenter {
     this.taskQueue = taskQueue;
     this.acceptedTasks = acceptedTasks;
   }
+
+
+
+
+
+
+  //* 任务管理
 
   addTask(task: TransportTask): void {
     bubbleUpEnqueue(this.taskQueue, task, transportTaskCompareFn);
