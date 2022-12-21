@@ -2,11 +2,9 @@ a newbie player in Screeps:World Game
 
 todo list:
 
-
+- [ ] 物流任务系统未检查紧急任务的情况
 
 - [ ] 优化过多使用的find  
-
-- [ ] 用任务为repair,sweepper提供目标，避免一直find
 
 - [ ] room states cheaker (check if is attacked)
 

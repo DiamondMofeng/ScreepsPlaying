@@ -66,7 +66,7 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
     .map(id => Game.getObjectById(id))
     .filter(isDefined);
 
-  let target = creep.pos.findClosestByPath(fromStructures, {
+  let target = creep.pos.findClosestByPath(fromStructures, {  //TODO 不要用findClosestByPath，找不到路会卡住
 
     filter: (s) => {
 
@@ -115,7 +115,7 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
     .map(id => Game.getObjectById(id))
     .filter(isDefined);
 
-  let target = creep.pos.findClosestByPath(toStructures, {
+  let target = creep.pos.findClosestByPath(toStructures, {  //TODO 不要用findClosestByPath，找不到路会卡住
 
     filter: (s) => {
 
@@ -185,7 +185,7 @@ function cleanStoreForTask(creep: Creep, task: AnyTransportTask) {
   ) {
 
     let uselessTypes = resourceTypesIn(creep.store).filter(r => r !== task.resourceType);
-    if (!uselessTypes) {
+    if (!uselessTypes.length) {
       return;   //实际不应该能进行到这里
     }
 
