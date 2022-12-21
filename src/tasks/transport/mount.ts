@@ -35,7 +35,8 @@ export const mountTransportTaskCenter = () => {
 
           this._transportTaskCenter = new TransportTaskCenter(
             this.memory.transportTaskCenter.taskQueue,
-            this.memory.transportTaskCenter.acceptedTasks
+            this.memory.transportTaskCenter.acceptedTasks,
+            this.name
           );
         }
         return this._transportTaskCenter;

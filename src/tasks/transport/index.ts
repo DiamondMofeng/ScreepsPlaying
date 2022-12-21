@@ -1,5 +1,7 @@
 import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
+import { ExtensionTaskPublisher } from "./publisher/extension";
+import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
 
 /** 影响任务结束条件 */
 export type TransportTaskType =
@@ -79,16 +81,37 @@ export class TransportTaskCenter {
 
   taskQueue: AnyTransportTask[];
   acceptedTasks: Record<TransportTask['id'], AnyTransportTask>;
+  roomName: string;
 
   constructor(
     taskQueue: AnyTransportTask[],
-    acceptedTasks: Record<TransportTask['id'], AnyTransportTask>
+    acceptedTasks: Record<TransportTask['id'], AnyTransportTask>,
+    roomName: string
   ) {
     this.taskQueue = taskQueue;
     this.acceptedTasks = acceptedTasks;
+    this.roomName = roomName;
   }
 
+  //* 发布任务
+  //TODO 分离到别的地方，这里太杂了
+  publishTask(
+    // publishers: (roomName: string) => AnyTransportTask[]
+  ): void {
 
+    const availablePublishers = [
+      FillFactoryTransferTaskPublisher,
+      ExtensionTaskPublisher
+    ]
+
+    availablePublishers.forEach(publisher => {
+
+      publisher(this.roomName)
+        .forEach(task => this.addTask(task));
+
+    })
+
+  }
 
 
 
