@@ -1,5 +1,5 @@
 // import attack_dismental from "./attack_dismental";
-import claimNewRoom from "./scripts/script_claimNewRoom";
+// import claimNewRoom from "./scripts/script_claimNewRoom";
 import developNewRoom from "./scripts/script_developRoom";
 // import supportEnergy from "./script_supportEnergy";
 import { cronRun, errorIsolater } from "@/utils/util_helper";
@@ -16,7 +16,7 @@ const main_temp_commands = () => {
   errorIsolater(() => {
     cronRun(2000, () => sellEnergy('W12N16'))
 
-    claimNewRoom('develop_W21N14', 'W17N15_0')
+    // claimNewRoom('develop_W21N14', 'W17N15_0')
     developNewRoom('develop_W21N14')
 
 
