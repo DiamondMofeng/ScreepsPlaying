@@ -8,7 +8,7 @@ interface TransportTaskCenterMemory {
 declare global {
   interface Room {
     transportTaskCenter: TransportTaskCenter
-    _transportTaskCenter: TransportTaskCenter
+    __transportTaskCenter: TransportTaskCenter
   }
 
   interface RoomMemory {
@@ -24,7 +24,7 @@ export const mountTransportTaskCenter = () => {
     transportTaskCenter: {
       get: function () {
 
-        if (!this._transportTaskCenter) {
+        if (!this.__transportTaskCenter) {
           //初始化memory
           if (!this.memory.transportTaskCenter) {
             this.memory.transportTaskCenter = {
@@ -33,13 +33,13 @@ export const mountTransportTaskCenter = () => {
             };
           }
 
-          this._transportTaskCenter = new TransportTaskCenter(
+          this.__transportTaskCenter = new TransportTaskCenter(
             this.memory.transportTaskCenter.taskQueue,
             this.memory.transportTaskCenter.acceptedTasks,
             this.name
           );
         }
-        return this._transportTaskCenter;
+        return this.__transportTaskCenter;
       },
 
       configurable: false,

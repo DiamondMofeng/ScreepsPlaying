@@ -9,17 +9,20 @@ export type TransportTaskType =
   | "withdraw"
   | "pickup"
 
-export type TransportTaskName = string
+export type TransportTaskName =
+  // string
+  | 'fill_extension' //填充ext,spawn
 
-// | "extension"   //填充ext,spawn
+  | "fill_lab"    //填充lab原料
+  | "harvest_lab" //回收lab产物
 
-// | "fill_lab"    //填充lab原料
-// | "harvest_lab" //回收lab产物
+  | "fill_factory"
 
-// | "clear"       //清空from目标建筑
+  | "clear"       //清空from目标建筑
 
-// | "misc"        //杂项
-// ;
+
+  | "misc"        //杂项
+  ;
 
 
 interface TransportTask {
@@ -37,8 +40,7 @@ interface TransportTask {
   /** 到期tick */
   expirationTick: number,
 
-  workerCreeps: string[], //执行者creep的名字
-  workerLimit: number, //执行者上限
+  workerCreep?: string, //执行者creep的名字
 
   //* 任务信息
   /** 取回/填充 */
@@ -99,15 +101,41 @@ export class TransportTaskCenter {
     // publishers: (roomName: string) => AnyTransportTask[]
   ): void {
 
-    const availablePublishers = [
-      FillFactoryTransferTaskPublisher,
-      ExtensionTaskPublisher
+    const TASK_LIMITS: Record<TransportTaskName, number> = {
+      'fill_extension': 2,
+      'fill_lab': 1,
+      'harvest_lab': 1,
+      'fill_factory': 1,
+      'clear': 1,
+      'misc': 1,
+    }
+
+    const intervaledPublishers: Array<[number, (roomName: string) => AnyTransportTask[]]> = [
+      [10, ExtensionTaskPublisher],
+      [50, FillFactoryTransferTaskPublisher]
     ]
 
-    availablePublishers.forEach(publisher => {
+    const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {
+      if (Game.time % interval === 0) {
+        tasks.push(...publisher(this.roomName));
+      }
+      return tasks;
+    }, [] as AnyTransportTask[])
 
-      publisher(this.roomName)
-        .forEach(task => this.addTask(task));
+    console.log('tasksToPublish: ', tasksToPublish);  //TODO debug
+
+    const currentTasks = _.groupBy(
+      this.taskQueue.concat(Object.values(this.acceptedTasks)),
+      task => task.name
+    )
+
+    tasksToPublish.forEach(task => {
+
+      const currentTaskCount = currentTasks[task.name]?.length ?? 0;
+      const taskLimit = TASK_LIMITS[task.name] ?? 1;
+      if (currentTaskCount < taskLimit) {
+        this.addTask(task);
+      }
 
     })
 
@@ -165,28 +193,25 @@ export class TransportTaskCenter {
     return this.taskQueue[0];
   }
 
-  static bindCreepTo(task: TransportTask, creepName: string) {
-    task.workerCreeps.push(creepName);
-  }
+  // static bindCreepTo(task: TransportTask, creepName: string) {
+  //   task.workerCreeps.push(creepName);
+  // }
 
-  static removeWorkerAt(task: TransportTask, creepName: string) {
-    const index = task.workerCreeps.indexOf(creepName);
-    if (index !== -1) {
-      task.workerCreeps.splice(index, 1);
-    }
-  }
+  // static removeWorkerAt(task: TransportTask, creepName: string) {
+  //   const index = task.workerCreeps.indexOf(creepName);
+  //   if (index !== -1) {
+  //     task.workerCreeps.splice(index, 1);
+  //   }
+  // }
 
-  static cleanDeadWorkersAt(task: TransportTask) {
-    task.workerCreeps = task.workerCreeps.filter(name => Game.creeps[name]);
-  }
+  // static cleanDeadWorkersAt(task: TransportTask) {
+  //   task.workerCreeps = task.workerCreeps.filter(name => Game.creeps[name]);
+  // }
 
 
   //TODO 检查workerCreeps的对应资源为空是否合理
   #isWorkerCleaned(task: TransportTask): boolean {
-    return task.workerCreeps
-      .map(name => Game.creeps[name])
-      // .filter(isDefined)
-      .every(s => !s.store.getUsedCapacity(task.resourceType))
+    return Game.creeps[task.workerCreep!]?.store.getUsedCapacity(task.resourceType) === 0;  //safe
   }
 
   /**

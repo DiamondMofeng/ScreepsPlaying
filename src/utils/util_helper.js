@@ -170,6 +170,12 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+/**
+ * @template T
+ * @param {Number} interval - interval of run
+ * @param {()=>T} func - function to run
+ * @returns {T|undefined}
+ */
 function cronRun(interval, func) {
 
   if (!_.isFunction(func)) {
