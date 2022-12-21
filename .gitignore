@@ -4,6 +4,9 @@ node_modules
 # cache
 .eslintcache
 
+# screeps client always creates this file
+*/main.js
+
 # ???
 OTHER
 .sync
@@ -16,4 +19,3 @@ dist copy 2
 tutorial-1
 test
 test default
-
