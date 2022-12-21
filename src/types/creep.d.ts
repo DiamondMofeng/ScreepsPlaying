@@ -19,13 +19,15 @@ type CreepRole =
   | 'wallRepairer'
   | 'scavenger'
 
+  | 'task_transporter'
+
 interface Creep extends RoomObject {
   memory: CreepMemory;
 }
 
 interface CreepMemory {
   role?: CreepRole;
-  task?: BasicTask;
+  // task?: BasicTask;
 }
 
 

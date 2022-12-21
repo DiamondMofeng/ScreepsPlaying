@@ -31,6 +31,7 @@ import { config } from '@/utils/util_consts'
 
 import powerCreep_new from './powerCreeps/powerCreep_new'
 import { errorIsolater } from '@/utils/util_helper'
+import { TaskTransporter } from '@/tasks/transport/taskTransporter'
 
 
 
@@ -79,13 +80,15 @@ const roleMap: Record<CreepRole, (creep: Creep) => void> = {
   guardian: Guardian,
   roomClaimer: RoomClaimer,
   scavenger: role_scavenger,
+
+  task_transporter: TaskTransporter
 }
 
 
-/**
- * 
- * @param {Creep} creep 
- */
+// /**
+//  * 
+//  * @param {Creep} creep 
+//  */
 // function addToSpawnQueueBeforeDead(creep) {
 //   creep.room.pushToSpawnQueue({
 //     name: creep.memory.role + Game.time,

@@ -4,11 +4,11 @@ import mountCLI from "./cli/cli";
 import mountWhiteList from "./common/whitelist";
 
 import mountCreep from "./creeps/proto_creep";
-// import mountTaskCenter from "./task_taskCenter";
 
 import findCache from "./common/util_cache_find"
 
 import customPrototypes from './common/util_customPrototypes'
+import { mountTransportTaskCenter } from "@/tasks/transport/mount";
 
 export const mountAll = () => {
 
@@ -23,7 +23,7 @@ export const mountAll = () => {
 
   mountSpawnQueue()
 
-  // mountTaskCenter()
+  mountTransportTaskCenter()
 
 }
 
