@@ -2,6 +2,7 @@ import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
 import { ExtensionTaskPublisher } from "./publisher/extension";
 import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
+import { TaskTransporterMemory } from "./taskTransporter";
 
 /** 影响任务结束条件 */
 export type TransportTaskType =
@@ -96,6 +97,7 @@ export class TransportTaskCenter {
   }
 
   //* 发布任务
+  //应当在tick start阶段运行
   //TODO 分离到别的地方，这里太杂了
   publishTask(
     // publishers: (roomName: string) => AnyTransportTask[]
@@ -143,41 +145,18 @@ export class TransportTaskCenter {
 
 
 
+  //** 任务管理
 
-  //* 任务管理
+  //* taskQueue
 
   addTask(task: TransportTask): void {
     bubbleUpEnqueue(this.taskQueue, task, transportTaskCompareFn);
   }
 
-  removeAcceptedTaskById(taskId: TransportTask['id']): void {
-    delete this.acceptedTasks[taskId];
-  }
-
-  removeAllDoneTasks(): void {
-    Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
-      if (this.isTaskDone(task)) {
-        this.removeAcceptedTaskById(taskId);
-      }
-    });
-  }
-
-  getAcceptedTaskById(id: TransportTask['id']) {
-    return this.taskQueue.find(task => task.id === id);
-  }
-
-  pauseAcceptedTaskById(id: TransportTask['id']) {
-    const task = this.getAcceptedTaskById(id);
-    if (isDefined(task)) {
-      this.addTask(task);
-    }
-    this.removeAcceptedTaskById(id);
-  }
-
   /** 
-   * 供执行者获取最新任务，并将其从任务队列中移除，并将其加入已接受任务列表
-  */
-  requestTask(): AnyTransportTask | undefined {
+   * 将最新任务移出队列，移入被接受列表，并返回此任务
+   */
+  requestAndAcceptTask(): AnyTransportTask | undefined {
     let task = bubbleDownDequeue(this.taskQueue, transportTaskCompareFn);
     if (isDefined(task)) {
       this.acceptedTasks[task.id] = task;
@@ -192,6 +171,62 @@ export class TransportTaskCenter {
   peekTask(): TransportTask | undefined {
     return this.taskQueue[0];
   }
+
+
+  //* acceptedTask
+
+  getAcceptedTaskById(id: TransportTask['id']) {
+    return this.acceptedTasks[id];
+  }
+
+  /**
+   * TODO 在这里清除creep的任务id是否恰当？
+   * 通过id删除一个已接受的任务，同时清除对应creep的任务id
+   */
+  removeAcceptedTaskById(id: TransportTask['id']): void {
+    const task = this.getAcceptedTaskById(id);
+    if (task?.workerCreep) {
+      const creep = Game.creeps[task.workerCreep];
+      const CM: TaskTransporterMemory = creep?.memory
+      if (creep && CM?.taskID === id) {
+        CM.taskID = undefined;
+      }
+    }
+
+    delete this.acceptedTasks[id];
+  }
+
+  removeAllDoneTasks(): void {
+    Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
+      console.log('this.isTaskDone(task): ', task.name, this.isTaskDone(task));
+      if (this.isTaskDone(task)) {
+        this.removeAcceptedTaskById(taskId);
+      }
+    });
+  }
+
+  //* Creep与任务中心的交互
+
+  /**
+   * 为creep分配新任务
+   */
+  requestAndBindTask(creep: Creep) {
+    let CM: TaskTransporterMemory = creep.memory  //TODO type creep instead of memory
+    const task = this.requestAndAcceptTask();
+    if (isDefined(task)) {
+      CM.taskID = task.id;
+    }
+
+  }
+
+  pauseAcceptedTaskById(id: TransportTask['id']) {
+    const task = this.getAcceptedTaskById(id);
+    if (isDefined(task)) {
+      this.addTask(task);
+    }
+    this.removeAcceptedTaskById(id);
+  }
+
 
   // static bindCreepTo(task: TransportTask, creepName: string) {
   //   task.workerCreeps.push(creepName);
@@ -229,7 +264,7 @@ export class TransportTaskCenter {
         }
         return (s.store.getUsedCapacity(task.resourceType) ?? 0) >= task.targetCapacity;
       })
-      && this.#isWorkerCleaned(task)
+      // && this.#isWorkerCleaned(task)
     )
 
   }
@@ -246,7 +281,7 @@ export class TransportTaskCenter {
         }
         return (s.store.getUsedCapacity(task.resourceType) ?? 0) <= task.targetCapacity;
       })
-      && this.#isWorkerCleaned(task)
+      // && this.#isWorkerCleaned(task)
 
     )
   }
@@ -262,7 +297,7 @@ export class TransportTaskCenter {
         }
         return s.amount <= task.targetCapacity;
       })
-      && this.#isWorkerCleaned(task)
+      // && this.#isWorkerCleaned(task)
 
     )
   }
