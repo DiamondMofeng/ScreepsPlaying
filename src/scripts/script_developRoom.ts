@@ -1,5 +1,7 @@
 /* eslint-disable no-fallthrough */
 
+import { isStructureType } from "@/utils/typer";
+
 const INTERVAL_PLACE_CONSTRUCTION_SITES = 5;
 
 interface PlannedStructure {
@@ -193,12 +195,10 @@ const locateSomething_byAux = (room: string | Room, starter: RoomPosition) => {
 
     // let { x, y } = s.pos;  //s的位置肯定是个墙
     //! AUX 先找到harvester的工作位置，帮助后续
-    // console.log(111)
     let hPath = starter.findPathTo(s.pos, { ignoreCreeps: true, range: 1, swampCost: 2.1, plainCost: 2, costCallback: costCallback })
-    // console.log(222)
     // console.log('hPath: ', hPath);
-
-    let workPos = hPath[hPath.length - 1]
+    let workPos: { x: number, y: number } = hPath[hPath.length - 1]
+    // console.log('workPos: ', JSON.stringify(workPos));
 
     containerPos = workPos;
     //确定link位置
@@ -216,26 +216,32 @@ const locateSomething_byAux = (room: string | Room, starter: RoomPosition) => {
 
 
     let possiblePos = [
-      { x: workPos.x + 1, y: workPos.y + 1 },
-      { x: workPos.x + 1, y: workPos.y + 0 },
-      { x: workPos.x + 1, y: workPos.y - 1 },
-      { x: workPos.x + 0, y: workPos.y + 1 },
-      { x: workPos.x + 0, y: workPos.y - 1 },
-      { x: workPos.x - 1, y: workPos.y + 1 },
-      { x: workPos.x - 1, y: workPos.y + 0 },
-      { x: workPos.x - 1, y: workPos.y - 1 },
-    ]; //! 硬编码
+      [+ 1, + 1],
+      [+ 1, + 0],
+      [+ 1, - 1],
+      [+ 0, + 1],
+      [+ 0, - 1],
+      [- 1, + 1],
+      [- 1, + 0],
+      [- 1, - 1],
+    ];
 
-    for (let pos of possiblePos) {
-      // console.log('terrain.get(pos.x, pos.y) != 1  : ', terrain.get(pos.x, pos.y) != 1);
-      // console.log('pos.x !== lastPath.x && pos.y !== lastPath.y: ', pos.x !== lastPath.x || pos.y !== lastPath.y);
-      if (terrain.get(pos.x, pos.y) != 1    //不是墙
-        && (pos.x !== lastPath.x || pos.y !== lastPath.y)) { //不挡路
-        linkPos = pos;
-        break;
+    let possibleContainers = s.pos.findInRange(FIND_STRUCTURES, 1, { filter: isStructureType(STRUCTURE_CONTAINER) })
+    if (possibleContainers.length > 0) {
+      if (possibleContainers.length > 1) {
+        //TODO use warning logger here
+        console.log('定位link时，发现source附近有多个container,导致结果可能不准');
       }
-
+      workPos = possibleContainers[0].pos
     }
+
+    linkPos = possiblePos
+      .map(pos => ({ x: workPos.x + pos[0], y: workPos.y + pos[1] }))
+      .find(pos => terrain.get(pos.x, pos.y) != TERRAIN_MASK_WALL && (pos.x !== lastPath.x || pos.y !== lastPath.y))
+
+    //TODO 可以map之后sort一下，让位置更接近基地
+    
+    // console.log('linkPos: ', JSON.stringify(linkPos));
 
 
     let nearbyStructures = new RoomPosition(workPos.x, workPos.y, room.name).findInRange(FIND_STRUCTURES, 3)
