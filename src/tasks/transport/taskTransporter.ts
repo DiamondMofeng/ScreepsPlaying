@@ -1,73 +1,56 @@
 import { isDefined, resourceTypesIn } from "@/utils/typer";
-import { AnyTransportTask, PickupTask, TransferTask, TransportTaskCenter, transportTaskCompareFn, WithdrawTask } from ".";
+import { moveAndTransfer, moveAndWithdraw } from "@/utils/util_beheavor";
+import { AnyTransportTask, PickupTask, TransferTask, transportTaskCompareFn, WithdrawTask } from ".";
 
-interface TaskTransporterMemory extends CreepMemory {
+export interface TaskTransporterMemory extends CreepMemory {
   taskID?: string
 }
+
+function shouldReplaceTask(creep: Creep) {
+  const CM: TaskTransporterMemory = creep.memory
+  const center = creep.room.transportTaskCenter
+  if (!CM.taskID) {
+    return true
+  }
+
+  const task = center.getAcceptedTaskById(CM.taskID)
+  if (!task) {
+    return true
+  }
+
+  const frontTask = center.peekTask()
+  if (frontTask?.urgent && transportTaskCompareFn(task, frontTask) < 0) {
+    return true
+  }
+
+  return false;
+}
+
 
 /**
  * 流程：
  * 1.尝试申请新任务
- * 2.做任务
- * 3.检查任务是否完成，若完成则清除任务
+ * 2.如果有任务就做任务
+ *   如果没任务就倒store
+ * 
+ * 3.检查任务是否完成的步骤交给center做
  */
 
 
 export function TaskTransporter(creep: Creep) {
-  const mockTransportCenter = {} as TransportTaskCenter;
   const CM: TaskTransporterMemory = creep.memory;
+  const center = creep.room.transportTaskCenter;
 
-  // 请求任务
-  // 调整CM.taskId到合适状态
-  function tryRequestTask(): AnyTransportTask | undefined {
-
-    //如果存在任务id但是不存在任务，则清除任务id
-    if (CM.taskID && !mockTransportCenter.getAcceptedTaskById(CM.taskID)) {
-      CM.taskID = undefined;
-    }
-
-    // 如果当前没有任务，直接领取最新任务
-    // 因为紧急任务总是在最前面，所以不用担心
-    if (!CM.taskID) {
-      let task = mockTransportCenter.requestTask();
-      if (task) {
-        CM.taskID = task.id;
-      }
-      return
-    }
-
-    // 如果当前有任务
-    // 如果存在更紧急的任务，则暂停当前任务，领取紧急任务
-    let curTask = mockTransportCenter.getAcceptedTaskById(CM.taskID);
-    if (!curTask) {
-      throw new Error('程序不应该进行到这里')
-    }
-
-    let frontTask = mockTransportCenter.peekTask();
-    if (frontTask && transportTaskCompareFn(frontTask, curTask) > 0) {
-      mockTransportCenter.pauseAcceptedTaskById(CM.taskID);
-      CM.taskID = undefined;
-
-      let newTask = mockTransportCenter.requestTask();
-      if (newTask) {
-        CM.taskID = newTask.id;
-      } else {
-        throw new Error('程序不应该进行到这里2')
-      }
-      return
-    }
+  if (shouldReplaceTask(creep)) {
+    center.requestAndBindTask(creep);
   }
 
-  tryRequestTask();
-  if (!CM.taskID) {
-    return;
-  }
-  let task = mockTransportCenter.getAcceptedTaskById(CM.taskID);
+  const task = center.getAcceptedTaskById(CM.taskID);
   if (!task) {
-    throw new Error('程序不应该进行到这里3')
+    return cleanStore(creep);
   }
+  // console.log('doTransportTask')
 
-  //TODO 做任务
   doTransportTask(creep, task);
 }
 
@@ -86,18 +69,25 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
   let target = creep.pos.findClosestByPath(fromStructures, {
 
     filter: (s) => {
+
+      // 指定资源类型时，没有这种资源
       if (resourceType && s.store[resourceType] === 0) {
         return false;
       }
+
+      // 已经达成目标了
       if (targetCapacity && (s.store.getUsedCapacity(resourceType) ?? 0) <= targetCapacity) {
         return false;
       }
+
+      // 完全没得取
       if (resourceTypesIn(s.store).length === 0) {
         return false;
       }
       return true;
     }
   });
+  // console.log('target: ', target);
   if (!target) {
     return ERR_NOT_FOUND;
   }
@@ -106,11 +96,11 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
     creep.store.getFreeCapacity(),
     (target.store.getUsedCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
   );
-
-  return creep.withdraw(target,
-    resourceType ?? resourceTypesIn(target.store)[0],
-    amount
-  );
+  // console.log("withdraw res:", creep.withdraw(target,
+  //   resourceType ?? resourceTypesIn(target.store)[0],
+  //   amount
+  // ))
+  return moveAndWithdraw(creep, target, resourceType ?? resourceTypesIn(target.store)[0], amount);
 }
 
 /**
@@ -128,19 +118,22 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
   let target = creep.pos.findClosestByPath(toStructures, {
 
     filter: (s) => {
-      if (resourceType && s.store.getFreeCapacity(resourceType) === 0) {
+
+      // 指定/不指定资源类型时，容器已满
+      if (s.store.getFreeCapacity(resourceType) === 0) {
         return false;
       }
-      if (targetCapacity && (s.store.getFreeCapacity(resourceType) ?? 0) <= targetCapacity) {
+
+      // 已经达到目标了
+      if (targetCapacity && (s.store.getUsedCapacity(resourceType) ?? 0) >= targetCapacity) {
         return false;
       }
-      if (resourceTypesIn(s.store).length === 0) {
-        return false;
-      }
+
       return true;
     }
   });
   if (!target) {
+    // console.log('transferTo ERR_NOT_FOUND: ', ERR_NOT_FOUND);
     return ERR_NOT_FOUND;
   }
 
@@ -148,19 +141,70 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
     creep.store.getUsedCapacity(resourceType),
     (target.store.getFreeCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
   );
-
-  return creep.transfer(target,
+  // console.log("moveAndTransfer", moveAndTransfer(creep, target,
+  //   resourceType ?? resourceTypesIn(target.store)[0],
+  //   amount
+  // ))
+  return moveAndTransfer(creep, target,
     resourceType ?? resourceTypesIn(target.store)[0],
     amount
   );
 
+
+}
+
+/**
+ * 将creep身上的资源清理到storage或terminal
+ * @param creep
+ * @param types - 指定清理的资源类型，不指定则清理所有
+ */
+function cleanStore(creep: Creep, types: ResourceConstant[] = []) {
+  let resourceType = types.length === 0
+    ? resourceTypesIn(creep.store)[0]
+    : resourceTypesIn(creep.store).find(r => types.includes(r));
+
+  if (!resourceType) {
+    return;
+  }
+
+  let target = [creep.room.storage, creep.room.terminal]
+    .filter(isDefined)
+    .find(s => s.store.getFreeCapacity(resourceType) > 0)
+
+  if (target) {
+    moveAndTransfer(creep, target, resourceType)
+  } else {
+    console.log(`!!!!!creep ${creep.name} 无法清理store，因为没有可用的目标,导致扔掉了`)  //TODO use warning logger
+    creep.drop(resourceType);
+  }
+}
+
+function cleanStoreForTask(creep: Creep, task: AnyTransportTask) {
+  if (task.resourceType &&
+    creep.store.getUsedCapacity() > creep.store.getUsedCapacity(task.resourceType)
+  ) {
+
+    let uselessTypes = resourceTypesIn(creep.store).filter(r => r !== task.resourceType);
+    if (!uselessTypes) {
+      return;   //实际不应该能进行到这里
+    }
+
+    cleanStore(creep, uselessTypes);
+  }
 }
 
 
 
 function doTransportTask(creep: Creep, task: AnyTransportTask) {
+  if (task.resourceType &&
+    creep.store.getUsedCapacity() > creep.store.getUsedCapacity(task.resourceType)
+  ) {
+    cleanStoreForTask(creep, task);
+    // console.log(2)
 
-
+    return;
+  }
+  // console.log(1)
   switch (task.type) {
     case "transfer":
       doTransferTask(creep, task);
