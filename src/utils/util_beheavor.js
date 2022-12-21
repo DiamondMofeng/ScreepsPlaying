@@ -314,11 +314,12 @@ function pickUpNearbyDroppedEnergy(creep, range = 1) {
 /**
  * 默认只取能量
  * @param {Creep} creep 
- * @param {StructureContainer|STRUCTURE_STORAGE} container - withdraw from
- * @param {Array} resourceTypes an array
+ * @param {AnyStoreStructure} container - withdraw from
+ * @param {ResourceConstant | ResourceConstant[]} resourceTypes an array
+ * @param {number|undefined} amount - default is all
  */
-function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], amount) {
-  if (Array.isArray(resourceTypes) == false) {
+function moveAndWithdraw(creep, container, resourceTypes = [RESOURCE_ENERGY], amount = undefined) {
+  if (!Array.isArray(resourceTypes)) {
     resourceTypes = [resourceTypes]
   }
   for (const rt of resourceTypes) {
@@ -373,22 +374,23 @@ function moveAndHarvest(creep, target) {
 /**
  * 将creep身上的资源转移至指定container，未指定时转移所有资源
  * @param {Creep} creep 
- * @param {StructureContainer|StructureStore} container - transfer to
- * @param {Array} resourceTypes - 未指定时转移所有资源
+ * @param {AnyStoreStructure} container - transfer to
+ * @param {ResourceConstant | ResourceConstant[]} resourceTypes - 未指定时转移所有资源
+ * @param {number|undefined} amount - default is all
+ * @param {MoveToOpts} moveOpt - moveTo的参数
  * 
  */
-function moveAndTransfer(creep, container, resourceTypes = [], moveOpt = {}) {
-  if (Array.isArray(resourceTypes) == false) {
+function moveAndTransfer(creep, container, resourceTypes = [], amount = undefined, moveOpt = {}) {
+  if (!Array.isArray(resourceTypes)) {
     resourceTypes = [resourceTypes]
   }
   let transferResult
-
   moveOpt.ignoreCreeps = moveOpt.ignoreCreeps || IGNORE_CREEPS
   //若给定类型了则按类型transfer
   if (resourceTypes.length > 0) {
 
     for (const rt of resourceTypes) {
-      let transferResult = creep.transfer(container, rt)
+      let transferResult = creep.transfer(container, rt, amount)
       if (transferResult == ERR_NOT_IN_RANGE) {
         creep.moveTo(container, { ...moveOpt, reusePath: 50 })
         return transferResult
