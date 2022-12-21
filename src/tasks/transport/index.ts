@@ -175,7 +175,8 @@ export class TransportTaskCenter {
 
   //* acceptedTask
 
-  getAcceptedTaskById(id: TransportTask['id']) {
+  getAcceptedTaskById(id: TransportTask['id'] | undefined) {
+    if (!id) { return undefined }
     return this.acceptedTasks[id];
   }
 
