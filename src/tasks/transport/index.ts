@@ -1,8 +1,11 @@
+import { useRoomCache } from "@/utils/hooks/useRoomCache";
 import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
 import { ExtensionTaskPublisher } from "./publisher/extension";
 import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
 import { TaskTransporterMemory } from "./taskTransporter";
+
+//TODO 处理任务卡死完不成的情况
 
 /** 影响任务结束条件 */
 export type TransportTaskType =
@@ -126,10 +129,10 @@ export class TransportTaskCenter {
 
     console.log('tasksToPublish: ', tasksToPublish);  //TODO debug
 
-    const currentTasks = _.groupBy(
+    const currentTasks = useRoomCache(this.roomName, 'transportTasksCounter', () => _.groupBy(
       this.taskQueue.concat(Object.values(this.acceptedTasks)),
       task => task.name
-    )
+    ))
 
     tasksToPublish.forEach(task => {
 
@@ -216,34 +219,22 @@ export class TransportTaskCenter {
     const task = this.requestAndAcceptTask();
     if (isDefined(task)) {
       CM.taskID = task.id;
+      task.workerCreep = creep.name;
     }
 
   }
 
+  /**
+   * pause意为将任务从 `已接受状态` 转为 `未接受状态`
+   */
   pauseAcceptedTaskById(id: TransportTask['id']) {
     const task = this.getAcceptedTaskById(id);
     if (isDefined(task)) {
+      task.workerCreep = undefined;
       this.addTask(task);
     }
     this.removeAcceptedTaskById(id);
   }
-
-
-  // static bindCreepTo(task: TransportTask, creepName: string) {
-  //   task.workerCreeps.push(creepName);
-  // }
-
-  // static removeWorkerAt(task: TransportTask, creepName: string) {
-  //   const index = task.workerCreeps.indexOf(creepName);
-  //   if (index !== -1) {
-  //     task.workerCreeps.splice(index, 1);
-  //   }
-  // }
-
-  // static cleanDeadWorkersAt(task: TransportTask) {
-  //   task.workerCreeps = task.workerCreeps.filter(name => Game.creeps[name]);
-  // }
-
 
   //TODO 检查workerCreeps的对应资源为空是否合理
   #isWorkerCleaned(task: TransportTask): boolean {
