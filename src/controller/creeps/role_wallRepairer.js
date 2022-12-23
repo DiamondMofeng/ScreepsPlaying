@@ -1,5 +1,5 @@
 import { workingStatesKeeper, getEnergyFromStorage } from "@/utils/util_beheavor";
-import { TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET } from "@/utils/util_consts";
+import { TIME_INTERVAL } from "@/utils/consts";
 
 
 let repairTargetId = "repairerTargetId"
@@ -14,7 +14,7 @@ const roleWallRepairer = (creep) => {
       getEnergyFromStorage(creep)
     },
     () => {
-      if (Game.time % TIME_INTERVAL_WALL_REPAIRER_RESELECT_TARGET == 0) {
+      if (Game.time % TIME_INTERVAL.WALL_REPAIRER_RESELECT_TARGET == 0) {
         delete creep.memory[repairTargetId]
       }
 

@@ -1,5 +1,5 @@
 import { setDoing } from "@/utils/util_beheavor"
-import { IGNORE_CREEPS } from "@/utils/util_consts"
+import C from "@/utils/consts"
 import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
 import { isStructureType } from "@/utils/typer"
 
@@ -65,7 +65,7 @@ const roleHarvesterPlus = {
             }
             else {
               if (creep.moveTo(container, { noPathFinding: true }) == ERR_NOT_FOUND) {
-                creep.moveTo(container, { costCallback: stayInRoomCallBack, ignoreCreeps: IGNORE_CREEPS })
+                creep.moveTo(container, { costCallback: stayInRoomCallBack, ignoreCreeps: C.IGNORE_CREEPS })
               }
             }
           }
@@ -87,11 +87,11 @@ const roleHarvesterPlus = {
           if (currentHarvesters.length > 0) {
             continue
           } else {
-            creep.moveTo(container, { costCallback: stayInRoomCallBack, reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
+            creep.moveTo(container, { costCallback: stayInRoomCallBack, reusePath: 50, ignoreCreeps: C.IGNORE_CREEPS })
           }
         }
         else {
-          let moveResult = creep.moveTo(s, { costCallback: stayInRoomCallBack, reusePath: 10, ignoreCreeps: IGNORE_CREEPS })
+          let moveResult = creep.moveTo(s, { costCallback: stayInRoomCallBack, reusePath: 10, ignoreCreeps: C.IGNORE_CREEPS })
           if (moveResult === ERR_NO_PATH) {
             continue
           }

@@ -1,4 +1,3 @@
-import { myName } from "@/utils/util_consts"
 import { spawnByMinNumber, body } from "@/utils/util_helper"
 
 
@@ -58,7 +57,7 @@ const claimNewRoom = (flag, spawn, keepHelping = false) => {
   }
 
 
-  if (_.isUndefined(flag.room) || (flag.room.controller && flag.room.controller.owner.username !== myName)) {
+  if (_.isUndefined(flag.room) || (flag.room.controller && flag.room.controller.my)) {
 
     spawnByMinNumber(spawn.name, expend_claimer, body([TOUGH, 4, MOVE, 4, CLAIM, 1, MOVE, 1]), 1,
       {

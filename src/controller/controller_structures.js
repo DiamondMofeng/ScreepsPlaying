@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { config } from '@/utils/util_consts'
+import { config } from '@/utils/consts'
 
 import Tower from './structures/building_tower'
 import Link from './structures/building_link'

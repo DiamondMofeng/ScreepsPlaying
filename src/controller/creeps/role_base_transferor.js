@@ -2,8 +2,10 @@ import { moveAndWithdraw, moveAndTransfer, getEnergyFromStorage, setDoing } from
 
 import { task_powerSpawn } from '@/task_powerSpawn'
 
-import { RM } from '@/utils/util_consts'
 import task_factory from '@/task_factory'
+import C from '@/utils/consts'
+
+const { RM } = C
 
 
 

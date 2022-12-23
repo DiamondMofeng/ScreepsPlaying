@@ -1,5 +1,5 @@
 //import
-import { TIME_INTERVAL_TOWER_REPIRE } from '@/utils/util_consts'
+import { TIME_INTERVAL } from '@/utils/consts'
 
 
 /**
@@ -47,7 +47,7 @@ const roleTower = (tower) => {
 
   if (tower.store[RESOURCE_ENERGY] > 600) {
 
-    if (!tower.room[TOWER_REPIRE_TARGETS] && Game.time % TIME_INTERVAL_TOWER_REPIRE == 0) {
+    if (!tower.room[TOWER_REPIRE_TARGETS] && Game.time % TIME_INTERVAL.TOWER_REPIRE == 0) {
 
       let targets = tower.room.find(FIND_STRUCTURES, {
         filter: (s) =>

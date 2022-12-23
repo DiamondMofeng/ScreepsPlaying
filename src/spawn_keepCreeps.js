@@ -5,7 +5,7 @@
  */
 
 import { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy, evalBodyByRole } from "./spawn_evalBody"
-import { TIME_INTERVAL_COUNT_CREEPS, PRIORITY_SPAWN_HARVESTER, PRIORITY_SPAWN_WORKER, PRIORITY_SPAWN_CARRIER, PRIORITY_SPAWN_UPGRADER, PRIORITY_SPAWN_BUILDER, PRIORITY_SPAWN_REPAIRER, PRIORITY_SPAWN_MINER, PRIORITY_SPAWN_BASE_TRANSFEROR } from "@/utils/util_consts"
+import { TIME_INTERVAL, SPAWN_PRIOTITY } from "@/utils/consts"
 import { body } from "@/utils/util_helper"
 
 
@@ -39,7 +39,7 @@ const config = {
 function countAllCreepsByRole() {
 
   let counts = global.creepCountsByRoom
-  if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= TIME_INTERVAL_COUNT_CREEPS) {
+  if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= TIME_INTERVAL.COUNT_CREEPS) {
     counts = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
     for (let roomName in counts) {
       counts[roomName] = _.countBy(counts[roomName], c => c.memory.role);
@@ -100,30 +100,7 @@ function countAllCreepsByRole() {
  * @param {String} role 
  */
 function getCreepSpawnPriorityByRole(role) {
-  if (role.startsWith('harvester')) {
-    return PRIORITY_SPAWN_HARVESTER
-  }
-  else if (role.startsWith('worker')) {
-    return PRIORITY_SPAWN_WORKER
-  }
-  else if (role.startsWith('carrier')) {
-    return PRIORITY_SPAWN_CARRIER
-  }
-  else if (role.startsWith('upgrader')) {
-    return PRIORITY_SPAWN_UPGRADER
-  }
-  else if (role.startsWith('builder')) {
-    return PRIORITY_SPAWN_BUILDER
-  }
-  else if (role.startsWith('repairer')) {
-    return PRIORITY_SPAWN_REPAIRER
-  }
-  else if (role.startsWith('miner')) {
-    return PRIORITY_SPAWN_MINER
-  }
-  else if (role.startsWith('base_transferor')) {
-    return PRIORITY_SPAWN_BASE_TRANSFEROR
-  }
+  return SPAWN_PRIOTITY[role] || 0
 }
 
 

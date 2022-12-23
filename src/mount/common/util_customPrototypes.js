@@ -10,7 +10,9 @@
 如：Link.Rmemory==Link.room.memory['BUINDING_LINK'][Link.id]
 */
 
-import { RM } from "@/utils/util_consts"
+import C from "@/utils/consts"
+
+const { RM } = C
 
 
 

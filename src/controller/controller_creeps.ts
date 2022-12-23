@@ -27,11 +27,11 @@ import role_expend_builder from './creeps/role_expend_builder'
 import role_expend_claimer from './creeps/role_expend_claimer'
 import role_scavenger from './creeps/role_scavenger'
 import roleWallRepairer from './creeps/role_wallRepairer'
-import { config } from '@/utils/util_consts'
 
 import powerCreep_new from './powerCreeps/powerCreep_new'
 import { errorIsolater } from '@/utils/util_helper'
 import { TaskTransporter } from '@/tasks/transport/taskTransporter'
+import { config } from '@/utils/consts'
 
 
 

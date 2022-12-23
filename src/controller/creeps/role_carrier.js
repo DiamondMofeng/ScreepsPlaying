@@ -1,7 +1,8 @@
 import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } from '@/utils/util_beheavor';
-import { IGNORE_CREEPS } from '@/utils/util_consts';
 import { stayInRoomCallBack } from '@/utils/util_costCallBacks';
+import C from '@/utils/consts';
 
+const { IGNORE_CREEPS } = C;
 
 const MIN_ENERGY = {
   [STRUCTURE_POWER_SPAWN]: 3000,
@@ -98,7 +99,7 @@ var roleCarrier = {
 
 
       else {
-        
+
         const priorTargets = prioritySelect(
           targets,
           [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_POWER_SPAWN, STRUCTURE_CONTAINER, STRUCTURE_NUKER, STRUCTURE_STORAGE, STRUCTURE_TERMINAL],

@@ -1,4 +1,6 @@
-import { RM as _RM } from "@/utils/util_consts"
+import C from "@/utils/consts"
+
+const { RM: _RM } = C
 
 /**
  * 
