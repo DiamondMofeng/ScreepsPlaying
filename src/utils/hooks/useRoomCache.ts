@@ -1,4 +1,4 @@
-import { PartialRecord } from "../type";
+import { PartialRecord } from "../util-types";
 
 //* 为了防止获取缓存时发生混乱，直接在这里定义所有的缓存key
 type RoomCacheKey =

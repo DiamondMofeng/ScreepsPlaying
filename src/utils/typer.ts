@@ -29,7 +29,7 @@ export function isDefined<T>(value: T | undefined | null): value is T {
   return value !== undefined && value !== null;
 }
 
-type resInStore<T> = T extends Store<infer R, any> ? R[] : never[];
+export type resInStore<T> = T extends Store<infer R, any> ? R[] : never[];
 
 export function resourceTypesIn<T extends Store<ResourceConstant, any>>(store: T): resInStore<T> {
   return Object.keys(store) as resInStore<T>;

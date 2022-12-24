@@ -1,4 +1,4 @@
-import { PartialRecord } from "./type"
+import { PartialRecord } from "./util-types"
 
 
 export const SPAWN_PRIOTITY: PartialRecord<CreepRole, number> = {
