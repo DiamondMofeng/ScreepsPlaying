@@ -11,6 +11,7 @@
   "dependencies": {
     "@rollup/plugin-commonjs": "^23.0.4",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "lodash": "^4.17.21",
     "rollup": "^3.7.4",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-typescript-paths": "^1.4.0",
@@ -21,7 +22,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
-    "@types/lodash": "^3.10.1",
+    "@types/lodash": "^4.14.191",
     "@types/node": "^12.20.55",
     "@types/power-assert": "^1.5.8",
     "@types/screeps": "^3.3.0",

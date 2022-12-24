@@ -2,6 +2,7 @@ import { setDoing } from "@/utils/util_beheavor"
 import C from "@/utils/consts"
 import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
 import { isStructureType } from "@/utils/typer"
+import _ from "lodash"
 
 //when spawn, add memory of certain source position to go , and bind with this source.
 //出生时绑定指定能量源，并指定工作坐标（待完成）

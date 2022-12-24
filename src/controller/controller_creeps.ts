@@ -165,7 +165,7 @@ function controller_creeps() {
 
   if (SHOW_CPU_CREEPS) {
     CPUcounts.sort((a, b) => a.cpu - b.cpu)
-    _.forEach(CPUcounts, i => console.log(`CPU of ${i.creep} at ${i.roomName} : ${i.cpu}`))
+    CPUcounts.forEach(info => console.log(`CPU of ${info.creep} at ${info.roomName} : ${info.cpu}`))
   }
 
 

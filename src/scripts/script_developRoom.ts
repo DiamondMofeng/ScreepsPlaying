@@ -1,6 +1,7 @@
 /* eslint-disable no-fallthrough */
 
 import { isStructureType } from "@/utils/typer";
+import _ from "lodash";
 
 const INTERVAL_PLACE_CONSTRUCTION_SITES = 5;
 

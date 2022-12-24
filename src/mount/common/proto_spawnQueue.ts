@@ -1,5 +1,6 @@
 
 import { bubbleDownDequeue, bubbleUpEnqueue } from '@/utils/util_priorityQueue'
+import _ from 'lodash'
 
 const priorityCompareFn = (a: CreepToSpawn, b: CreepToSpawn) => a.priority - b.priority
 
