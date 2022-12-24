@@ -1,26 +1,4 @@
-import { PartialRecord } from "../util-types";
-
-//* 为了防止获取缓存时发生混乱，直接在这里定义所有的缓存key
-type RoomCacheKey =
-  | 'taskCounter'
-  | 'transportTasksCounter'
-
-interface RoomCache {
-  data: any;
-  expire: number;
-}
-
-declare global {
-  namespace NodeJS {
-    interface Global {
-      __cache: {
-        /** roomName:roomCache */
-        roomCache?: Record<string, PartialRecord<RoomCacheKey, RoomCache>>
-      };
-
-    }
-  }
-}
+import type { RoomCacheKey } from "./type";
 
 /**
  * @danger 请不要在这里存储不可丢失的数据
