@@ -3,6 +3,8 @@ import { PartialRecord } from "./util-types"
 
 export const SPAWN_PRIOTITY: PartialRecord<CreepRole, number> = {
   harvester: 95,
+  harvesterPlus: 95,
+
   carrier: 100,
   upgrader: 50,
   builder: 40,

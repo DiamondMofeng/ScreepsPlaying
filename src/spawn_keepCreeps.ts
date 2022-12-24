@@ -1,13 +1,12 @@
-/**
- * 保持creep数量。
- * !临时用
- * 
- */
-
+import _ from 'lodash'
 import { evalBody_worker_halfEnergy, evalBody_harvester, evalBody_carrier_halfEnergy, evalBody_worker_fullEnergy, evalBodyByRole } from "./spawn_evalBody"
 import { TIME_INTERVAL, SPAWN_PRIOTITY } from "@/utils/consts"
 import { body } from "@/utils/util_helper"
+import { useGlobalCache } from "./utils/hooks/useGlobalCache"
 
+/**
+ * 维护creep数量。若少于期望数量则推入对应房间的spawnQueue
+ */
 
 
 /*
@@ -32,112 +31,123 @@ const config = {
 
 
 
-/**
- * 统计全球的creep,role数量
- * @returns {Object} counts - {role: count}
- */
-function countAllCreepsByRole() {
+// /**
+//  * 统计全球的creep,role数量
+//  * @returns {Object} counts - {role: count}
+//  */
+// function countAllCreepsByRole() {
 
-  let counts = global.creepCountsByRoom
-  if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= TIME_INTERVAL.COUNT_CREEPS) {
-    counts = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
-    for (let roomName in counts) {
-      counts[roomName] = _.countBy(counts[roomName], c => c.memory.role);
+//   let counts = global.creepCountsByRoom
+//   if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= TIME_INTERVAL.COUNT_CREEPS) {
+//     counts = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
+//     for (let roomName in counts) {
+//       counts[roomName] = _.countBy(counts[roomName], c => c.memory.role);
+//     }
+
+
+//     for (let roomName in Game.rooms) {
+//       if (!counts[roomName]) {
+//         counts[roomName] = {}
+//       }
+
+//       for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
+
+//         if (!creepToSpawn.memory || !creepToSpawn.memory.role) {
+//           continue;
+//         }
+
+//         if (!counts[roomName][creepToSpawn.memory.role]) {
+//           counts[roomName][creepToSpawn.memory.role] = 0
+//         }
+//         counts[roomName][creepToSpawn.memory.role] += 1
+//       }
+//     }
+
+//     global.creepCountsByRoom = { ...counts, lastUpdate: Game.time }
+//   }
+
+//   return global.creepCountsByRoom
+
+// }
+
+export const creepsCounterInitializer = () => {
+
+  //count existing creeps
+  let roomGroupedCreeps = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
+  let counter = _.fromPairs(
+    Object.entries(roomGroupedCreeps)
+      .map(([roomName, creeps]) =>
+        [roomName, _.countBy(creeps, c => c.memory.role)]
+      )
+  )
+
+
+  //count creeps in spawnQueue
+  for (let roomName in Game.rooms) {
+    if (!counter[roomName]) {
+      counter[roomName] = {}
     }
 
+    for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
 
-    for (let roomName in Game.rooms) {
-      if (!counts[roomName]) {
-        counts[roomName] = {}
+      if (!creepToSpawn?.memory?.role && !creepToSpawn.role) {
+        continue;
       }
 
-      for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
+      let role = creepToSpawn.memory?.role || creepToSpawn.role
 
-        if (!creepToSpawn.memory || !creepToSpawn.memory.role) {
-          continue;
-        }
-
-        if (!counts[roomName][creepToSpawn.memory.role]) {
-          counts[roomName][creepToSpawn.memory.role] = 0
-        }
-        counts[roomName][creepToSpawn.memory.role] += 1
-      }
+      counter[roomName][role] = (counter[roomName][role] ?? 0) + 1
     }
-
-    global.creepCountsByRoom = { ...counts, lastUpdate: Game.time }
   }
 
-  return global.creepCountsByRoom
+  return counter
 
 }
 
+function countAllCreepsByRole() {
+  return useGlobalCache('creepsCounter', creepsCounterInitializer, TIME_INTERVAL.COUNT_CREEPS)
+}
 
-// /**
-//  * 获取room内role的creep数量
-//  * @param {Room} room 
-//  */
-// function getCreepCountsByRole(room) {
-
-//   if (_.isUndefined(room.memory.creepCounts)
-//     || _.isUndefined(room.memory.creepCounts.lastUpdate)
-//     // || Game.time - room.memory.creepCounts.lastUpdate > C.TIME_INTERVAL_COUNT_CREEPS
-//   ) {
-
-//     room.memory.creepCounts = { ...countCreepsByRole(room), lastUpdate: Game.time }
-//   }
-
-//   if (room.memory.creepCounts) {
-//     return room.memory.creepCounts
-//   }
-//   else {
-//     // console.log(`unable to get creep counts for ${room}`)
-//     return
-//   }
-// }
 
 /**
  * 通过role获取creep的spawn优先级
- * @param {String} role 
+ * @param {CreepRole} role 
  */
-function getCreepSpawnPriorityByRole(role) {
+function spawnPriorityOfRole(role: CreepRole) {
   return SPAWN_PRIOTITY[role] || 0
 }
 
 
-
-/**
- * 
- * @param {Room|String} room 
- * @param {String} role 
- * @param {Number} minNumber 
- * @param {BodyPartDefinition[]} body
- */
-function spawnByMinNumber(room, role, body = [], minNumber = 0) {
+function spawnByMinNumber(
+  room: Room | string,
+  role: CreepRole,
+  body: BodyPartConstant[] = [],
+  minNumber = 0
+) {
   // console.log(room)
   if (typeof room == 'string') {
     room = Game.rooms[room]
     if (!room) {
-      console.log('spawnByMinNumber: room not found', room)
+      console.log('spawnByMinNumber: room not found', room) //TODO: use warning logger
       return
     }
   }
+  let counter = countAllCreepsByRole()
 
-  let counts = countAllCreepsByRole()
-
-  if (!counts[room.name]) {
-    console.log('spawnByMinNumber: room not found', room)
+  if (!counter[room.name]) {
+    console.log('spawnByMinNumber: room not found', room)  //TODO: use warning logger
     return
   }
 
-  if (counts[room.name][role] >= minNumber) {
+  if (counter[room.name][role] >= minNumber) {
     // console.log('spawnByMinNumber: already enough', role, minNumber)
     return
   }
 
-  if (!counts[room.name][role]) {
-    counts[room.name][role] = 0
+  if (!counter[room.name][role]) {
+    counter[room.name][role] = 0
   }
-  counts[room.name][role] += 1
+  counter[room.name][role] += 1
 
 
 
@@ -148,39 +158,29 @@ function spawnByMinNumber(room, role, body = [], minNumber = 0) {
   let memory = {
     role: role,
   }
-  let pushRes = room.pushToSpawnQueue({
+  room.pushToSpawnQueue({
     // name: name,
     body: body,
     memory: memory,
-    priority: getCreepSpawnPriorityByRole(role)
+    priority: spawnPriorityOfRole(role)
   })
   // console.log(pushRes)
-  console.log(`pushed ${role} to ${room}'s spawn queue`)
+  console.log(`pushed ${role} to ${room}'s spawn queue`)  //TODO: use info logger
 }
 
 
 
-/**
- * 
- * @param {String} targetRoom 
- * @param {Object} opt 
- * @returns 
- */
-const keepCreeps = (targetRoom, opt = {}) => {
-
-
+const keepCreeps = (
+  targetRoom: Room['name'],
+  // opt = {}
+) => {
 
   let room = Game.rooms[targetRoom]
-  if (!room) {
+  if (!room || !room.controller?.my) {  //? prevents spawnQueue in non owned room
     return
   }
 
-  // let spawnName = targetRoom + '_0'  //TODO 到时候用生产队列代替
-  // if (!Game.spawns[targetRoom]) {
-  //   return
-  // }
-
-  let rcl = Game.rooms[targetRoom].controller.level
+  let rcl = room.controller.level
   switch (rcl) {
     case 1:
       spawnByMinNumber(targetRoom, 'upgrader', [WORK, MOVE, CARRY, MOVE], 3)
@@ -237,6 +237,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
 
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 2)
+      // spawnByMinNumber(targetRoom, 'task_transporter', evalBody_carrier_halfEnergy(targetRoom), 2)
 
       // spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
@@ -255,7 +256,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
 
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
-      if (room.mineral.mineralAmount > 0) {
+      if ((room.mineral?.mineralAmount ?? 0) > 0) {
         spawnByMinNumber(targetRoom, 'miner', evalBody_worker_halfEnergy(targetRoom), 1)
       }
 
@@ -281,7 +282,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
-      if (room.mineral.mineralAmount > 0) {
+      if ((room.mineral?.mineralAmount ?? 0) > 0) {
         spawnByMinNumber(targetRoom, 'miner', evalBody_worker_halfEnergy(targetRoom), 1)
       }
 
@@ -296,7 +297,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
-      if (room.mineral.mineralAmount > 0) {
+      if ((room.mineral?.mineralAmount ?? 0) > 0) {
         if (room.storage && room.storage.store.getFreeCapacity() > 0.2 * 1000 * 1000) {
           spawnByMinNumber(targetRoom, 'miner', evalBody_worker_halfEnergy(targetRoom), 1)
         }
@@ -322,7 +323,7 @@ const keepCreeps = (targetRoom, opt = {}) => {
         }
       }
       else
-        if (Game.rooms[targetRoom].controller.ticksToDowngrade < 150000) {
+        if (room.controller.ticksToDowngrade < 150000) {
           spawnByMinNumber(targetRoom, 'upgrader', body([WORK, 1, CARRY, 1, MOVE, 1]), 1)
         }
 

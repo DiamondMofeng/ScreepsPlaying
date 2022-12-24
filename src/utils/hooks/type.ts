@@ -8,7 +8,7 @@ export type RoomCacheKey =
   | 'transportTasksCounter'
 
 export type GlobalCacheKey =
-  | '';
+  | 'creepsCounter';
 
 export interface RoomCache {
   data: any;

@@ -60,7 +60,7 @@ module.exports.loop = errorMapper(function () {//
     if (!room || !room.controller || !room.controller.my) {
       continue
     }
-    keepCreeps(roomName, {})
+    keepCreeps(roomName)
   }
 
   // showVisuals()   //* VISUAL所有的主入口
