@@ -65,8 +65,37 @@ describe('useCounter hook', () => {
     assert(counter.a === 6);
     assert(counter.b === 5);
 
-    // let c='c'
-    // counter[c] = 5; //TODO 由于TS的关系，仍然不允许。待解决
+    let c = 'c'
+    counter[c] = 10;
+    assert(counter.c === 10);
+    assert(counter.get('c') === 10);
+
+    counter.d = 100;
+    assert(counter.d === 100);
+    assert(counter.get('d') === 100);
+
+  });
+
+  it('do not allow to set props: get,set,add,sub ', () => {
+    const [counter] = useCounter({ a: 5, b: 3 });
+    assert.throws(() => {
+      // counter.get = 1  // typescript already prevent this
+      // counter['get'] = 1 // typescript already prevent this
+      counter.set('get', 1)
+    });
+
+    assert.throws(() => {
+      counter.set('set', 1)
+    });
+
+    assert.throws(() => {
+      counter.set('add', 1)
+    });
+
+    assert.throws(() => {
+      counter.set('sub', 1)
+    });
+
   });
 
 });

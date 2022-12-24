@@ -1,10 +1,11 @@
+//TODO 用ts限制禁止调用方法时传入预留的add,sub,get,set等key
 
 type Counter = Record<string, number>
-type ProxiedCounter<T extends Counter> = T & {
-  add: (key: string, value?: number) => number;
-  sub: (key: string, value?: number) => number;
-  get: (key: string) => number;
-  set: (key: string, value: number) => number;
+type ProxiedCounter = Counter & {
+  readonly add: (key: string, value?: number) => number;
+  readonly sub: (key: string, value?: number) => number;
+  readonly get: (key: string) => number;
+  readonly set: (key: string, value: number) => number;
 };
 
 /**
@@ -21,7 +22,7 @@ type ProxiedCounter<T extends Counter> = T & {
  * @param counter - 初始counter
  * @returns {[counterProxy, counterRef]} counterProxy是counter的代理，counterRef是原counter
 */
-export function useCounter<T extends Counter>(counter: T = {} as T): [ProxiedCounter<T>, T] {
+export function useCounter(counter = {} as Counter): [ProxiedCounter, Counter] {
 
   if (!Reflect.isExtensible(counter)) {
     throw new Error('counter must be extensible')
@@ -46,6 +47,11 @@ export function useCounter<T extends Counter>(counter: T = {} as T): [ProxiedCou
       }
       if (key === 'set') {
         return (key: string, value: number) => {
+
+          if (['add', 'sub', 'get', 'set'].includes(key)) {
+            throw new Error(`key '${key}' is preserved`)
+          }
+
           Reflect.set(target, key, value)
           return Reflect.get(target, key, target)
         }
@@ -54,11 +60,16 @@ export function useCounter<T extends Counter>(counter: T = {} as T): [ProxiedCou
     },
 
     set(target: object, key: string, value: number) {
+
+      if (['add', 'sub', 'get', 'set'].includes(key)) {
+        throw new Error(`key '${key}' is preserved`)
+      }
+
       return Reflect.set(target, key, value)
     }
   }
 
-  return [new Proxy(counter, handler) as ProxiedCounter<T>, counter]
+  return [new Proxy(counter, handler) as ProxiedCounter, counter]
 
 }
 
