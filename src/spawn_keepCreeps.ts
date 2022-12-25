@@ -28,83 +28,29 @@ const config = {
   upgrader: true
 }
 
-
-
-
-// /**
-//  * 统计全球的creep,role数量
-//  * @returns {Object} counts - {role: count}
-//  */
-// function countAllCreepsByRole() {
-
-//   let counts = global.creepCountsByRoom
-//   if (!counts || !counts.lastUpdate || Game.time - counts.lastUpdate >= TIME_INTERVAL.COUNT_CREEPS) {
-//     counts = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
-//     for (let roomName in counts) {
-//       counts[roomName] = _.countBy(counts[roomName], c => c.memory.role);
-//     }
-
-
-//     for (let roomName in Game.rooms) {
-//       if (!counts[roomName]) {
-//         counts[roomName] = {}
-//       }
-
-//       for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
-
-//         if (!creepToSpawn.memory || !creepToSpawn.memory.role) {
-//           continue;
-//         }
-
-//         if (!counts[roomName][creepToSpawn.memory.role]) {
-//           counts[roomName][creepToSpawn.memory.role] = 0
-//         }
-//         counts[roomName][creepToSpawn.memory.role] += 1
-//       }
-//     }
-
-//     global.creepCountsByRoom = { ...counts, lastUpdate: Game.time }
-//   }
-
-//   return global.creepCountsByRoom
-
-// }
-
+/**
+ * 返回{room:{role:number}}对象
+ */
 export const creepsCounterInitializer = () => {
 
-  //count existing creeps
-  let roomGroupedCreeps = _.groupBy(Object.values(Game.creeps), (creep) => creep.room.name);
-  let counter = _.fromPairs(
-    Object.entries(roomGroupedCreeps)
-      .map(([roomName, creeps]) =>
-        [roomName, _.countBy(creeps, c => c.memory.role)]
-      )
+  //Game.creeps中的
+  let counter = _(Object.values(Game.creeps))
+    .groupBy(c => c.room.name)
+    .mapValues(creeps => _.countBy(creeps, c => c.memory.role))
+    .value()
+
+  //合并spawnQueue中的
+  counter = _.mergeWith(counter, _(Game.rooms)
+    .mapValues(room => room.spawnQueue)
+    .mapValues(queue => _.countBy(queue, c => c.memory?.role || c.role))
+    .value(),
+    (objValue, srcValue) => _.isNumber(objValue) ? objValue + srcValue : srcValue
   )
 
-
-  //count creeps in spawnQueue
-  for (let roomName in Game.rooms) {
-    if (!counter[roomName]) {
-      counter[roomName] = {}
-    }
-
-    for (let creepToSpawn of Game.rooms[roomName].spawnQueue) {
-
-      if (!creepToSpawn?.memory?.role && !creepToSpawn.role) {
-        continue;
-      }
-
-      let role = creepToSpawn.memory?.role || creepToSpawn.role
-
-      counter[roomName][role] = (counter[roomName][role] ?? 0) + 1
-    }
-  }
-
   return counter
-
 }
 
-function countAllCreepsByRole() {
+export function getCreepsCounter() {
   return useGlobalCache('creepsCounter', creepsCounterInitializer, TIME_INTERVAL.COUNT_CREEPS)
 }
 
@@ -132,7 +78,7 @@ function spawnByMinNumber(
       return
     }
   }
-  let counter = countAllCreepsByRole()
+  let counter = getCreepsCounter()
 
   if (!counter[room.name]) {
     console.log('spawnByMinNumber: room not found', room)  //TODO: use warning logger
@@ -168,7 +114,7 @@ function spawnByMinNumber(
   console.log(`pushed ${role} to ${room}'s spawn queue`)  //TODO: use info logger
 }
 
-
+//! TODO 优化为声明式结构
 
 const keepCreeps = (
   targetRoom: Room['name'],
