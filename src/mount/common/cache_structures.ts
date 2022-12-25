@@ -13,10 +13,13 @@ const INTERVAL_REFRESH_STRUCTURE_CACHE = 100
 
 // 懒人写法，可以不用挨个声明属性
 // 实现的可能不是很优雅，但是可以用了
+
+type Singular<T extends string> = T extends `${infer P}s` ? P : never
+
 type AnyCountableStructure = typeof multipleList[number]
 
-type CountableStructuresMap<T extends StructureConstant = AnyCountableStructure> = {
-  [P in `${T}s`]: ConcreteStructure<T>[];
+type CountableStructuresMap = {
+  [P in `${AnyCountableStructure}s`]: ConcreteStructure<Singular<P>>[];
 }
 
 type AnyUniqueStructure = typeof singleList[number]
