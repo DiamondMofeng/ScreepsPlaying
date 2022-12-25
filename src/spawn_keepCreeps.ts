@@ -44,8 +44,9 @@ export const creepsCounterInitializer = () => {
     .mapValues(room => room.spawnQueue)
     .mapValues(queue => _.countBy(queue, c => c.memory?.role || c.role))
     .value(),
-    (objValue, srcValue) => _.isNumber(objValue) ? objValue + srcValue : srcValue
+    (roomCounter1, roomCounter2) => _.mergeWith(roomCounter1, roomCounter2, _.add)
   )
+
 
   return counter
 }
