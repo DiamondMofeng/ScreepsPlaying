@@ -29,7 +29,14 @@ const main_temp_commands = () => {
     // guardRoom('W11N16')
   });
 
-
+  errorIsolater(() => {
+    for (let roomName in Game.rooms) {
+      let room = Game.rooms[roomName]
+      room.transportTaskCenter.publishTask()
+      //TODO 放到tick结束时执行
+      room.transportTaskCenter.removeAllDoneTasks()
+    }
+  })
 
   //support energy
   errorIsolater(() => {
