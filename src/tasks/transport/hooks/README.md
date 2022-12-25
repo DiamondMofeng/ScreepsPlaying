@@ -1,0 +1,4 @@
+TODO 没做完
+
+预期的效果是可以在其他地方方便地调用这些hook,
+例如在lab运行时，若缺少资源则可以直接调用 useRequestResource hook来获取资源
