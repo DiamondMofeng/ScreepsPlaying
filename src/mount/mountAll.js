@@ -5,14 +5,14 @@ import mountWhiteList from "./common/whitelist";
 
 import mountCreep from "./creeps/proto_creep";
 
-import findCache from "./common/util_cache_find"
+import { mountStructureCache } from "./common/cache_structures"
 
 import customPrototypes from './common/util_customPrototypes'
 import { mountTransportTaskCenter } from "@/tasks/transport/mount";
 
 export const mountAll = () => {
 
-  findCache();
+  mountStructureCache();
   customPrototypes()
 
   mountCLI();

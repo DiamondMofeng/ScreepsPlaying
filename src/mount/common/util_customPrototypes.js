@@ -142,21 +142,6 @@ const customPrototypes = () => {
   // })
 
 
-  //* ROOM
-  Object.defineProperties(Room.prototype, {
-
-    /* 直接获取mineral对象 */
-    mineral: {
-      get() {
-        if (!this.memory._mineralID) {
-          this.memory._mineralID = this.find(FIND_MINERALS)[0].id
-        }
-        return Game.getObjectById(this.memory._mineralID)
-      },
-    }
-  })
-
-
 }
 
 
