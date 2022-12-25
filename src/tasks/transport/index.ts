@@ -4,6 +4,7 @@ import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
 import _ from "lodash";
 import { ExtensionTaskPublisher } from "./publisher/extension";
 import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
+import { FillTowerTaskPublisher } from "./publisher/tower";
 import { TaskTransporterMemory } from "./taskTransporter";
 
 //TODO 处理任务卡死完不成的情况
@@ -17,6 +18,7 @@ export type TransportTaskType =
 export type TransportTaskName =
   // string
   | 'fill_extension' //填充ext,spawn
+  | 'fill_tower'     //填充tower
 
   | "fill_lab"    //填充lab原料
   | "harvest_lab" //回收lab产物
@@ -109,16 +111,19 @@ export class TransportTaskCenter {
 
     const TASK_LIMITS: Record<TransportTaskName, number> = {
       'fill_extension': 2,
+      'fill_tower': 1,
       'fill_lab': 1,
       'harvest_lab': 1,
       'fill_factory': 1,
       'clear': 1,
       'misc': 1,
+
     }
 
     const intervaledPublishers: Array<[number, (roomName: string) => AnyTransportTask[]]> = [
       [10, ExtensionTaskPublisher],
-      [50, FillFactoryTransferTaskPublisher]
+      [50, FillFactoryTransferTaskPublisher],
+      [20, FillTowerTaskPublisher],
     ]
 
     const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {
