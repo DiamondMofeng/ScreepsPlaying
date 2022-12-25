@@ -130,17 +130,22 @@ export class TransportTaskCenter {
 
     console.log('tasksToPublish: ', tasksToPublish);  //TODO debug
 
-    const currentTasks = useRoomCache(this.roomName, 'transportTasksCounter', () => _.groupBy(
-      this.taskQueue.concat(Object.values(this.acceptedTasks)),
-      task => task.name
-    ))
+    //TODO 分到外面去
+    const roomTaskCounter = useRoomCache(
+      this.roomName,
+      'transportTasksCounter',
+      () => _(this.taskQueue.concat(Object.values(this.acceptedTasks)))
+        .countBy(task => task.name)
+        .value()
+    )
 
     tasksToPublish.forEach(task => {
 
-      const currentTaskCount = currentTasks[task.name]?.length ?? 0;
+      const currentTaskCount = roomTaskCounter[task.name] ?? 0;
       const taskLimit = TASK_LIMITS[task.name] ?? 1;
       if (currentTaskCount < taskLimit) {
         this.addTask(task);
+        roomTaskCounter[task.name] = currentTaskCount + 1;
       }
 
     })
