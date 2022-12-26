@@ -1,3 +1,7 @@
+#
+
+!!! 期待重构。现在的格式感觉比较臃肿
+
 # 需要的搬运任务
 
 ## 基础部分
@@ -6,13 +10,13 @@
 
 ### 基础填充能量
 
-- 填充spawn, extension
-- 填充tower
+- [x] 填充spawn, extension
+- [x] 填充tower
 
 ### container
 
-- 将能量从source container转移至controller container
-- 将能量从source container转移至storage
+- [x] 将能量从source container转移至controller container
+- [x] 将能量从source container转移至storage
 
 
 

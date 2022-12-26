@@ -20,6 +20,8 @@ export type TransportTaskName =
   | 'fill_extension' //填充ext,spawn
   | 'fill_tower'     //填充tower
 
+  | 'dump_container' //清空container
+
   | "fill_lab"    //填充lab原料
   | "harvest_lab" //回收lab产物
 
@@ -113,6 +115,9 @@ export class TransportTaskCenter {
       'fill_extension': 2,
       'fill_tower': 1,
       'fill_lab': 1,
+
+      'dump_container': 2,
+
       'harvest_lab': 1,
       'fill_factory': 1,
       'clear': 1,
