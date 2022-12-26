@@ -5,6 +5,7 @@ import _ from "lodash";
 import { DumpContainerTaskPublisher } from "./publisher/container";
 import { ExtensionTaskPublisher } from "./publisher/extension";
 import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
+import { LabEnergyTaskPublisher } from "./publisher/lab/energy";
 import { FillTowerTaskPublisher } from "./publisher/tower";
 import { TaskTransporterMemory } from "./taskTransporter";
 
@@ -18,20 +19,21 @@ export type TransportTaskType =
 
 export type TransportTaskName =
   // string
-  | 'fill_extension' //填充ext,spawn
-  | 'fill_tower'     //填充tower
+  | 'fill_extension'  //填充ext,spawn
+  | 'fill_tower'      //填充tower
 
-  | 'dump_container' //清空container
+  | 'dump_container'  //清空container
 
-  | "fill_lab"    //填充lab原料
-  | "harvest_lab" //回收lab产物
+  | 'fill_lab_energy' //填充lab能量
+  | "fill_lab"        //填充lab原料
+  | "harvest_lab"     //回收lab产物
 
   | "fill_factory"
 
-  | "clear"       //清空from目标建筑
+  | "clear"           //清空from目标建筑
 
 
-  | "misc"        //杂项
+  | "misc"            //杂项
   ;
 
 
@@ -116,6 +118,7 @@ export class TransportTaskCenter {
       'fill_extension': 2,
       'fill_tower': 1,
       'fill_lab': 1,
+      'fill_lab_energy': 1,
 
       'dump_container': 2,
 
@@ -131,6 +134,7 @@ export class TransportTaskCenter {
       [50, FillFactoryTransferTaskPublisher],
       [20, FillTowerTaskPublisher],
       [20, DumpContainerTaskPublisher],
+      [20, LabEnergyTaskPublisher],
     ]
 
     const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {
