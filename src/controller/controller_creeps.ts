@@ -134,6 +134,11 @@ function controller_creeps() {
 
       const creep = Game.creeps[creepName]
 
+      //未出生
+      if (creep.spawning) {
+        continue
+      }
+
       if (!creep.memory.role || !Object.prototype.hasOwnProperty.call(roleMap, creep.memory.role)) {
         continue
       }
