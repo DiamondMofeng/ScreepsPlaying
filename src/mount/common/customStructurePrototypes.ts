@@ -35,7 +35,7 @@ declare global {
 }
 
 
-const customPrototypes = () => {
+export const mountStructurePrototypes = () => {
 
   //* 全建筑定义
   Object.defineProperties(Structure.prototype, {
@@ -115,8 +115,3 @@ const customPrototypes = () => {
 
 
 }
-
-
-
-
-export default customPrototypes
