@@ -241,7 +241,9 @@ const keepCreeps = (
     case 8:
       // console.log("run here")
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
-      spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
+      // spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
+      spawnByMinNumber(targetRoom, 'task_transporter', evalBody_carrier_halfEnergy(targetRoom), 1)
+
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)
 
       if ((room.mineral?.mineralAmount ?? 0) > 0) {
