@@ -1,40 +1,20 @@
+import _ from "lodash";
 import { useRoomCache } from "@/utils/hooks/useRoomCache";
 import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
-import _ from "lodash";
-import { DumpContainerTaskPublisher } from "./publisher/container";
-import { ExtensionTaskPublisher } from "./publisher/extension";
-import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
-import { LabEnergyTaskPublisher } from "./publisher/lab/energy";
-import { FillTowerTaskPublisher } from "./publisher/tower";
-import { TaskTransporterMemory } from "./taskTransporter";
+
+import type { TaskTransporterMemory } from "./taskTransporter";
+import type { TransportTaskName, TransportTaskType } from "./types";
+
+import {
+  DumpContainerTaskPublisher,
+  ExtensionTaskPublisher,
+  FillFactoryTransferTaskPublisher,
+  FillTowerTaskPublisher,
+  LabEnergyTaskPublisher
+} from "./publisher";
 
 //TODO 处理任务卡死完不成的情况
-
-/** 影响任务结束条件 */
-export type TransportTaskType =
-  | "transfer"
-  | "withdraw"
-  | "pickup"
-
-export type TransportTaskName =
-  // string
-  | 'fill_extension'  //填充ext,spawn
-  | 'fill_tower'      //填充tower
-
-  | 'dump_container'  //清空container
-
-  | 'fill_lab_energy' //填充lab能量
-  | "fill_lab"        //填充lab原料
-  | "harvest_lab"     //回收lab产物
-
-  | "fill_factory"
-
-  | "clear"           //清空from目标建筑
-
-
-  | "misc"            //杂项
-  ;
 
 
 interface TransportTask {
