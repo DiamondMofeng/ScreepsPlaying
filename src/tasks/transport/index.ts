@@ -224,10 +224,21 @@ export class TransportTaskCenter {
 
   removeAllDoneTasks(): void {
     Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
-      console.log('this.isTaskDone(task): ', task.name, this.isTaskDone(task));
+      console.log('this.isTaskDone(task): ', task.name, this.isTaskDone(task));   //TODO use debug or info logger 
       if (this.isTaskDone(task)) {
         this.removeAcceptedTaskById(taskId);
       }
+    });
+  }
+
+  //TODO 方法的名字一般，换个名字
+  pauseAllDeadCreepsTasks(): void {
+    Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
+
+      if (!task.workerCreep || !Game.creeps[task.workerCreep]) {
+        this.pauseAcceptedTaskById(taskId);
+      }
+
     });
   }
 

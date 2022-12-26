@@ -30,11 +30,14 @@ const main_temp_commands = () => {
   });
 
   errorIsolater(() => {
-    for (let roomName in Game.rooms) {
-      let room = Game.rooms[roomName]
-      room.transportTaskCenter.publishTask()
+    for (const roomName in Game.rooms) {
+      const room = Game.rooms[roomName]
+      const center = room.transportTaskCenter
+      center.publishTask()
       //TODO 放到tick结束时执行
-      room.transportTaskCenter.removeAllDoneTasks()
+      center.removeAllDoneTasks()
+      center.pauseAllDeadCreepsTasks()
+
     }
   })
 
