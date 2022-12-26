@@ -18,9 +18,11 @@ type StructureMemoryMap = {
 
 type ContainerType = 'source' | 'storage' | 'controller' | 'unknown'
 type LinkType = 'source' | 'storage' | 'controller' | 'unknow'
+type LabType = 'boost' | 'reaction' | 'raw'
 
 declare global {
   interface RoomMemory extends StructureMemoryMap { }
+
   interface Structure {
     Rmemory: any
   }
@@ -31,6 +33,10 @@ declare global {
 
   interface StructureContainer {
     type: ContainerType
+  }
+
+  interface StructureLab {
+    type: LabType
   }
 }
 
@@ -113,5 +119,29 @@ export const mountStructurePrototypes = () => {
     }
   } as PropertyDescriptorMap & ThisType<StructureContainer>)
 
+  //* Link 和 Lab 的 type
+  //TODO 未初始化！！
+
+  Object.defineProperties(StructureLink.prototype, {
+    type: {
+      get(): LinkType {
+        return this.Rmemory.type
+      },
+      set(value) { this.Rmemory.type = value },
+      configurable: true,
+      enumerable: true
+    },
+  } as PropertyDescriptorMap & ThisType<StructureLink>)
+
+  Object.defineProperties(StructureLab.prototype, {
+    type: {
+      get(): LabType {
+        return this.Rmemory.type
+      },
+      set(value) { this.Rmemory.type = value },
+      configurable: true,
+      enumerable: true
+    },
+  } as PropertyDescriptorMap & ThisType<StructureLab>)
 
 }
