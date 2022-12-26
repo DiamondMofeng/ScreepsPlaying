@@ -1,8 +1,8 @@
-interface Rmemory {
-  type: string; // 反应一种建筑的type
-}
+// interface Rmemory {
+//   type: string; // 反应一种建筑的type
+// }
 
 
-interface Structure {
-  Rmemory: Rmemory;
-}
+// interface Structure {
+//   Rmemory: Rmemory;
+// }
