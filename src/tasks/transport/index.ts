@@ -2,6 +2,7 @@ import { useRoomCache } from "@/utils/hooks/useRoomCache";
 import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
 import _ from "lodash";
+import { DumpContainerTaskPublisher } from "./publisher/container";
 import { ExtensionTaskPublisher } from "./publisher/extension";
 import { FillFactoryTransferTaskPublisher } from "./publisher/factory";
 import { FillTowerTaskPublisher } from "./publisher/tower";
@@ -129,6 +130,7 @@ export class TransportTaskCenter {
       [10, ExtensionTaskPublisher],
       [50, FillFactoryTransferTaskPublisher],
       [20, FillTowerTaskPublisher],
+      [20, DumpContainerTaskPublisher],
     ]
 
     const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {

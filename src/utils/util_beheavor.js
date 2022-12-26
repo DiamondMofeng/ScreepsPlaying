@@ -391,6 +391,7 @@ function moveAndTransfer(creep, container, resourceTypes = [], amount = undefine
 
     for (const rt of resourceTypes) {
       let transferResult = creep.transfer(container, rt, amount)
+      // console.log('transferResult1: ', transferResult);
       if (transferResult == ERR_NOT_IN_RANGE) {
         creep.moveTo(container, { ...moveOpt, reusePath: 50 })
         return transferResult
@@ -403,10 +404,11 @@ function moveAndTransfer(creep, container, resourceTypes = [], amount = undefine
 
       transferResult = creep.transfer(container, rt)
 
-      // console.log(transferResult)
+      // console.log('transferResult2: ', transferResult);
 
       if (transferResult == ERR_NOT_IN_RANGE) {
         creep.moveTo(container, { ...moveOpt, reusePath: 50 })
+        // console.log('creep.moveTo2: ', creep.moveTo(container, { ...moveOpt, reusePath: 50 }));
         return transferResult
       }
     }

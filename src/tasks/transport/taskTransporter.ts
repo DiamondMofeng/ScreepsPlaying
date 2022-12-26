@@ -132,6 +132,7 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
       return true;
     }
   });
+  // console.log('target: ', target);
   if (!target) {
     // console.log('transferTo ERR_NOT_FOUND: ', ERR_NOT_FOUND);
     return ERR_NOT_FOUND;
@@ -139,8 +140,10 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
 
   let amount = Math.min(
     creep.store.getUsedCapacity(resourceType),
-    (target.store.getFreeCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
+    // (targetCapacity ?? target.store.getFreeCapacity(resourceType) ?? 0) - (target.store.getUsedCapacity(resourceType) ?? 0), //! 注释掉之后允许过量填装
+    target.store.getFreeCapacity(resourceType) ?? 0
   );
+  // console.log('amount: ', amount);
   // console.log("moveAndTransfer", moveAndTransfer(creep, target,
   //   resourceType ?? resourceTypesIn(target.store)[0],
   //   amount
@@ -234,7 +237,15 @@ function doTransferTask(creep: Creep, task: TransferTask) {
 }
 
 function doWithdrawTask(creep: Creep, task: WithdrawTask) {
-  //TODO
+
+  //TODO 随便写的，没确认逻辑合理性
+  const { from, to, resourceType, targetCapacity } = task;
+
+  if (creep.store.getUsedCapacity(resourceType) === 0) {
+    withdrawFrom(creep, from, resourceType, targetCapacity);
+  } else {
+    transferTo(creep, to, resourceType, undefined);
+  }
 }
 
 function doPickupTask(creep: Creep, task: PickupTask) {

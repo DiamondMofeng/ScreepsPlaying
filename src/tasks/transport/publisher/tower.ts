@@ -12,6 +12,7 @@ interface FillExtensionTransferTask extends TransferTask {
   to: Id<StructureTower>[]
 
   resourceType?: RESOURCE_ENERGY
+  targetCapacity: number  // 不加的话，塔工作时会一直给同一个填
 }
 
 
@@ -49,6 +50,7 @@ export function FillTowerTaskPublisher(roomName: string): FillExtensionTransferT
       from: fromIds,
       to: targetIds,
       resourceType: RESOURCE_ENERGY,
+      targetCapacity: MIN_TOWER_ENERGY,
     }
   }
 

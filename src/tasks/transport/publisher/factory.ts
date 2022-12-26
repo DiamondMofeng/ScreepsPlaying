@@ -7,12 +7,14 @@ interface FillFactoryTransferTask extends TransferTask {
   type: 'transfer'
   to: Id<StructureFactory>[]
 
+  targetCapacity: number
   resourceType: ResourceConstant
 }
 
 export function FillFactoryTransferTaskPublisher(roomName: string): FillFactoryTransferTask[] {
 
   const resourceType = 'energy'//TODO 这里只是用来测试的，需要改成真正的逻辑
+  const targetCapacity = 10000//TODO 这里只是用来测试的，需要改成真正的逻辑
 
   const room = Game.rooms[roomName];
   if (!room) {
@@ -46,7 +48,7 @@ export function FillFactoryTransferTaskPublisher(roomName: string): FillFactoryT
       from: fromIds,
       to: [factory.id],
       resourceType: resourceType,
-      targetCapacity: undefined,
+      targetCapacity: targetCapacity,
     };
   }
 
