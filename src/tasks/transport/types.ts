@@ -4,7 +4,7 @@ export type TransportTaskType =
   | "withdraw"
   | "pickup"
 
-export type TransportTaskName =
+export type TransportTaskBaseName =
   // string
   | 'fill_extension'  //填充ext,spawn
   | 'fill_tower'      //填充tower
@@ -22,3 +22,7 @@ export type TransportTaskName =
 
   | "misc"            //杂项
   ;
+
+export type TransportTaskName =
+  | TransportTaskBaseName
+  | `${TransportTaskBaseName}_${ResourceConstant}`

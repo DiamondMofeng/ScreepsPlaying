@@ -94,7 +94,8 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
 
   let amount = Math.min(
     creep.store.getFreeCapacity(),
-    (target.store.getUsedCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
+    // (target.store.getUsedCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
+    target.store.getUsedCapacity(resourceType) ?? 0
   );
   // console.log("withdraw res:", creep.withdraw(target,
   //   resourceType ?? resourceTypesIn(target.store)[0],
@@ -241,6 +242,7 @@ function doWithdrawTask(creep: Creep, task: WithdrawTask) {
   //TODO 随便写的，没确认逻辑合理性
   const { from, to, resourceType, targetCapacity } = task;
 
+  //TODO 条件可以改成有空余容量
   if (creep.store.getUsedCapacity(resourceType) === 0) {
     withdrawFrom(creep, from, resourceType, targetCapacity);
   } else {

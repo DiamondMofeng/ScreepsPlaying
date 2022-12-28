@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { PartialRecord } from "@/utils/util-types";
 import { useRoomCache } from "@/utils/hooks/useRoomCache";
 import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
@@ -11,8 +12,10 @@ import {
   ExtensionTaskPublisher,
   FillFactoryTransferTaskPublisher,
   FillTowerTaskPublisher,
-  LabEnergyTaskPublisher
+  LabEnergyTaskPublisher,
+  FillLabTaskPublisher,
 } from "./publisher";
+import { HarvestLabTaskPublisher } from "./publisher/lab/reaction";
 
 //TODO 处理任务卡死完不成的情况
 
@@ -94,7 +97,7 @@ export class TransportTaskCenter {
     // publishers: (roomName: string) => AnyTransportTask[]
   ): void {
 
-    const TASK_LIMITS: Record<TransportTaskName, number> = {
+    const TASK_LIMITS: PartialRecord<TransportTaskName, number> = {
       'fill_extension': 2,
       'fill_tower': 1,
       'fill_lab': 1,
@@ -115,6 +118,8 @@ export class TransportTaskCenter {
       [20, FillTowerTaskPublisher],
       [20, DumpContainerTaskPublisher],
       [20, LabEnergyTaskPublisher],
+      [20, FillLabTaskPublisher],
+      [20, HarvestLabTaskPublisher]
     ]
 
     const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {
@@ -267,6 +272,10 @@ export class TransportTaskCenter {
           // 装不了更多了
           return !s.store.getFreeCapacity(task.resourceType);
         }
+        // console.log('(s.store.getUsedCapacity(task.resourceType) ?? 0) >= task.targetCapacity;: ', (s.store.getUsedCapacity(task.resourceType) ?? 0) >= task.targetCapacity);
+        // console.log('task.targetCapacity: ', task.targetCapacity);
+        // console.log('task.resourceType: ', task.resourceType);
+        // console.log('s.store.getUsedCapacity(task.resourceType: ', s.store.getUsedCapacity(task.resourceType));
         return (s.store.getUsedCapacity(task.resourceType) ?? 0) >= task.targetCapacity;
       })
       // && this.#isWorkerCleaned(task)

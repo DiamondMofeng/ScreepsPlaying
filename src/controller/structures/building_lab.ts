@@ -22,7 +22,7 @@ const LAB_TYPE_RAW = 'raw'              // 提供反应原料 / 存放分解产�
  * 
  * @param {Room} room 
  */
-function defineTypeOfLabs(room, typeBoostNumber = 1) {
+function defineTypeOfLabs(room: Room, typeBoostNumber = 1) {
 
   const typeRawNumber = 2
 
@@ -80,11 +80,13 @@ function defineTypeOfLabs(room, typeBoostNumber = 1) {
       room.storage ? room.storage :
         undefined
 
-  if (auxToLocate != undefined) {
-    labs.sort((a, b) => a.pos.getRangeTo(auxToLocate) - b.pos.getRangeTo(auxToLocate))
-    for (let i = 0; i < typeBoostNumber; i++) {
-      labs[i].Rmemory[RM_TYPE] = LAB_TYPE_BOOST
-    }
+  if (!auxToLocate) {
+    return
+  }
+
+  labs.sort((a, b) => a.pos.getRangeTo(auxToLocate!) - b.pos.getRangeTo(auxToLocate!))  //TODO ???
+  for (let i = 0; i < typeBoostNumber; i++) {
+    labs[i].Rmemory[RM_TYPE] = LAB_TYPE_BOOST
   }
 
   //* 确定reaction类型：
@@ -103,15 +105,22 @@ function defineTypeOfLabs(room, typeBoostNumber = 1) {
  * 
  * @param {StructureLab} lab 
  */
-const Lab = (lab) => {
+const Lab = (lab: StructureLab) => {
 
   if (!lab.Rmemory[RM_TYPE]) {
     defineTypeOfLabs(lab.room)
   }
 
+  let rawLabs = lab.room.labs.filter(lab => lab.type === 'raw')
+
+  const DO_REACTION = true
+
+  if (DO_REACTION) {
+    lab.runReaction(rawLabs[0], rawLabs[1])
+  }
 
 
 }
 
 
-module.exports = Lab
+export default Lab      //TODO 改成非默认export 
