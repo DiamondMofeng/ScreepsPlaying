@@ -115,7 +115,7 @@ const Lab = (lab: StructureLab) => {
 
   const DO_REACTION = true
 
-  if (DO_REACTION) {
+  if (DO_REACTION && lab.type === 'reaction') {
     lab.runReaction(rawLabs[0], rawLabs[1])
   }
 
