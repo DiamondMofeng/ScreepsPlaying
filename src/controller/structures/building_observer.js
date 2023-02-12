@@ -11,6 +11,6 @@ const Observer = (observer) => {
 
 }
 
-module.exports = Observer
+export default Observer
 
 //minCut
