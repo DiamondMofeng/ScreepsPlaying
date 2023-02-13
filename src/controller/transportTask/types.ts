@@ -12,6 +12,6 @@ export type RoomTaskPublisher = {
   /** always do if not exists */
   shouldPublish?: (room: Room) => boolean,
   /** 任务发布器 */
-  publisher: (room: Room, num: number) => AnyTransportTask[],
+  publish: (room: Room, num: number) => AnyTransportTask[],
 
 }

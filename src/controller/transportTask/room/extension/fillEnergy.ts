@@ -19,7 +19,7 @@ export const fillExtensionTaskPublisher: RoomTaskPublisher = {
   ...transportTaskConfig['fill_extension'],
   maxDuration: 500,
 
-  publisher(room: Room, num): FillExtensionTransferTask[] {
+  publish(room: Room, num): FillExtensionTransferTask[] {
     if (!room?.controller?.my) {
       return []
     }
