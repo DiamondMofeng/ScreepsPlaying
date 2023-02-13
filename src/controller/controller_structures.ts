@@ -1,7 +1,7 @@
 import { config } from '@/utils/consts'
 
-import Tower from './structures/building_tower'
-import Link from './structures/building_link'
+import Tower from './structures/tower/tower'
+import Link from './structures/link/link'
 import { Factory } from './structures/factory'
 import { PowerSpawn } from './structures/powerSpawn'
 import { Spawn } from './structures/spawn'
