@@ -50,21 +50,19 @@ export const mountStructurePrototypes = () => {
      */
     Rmemory: {
       get(): any {
-        if (_.isUndefined(this.room.memory[this.structureType])) {
-          this.room.memory[this.structureType] = {}
+        this.room.memory[this.structureType] ??= {}
+
+        //TODO 初始化成带id的没有规范
+        this.room.memory[this.structureType][this.id] ??= {
+          '_id': this.id,
         }
 
-        if (_.isUndefined(this.room.memory[this.structureType][this.id])) {
-          //TODO 初始化成带id的没有规范
-          this.room.memory[this.structureType][this.id] = {
-            '_id': this.id,
-          }
-        }
         return this.room.memory[this.structureType][this.id]
       },
       set(value) {
-        (this.room.memory[this.structureType] ?? (this.room.memory[this.structureType] = {}))[this.id] = value
+        (this.room.memory[this.structureType] ??= {})[this.id] = { '_id': this.id, ...value }
       },
+
       configurable: true,
       enumerable: false
     },
