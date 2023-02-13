@@ -1,10 +1,5 @@
-/**
- * 
- * @param {StructurePowerSpawn} ps 
- */
-const PowerSpawn = (ps) => {
+export const PowerSpawn = (ps: StructurePowerSpawn) => {
 
   ps.processPower();
 
 }
-export default PowerSpawn

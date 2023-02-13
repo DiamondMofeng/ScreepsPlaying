@@ -1,22 +1,24 @@
-// @ts-nocheck
 import { config } from '@/utils/consts'
 
 import Tower from './structures/building_tower'
 import Link from './structures/building_link'
-import Factory from './structures/building_factory'
-import PowerSpawn from './structures/building_powerSpawn'
-import Spawn from './structures/building_spawn'
-import Lab from './structures/building_lab'
-import Observer from './structures/building_observer'
-
+import { Factory } from './structures/factory'
+import { PowerSpawn } from './structures/powerSpawn'
+import { Spawn } from './structures/spawn'
+import Lab from './structures/lab/lab'
+import { Observer } from './structures/observer'
 
 const SHOW_CPU_BUILDINGS = config.SHOW_CPU_BUILDINGS
+
+type AnyPlayerOwnedStructure = Exclude<AnyOwnedStructure, StructureKeeperLair | StructureInvaderCore | StructurePowerBank>
+
+// const ControlledStrctureTypes = [STRUCTURE_TOWER, STRUCTURE_LINK, STRUCTURE_FACTORY, STRUCTURE_SPAWN, STRUCTURE_POWER_SPAWN, STRUCTURE_LAB, STRUCTURE_OBSERVER] as const
 
 function controller_structures() {
 
   let CPUcounts = []
 
-  for (const s of Object.values(Game.structures)) {
+  for (const s of Object.values(Game.structures) as AnyPlayerOwnedStructure[]) {  // it should be AnyOwnedStructure
 
     try {
 
@@ -55,27 +57,8 @@ function controller_structures() {
         // console.log(`CPU of ${s.structureType} at ${s.room.name} : ${endCPU - startCPU}`)
       }
 
-
-      // if (s.structureType == STRUCTURE_TOWER) {
-      //   Tower(s)
-      // }
-      // if (s.structureType == STRUCTURE_LINK) {
-      //   Link(s)
-      // }
-      // // if (s.structureType == STRUCTURE_TERMINAL) {
-      // //   Terminnal(s)
-      // // }
-      // if (s.structureType == STRUCTURE_FACTORY) {
-      //   Factory(s)
-      // }
-      // // if (s.structureType == STRUCTURE_TOWER) {
-      // //   Tower(s)
-      // // }
-      // if (s.structureType == STRUCTURE_POWER_SPAWN) {
-      //   PowerSpawn(s)
-      // }
     }
-    catch (e) {
+    catch (e: any) {
       console.log('!!!!!!!!!!!!ERROR FOUND IN ' + s + ' CONTROLL!!!!!!!!!' + e)
       console.log(e.stack)
 

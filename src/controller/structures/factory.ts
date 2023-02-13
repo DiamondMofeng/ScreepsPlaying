@@ -1,9 +1,4 @@
-
-/**
- * 
- * @param {StructureFactory} factory 
- */
-const buildingRoleFactory = (factory) => {
+export const Factory = (factory: StructureFactory) => {
 
   //TODO 准备写成任务驱动的
 
@@ -13,6 +8,3 @@ const buildingRoleFactory = (factory) => {
   }
 
 }
-export default buildingRoleFactory
-
-//minCut

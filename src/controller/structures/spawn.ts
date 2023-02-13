@@ -1,8 +1,4 @@
-/**
- * 
- * @param {StructureSpawn} spawn 
- */
-const Spawn = (spawn) => {
+export const Spawn = (spawn: StructureSpawn) => {
 
   if (spawn.spawning) {
     return;
@@ -11,6 +7,3 @@ const Spawn = (spawn) => {
   spawn.spawnFromQueue()
 
 }
-module.exports = Spawn
-
-//StructureSpawn spawnQueue
