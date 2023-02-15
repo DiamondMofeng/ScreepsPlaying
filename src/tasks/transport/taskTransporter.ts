@@ -250,7 +250,7 @@ function doWithdrawTask(creep: Creep, task: WithdrawTask) {
   }
 }
 
-function doPickupTask(creep: Creep, task: PickupTask) {
+function doPickupTask(_creep: Creep, _task: PickupTask) {
   //TODO
 }
 

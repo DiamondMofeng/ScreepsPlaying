@@ -41,5 +41,7 @@ module.exports = {
 
         "@typescript-eslint/no-namespace": ["error", { "allowDeclarations": true }],
 
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+
     }
 }
