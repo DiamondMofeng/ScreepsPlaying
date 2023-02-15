@@ -29,18 +29,6 @@ const main_temp_commands = () => {
     // guardRoom('W11N16')
   });
 
-  errorIsolater(() => {
-    for (const roomName in Game.rooms) {
-      const room = Game.rooms[roomName]
-      const center = room.transportTaskCenter
-      center.publishTask()
-      //TODO 放到tick结束时执行
-      center.removeAllDoneTasks()
-      center.pauseAllDeadCreepsTasks()
-
-    }
-  })
-
   //support energy
   errorIsolater(() => {
     // let fromRoomList = ['W12N16', 'W11N8', 'W9N7', 'W17N15', 'W11N4']

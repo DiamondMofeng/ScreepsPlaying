@@ -1,7 +1,8 @@
-import { isDefined, isStructureTypeAmong, looseConcat } from "@/utils/typer";
-import type { WithdrawTask } from "..";
-
-const TASK_NUM = 2
+import { randomId } from "@/utils/random";
+import { isDefined, looseConcat } from "@/utils/typer";
+import type { WithdrawTask } from "../../../../tasks/transport";
+import { transportTaskConfig } from "../../config";
+import type { RoomTaskPublisher } from "../../types";
 
 /** 存的能量超过这个值就应该发布任务被取走了 */
 const MAX_ENERGY_HARVESTER_CONTAINER = 1000
@@ -21,19 +22,20 @@ interface DumpContainerTask extends WithdrawTask {
   // resourceType: RESOURCE_ENERGY
 }
 
+export const dumpContainerTaskPublisher: RoomTaskPublisher = {
+  name: 'dump_container',
+  maxDuration: 500,
+  ...transportTaskConfig['dump_container'],
+  getGenerator: DumpContainerTaskPublisher
+}
 
+function DumpContainerTaskPublisher(room: Room): null | (() => DumpContainerTask) {
 
-export function DumpContainerTaskPublisher(roomName: string): DumpContainerTask[] {
-
-  let room = Game.rooms[roomName]
   if (!room?.controller?.my) {
-    return []
+    return null
   }
 
-  //TODO use cache
-  const fromIds = Game.rooms[roomName]
-    .find(FIND_STRUCTURES)
-    .filter(isStructureTypeAmong([STRUCTURE_CONTAINER]))
+  const fromIds = room.containers
     .filter(s => s.type === 'source')
     .filter(
       s => s.store['energy'] > MAX_ENERGY_HARVESTER_CONTAINER
@@ -42,7 +44,7 @@ export function DumpContainerTaskPublisher(roomName: string): DumpContainerTask[
     .map(s => s.id)
 
   if (fromIds.length === 0) {
-    return []
+    return null
   }
 
   const toIds = looseConcat(
@@ -57,7 +59,7 @@ export function DumpContainerTaskPublisher(roomName: string): DumpContainerTask[
   function generateTask(): DumpContainerTask {
     return {
       name: 'dump_container',
-      id: `dump_container_${roomName}_${Math.floor(Math.random() * 1000)}`,  //TODO use uuid
+      id: randomId(`dump_container_${room.name}`),  //TODO use uuid
       weight: 100,
       startTick: Game.time,
       expirationTick: Game.time + 1000,
@@ -69,6 +71,6 @@ export function DumpContainerTaskPublisher(roomName: string): DumpContainerTask[
     }
   }
 
-  return new Array(TASK_NUM).fill(0).map(generateTask)
+  return generateTask
 
 }

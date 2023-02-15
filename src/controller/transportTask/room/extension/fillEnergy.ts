@@ -16,8 +16,8 @@ interface FillExtensionTransferTask extends TransferTask {
 
 export const fillExtensionTaskPublisher: RoomTaskPublisher = {
   name: 'fill_extension',
-  ...transportTaskConfig['fill_extension'],
   maxDuration: 500,
+  ...transportTaskConfig['fill_extension'],
 
   getGenerator(room: Room): null | (() => FillExtensionTransferTask) {
     if (!room?.controller?.my) {

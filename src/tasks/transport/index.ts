@@ -1,21 +1,9 @@
-import _ from "lodash";
-import { PartialRecord } from "@/utils/util-types";
-import { useRoomCache } from "@/utils/hooks/useRoomCache";
 import { isDefined } from "@/utils/typer";
 import { bubbleDownDequeue, bubbleUpEnqueue } from "@/utils/util_priorityQueue";
 
 import type { TaskTransporterMemory } from "./taskTransporter";
 import type { TransportTaskName, TransportTaskType } from "./types";
 
-import {
-  DumpContainerTaskPublisher,
-  ExtensionTaskPublisher,
-  FillFactoryTransferTaskPublisher,
-  FillTowerTaskPublisher,
-  LabEnergyTaskPublisher,
-  FillLabTaskPublisher,
-} from "./publisher";
-import { HarvestLabTaskPublisher } from "./publisher/lab/reaction";
 
 //TODO 处理任务卡死完不成的情况
 
@@ -90,68 +78,65 @@ export class TransportTaskCenter {
     this.roomName = roomName;
   }
 
-  //* 发布任务
-  //应当在tick start阶段运行
-  //TODO 分离到别的地方，这里太杂了
-  publishTask(
-    // publishers: (roomName: string) => AnyTransportTask[]
-  ): void {
+  // //* 发布任务
+  // //应当在tick start阶段运行
+  // publishTask(
+  //   // publishers: (roomName: string) => AnyTransportTask[]
+  // ): void {
 
-    const TASK_LIMITS: PartialRecord<TransportTaskName, number> = {
-      'fill_extension': 2,
-      'fill_tower': 1,
-      'fill_lab': 1,
-      'fill_lab_energy': 1,
+  //   const TASK_LIMITS: PartialRecord<TransportTaskName, number> = {
+  //     'fill_extension': 2,
+  //     'fill_tower': 1,
+  //     'fill_lab': 1,
+  //     'fill_lab_energy': 1,
 
-      'dump_container': 2,
+  //     'dump_container': 2,
 
-      'harvest_lab': 1,
-      'fill_factory': 1,
-      'clear': 1,
-      'misc': 1,
+  //     'harvest_lab': 1,
+  //     'fill_factory': 1,
+  //     'clear': 1,
+  //     'misc': 1,
 
-    }
+  //   }
 
-    const intervaledPublishers: Array<[number, (roomName: string) => AnyTransportTask[]]> = [
-      [10, ExtensionTaskPublisher],
-      [50, FillFactoryTransferTaskPublisher],
-      [20, FillTowerTaskPublisher],
-      [20, DumpContainerTaskPublisher],
-      [20, LabEnergyTaskPublisher],
-      [20, FillLabTaskPublisher],
-      [20, HarvestLabTaskPublisher]
-    ]
+  //   const intervaledPublishers: Array<[number, (roomName: string) => AnyTransportTask[]]> = [
+  //     [50, FillFactoryTransferTaskPublisher],
+  //     [20, FillTowerTaskPublisher],
+  //     [20, LabEnergyTaskPublisher],
+  //     [20, FillLabTaskPublisher],
+  //     [20, HarvestLabTaskPublisher]
+  //   ]
 
-    const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {
-      if (Game.time % interval === 0) {
-        tasks.push(...publisher(this.roomName));
-      }
-      return tasks;
-    }, [] as AnyTransportTask[])
+  //   const tasksToPublish = intervaledPublishers.reduce((tasks, [interval, publisher]) => {
+  //     if (Game.time % interval === 0) {
+  //       tasks.push(...publisher(this.roomName));
+  //     }
+  //     return tasks;
+  //   }, [] as AnyTransportTask[])
 
-    console.log('tasksToPublish: ', tasksToPublish);  //TODO debug
+  //   console.log('tasksToPublish: ', tasksToPublish);  //TODO debug
 
-    //TODO 分到外面去
-    const roomTaskCounter = useRoomCache(
-      this.roomName,
-      'transportTasksCounter',
-      () => _(this.taskQueue.concat(Object.values(this.acceptedTasks)))
-        .countBy(task => task.name)
-        .value()
-    )
+  //   //TODO 分到外面去
+  //   const roomTaskCounter = useRoomCache(
+  //     this.roomName,
+  //     'transportTasksCounter',
+  //     () => _(this.taskQueue.concat(Object.values(this.acceptedTasks)))
+  //       .countBy(task => task.name)
+  //       .value()
+  //   )
 
-    tasksToPublish.forEach(task => {
+  //   tasksToPublish.forEach(task => {
 
-      const currentTaskCount = roomTaskCounter[task.name] ?? 0;
-      const taskLimit = TASK_LIMITS[task.name] ?? 1;
-      if (currentTaskCount < taskLimit) {
-        this.addTask(task);
-        roomTaskCounter[task.name] = currentTaskCount + 1;
-      }
+  //     const currentTaskCount = roomTaskCounter[task.name] ?? 0;
+  //     const taskLimit = TASK_LIMITS[task.name] ?? 1;
+  //     if (currentTaskCount < taskLimit) {
+  //       this.addTask(task);
+  //       roomTaskCounter[task.name] = currentTaskCount + 1;
+  //     }
 
-    })
+  //   })
 
-  }
+  // }
 
 
 
