@@ -1,3 +1,4 @@
+import { useContinuousJudge } from "@/utils/hooks/useContinuousJudge";
 import { isDefined, resourceTypesIn } from "@/utils/typer";
 import { moveAndTransfer, moveAndWithdraw } from "@/utils/util_beheavor";
 import { AnyTransportTask, PickupTask, TransferTask, transportTaskCompareFn, WithdrawTask } from ".";
@@ -51,8 +52,25 @@ export function TaskTransporter(creep: Creep) {
   }
   // console.log('doTransportTask')
 
-  doTransportTask(creep, task);
+  let res = doTransportTask(creep, task);
+
+  const MAX_STUCK_TICKS = 5;
+  const WEIGHT_COST_AFTER_PAUSE = 10;
+
+  // 连续检测到无法进行
+  if (CM.taskID && useContinuousJudge(
+    `${creep.name}_transportTask`,
+    MAX_STUCK_TICKS,
+    () => res === ERR_NOT_IN_RANGE,
+    true
+  )
+  ) {
+    center.pauseAcceptedTaskById(CM.taskID, WEIGHT_COST_AFTER_PAUSE);
+  }
+
+  return res;
 }
+
 
 /**
  * 从多个来源中取出资源
@@ -142,7 +160,7 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
   });
   // console.log('target: ', target);
   if (!target) {
-    // console.log('transferTo ERR_NOT_FOUND: ', ERR_NOT_FOUND);
+    console.log('transferTo ERR_NOT_FOUND: ', ERR_NOT_FOUND);
     return ERR_NOT_FOUND;
   }
 
@@ -210,22 +228,17 @@ function doTransportTask(creep: Creep, task: AnyTransportTask) {
   if (task.resourceType &&
     creep.store.getUsedCapacity() > creep.store.getUsedCapacity(task.resourceType)
   ) {
-    cleanStoreForTask(creep, task);
-    // console.log(2)
 
-    return;
+    return cleanStoreForTask(creep, task);
   }
-  // console.log(1)
+
   switch (task.type) {
     case "transfer":
-      doTransferTask(creep, task);
-      break;
+      return doTransferTask(creep, task);
     case "withdraw":
-      doWithdrawTask(creep, task);
-      break;
+      return doWithdrawTask(creep, task);
     case "pickup":
-      doPickupTask(creep, task);
-      break;
+      return doPickupTask(creep, task);
     default:
       throw new Error('未知的任务类型')
   }
@@ -237,9 +250,9 @@ function doTransferTask(creep: Creep, task: TransferTask) {
   const { from, to, resourceType, targetCapacity } = task;
 
   if (creep.store.getUsedCapacity(resourceType) === 0) {
-    withdrawFrom(creep, from, resourceType, undefined);
+    return withdrawFrom(creep, from, resourceType, undefined);
   } else {
-    transferTo(creep, to, resourceType, targetCapacity);
+    return transferTo(creep, to, resourceType, targetCapacity);
   }
 
 }
@@ -255,9 +268,9 @@ function doWithdrawTask(creep: Creep, task: WithdrawTask) {
 
   // 还有空余容量就继续取
   if (creep.store.getFreeCapacity(resourceType) > 0) {
-    withdrawFrom(creep, from, resourceType, targetCapacity);
+    return withdrawFrom(creep, from, resourceType, targetCapacity);
   } else {
-    transferTo(creep, to, resourceType, undefined);
+    return transferTo(creep, to, resourceType, undefined);
   }
 }
 

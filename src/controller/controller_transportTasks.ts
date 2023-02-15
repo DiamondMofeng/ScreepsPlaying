@@ -40,9 +40,9 @@ export function manageTasks(room: Room) {
 
   for (const publisher of Object.values(roomTasks)) {
 
-    // if (Game.time % publisher.interval !== 0) {
-    //   continue;
-    // }
+    if (Game.time % publisher.interval !== 0) {
+      continue;
+    }
 
     const currentTaskCount = roomTaskCounter[publisher.name] ?? 0;
     const taskLimit = publisher.limit ?? 1;

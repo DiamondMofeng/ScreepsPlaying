@@ -195,7 +195,7 @@ export class TransportTaskCenter {
 
   removeAllDoneTasks(): void {
     Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
-      console.log('this.isTaskDone(task): ', task.name, this.isTaskDone(task));   //TODO use debug or info logger 
+      console.log('this.isTaskDone(task): ', task.id, this.isTaskDone(task));   //TODO use debug or info logger 
       if (this.isTaskDone(task)) {
         this.removeAcceptedTaskById(taskId);
       }
@@ -230,11 +230,13 @@ export class TransportTaskCenter {
 
   /**
    * pause意为将任务从 `已接受状态` 转为 `未接受状态`
+   * @param weightCost 减少被暂停任务的权重
    */
-  pauseAcceptedTaskById(id: TransportTask['id']) {
+  pauseAcceptedTaskById(id: TransportTask['id'], weightCost = 0) {
     const task = this.getAcceptedTaskById(id);
     if (isDefined(task)) {
       task.workerCreep = undefined;
+      task.weight -= weightCost;
       this.addTask(task);
     }
     this.removeAcceptedTaskById(id);

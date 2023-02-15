@@ -378,7 +378,7 @@ function moveAndHarvest(creep, target) {
  * @param {ResourceConstant | ResourceConstant[]} resourceTypes - 未指定时转移所有资源
  * @param {number|undefined} amount - default is all
  * @param {MoveToOpts} moveOpt - moveTo的参数
- * 
+ * @returns {ScreepsReturnCode} 
  */
 function moveAndTransfer(creep, container, resourceTypes = [], amount = undefined, moveOpt = {}) {
   if (!Array.isArray(resourceTypes)) {
@@ -413,6 +413,8 @@ function moveAndTransfer(creep, container, resourceTypes = [], amount = undefine
       }
     }
   }
+
+  return transferResult
 }
 
 
