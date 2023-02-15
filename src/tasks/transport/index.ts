@@ -146,6 +146,7 @@ export class TransportTaskCenter {
 
   addTask(task: TransportTask): void {
     bubbleUpEnqueue(this.taskQueue, task, transportTaskCompareFn);
+    console.log(`[TransportTaskCenter] ${this.roomName} addTask: ${task.id}`) //TODO use low level info logger
   }
 
   /** 

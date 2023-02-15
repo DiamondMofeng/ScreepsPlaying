@@ -25,7 +25,9 @@ roleCounts包括spawning,living,spawnQueue中的数量。
 
 const config = {
   wallRepairer: false,
-  upgrader: true
+  upgrader: true,
+
+  test_taskTransporter: true,
 }
 
 /**
@@ -137,7 +139,12 @@ const keepCreeps = (
 
       spawnByMinNumber(targetRoom, 'upgrader', evalBody_worker_halfEnergy(targetRoom, { haveRoad: false }), 5)
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
+
+      // if (config.test_taskTransporter) {
+      //   spawnByMinNumber(targetRoom, 'task_transporter', evalBody_carrier_halfEnergy(targetRoom), 2)
+      // } else {
       spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 2)
+      // }
 
       if (room.cts && room.cts.length > 0) {
         spawnByMinNumber(targetRoom, 'builder', evalBody_worker_halfEnergy(targetRoom, { haveRoad: false }), 1)
@@ -241,7 +248,7 @@ const keepCreeps = (
     case 8:
       // console.log("run here")
       spawnByMinNumber(targetRoom, 'harvesterPlus', evalBody_harvester(targetRoom), 2)
-      // spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
+      spawnByMinNumber(targetRoom, 'carrier', evalBody_carrier_halfEnergy(targetRoom), 1)
       spawnByMinNumber(targetRoom, 'task_transporter', evalBody_carrier_halfEnergy(targetRoom), 1)
 
       spawnByMinNumber(targetRoom, 'base_transferor', evalBody_carrier_halfEnergy(targetRoom), 1)

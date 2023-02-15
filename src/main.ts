@@ -1,5 +1,6 @@
 import controller_creeps from "./controller/controller_creeps"
 import controller_structures from "./controller/controller_structures"
+import { controller_transportTasks } from "./controller/controller_transportTasks"
 
 import broadcaster from '@/utils/util_broadcast'
 
@@ -42,6 +43,7 @@ module.exports.loop = errorMapper(function () {//
 
   }
 
+  getCPUCost(controller_transportTasks)
 
   getCPUCost(controller_creeps)
 

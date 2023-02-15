@@ -2,7 +2,17 @@ import _ from 'lodash'
 import { useRoomCache } from '@/utils/hooks/useRoomCache'
 import * as roomTasks from './transportTask/room'
 
-export function publishRoomTasks(room: Room) {
+export function controller_transportTasks() {
+  for (const room of Object.values(Game.rooms)) {
+    if (!room?.controller?.my) {
+      continue
+    }
+    manageTasks(room)
+  }
+}
+
+
+export function manageTasks(room: Room) {
 
   const center = room.transportTaskCenter
 
@@ -10,9 +20,10 @@ export function publishRoomTasks(room: Room) {
   center.pauseAllDeadCreepsTasks()
   center.removeAllDoneTasks()
 
-  center.taskQueue = center.taskQueue.filter(task => task.expirationTick > Game.time)
+  //TODO 抽为一个方法
+  // center.taskQueue = center.taskQueue.filter(task => task.expirationTick > Game.time)
   for (const [id, task] of Object.entries(center.acceptedTasks)) {
-    if (task.expirationTick > Game.time) {
+    if (Game.time >= task.expirationTick) {
       center.removeAcceptedTaskById(id);
     }
   }
@@ -28,6 +39,10 @@ export function publishRoomTasks(room: Room) {
   )
 
   for (const publisher of Object.values(roomTasks)) {
+
+    // if (Game.time % publisher.interval !== 0) {
+    //   continue;
+    // }
 
     const currentTaskCount = roomTaskCounter[publisher.name] ?? 0;
     const taskLimit = publisher.limit ?? 1;

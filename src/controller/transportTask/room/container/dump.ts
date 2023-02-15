@@ -26,10 +26,10 @@ export const dumpContainerTaskPublisher: RoomTaskPublisher = {
   name: 'dump_container',
   maxDuration: 500,
   ...transportTaskConfig['dump_container'],
-  getGenerator: DumpContainerTaskPublisher
+  getGenerator: genDumpContainerTask
 }
 
-function DumpContainerTaskPublisher(room: Room): null | (() => DumpContainerTask) {
+function genDumpContainerTask(room: Room): null | (() => DumpContainerTask) {
 
   if (!room?.controller?.my) {
     return null
@@ -59,10 +59,10 @@ function DumpContainerTaskPublisher(room: Room): null | (() => DumpContainerTask
   function generateTask(): DumpContainerTask {
     return {
       name: 'dump_container',
-      id: randomId(`dump_container_${room.name}`),  //TODO use uuid
-      weight: 100,
+      id: randomId(`dump_container_${room.name}`),
+      weight: dumpContainerTaskPublisher.weight,
       startTick: Game.time,
-      expirationTick: Game.time + 1000,
+      expirationTick: Game.time + dumpContainerTaskPublisher.maxDuration,
       type: 'withdraw',
       from: fromIds,
       to: toIds,
