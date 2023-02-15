@@ -1,4 +1,4 @@
-export const PowerSpawn = (ps: StructurePowerSpawn) => {
+export const runPowerSpawn = (ps: StructurePowerSpawn) => {
 
   ps.processPower();
 

@@ -6,7 +6,7 @@ const MIN_ENERGY = 300
  * type和Rmemory属性见此  
  * {@link "../../../mount/common/customStructurePrototypes.ts"}
  */
-export const Link = (link: StructureLink) => {
+export const runLink = (link: StructureLink) => {
 
   //* 若未定义type，进行定义
   if (_.isUndefined(link.type)) {

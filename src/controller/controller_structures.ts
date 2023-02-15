@@ -1,12 +1,13 @@
 import { config } from '@/utils/consts'
 
-import { Tower } from './structures/tower/tower'
-import { Link } from './structures/link/link'
-import { Factory } from './structures/factory'
-import { PowerSpawn } from './structures/powerSpawn'
-import { Spawn } from './structures/spawn'
-import Lab from './structures/lab/lab'
-import { Observer } from './structures/observer'
+import { runTower } from './structures/tower/tower'
+import { runLink } from './structures/link/link'
+import { runFactory } from './structures/factory'
+import { runPowerSpawn } from './structures/powerSpawn'
+import { runSpawn } from './structures/spawn'
+import { runLab } from './structures/lab/lab'
+import { runObserver } from './structures/observer'
+// import { runTerminal } from './structures/terminal'
 
 const SHOW_CPU_BUILDINGS = config.SHOW_CPU_BUILDINGS
 
@@ -26,25 +27,25 @@ function controller_structures() {
 
       switch (s.structureType) {
         case STRUCTURE_TOWER:
-          Tower(s)
+          runTower(s)
           break
         case STRUCTURE_LINK:
-          Link(s)
+          runLink(s)
           break
         case STRUCTURE_FACTORY:
-          Factory(s)
+          runFactory(s)
           break
         case STRUCTURE_SPAWN:
-          Spawn(s)
+          runSpawn(s)
           break
         case STRUCTURE_POWER_SPAWN:
-          PowerSpawn(s)
+          runPowerSpawn(s)
           break
         case STRUCTURE_LAB:
-          Lab(s)
+          runLab(s)
           break
         case STRUCTURE_OBSERVER:
-          Observer(s)
+          runObserver(s)
           break
         default:
           continue

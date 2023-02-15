@@ -41,7 +41,7 @@ function defineTypeOfLabs(room: Room, typeBoostNumber = 1) {
   let REACTION_RANGE = 2;
 
   let count_raw = 0;
-  let count_boost = 0;
+  // let count_boost = 0;
   for (let lab1 of labs) {
 
     // 终止条件
@@ -105,7 +105,7 @@ function defineTypeOfLabs(room: Room, typeBoostNumber = 1) {
  * 
  * @param {StructureLab} lab 
  */
-const Lab = (lab: StructureLab) => {
+export const runLab = (lab: StructureLab) => {
 
   if (!lab.Rmemory[RM_TYPE]) {
     defineTypeOfLabs(lab.room)
@@ -121,6 +121,3 @@ const Lab = (lab: StructureLab) => {
 
 
 }
-
-
-export default Lab      //TODO 改成非默认export 

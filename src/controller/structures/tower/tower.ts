@@ -1,7 +1,7 @@
 import { TIME_INTERVAL } from '@/utils/consts'
 import { useRoomCache } from '@/utils/hooks/useRoomCache'
 
-export const Tower = (tower: StructureTower) => {
+export const runTower = (tower: StructureTower) => {
 
   const TOWER_REPIRE_TARGETS = 'towerRepaireTargets'
   const TOWER_ATTACK_TARGETS = 'towerAttackTargets'

@@ -1,4 +1,4 @@
-export const Terminal = (terminal: StructureTerminal) => {
+export const runTerminal = (terminal: StructureTerminal) => {
 
   let store = terminal.store;
   if (store[RESOURCE_ENERGY] > 50 * 1000) {

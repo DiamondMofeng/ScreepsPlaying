@@ -1,4 +1,4 @@
-export const Spawn = (spawn: StructureSpawn) => {
+export const runSpawn = (spawn: StructureSpawn) => {
 
   if (spawn.spawning) {
     return;

@@ -1,4 +1,4 @@
-export const Factory = (factory: StructureFactory) => {
+export const runFactory = (factory: StructureFactory) => {
 
   //TODO 准备写成任务驱动的
 
