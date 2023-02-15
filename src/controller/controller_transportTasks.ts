@@ -33,7 +33,15 @@ export function publishRoomTasks(room: Room) {
     const taskLimit = publisher.limit ?? 1;
 
     if (currentTaskCount < taskLimit && publisher.shouldPublish?.(room) !== false) {
-      const tasks = publisher.publish(room, taskLimit - currentTaskCount);
+      const len = taskLimit - currentTaskCount;
+
+      const taskGenerator = publisher.getGenerator(room);
+      if (!taskGenerator) {
+        continue;
+      }
+
+      const tasks = new Array(len).fill(0).map(taskGenerator);
+
       tasks.forEach(task => center.addTask(task));
       roomTaskCounter[publisher.name] = currentTaskCount + tasks.length;
     }

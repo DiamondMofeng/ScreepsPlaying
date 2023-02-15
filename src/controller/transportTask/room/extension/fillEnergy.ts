@@ -19,40 +19,35 @@ export const fillExtensionTaskPublisher: RoomTaskPublisher = {
   ...transportTaskConfig['fill_extension'],
   maxDuration: 500,
 
-  publish(room: Room, num): FillExtensionTransferTask[] {
+  getGenerator(room: Room): null | (() => FillExtensionTransferTask) {
     if (!room?.controller?.my) {
-      return []
+      return null
     }
 
-    //TODO use cache
     const toIds = [...room.extensions, ...room.spawns]
       .filter(s => s.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
       .map(s => s.id)
 
     if (toIds.length === 0) {
-      return []
+      return null
     }
 
     const fromIds = [room.storage, room.terminal]
       .filter(isDefined)
       .map(s => s.id)
 
-    const genTask = () => {
-      return {
-        name: 'fill_extension',
-        id: randomId('fill_extension' + room.name),
-        weight: this.weight,
-        startTick: Game.time,
-        expirationTick: Game.time + this.maxDuration,
-        type: 'transfer',
-        from: fromIds,
-        to: toIds,
-        resourceType: RESOURCE_ENERGY,
-      } satisfies FillExtensionTransferTask;
-    }
+    return () => ({
+      name: 'fill_extension',
+      id: randomId('fill_extension' + room.name),
+      weight: this.weight,
+      startTick: Game.time,
+      expirationTick: Game.time + this.maxDuration,
+      type: 'transfer',
+      from: fromIds,
+      to: toIds,
+      resourceType: RESOURCE_ENERGY,
+    })
 
-    return new Array(num).fill(0).map(genTask);
 
   }
-
 }
