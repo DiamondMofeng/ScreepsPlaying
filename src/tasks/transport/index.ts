@@ -202,11 +202,23 @@ export class TransportTaskCenter {
     });
   }
 
-  //TODO 方法的名字一般，换个名字
-  pauseAllDeadCreepsTasks(): void {
+  // 被下面的代替了
+  // 方法的名字一般，换个名字
+  // pauseAllDeadCreepsTasks(): void {
+  //   Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
+
+  //     if (!task.workerCreep || !Game.creeps[task.workerCreep]) {
+  //       this.pauseAcceptedTaskById(taskId);
+  //     }
+
+  //   });
+  // }
+
+  pauseAllWorkerMisBoundTasks(): void {
     Object.entries(this.acceptedTasks).forEach(([taskId, task]) => {
 
-      if (!task.workerCreep || !Game.creeps[task.workerCreep]) {
+      let workerName = task.workerCreep;
+      if (!workerName || !Game.creeps[workerName] || (Game.creeps[workerName]?.memory as TaskTransporterMemory).taskID !== taskId) {
         this.pauseAcceptedTaskById(taskId);
       }
 

@@ -17,8 +17,8 @@ export function manageTasks(room: Room) {
   const center = room.transportTaskCenter
 
   // 清理任务
-  center.pauseAllDeadCreepsTasks()
   center.removeAllDoneTasks()
+  center.pauseAllWorkerMisBoundTasks()
 
   //TODO 抽为一个方法
   // center.taskQueue = center.taskQueue.filter(task => task.expirationTick > Game.time)
