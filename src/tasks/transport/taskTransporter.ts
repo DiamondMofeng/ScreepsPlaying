@@ -66,7 +66,7 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
     .map(id => Game.getObjectById(id))
     .filter(isDefined);
 
-  let target = creep.pos.findClosestByPath(fromStructures, {  //TODO 不要用findClosestByPath，找不到路会卡住
+  let target = creep.pos.findClosestByRange(fromStructures, {
 
     filter: (s) => {
 
@@ -92,6 +92,9 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
     return ERR_NOT_FOUND;
   }
 
+  // 没有指定资源类型时，随便选一个
+  resourceType = resourceType ?? resourceTypesIn(target.store)[0];
+
   let amount = Math.min(
     creep.store.getFreeCapacity(),
     // (target.store.getUsedCapacity(resourceType) ?? 0) - (targetCapacity ?? 0)
@@ -101,7 +104,11 @@ function withdrawFrom(creep: Creep, fromIds: Id<AnyStoreStructure>[], resourceTy
   //   resourceType ?? resourceTypesIn(target.store)[0],
   //   amount
   // ))
-  return moveAndWithdraw(creep, target, resourceType ?? resourceTypesIn(target.store)[0], amount);
+  // console.log('creep.store.getFreeCapacity(): ', creep.store.getFreeCapacity());
+  // console.log('target.store.getUsedCapacity(resourceType): ', target.store.getUsedCapacity(resourceType));
+  // console.log('resourceType ?? resourceTypesIn(target.store)[0]: ', resourceType ?? resourceTypesIn(target.store)[0]);
+  // console.log('amount: ', amount);
+  return moveAndWithdraw(creep, target, resourceType, amount);
 }
 
 /**
@@ -116,7 +123,7 @@ function transferTo(creep: Creep, toIds: Id<AnyStoreStructure>[], resourceType?:
     .map(id => Game.getObjectById(id))
     .filter(isDefined);
 
-  let target = creep.pos.findClosestByPath(toStructures, {  //TODO 不要用findClosestByPath，找不到路会卡住
+  let target = creep.pos.findClosestByRange(toStructures, {
 
     filter: (s) => {
 
@@ -242,8 +249,12 @@ function doWithdrawTask(creep: Creep, task: WithdrawTask) {
   //TODO 随便写的，没确认逻辑合理性
   const { from, to, resourceType, targetCapacity } = task;
 
-  //TODO 条件可以改成有空余容量
-  if (creep.store.getUsedCapacity(resourceType) === 0) {
+  // console.log('creep.store.getUsedCapacity(resourceType): ', creep.store.getUsedCapacity(resourceType));
+  // console.log('creep.store.getUsedCapacity(): ', creep.store.getUsedCapacity());
+  // console.log('resourceType: ', resourceType);
+
+  // 还有空余容量就继续取
+  if (creep.store.getFreeCapacity(resourceType) > 0) {
     withdrawFrom(creep, from, resourceType, targetCapacity);
   } else {
     transferTo(creep, to, resourceType, undefined);
