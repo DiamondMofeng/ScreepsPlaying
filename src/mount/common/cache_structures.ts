@@ -125,7 +125,7 @@ function mountPermanentCache() {
         useRoomCache(
           this,
           `${LOOK_MINERALS}`,
-          () => this.find(FIND_MINERALS)[0].id,
+          () => this.find(FIND_MINERALS)[0]?.id,
           Infinity  //永久缓存
         )
       )
@@ -173,7 +173,7 @@ function mountSingleStructureCache() {
             `${type}`,
             () => this.find(FIND_STRUCTURES)      //TODO 好像find过多次了，可以把大find提出来。不过会更加损失时效性
               .filter(isStructureType(type))[0]
-              .id,
+              ?.id,
             INTERVAL_REFRESH_STRUCTURE_CACHE
           )
         )
