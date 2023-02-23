@@ -364,7 +364,11 @@ function moveAndHarvest(creep, target) {
   // console.log('Game.cpu.getUsed(): ', Game.cpu.getUsed());
 
   if (harvestResult == ERR_NOT_IN_RANGE) {
-    creep.moveTo(target, { reusePath: 50, ignoreCreeps: IGNORE_CREEPS })
+    creep.moveTo(target, {
+      reusePath: 50,
+      ignoreCreeps: IGNORE_CREEPS,
+      costCallback: stayInRoomCallBack,
+    })
     return
   }
 
