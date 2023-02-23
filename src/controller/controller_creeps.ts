@@ -19,7 +19,7 @@ import Guardian from './creeps/role_guardian'
 import RoomClaimer from './creeps/role_roomClaimer'
 
 
-import Miner from './creeps/role_miner'
+import { roleMiner } from './creeps/role_miner'
 
 
 // import { getBodyArray } from '@/utils/util_helper'
@@ -61,7 +61,7 @@ const roleMap: Record<CreepRole, (creep: Creep) => void> = {
   upgrader: Upgrader,
   builder: Builder,
 
-  miner: Miner,
+  miner: roleMiner,
 
   //* expand
   expend_builder: role_expend_builder,
