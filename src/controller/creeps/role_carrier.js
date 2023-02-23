@@ -1,5 +1,5 @@
 import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromTerminal, prioritySelect } from '@/utils/util_beheavor';
-import { stayInRoomCallBack } from '@/utils/util_costCallBacks';
+import { stayInRoomCallBack } from '@/utils/costMatrix';
 import C from '@/utils/consts';
 
 const { IGNORE_CREEPS } = C;

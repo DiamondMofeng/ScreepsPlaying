@@ -1,16 +1,10 @@
-/**
- * 
- * @param {Number} x1 
- * @param {Number} y1 
- * @param {Number} x2 
- * @param {Number} y2 
- * @returns 
- */
-const getRectangleArea = (x1, y1, x2, y2) => {
+type Coord2D = [number, number]
+
+export const getRectangleArea = (x1: number, y1: number, x2: number, y2: number): Coord2D[] => {
   if (x1 > x2) return getRectangleArea(x2, y1, x1, y2);
   if (y1 > y2) return getRectangleArea(x1, y2, x2, y1);
 
-  let res = []
+  let res: Coord2D[] = []
   while (x1 <= x2) {
     while (y1 <= y2) {
       res.push([x1, y1])
@@ -26,9 +20,8 @@ const getRectangleArea = (x1, y1, x2, y2) => {
  * @param {Number} x 
  * @param {Number} y 
  * @param {Number} range 
- * @returns 
  */
-const getCenterSquare = (x, y, range) => {
+const getCenterSquare = (x: number, y: number, range: number): Coord2D[] => {
   let x1 = x - range
   let y1 = y - range
   let x2 = x + range
@@ -36,7 +29,7 @@ const getCenterSquare = (x, y, range) => {
   return getRectangleArea(x1, y1, x2, y2)
 }
 
-const getBorder = (x1, y1, x2, y2) => {
+const getBorder = (x1: number, y1: number, x2: number, y2: number): Coord2D[] => {
   if (x1 > x2) {
     return getBorder(x2, y1, x1, y2)
   }
@@ -44,7 +37,7 @@ const getBorder = (x1, y1, x2, y2) => {
     return getBorder(x1, y2, x2, y1)
   }
 
-  let res = []
+  let res: Coord2D[] = []
   for (let x = x1; x <= x2; x++) {
     res.push([x, y1])
     res.push([x, y2])
@@ -57,7 +50,7 @@ const getBorder = (x1, y1, x2, y2) => {
 }
 
 
-const avoidSourceKeeper = (roomName) => {
+export const avoidSourceKeeper = (roomName: string) => {
 
   let room = Game.rooms[roomName]
 
@@ -76,8 +69,8 @@ const avoidSourceKeeper = (roomName) => {
 
       let { x, y } = enemy.pos
 
-      getCenterSquare(x, y, 3).forEach(pos => {
-        costs.set(pos.x, pos.y, 50)
+      getCenterSquare(x, y, 3).forEach(([xx, yy]) => {
+        costs.set(xx, yy, 50)
       })
 
     }
@@ -98,14 +91,8 @@ const roomBorder = getBorder(0, 0, 49, 49);
 //   return costs
 // })()
 
-const stayInRoomCallBack = (roomName, costMatrix) => {
+export const stayInRoomCallBack = (roomName: string, costMatrix: CostMatrix) => {
   for (let [x, y] of roomBorder) {
     costMatrix.set(x, y, 0xff)
   }
-}
-
-
-module.exports = {
-  avoidSourceKeeper,
-  stayInRoomCallBack
 }

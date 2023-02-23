@@ -1,6 +1,6 @@
 import { setDoing } from "@/utils/util_beheavor"
 import C from "@/utils/consts"
-import { stayInRoomCallBack } from "@/utils/util_costCallBacks"
+import { stayInRoomCallBack } from "@/utils/costMatrix"
 import { isStructureType } from "@/utils/typer"
 import _ from "lodash"
 

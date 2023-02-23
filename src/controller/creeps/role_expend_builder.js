@@ -1,5 +1,5 @@
 import { moveToRoom, tryCollectAnyEnergy, workingStatesKeeper } from "@/utils/util_beheavor";
-import { avoidSourceKeeper } from "@/utils/util_costCallBacks";
+import { avoidSourceKeeper } from "@/utils/costMatrix";
 
 import roleUpgrader from "./role_upgrader";
 

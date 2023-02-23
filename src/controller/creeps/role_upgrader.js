@@ -1,5 +1,5 @@
 import { getEnergyFromContainer, getEnergyFromStorage, getEnergyFromNearbyLink, getEnergyFromTerminal, getEnergyFromHarvest, moveAndWithdraw } from '@/utils/util_beheavor';
-import { stayInRoomCallBack } from '@/utils/util_costCallBacks';
+import { stayInRoomCallBack } from '@/utils/costMatrix';
 
 
 
