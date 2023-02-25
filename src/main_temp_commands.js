@@ -1,6 +1,6 @@
 // import attack_dismental from "./attack_dismental";
 // import claimNewRoom from "./scripts/script_claimNewRoom";
-import developNewRoom from "./scripts/script_developRoom";
+// import developNewRoom from "./scripts/script_developRoom";
 // import supportEnergy from "./script_supportEnergy";
 import { cronRun, errorIsolater } from "@/utils/util_helper";
 import { sellEnergy } from "./mount/cli/cli";
@@ -17,7 +17,7 @@ const main_temp_commands = () => {
     cronRun(2000, () => sellEnergy('W12N16'))
 
     // claimNewRoom('develop_W21N14', 'W17N15_0')
-    developNewRoom('develop_W21N14')
+    // developNewRoom('develop_W21N14')
 
 
     // Object.entries(_.groupBy(Game.creeps, (c) => c.room.name)).forEach(([room, creeps]) => console.log(room, creeps.length));

@@ -35,7 +35,7 @@ module.exports.loop = errorMapper(function () {//
 
   try {
 
-    main_temp_commands()
+    getCPUCost(main_temp_commands)
 
   } catch (e: any) {
     // console.log(e)

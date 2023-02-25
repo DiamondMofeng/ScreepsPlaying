@@ -3,7 +3,7 @@
 import { isStructureType } from "@/utils/typer";
 import _ from "lodash";
 
-const INTERVAL_PLACE_CONSTRUCTION_SITES = 5;
+const INTERVAL_PLACE_CONSTRUCTION_SITES = 10000;
 
 interface PlannedStructure {
   x: number,
