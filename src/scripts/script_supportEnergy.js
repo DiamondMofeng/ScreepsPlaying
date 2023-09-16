@@ -6,7 +6,7 @@ import { randomInt } from "@/utils/util_helper";
  * @param {String[]} fromRoomList - 自己的房间，用于功能
  * @param {String[]} toRoomList - 
  */
-function supportEnergy(fromRoomList, toRoomList, amount = 75 * 1000) {
+export function supportEnergy(fromRoomList, toRoomList, amount = 50000) {
 
   if (fromRoomList.length == 0 || toRoomList.length == 0) {
     console.log('fromRoomList or toRoomList is empty');
@@ -32,5 +32,3 @@ function supportEnergy(fromRoomList, toRoomList, amount = 75 * 1000) {
   }
 
 }
-
-export default supportEnergy
