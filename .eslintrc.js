@@ -18,8 +18,9 @@ module.exports = {
         "@typescript-eslint"
     ],
     rules: {
+        'linebreak-style': ['error', 'windows'],
+
         'no-undef': 'off',  // 对js的未声明全局变量不友好. 让ts检查
-        'linebreak-style': 'off',
         'no-unused-vars': 'off',  //ts-eslint里面有
         'prefer-const': 'off',
         "no-redeclare": "off",  //ts-eslint里面有

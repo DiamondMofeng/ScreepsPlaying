@@ -1,4 +1,5 @@
 {
+  "files.eol": "\r\n",
   "better-comments.tags": [
     {
       //! 
@@ -50,7 +51,7 @@
       "bold": false,
       "italic": false
     },
-    { 
+    {
       //* 
       "tag": "*",
       "color": "#98C379",
