@@ -4,7 +4,6 @@
     "dev": "cross-env COPY_TARGET=default/ rollup -cw",
     "dev:local": "cross-env COPY_TARGET=../127_0_0_1___21025/default rollup -cw",
     "dev:sim": "cross-env COPY_TARGET=sim/ rollup -cw",
-    "dev:panda": "cross-env COPY_TARGET=../121_5_170_187___21025/default rollup -cw",
     "jest": "jest",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.ts .",
     "lint:fix": "eslint --fix --ignore-path ./.gitignore --ext .js,.ts ."
@@ -19,7 +18,7 @@
     "rollup-plugin-typescript2": "^0.34.1",
     "source-map": "^0.6.1",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
+    "typescript": "^5.3.2"
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
