@@ -4,18 +4,18 @@ import { body } from "@/utils/util_helper"
 //withRoad
 //withBoost
 
-export const evalBody_harvester = (roomName, opt = {}) => {
+export const evalBody_harvester = (roomName: string, opt?: { haveRoad?: boolean }) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
 
-  let haveRoad = opt.haveRoad || false
+  let haveRoad = opt?.haveRoad || false
 
   let minBody = { w: 1, c: 1, m: 1 }
   let maxBody = { w: 10, c: 2, m: 1 }
 
   //TODO 比较拖慢效率，待优化
-  if (room.controller.isPowerEnabled == true) {
+  if (room.controller?.isPowerEnabled == true) {
     let pcs = room.find(FIND_POWER_CREEPS).find(pc => pc.powers[PWR_REGEN_SOURCE] != undefined)
     if (pcs) {
       let pwrLevel = pcs.powers[PWR_REGEN_SOURCE].level
@@ -54,12 +54,12 @@ export const evalBody_harvester = (roomName, opt = {}) => {
  * @opt haveRoad - 默认为true,若为false则move=2*(w+c)
  * @returns 
  */
-export const evalBody_worker_halfEnergy = (roomName, opt = {}) => {
+export const evalBody_worker_halfEnergy = (roomName: string, opt?: { haveRoad?: boolean }) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
 
-  let haveRoad = opt.haveRoad || true
+  let haveRoad = opt?.haveRoad || true
 
   let i;
   if (!haveRoad) {
@@ -78,12 +78,12 @@ export const evalBody_worker_halfEnergy = (roomName, opt = {}) => {
   }
 }
 
-export const evalBody_worker_fullEnergy = (roomName, opt = {}) => {
+export const evalBody_worker_fullEnergy = (roomName: string, opt?: { haveRoad?: boolean }) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
 
-  let haveRoad = opt.haveRoad || true
+  let haveRoad = opt?.haveRoad || true
 
   let i;
   if (!haveRoad) {
@@ -97,12 +97,12 @@ export const evalBody_worker_fullEnergy = (roomName, opt = {}) => {
   }
 }
 
-export const evalBody_carrier_halfEnergy = (roomName, opt = {}) => {
+export const evalBody_carrier_halfEnergy = (roomName: string, opt?: { haveRoad?: boolean }) => {
   let room = Game.rooms[roomName]
   let curEnergy = room.energyAvailable
   let capEnergy = room.energyCapacityAvailable
 
-  let haveRoad = opt.haveRoad || false
+  let haveRoad = opt?.haveRoad || false
 
   let i;
   if (haveRoad) {
@@ -129,7 +129,7 @@ export const evalBody_carrier_halfEnergy = (roomName, opt = {}) => {
  * @param {String} role 
  * @param {Object|SpawnOptions} opt 
  */
-export const evalBodyByRole = (roomName, role, opt = {}) => {
+export const evalBodyByRole = (roomName: string, role: string, opt?: { haveRoad?: boolean }) => {
 
   //* 因为role名是role+房间名，所以没法直接用switch
   // switch (role) {

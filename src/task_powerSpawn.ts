@@ -1,13 +1,13 @@
+import _ from 'lodash'
 import { moveAndWithdraw, moveAndTransfer } from "@/utils/util_beheavor"
-
 
 /**
  * 
  * @param {Creep} creep 
  */
-export const task_powerSpawn = (creep) => {
+export const task_powerSpawn = (creep: Creep) => {
 
-  if (creep.room.controller.level < 8) {
+  if (creep.room.controller?.level ?? 0 <= 8) {
     return
   }
 
@@ -20,10 +20,9 @@ export const task_powerSpawn = (creep) => {
   const MIN_POWER = 20  //PS低于此数值是进行填充
 
   if (_.isUndefined(creep.memory[PS_ID])) {
-    let PSs = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_POWER_SPAWN })
-    if (PSs.length > 0) {
-      let PS = PSs[0]
-      creep.memory[PS_ID] = PS.id
+    let ps = creep.room.powerSpawn
+    if (ps) {
+      creep.memory[PS_ID] = ps.id
     }
     else {
       return
@@ -37,11 +36,11 @@ export const task_powerSpawn = (creep) => {
   }
 
   if (PS.store.power < MIN_POWER
-    && (creep.room.terminal.store.power > 100 || creep.room.storage.store.power > 1000 || creep.store.power > 0)
+    && ((creep.room.terminal?.store[RESOURCE_POWER] ?? 0 > 100) || (creep.room.storage?.store[RESOURCE_POWER] ?? 0 > 1000) || creep.store[RESOURCE_POWER] > 0)
   ) {
     if (creep.store.getUsedCapacity(RESOURCE_POWER) == 0) {
-      moveAndWithdraw(creep, creep.room.storage, [RESOURCE_POWER], 100)
-      moveAndWithdraw(creep, creep.room.terminal, [RESOURCE_POWER], 100)
+      moveAndWithdraw(creep, creep.room.storage!, [RESOURCE_POWER], 100)
+      moveAndWithdraw(creep, creep.room.terminal!, [RESOURCE_POWER], 100)
     }
     else {
       moveAndTransfer(creep, PS)

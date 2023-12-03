@@ -1,8 +1,8 @@
+import _ from 'lodash'
 import { moveAndTransfer, moveAndWithdraw } from "@/utils/util_beheavor"
 
 
-
-const task_factory = (creep) => {
+const task_factory = (creep: Creep) => {
 
   const IS_WORK = false
 
@@ -15,7 +15,7 @@ const task_factory = (creep) => {
     return
   }
 
-  if (creep.room.controller.level < 8) {
+  if (creep.room.controller?.level ?? 0 < 8) {
     return
   }
 
@@ -25,10 +25,9 @@ const task_factory = (creep) => {
 
 
   if (_.isUndefined(creep.memory[FACTORY_ID])) {
-    let FACTORIES = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_FACTORY })
-    if (FACTORIES.length > 0) {
-      let FACTORY = FACTORIES[0]
-      creep.memory[FACTORY_ID] = FACTORY.id
+    let factory = creep.room.factory
+    if (factory) {
+      creep.memory[FACTORY_ID] = factory.id
     }
     else {
       return
@@ -67,7 +66,7 @@ const task_factory = (creep) => {
 
   }
 
-  if (factory && factory.store[RESOURCE_ENERGY] > 1000) {
+  if (storage && factory && factory.store[RESOURCE_ENERGY] > 1000) {
     moveAndTransfer(creep, storage)
     moveAndWithdraw(creep, factory, [RESOURCE_ENERGY])
     return 'return'

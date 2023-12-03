@@ -21,12 +21,14 @@ type CreepRole =
 
   | 'task_transporter'
 
-interface Creep extends RoomObject {
-  memory: CreepMemory;
-}
+// interface Creep extends RoomObject {
+//   memory: CreepMemory;
+// }
 
 interface CreepMemory {
   role?: CreepRole;
+  '_PS_ID'?: Id<StructurePowerSpawn>;
+  '_FACTORY_ID'?: Id<StructureFactory>;
   // task?: BasicTask;
 }
 
